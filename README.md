@@ -1,8 +1,8 @@
+# FoldingBrowser
+
 [![FoldingCoin Logo](FoldingCoinTitle.png)](http://foldingcoin.net/ "FoldingCoin")
 
-# FoldingBrowser
 [FoldingCoin](http://foldingcoin.net/) All-In-One Installer and Web Wallet interface
-
 
 ## Releases
 
@@ -15,5 +15,4 @@ FoldingBrowser is [licensed](https://github.com/Hou5e/FoldingBrowser/Browser/bin
 
 ## Contact
 
-Jump on the [FoldingCoin Slack](https://foldingcoin.slack.com/messages/general/), and I'm user hou5e
-Or, [BitcoinTalk forum](https://bitcointalk.org/index.php?topic=781352), user Hou5e
+Jump on the [FoldingCoin Slack](https://foldingcoin.slack.com/messages/general/), and I'm user hou5e, or [BitcoinTalk forum](https://bitcointalk.org/index.php?topic=781352), user Hou5e
