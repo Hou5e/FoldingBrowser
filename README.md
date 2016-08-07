@@ -1,4 +1,6 @@
-# FoldingBrowser   [![FoldingCoin Logo](FLDC-Banner2-sm.png)](http://foldingcoin.net/ "FoldingCoin")
+[![FoldingCoin Logo](FoldingCoinTitle.png)](http://foldingcoin.net/ "FoldingCoin")
+
+# FoldingBrowser
 [FoldingCoin](http://foldingcoin.net/) All-In-One Installer and Web Wallet interface
 
 
