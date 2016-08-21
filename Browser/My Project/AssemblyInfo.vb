@@ -8,11 +8,11 @@ Imports System.Runtime.InteropServices
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("FoldingCoinBrowser")> 
-<Assembly: AssemblyDescription("FoldingCoin (FLDC) Web Browser")> 
+<Assembly: AssemblyTitle("FoldingBrowser")> 
+<Assembly: AssemblyDescription("FoldingCoin (FLDC) All-In-One Installer and Web Wallet interface")> 
 <Assembly: AssemblyCompany("")> 
-<Assembly: AssemblyProduct("FoldingCoinBrowser")> 
-<Assembly: AssemblyCopyright("Copyright © 2016 FoldingCoin")> 
+<Assembly: AssemblyProduct("FoldingBrowser")> 
+<Assembly: AssemblyCopyright("Copyright © 2016 FoldingCoin Inc")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>

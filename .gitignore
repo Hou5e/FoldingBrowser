@@ -1,0 +1,5 @@
+/Browser/obj
+/Browser/*.suo
+/Browser/bin/Debug
+/Browser/bin/Release/FoldingBrowser.vshost.exe
+/Browser/bin/Release/FoldingBrowser.vshost.exe.manifest
