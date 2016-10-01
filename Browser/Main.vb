@@ -2,8 +2,10 @@
     Private Const URL_BLANK As String = "about:blank"
     Private Const URL_Counterwallet As String = "https://wallet.counterwallet.io/"
     Private Const URL_FoldingCoin As String = "http://foldingcoin.net/"
+    Private Const URL_Twitter_FoldingCoin As String = "https://twitter.com/FoldingCoin"
     Private Const URL_FLDC_Distro As String = "http://joelooney.org/fldc/?token=FLDC&total=500000&start=2016-08-05&end=2016-08-06"
     Private Const URL_CureCoin As String = "https://www.curecoin.net/"
+    Private Const URL_Twitter_CureCoin As String = "https://twitter.com/CureCoin_Team"
     Private Const URL_FAH As String = "http://folding.stanford.edu/"
     Private Const URL_FAH_Client As String = "http://folding.stanford.edu/client/"
 
@@ -14,6 +16,7 @@
     'URL to help determine the page loaded indicator
     Private m_strPageURL As String = ""
 
+#Region "Form and Browser Events - Initialization, Exiting"
     Public Sub New()
         InitializeComponent()
 
@@ -83,6 +86,8 @@
             Me.btnReload.Image = My.Resources.Reload_16.ToBitmap
             'FLDC Image
             Me.PictureBox1.Image = My.Resources.IconFLDC.ToBitmap
+            'Protein Image
+            Me.PictureBox2.Image = My.Resources.L_methionine_B_48.ToBitmap
 
             'TODO: not used yet. Process command line values
             If Environment.CommandLine.Length > 0 Then
@@ -90,11 +95,14 @@
                 Dim args As String() = Environment.GetCommandLineArgs()
                 If args.Length > 1 Then
                     Select Case args(1)
-                        Case "-InstFAH-Only"
+                        Case "-InstallFAH"
                             'TODO: FAH Installation
+                            g_bAskDownloadLocation = False
+                            If GetFAH() = False Then MsgBox("Task 'Get Folding@Home App' did not complete.")
 
-                        Case "-GetFLDCWallet"
+                        Case "-GetWallet"
                             'TODO: Get Wallet
+                            If GetWallet() = False Then MsgBox("Task 'Get Wallet' did not complete.")
                     End Select
                 End If
             End If
@@ -109,7 +117,7 @@
 #End If
 
         Catch ex As Exception
-            Me.txtMsg.Text = "Error: Webpage initization failed"
+            Msg("Error: Webpage initization failed: " & ex.ToString)
         End Try
     End Sub
 
@@ -129,11 +137,6 @@
     End Sub
     Private Sub OnBrowserStatusMessage(sender As Object, args As CefSharp.StatusMessageEventArgs)
         addActivity(args.Value)
-    End Sub
-    Private Sub addActivity(ByVal Message As String)
-        Me.Invoke(Sub()
-                      Me.txtMsg.AppendText(Message & vbCrLf)
-                  End Sub)
     End Sub
 
     Private Sub OnBrowserLoadingStateChanged(sender As Object, args As CefSharp.LoadingStateChangedEventArgs)
@@ -210,10 +213,16 @@
             'Shutdown the web browser control
             CefSharp.Cef.Shutdown()
 
-            'This 100ms delay seems to help prevent the messed up state where the cache needs to be deleted for the FAH Control webpage (atleast with CEF1)
+            'Save any log messages from the screen to a text file. This may make it easier for users to report issues
+            If Me.txtMsg.Text.Length > 0 Then
+                SaveLogFile(Me.txtMsg.Text)
+            End If
+
+            'For CefSharp.Cef.Shutdown(): This 100ms delay seems to help prevent the messed up state for older CefSharp versions, where the cache needs to be deleted for the FAH Control webpage (atleast with CEF1, v25)
             Wait(100)
         End If
     End Sub
+#End Region
 
 #Region "Checkbox Events"
     Private Sub chkShowTools_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkShowTools.CheckedChanged
@@ -236,12 +245,19 @@
         OpenURL(URL_FAH_Client, False)
     End Sub
 
-    Private Sub PictureBox1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PictureBox1.Click
-        OpenURL(URL_FoldingCoin, False)
-    End Sub
+    'Private Sub PictureBox1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PictureBox1.Click
+    '    OpenURL(URL_FoldingCoin, False)
+    'End Sub
+
+    'Private Sub PictureBox2_Click(sender As Object, e As EventArgs) Handles PictureBox2.Click
+    '    OpenURL(URL_FAH, False)
+    'End Sub
 
     Private Sub btnFoldingCoinWebsite_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnFoldingCoinWebsite.Click
         OpenURL(URL_FoldingCoin, False)
+    End Sub
+    Private Sub btnTwitterFoldingCoin_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTwitterFoldingCoin.Click
+        OpenURL(URL_Twitter_FoldingCoin, False)
     End Sub
 
     Private Sub btnFLDC_DailyDistro_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnFLDC_DailyDistro.Click
@@ -251,6 +267,9 @@
     Private Sub btnCureCoin_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnCureCoin.Click
         OpenURL(URL_CureCoin, False)
     End Sub
+    Private Sub btnTwitterCureCoin_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTwitterCureCoin.Click
+        OpenURL(URL_Twitter_CureCoin, False)
+    End Sub
 
     'TODO: add button to Extreme Overclocking's User Stats page. Would need to know user ID #...
 
@@ -259,6 +278,7 @@
     End Sub
 
     Private Sub btnGetFAH_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnGetFAH.Click
+        g_bAskDownloadLocation = True
         If GetFAH() = False Then MsgBox("Task 'Get Folding@Home App' did not complete.")
     End Sub
 
@@ -270,7 +290,6 @@
 #Region "Automated Processes"
     Private Function LoginToCounterwallet() As Boolean
         LoginToCounterwallet = False
-
         Try
             'Counterwallet webpage 
             OpenURL(URL_Counterwallet, False)
@@ -282,16 +301,16 @@
             'If there is no Dat file, then prompt to make one
             If bDatFile = False Then
                 'Prompt for PW, and save it
-                Dim Msg As New TextEntryDialog
-                Msg.Text = "Save Wallet Password"
-                Msg.MsgTextUpper.Text = "No saved wallet info yet."
-                Msg.MsgTextLower.Text = "Please enter your 12 word passphrase:"
-                Msg.Width = (Msg.MsgTextLower.Left * 2) + Msg.MsgTextLower.Width + 10
-                Msg.TextEnteredLower.Visible = False
+                Dim Prompt As New TextEntryDialog
+                Prompt.Text = "Save Wallet Password"
+                Prompt.MsgTextUpper.Text = "No saved wallet info yet."
+                Prompt.MsgTextLower.Text = "Please enter your 12 word passphrase:"
+                Prompt.Width = (Prompt.MsgTextLower.Left * 2) + Prompt.MsgTextLower.Width + 10
+                Prompt.TextEnteredLower.Visible = False
                 'Show modal dialog box
-                If Msg.ShowDialog() = Windows.Forms.DialogResult.OK Then
+                If Prompt.ShowDialog() = Windows.Forms.DialogResult.OK Then
                     'Save and encrypt 12 word passphase (or use username & PW?)
-                    Dim bPWSaved As Boolean = SaveWalletPW(0, Msg.TextEnteredUpper.Text, "", "")
+                    Dim bPWSaved As Boolean = SaveWalletPW(0, Prompt.TextEnteredUpper.Text, "", "")
                     'Allow time for the file to be written out
                     Wait(100)
                     If bPWSaved = True AndAlso System.IO.File.Exists(DatFilePath) = True Then bDatFile = True
@@ -322,19 +341,19 @@
             End If
 
         Catch ex As Exception
-            Me.txtMsg.Text = "Auto Wallet error:" & ex.ToString
+            Msg("Auto Wallet error:" & ex.ToString)
 
             'User info decryption failed, most likely. Prompt for new info
-            Dim Msg As New TextEntryDialog
-            Msg.Text = "Save Wallet Password"
-            Msg.MsgTextUpper.Text = "Wallet info could not be decrypted."
-            Msg.MsgTextLower.Text = "Please enter your 12 word passphrase:"
-            Msg.Width = (Msg.MsgTextLower.Left * 2) + Msg.MsgTextLower.Width + 10
-            Msg.TextEnteredLower.Visible = False
+            Dim Prompt As New TextEntryDialog
+            Prompt.Text = "Save Wallet Password"
+            Prompt.MsgTextUpper.Text = "Wallet info could not be decrypted."
+            Prompt.MsgTextLower.Text = "Please enter your 12 word passphrase:"
+            Prompt.Width = (Prompt.MsgTextLower.Left * 2) + Prompt.MsgTextLower.Width + 10
+            Prompt.TextEnteredLower.Visible = False
             'Show modal dialog box
-            If Msg.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            If Prompt.ShowDialog() = Windows.Forms.DialogResult.OK Then
                 'Save and encrypt 12 word passphase (or use username & PW?)
-                Dim bPWSaved As Boolean = SaveWalletPW(0, Msg.TextEnteredUpper.Text, "", "")
+                Dim bPWSaved As Boolean = SaveWalletPW(0, Prompt.TextEnteredUpper.Text, "", "")
                 'Allow time for the file to be written out
                 Wait(100)
             End If
@@ -345,7 +364,6 @@
 #Region "Automated Processes - One time only for setup"
     Private Function GetWallet() As Boolean
         GetWallet = False
-
         Try
             'Counterwallet webpage 
             OpenURL(URL_Counterwallet, False)
@@ -371,13 +389,12 @@
             GetWallet = True
 
         Catch ex As Exception
-            Me.txtMsg.Text = "Get Wallet error:" & ex.ToString
+            Msg("Get Wallet error:" & ex.ToString)
         End Try
     End Function
 
     Private Function SaveWalletPW(ByRef index As Integer, ByRef PW12words As String, ByRef URL As String, ByRef URL_PW As String) As Boolean
         SaveWalletPW = False
-
         Try
             'Save and encrypt 12 word passphase (or use username & PW?) to Dat file
             Dim DAT As New IniFile
@@ -392,13 +409,12 @@
             SaveWalletPW = True
 
         Catch ex As Exception
-            Me.txtMsg.Text = "Error creating Dat file:" & ex.ToString
+            Msg("Error creating Dat file:" & ex.ToString)
         End Try
     End Function
 
     Private Function GetFAH() As Boolean
         GetFAH = False
-
         Try
             'Detect FAH installed already, and give the option to skip over re-downloading and running the installer
 
@@ -415,8 +431,9 @@
             ClickByClass("download-btn", False, FileURL)
             Wait(200)
 
+            'Make the download progress visible
+            Me.gbxDownload.Visible = True
             'Start the download: Click the link for Windows download
-            g_bAskDownloadLocation = False
             ClickByClass("fah-platform-downloads", False, FileURL)
             Wait(200)
 
@@ -433,31 +450,113 @@
             g_bCancelNav = False
             'Download didn't finish or was cancelled
             If i >= 2400 Then Exit Try
+            'Let the screen refresh
+            Wait(50)
 
-            'Run FAH installer
-            ' = g_strDownloadPath
+            'Run FAH installer (stops any running instances and uninstalls previous version) and wait for it to finish
+            Dim result As String = ""
+            Dim process1 As System.Diagnostics.Process = New System.Diagnostics.Process()
+            process1.StartInfo.FileName = g_strDownloadedFilePath
+            'Allow prompt for elevation
+            process1.StartInfo.Verb = "runas"
+            process1.StartInfo.UseShellExecute = True
+            process1.StartInfo.WindowStyle = ProcessWindowStyle.Normal
+            'Run the installer
+            process1.Start()
+            'Wait for installer to exit
+            process1.WaitForExit()
+            'Free resources from the process
+            process1.Close()
+
+            'TODO: Remove:
+            Return True
+            ''''''''''''''''''''''''''''''''
+
+            'Close any running instances of FAH
+            Dim p As Process
+            Try
+                For Each p In Process.GetProcessesByName("FAHClient")
+                    Msg("Closing process: " & p.Id.ToString() & " - " & p.ProcessName)
+                    p.CloseMainWindow()
+                    p.WaitForExit(3000)
+
+                    'Check for the process being closed
+                    If p.HasExited = False Then
+                        Msg("Killing process: " & p.Id.ToString() & " - " & p.ProcessName)
+                        p.Kill()
+                        System.Threading.Thread.Sleep(400)
+                    End If
+                Next
+
+                'Try closing any FAH Core processes still active
+                For Each p In Process.GetProcesses
+                    If p.ProcessName.ToLower.StartsWith("fahcore_") = True Then
+                        Msg("Killing process: " & p.Id.ToString() & " - " & p.ProcessName)
+                        p.Kill()
+                    End If
+                Next
+            Catch ex As Exception
+                Msg("Couldn't kill FAH: " & ex.ToString)
+            End Try
+
+            '2nd try to close any running instances of FAH
+            Try
+                For Each p In Process.GetProcessesByName("FAHClient")
+                    'Wait for FAH to exit before trying again
+                    System.Threading.Thread.Sleep(5000)
+                    Msg("Killing process: " & p.Id.ToString() & " - " & p.ProcessName)
+                    p.Kill()
+                    System.Threading.Thread.Sleep(3000)
+                Next
+
+                'Try closing any FAH Core processes still active
+                For Each p In Process.GetProcesses
+                    If p.ProcessName.ToLower.StartsWith("fahcore_") = True Then
+                        Msg("Killing process: " & p.Id.ToString() & " - " & p.ProcessName)
+                        p.Kill()
+                    End If
+                Next
+            Catch ex As Exception
+                Msg("Couldn't kill FAH: " & ex.ToString)
+            End Try
 
 
-            'Kill any running instances of FAH.
+            'Read existing Username and Password from XML config file (or use saved info in DAT file)
 
 
-            'Prompt for FAH info: Email, to get Passcode. Ask for: (existing) username, Merged Folding Coin Selection, team #, passcode, and how many CPU / GPU.
+            'Prompt for FAH info: Ask for: (existing) username, Merged Folding Coin Selection, team #. Show username as typing and check it for errors. (Optional) Get passcode by email
+            Dim DialogFAH As New FAHSetupDialog
+            'Show modal dialog box
+            If DialogFAH.ShowDialog() = Windows.Forms.DialogResult.OK Then
+                'Save and encrypt Email, Passphase, FAH Username
+                Dim bSaveInfo As Boolean '= SaveEmail(0, Prompt.TextEnteredUpper.Text, "", "")
+                'Allow time for the file to be written out
+                Wait(100)
+                If bSaveInfo = True AndAlso System.IO.File.Exists(DatFilePath) = True Then
+                    'Good
+
+                End If
+            End If
 
 
-            'Find the location of the FAH Config file, save a backup copy, and re-write a new cfg file.
+            'Find the location of the FAH Config file, save a backup copy, and re-write a new cfg file. Set how many CPU / GPU in new config. Possibly show before and after, allowing the user to edit the settings directly
 
 
             'Launch FAH (restart should not be required)
 
 
+            'Show FAH webpage control (in this web browser)?
+            'OpenURL(URL_FAH_Client, False)
+
             GetFAH = True
 
         Catch ex As Exception
-            Me.txtMsg.Text = "Get FAH error:" & ex.ToString
+            Msg("Get FAH error:" & ex.ToString)
         End Try
 
         'Reset flag
         g_bAskDownloadLocation = True
+        Me.gbxDownload.Visible = False
     End Function
 #End Region
 
@@ -466,24 +565,31 @@
     Private Function EnterTextById(ByVal ObjectId As String, ByVal sText As String) As Boolean
         EnterTextById = False
 
-        If ObjectId.Length > 0 Then
-            Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementById('" & ObjectId & "').value = '" & sText & "';")
-            EnterTextById = True
-        End If
+        Try
+            If ObjectId.Length > 0 Then
+                Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementById('" & ObjectId & "').value = '" & sText & "';")
+                EnterTextById = True
+            End If
+        Catch ex As Exception
+            Msg("Enter Text By Id error: " & Err.Description)
+        End Try
     End Function
 
     'Specify object {Object Id} to click, and if you wait for the page to load or not
     Private Function ClickById(ByVal ObjectId As String, ByVal bWait As Boolean) As Boolean
         ClickById = False
-
-        If ObjectId.Length > 0 Then
-            Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementById('" & ObjectId & "').click();")
-            ClickById = True
-            'Wait for the page, if specified
-            If bWait = True Then
-                If PageLoadWait() = True Then ClickById = True Else ClickById = False
+        Try
+            If ObjectId.Length > 0 Then
+                Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementById('" & ObjectId & "').click();")
+                ClickById = True
+                'Wait for the page, if specified
+                If bWait = True Then
+                    If PageLoadWait() = True Then ClickById = True Else ClickById = False
+                End If
             End If
-        End If
+        Catch ex As Exception
+            Msg("Click By Id error: " & Err.Description)
+        End Try
     End Function
 
     'Specify object {Class} to click, and if you wait for the page to load or not
@@ -503,7 +609,7 @@
             End If
 
         Catch ex As Exception
-
+            Msg("Click By Class error: " & Err.Description)
         End Try
     End Function
 #End Region
@@ -570,7 +676,7 @@
 
         Catch ex As Exception
             Dim sRtnErrMsg As String = "Opening URL error: " & Err.Description
-            Console.WriteLine(sRtnErrMsg)
+            Msg(sRtnErrMsg)
 
             If bShowErrorDialogBoxes = True Then 'Report errors 
                 MsgBox(sRtnErrMsg, MsgBoxStyle.Exclamation)
@@ -593,8 +699,7 @@
             If i < 600 Then PageLoadWait = True
 
         Catch ex As Exception
-            Dim sRtnErrMsg As String = "Page Loading Wait error: " & Err.Description
-            Console.WriteLine(sRtnErrMsg)
+            Msg("Page Loading Wait error: " & Err.Description)
         End Try
     End Function
 
@@ -612,8 +717,7 @@
             If i < 30 Then PageTitleWait = True
 
         Catch ex As Exception
-            Dim sRtnErrMsg As String = "Page Title Wait error: " & Err.Description
-            Console.WriteLine(sRtnErrMsg)
+            Msg("Page Title Wait error: " & Err.Description)
         End Try
     End Function
 
@@ -637,10 +741,29 @@
             ClearWebpage = True
 
         Catch ex As Exception
-            Dim sRtnErrMsg As String = "Opening URL error: " & Err.Description
-            Console.WriteLine(sRtnErrMsg)
+            Msg("Opening URL error: " & Err.Description)
         End Try
     End Function
+#End Region
+
+#Region "Messages / Errors"
+    Private Sub addActivity(ByVal sMsg As String)
+        Me.Invoke(Sub()
+                      Me.txtMsg.AppendText("[" & Now.ToString("yyyy-MM-dd HH:mm:ss.f") & "] " & sMsg & vbNewLine)
+                  End Sub)
+    End Sub
+
+    Public Sub Msg(sMsg As String)
+        Try
+            Me.txtMsg.AppendText("[" & Now.ToString("yyyy-MM-dd HH:mm:ss.f") & "] " & sMsg & vbNewLine)
+            If Me.txtMsg.Visible = True Then
+                Me.txtMsg.ScrollToCaret()
+            End If
+
+        Catch ex As Exception
+            Msg("Error: " & ex.Message & "." & vbNewLine & vbNewLine & ex.ToString)
+        End Try
+    End Sub
 #End Region
 
 #Region "Wait (Milliseconds)"

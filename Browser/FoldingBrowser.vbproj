@@ -73,6 +73,12 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FAHSetupDialog.Designer.vb">
+      <DependentUpon>FAHSetupDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FAHSetupDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="TextEntryDialog.Designer.vb">
       <DependentUpon>TextEntryDialog.vb</DependentUpon>
     </Compile>
@@ -106,6 +112,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="FAHSetupDialog.resx">
+      <DependentUpon>FAHSetupDialog.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="TextEntryDialog.resx">
       <DependentUpon>TextEntryDialog.vb</DependentUpon>
     </EmbeddedResource>
@@ -138,6 +147,7 @@
     <None Include="Resources\Stop-16.ico" />
     <None Include="Resources\Go-16.ico" />
     <None Include="Resources\IconFLDC.ico" />
+    <None Include="Resources\L-methionine-B-48.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

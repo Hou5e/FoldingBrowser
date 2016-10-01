@@ -43,23 +43,27 @@ Partial Class Main
         Me.gbxTools = New System.Windows.Forms.GroupBox()
         Me.chkShowTools = New System.Windows.Forms.CheckBox()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
+        Me.btnTwitterFoldingCoin = New System.Windows.Forms.Button()
+        Me.btnTwitterCureCoin = New System.Windows.Forms.Button()
         Me.txtMsg = New System.Windows.Forms.TextBox()
         Me.gbxCheckboxForTools = New System.Windows.Forms.GroupBox()
         Me.ProgressBar1 = New System.Windows.Forms.ProgressBar()
         Me.lblPercent = New System.Windows.Forms.Label()
         Me.gbxDownload = New System.Windows.Forms.GroupBox()
         Me.lblDownloadText = New System.Windows.Forms.Label()
+        Me.PictureBox2 = New System.Windows.Forms.PictureBox()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ToolStripContainer1.SuspendLayout()
         Me.gbxTools.SuspendLayout()
         Me.gbxCheckboxForTools.SuspendLayout()
         Me.gbxDownload.SuspendLayout()
+        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'PictureBox1
         '
         Me.PictureBox1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.PictureBox1.Location = New System.Drawing.Point(995, 19)
+        Me.PictureBox1.Location = New System.Drawing.Point(927, 21)
         Me.PictureBox1.Name = "PictureBox1"
         Me.PictureBox1.Size = New System.Drawing.Size(50, 50)
         Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
@@ -74,7 +78,7 @@ Partial Class Main
         Me.btnStopNav.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.GradientActiveCaption
         Me.btnStopNav.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.GradientInactiveCaption
         Me.btnStopNav.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnStopNav.Location = New System.Drawing.Point(933, 33)
+        Me.btnStopNav.Location = New System.Drawing.Point(859, 47)
         Me.btnStopNav.Name = "btnStopNav"
         Me.btnStopNav.Size = New System.Drawing.Size(17, 17)
         Me.btnStopNav.TabIndex = 124
@@ -86,9 +90,9 @@ Partial Class Main
         '
         Me.txtURL.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtURL.Location = New System.Drawing.Point(122, 32)
+        Me.txtURL.Location = New System.Drawing.Point(116, 46)
         Me.txtURL.Name = "txtURL"
-        Me.txtURL.Size = New System.Drawing.Size(806, 20)
+        Me.txtURL.Size = New System.Drawing.Size(738, 20)
         Me.txtURL.TabIndex = 123
         '
         'btnGo
@@ -99,7 +103,7 @@ Partial Class Main
         Me.btnGo.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.GradientActiveCaption
         Me.btnGo.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.GradientInactiveCaption
         Me.btnGo.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnGo.Location = New System.Drawing.Point(910, 33)
+        Me.btnGo.Location = New System.Drawing.Point(836, 47)
         Me.btnGo.Name = "btnGo"
         Me.btnGo.Size = New System.Drawing.Size(17, 17)
         Me.btnGo.TabIndex = 121
@@ -110,7 +114,7 @@ Partial Class Main
         'lblURL
         '
         Me.lblURL.AutoSize = True
-        Me.lblURL.Location = New System.Drawing.Point(89, 35)
+        Me.lblURL.Location = New System.Drawing.Point(83, 49)
         Me.lblURL.Name = "lblURL"
         Me.lblURL.Size = New System.Drawing.Size(32, 13)
         Me.lblURL.TabIndex = 122
@@ -125,12 +129,12 @@ Partial Class Main
         '
         'ToolStripContainer1.ContentPanel
         '
-        Me.ToolStripContainer1.ContentPanel.Size = New System.Drawing.Size(1052, 634)
+        Me.ToolStripContainer1.ContentPanel.Size = New System.Drawing.Size(984, 634)
         Me.ToolStripContainer1.LeftToolStripPanelVisible = False
         Me.ToolStripContainer1.Location = New System.Drawing.Point(0, 73)
         Me.ToolStripContainer1.Name = "ToolStripContainer1"
         Me.ToolStripContainer1.RightToolStripPanelVisible = False
-        Me.ToolStripContainer1.Size = New System.Drawing.Size(1052, 634)
+        Me.ToolStripContainer1.Size = New System.Drawing.Size(984, 634)
         Me.ToolStripContainer1.TabIndex = 125
         Me.ToolStripContainer1.Text = "ToolStripContainer1"
         Me.ToolStripContainer1.TopToolStripPanelVisible = False
@@ -212,7 +216,7 @@ Partial Class Main
         Me.btnCureCoin.Size = New System.Drawing.Size(78, 23)
         Me.btnCureCoin.TabIndex = 129
         Me.btnCureCoin.Text = "CureCoin"
-        Me.ToolTip1.SetToolTip(Me.btnCureCoin, "Shop using FoldingCoin")
+        Me.ToolTip1.SetToolTip(Me.btnCureCoin, "CureCoin Website")
         Me.btnCureCoin.UseVisualStyleBackColor = True
         '
         'btnReload
@@ -223,7 +227,7 @@ Partial Class Main
         Me.btnReload.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.GradientActiveCaption
         Me.btnReload.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.GradientInactiveCaption
         Me.btnReload.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnReload.Location = New System.Drawing.Point(954, 33)
+        Me.btnReload.Location = New System.Drawing.Point(880, 47)
         Me.btnReload.Name = "btnReload"
         Me.btnReload.Size = New System.Drawing.Size(17, 17)
         Me.btnReload.TabIndex = 130
@@ -238,7 +242,7 @@ Partial Class Main
         Me.btnBack.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.GradientActiveCaption
         Me.btnBack.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.GradientInactiveCaption
         Me.btnBack.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnBack.Location = New System.Drawing.Point(36, 28)
+        Me.btnBack.Location = New System.Drawing.Point(30, 42)
         Me.btnBack.Name = "btnBack"
         Me.btnBack.Size = New System.Drawing.Size(25, 25)
         Me.btnBack.TabIndex = 131
@@ -253,7 +257,7 @@ Partial Class Main
         Me.btnFwd.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.GradientActiveCaption
         Me.btnFwd.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.GradientInactiveCaption
         Me.btnFwd.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnFwd.Location = New System.Drawing.Point(62, 28)
+        Me.btnFwd.Location = New System.Drawing.Point(56, 42)
         Me.btnFwd.Name = "btnFwd"
         Me.btnFwd.Size = New System.Drawing.Size(25, 25)
         Me.btnFwd.TabIndex = 132
@@ -267,7 +271,7 @@ Partial Class Main
         Me.gbxTools.Controls.Add(Me.btnGetFAH)
         Me.gbxTools.Controls.Add(Me.btnGetWallet)
         Me.gbxTools.Controls.Add(Me.btnBrowserTools)
-        Me.gbxTools.Location = New System.Drawing.Point(740, -9)
+        Me.gbxTools.Location = New System.Drawing.Point(669, -9)
         Me.gbxTools.Name = "gbxTools"
         Me.gbxTools.Size = New System.Drawing.Size(215, 32)
         Me.gbxTools.TabIndex = 133
@@ -285,22 +289,46 @@ Partial Class Main
         Me.chkShowTools.Text = "Tools"
         Me.chkShowTools.UseVisualStyleBackColor = True
         '
+        'btnTwitterFoldingCoin
+        '
+        Me.btnTwitterFoldingCoin.BackColor = System.Drawing.Color.LightSkyBlue
+        Me.btnTwitterFoldingCoin.Location = New System.Drawing.Point(148, 14)
+        Me.btnTwitterFoldingCoin.Name = "btnTwitterFoldingCoin"
+        Me.btnTwitterFoldingCoin.Size = New System.Drawing.Size(71, 19)
+        Me.btnTwitterFoldingCoin.TabIndex = 129
+        Me.btnTwitterFoldingCoin.Text = "Twitter"
+        Me.btnTwitterFoldingCoin.TextAlign = System.Drawing.ContentAlignment.BottomCenter
+        Me.ToolTip1.SetToolTip(Me.btnTwitterFoldingCoin, "FoldingCoin Twitter")
+        Me.btnTwitterFoldingCoin.UseVisualStyleBackColor = False
+        '
+        'btnTwitterCureCoin
+        '
+        Me.btnTwitterCureCoin.BackColor = System.Drawing.Color.LightSkyBlue
+        Me.btnTwitterCureCoin.Location = New System.Drawing.Point(292, 14)
+        Me.btnTwitterCureCoin.Name = "btnTwitterCureCoin"
+        Me.btnTwitterCureCoin.Size = New System.Drawing.Size(78, 19)
+        Me.btnTwitterCureCoin.TabIndex = 129
+        Me.btnTwitterCureCoin.Text = "Twitter"
+        Me.btnTwitterCureCoin.TextAlign = System.Drawing.ContentAlignment.BottomCenter
+        Me.ToolTip1.SetToolTip(Me.btnTwitterCureCoin, "CureCoin Twitter")
+        Me.btnTwitterCureCoin.UseVisualStyleBackColor = False
+        '
         'txtMsg
         '
         Me.txtMsg.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtMsg.Location = New System.Drawing.Point(371, 0)
+        Me.txtMsg.Location = New System.Drawing.Point(373, -1)
         Me.txtMsg.Multiline = True
         Me.txtMsg.Name = "txtMsg"
         Me.txtMsg.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtMsg.Size = New System.Drawing.Size(372, 73)
+        Me.txtMsg.Size = New System.Drawing.Size(293, 75)
         Me.txtMsg.TabIndex = 135
         '
         'gbxCheckboxForTools
         '
         Me.gbxCheckboxForTools.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.gbxCheckboxForTools.Controls.Add(Me.chkShowTools)
-        Me.gbxCheckboxForTools.Location = New System.Drawing.Point(964, -8)
+        Me.gbxCheckboxForTools.Location = New System.Drawing.Point(918, -8)
         Me.gbxCheckboxForTools.Name = "gbxCheckboxForTools"
         Me.gbxCheckboxForTools.Size = New System.Drawing.Size(63, 28)
         Me.gbxCheckboxForTools.TabIndex = 136
@@ -310,14 +338,14 @@ Partial Class Main
         '
         Me.ProgressBar1.Location = New System.Drawing.Point(64, 9)
         Me.ProgressBar1.Name = "ProgressBar1"
-        Me.ProgressBar1.Size = New System.Drawing.Size(211, 15)
+        Me.ProgressBar1.Size = New System.Drawing.Size(179, 15)
         Me.ProgressBar1.TabIndex = 137
         '
         'lblPercent
         '
         Me.lblPercent.AutoSize = True
         Me.lblPercent.BackColor = System.Drawing.SystemColors.Window
-        Me.lblPercent.Location = New System.Drawing.Point(159, 10)
+        Me.lblPercent.Location = New System.Drawing.Point(144, 10)
         Me.lblPercent.Name = "lblPercent"
         Me.lblPercent.Size = New System.Drawing.Size(21, 13)
         Me.lblPercent.TabIndex = 138
@@ -330,9 +358,9 @@ Partial Class Main
         Me.gbxDownload.Controls.Add(Me.lblDownloadText)
         Me.gbxDownload.Controls.Add(Me.lblPercent)
         Me.gbxDownload.Controls.Add(Me.ProgressBar1)
-        Me.gbxDownload.Location = New System.Drawing.Point(709, 46)
+        Me.gbxDownload.Location = New System.Drawing.Point(669, 17)
         Me.gbxDownload.Name = "gbxDownload"
-        Me.gbxDownload.Size = New System.Drawing.Size(280, 27)
+        Me.gbxDownload.Size = New System.Drawing.Size(249, 27)
         Me.gbxDownload.TabIndex = 139
         Me.gbxDownload.TabStop = False
         Me.gbxDownload.Visible = False
@@ -348,11 +376,21 @@ Partial Class Main
         Me.lblDownloadText.Text = "Download:"
         Me.lblDownloadText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
+        'PictureBox2
+        '
+        Me.PictureBox2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.PictureBox2.Location = New System.Drawing.Point(877, 18)
+        Me.PictureBox2.Name = "PictureBox2"
+        Me.PictureBox2.Size = New System.Drawing.Size(50, 30)
+        Me.PictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
+        Me.PictureBox2.TabIndex = 140
+        Me.PictureBox2.TabStop = False
+        '
         'Main
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1052, 708)
+        Me.ClientSize = New System.Drawing.Size(984, 708)
         Me.Controls.Add(Me.gbxCheckboxForTools)
         Me.Controls.Add(Me.txtMsg)
         Me.Controls.Add(Me.gbxTools)
@@ -370,7 +408,10 @@ Partial Class Main
         Me.Controls.Add(Me.lblURL)
         Me.Controls.Add(Me.PictureBox1)
         Me.Controls.Add(Me.txtURL)
+        Me.Controls.Add(Me.btnTwitterFoldingCoin)
+        Me.Controls.Add(Me.btnTwitterCureCoin)
         Me.Controls.Add(Me.gbxDownload)
+        Me.Controls.Add(Me.PictureBox2)
         Me.MinimumSize = New System.Drawing.Size(16, 670)
         Me.Name = "Main"
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
@@ -381,6 +422,7 @@ Partial Class Main
         Me.gbxCheckboxForTools.PerformLayout()
         Me.gbxDownload.ResumeLayout(False)
         Me.gbxDownload.PerformLayout()
+        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -411,5 +453,7 @@ Partial Class Main
     Friend WithEvents lblPercent As System.Windows.Forms.Label
     Friend WithEvents gbxDownload As System.Windows.Forms.GroupBox
     Friend WithEvents lblDownloadText As System.Windows.Forms.Label
-
+    Friend WithEvents btnTwitterFoldingCoin As Button
+    Friend WithEvents btnTwitterCureCoin As Button
+    Friend WithEvents PictureBox2 As PictureBox
 End Class

@@ -3,3 +3,6 @@
 /Browser/bin/Debug
 /Browser/bin/Release/FoldingBrowser.vshost.exe
 /Browser/bin/Release/FoldingBrowser.vshost.exe.manifest
+/Browser/.vs
+/Browser/bin/Release/*.pdb
+/Browser/bin/Release/*.xml
