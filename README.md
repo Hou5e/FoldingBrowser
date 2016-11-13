@@ -1,13 +1,13 @@
 # FoldingBrowser
 
-[![FoldingCoin Logo](FoldingCoinTitle.png)](http://foldingcoin.net/ "FoldingCoin")
+[![FoldingCoin Logo](FoldingBrowserTitle.png)](http://foldingcoin.net/ "FoldingCoin")
 
 [FoldingCoin](http://foldingcoin.net/) All-In-One Installer and Web Wallet interface
 
 ## Releases
 
 - See [FoldingBrowser Releases](https://github.com/Hou5e/FoldingBrowser/releases) for Windows installer
-- FoldingBrowser is written in VB.NET, compiled with VS2015, and currently based on [cefsharp/49](https://github.com/cefsharp/CefSharp/tree/cefsharp/49)
+- FoldingBrowser is written in VB.NET, compiled with VS2015, and currently based on [cefsharp/49](https://github.com/cefsharp/CefSharp/tree/cefsharp/49) Chrome / Chromium Embedded Framework (CEF)
 
 ## License
 

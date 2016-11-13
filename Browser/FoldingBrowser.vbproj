@@ -14,7 +14,7 @@
     <MyType>WindowsForms</MyType>
     <OptionStrict>On</OptionStrict>
     <OptionInfer>On</OptionInfer>
-    <ApplicationIcon>Resources\IconFLDC.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\FoldingCoin-16_32_48.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -79,6 +79,18 @@
     <Compile Include="FAHSetupDialog.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="SetupDialog.Designer.vb">
+      <DependentUpon>SetupDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SetupDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DisplayTextDialog.Designer.vb">
+      <DependentUpon>DisplayTextDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="DisplayTextDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="TextEntryDialog.Designer.vb">
       <DependentUpon>TextEntryDialog.vb</DependentUpon>
     </Compile>
@@ -115,6 +127,12 @@
     <EmbeddedResource Include="FAHSetupDialog.resx">
       <DependentUpon>FAHSetupDialog.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="SetupDialog.resx">
+      <DependentUpon>SetupDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DisplayTextDialog.resx">
+      <DependentUpon>DisplayTextDialog.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="TextEntryDialog.resx">
       <DependentUpon>TextEntryDialog.vb</DependentUpon>
     </EmbeddedResource>
@@ -146,8 +164,30 @@
     <None Include="Resources\Back-24.ico" />
     <None Include="Resources\Stop-16.ico" />
     <None Include="Resources\Go-16.ico" />
-    <None Include="Resources\IconFLDC.ico" />
-    <None Include="Resources\L-methionine-B-48.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Coins-4-top-24.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\L-cysteine-3D-vdW2-32.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\L-methionine-B-top-32.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\FoldingCoin-16_32_48.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\FoldingCoin-top-32.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CureCoinLogo-top-32.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\FLDC_48.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\EOC_48.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

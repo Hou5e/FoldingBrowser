@@ -1,10 +1,10 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class TextEntryDialog
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
-    Protected Overrides Sub Dispose(ByVal disposing As Boolean)
+    <System.Diagnostics.DebuggerNonUserCode()>
+    Protected Overrides Sub Dispose(disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
                 components.Dispose()
@@ -20,11 +20,11 @@ Partial Class TextEntryDialog
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.TextEnteredUpper = New System.Windows.Forms.TextBox()
         Me.MsgTextLower = New System.Windows.Forms.Label()
-        Me.Button1 = New System.Windows.Forms.Button()
+        Me.btnCancel = New System.Windows.Forms.Button()
         Me.BtnOK = New System.Windows.Forms.Button()
         Me.MsgTextUpper = New System.Windows.Forms.Label()
         Me.TextEnteredLower = New System.Windows.Forms.TextBox()
@@ -49,17 +49,17 @@ Partial Class TextEntryDialog
         Me.MsgTextLower.TabIndex = 1
         Me.MsgTextLower.Text = "Msg:"
         '
-        'Button1
+        'btnCancel
         '
-        Me.Button1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button1.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.Button1.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Button1.Location = New System.Drawing.Point(295, 103)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(90, 28)
-        Me.Button1.TabIndex = 3
-        Me.Button1.Text = "Cancel"
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.btnCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
+        Me.btnCancel.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnCancel.Location = New System.Drawing.Point(295, 103)
+        Me.btnCancel.Name = "btnCancel"
+        Me.btnCancel.Size = New System.Drawing.Size(90, 28)
+        Me.btnCancel.TabIndex = 3
+        Me.btnCancel.Text = "Cancel"
+        Me.btnCancel.UseVisualStyleBackColor = True
         '
         'BtnOK
         '
@@ -98,7 +98,7 @@ Partial Class TextEntryDialog
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(407, 143)
         Me.Controls.Add(Me.BtnOK)
-        Me.Controls.Add(Me.Button1)
+        Me.Controls.Add(Me.btnCancel)
         Me.Controls.Add(Me.MsgTextUpper)
         Me.Controls.Add(Me.MsgTextLower)
         Me.Controls.Add(Me.TextEnteredLower)
@@ -111,7 +111,7 @@ Partial Class TextEntryDialog
     End Sub
     Friend WithEvents TextEnteredUpper As System.Windows.Forms.TextBox
     Friend WithEvents MsgTextLower As System.Windows.Forms.Label
-    Friend WithEvents Button1 As System.Windows.Forms.Button
+    Friend WithEvents btnCancel As System.Windows.Forms.Button
     Friend WithEvents BtnOK As System.Windows.Forms.Button
     Friend WithEvents MsgTextUpper As System.Windows.Forms.Label
     Friend WithEvents TextEnteredLower As System.Windows.Forms.TextBox

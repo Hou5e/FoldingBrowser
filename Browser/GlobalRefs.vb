@@ -4,15 +4,43 @@ Public Module GlobalRefs
     'Don't change this:
     Public Const Prog_Name As String = "FoldingBrowser"
 
-    Public Const DAT_FLDC As String = "FLDC"
-    Public Const DAT_12W As String = "12W"
-    Public Const DAT_URL As String = "URL"
-    Public Const DAT_PW As String = "PW"
+    'Common URLs
+    Public Const URL_BLANK As String = "about:blank"
+    Public Const URL_Counterwallet As String = "https://wallet.counterwallet.io/"
+    Public Const URL_FoldingCoin As String = "http://foldingcoin.net/"
+    Public Const URL_Twitter_FoldingCoin As String = "https://twitter.com/FoldingCoin"
+    Public Const URL_BlockchainFLDC As String = "http://blockscan.com/assetInfo/FLDC"
+    Public Const URL_FLDC_Distro As String = "http://foldingcoin.xyz/?token=FLDC&total=500000&start=2016-10-25&end=2016-10-26"
+    Public Const URL_CureCoin As String = "https://www.curecoin.net/"
+    Public Const URL_Twitter_CureCoin As String = "https://twitter.com/CureCoin_Team"
+    Public Const URL_BlockchainCURE As String = "https://chainz.cryptoid.info/cure/"
+    Public Const URL_EOC As String = "http://folding.extremeoverclocking.com/user_summary.php?s=&u="
+    Public Const URL_CURECOIN_EOC As String = "http://folding.extremeoverclocking.com/team_summary.php?s=&t=224497"
+    Public Const URL_FAH As String = "http://folding.stanford.edu/"
+    Public Const URL_FAH_Client As String = "http://folding.stanford.edu/client/"
+
+    Public Const Id As String = "Id"
+    'Wallet Id specific
+    Public Const DAT_BTC_Addr As String = "BTCAddress"
+    Public Const DAT_CP12Words As String = "CP12Words"
+    Public Const DAT_FAH_Username As String = "FAHUsername"
+    Public Const DAT_FAH_Team As String = "FAHTeam"
+    Public Const DAT_Email As String = "Email"
+    Public Const DAT_Passkey As String = "Passkey"
 
     Public INI As New IniFile
     Public Const INI_Settings As String = "Settings"
     Public Const INI_PW As String = "DatFilePassword"
     Public Const INI_Size As String = "Size"
+    Public Const INI_WindowState As String = "WindowState"
+    Public Const INI_LastWalletId As String = "LastWalletId"
+    Public Const INI_LastBrowserVersion As String = "LastBrowserVersion"
+    Public Const INI_ShowTheShowDatButton As String = "ShowTheShowDatButton"
+
+    'Wallet Id specific
+    Public Const INI_FAH_Username As String = "FAHUsername"
+    Public Const INI_EOC_ID As String = "ExtremeOverclockingUserId"
+    Public Const INI_WalletName As String = "WalletName"
 
     Public UserProfileDir As String = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), Prog_Name)
     Public IniFilePath As String = System.IO.Path.Combine(UserProfileDir, Prog_Name & ".ini")
@@ -46,7 +74,7 @@ Public Module GlobalRefs
             SaveLogFile = True
 
         Catch ex As Exception
-            MsgBox("Saving Log File Error: " & ex.ToString, MsgBoxStyle.Exclamation)
+            MessageBox.Show("Saving Log File Error: " & ex.ToString, "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         Finally
             'Close the File 
             If twLog IsNot Nothing Then
@@ -54,22 +82,54 @@ Public Module GlobalRefs
             End If
         End Try
     End Function
+
+#Region "Wait (Milliseconds)"
+    Private iWaits As Integer = 0
+    Public Sub Wait(iMilSec As Integer)
+        If iMilSec > 0 Then
+            'Split the time interval up into 50ms intervals to allow the program to update for DoEvents
+            iWaits = iMilSec \ 50
+
+            For i As Integer = 1 To iWaits
+                System.Windows.Forms.Application.DoEvents()
+                'Test for closing app
+                If System.Windows.Forms.Application.OpenForms.Count = 0 Then Exit For
+                'Test for Stop button being pressed
+                If g_bCancelNav = True Then Exit For
+                'Sleep to free up system resources
+                Threading.Thread.Sleep(50)
+            Next
+        End If
+    End Sub
+#End Region
 End Module
+
 
 'File download, see: https://github.com/cefsharp/CefSharp/blob/master/CefSharp.Example/DownloadHandler.cs
 Public Class DownloadHandler
     Implements CefSharp.IDownloadHandler
     Public Sub OnBeforeDownload(browser As CefSharp.IBrowser, downloadItem As CefSharp.DownloadItem, callback As CefSharp.IBeforeDownloadCallback) Implements CefSharp.IDownloadHandler.OnBeforeDownload
+        'Reset the downloaded file path at the start of downloading the file
+        g_strDownloadedFilePath = ""
+        g_bCancelNav = False
+
         If callback.IsDisposed = False Then
             'For g_bAskDownloadLocation = true, then show the download location dialog, otherwise don't
             callback.Continue(System.IO.Path.Combine(UserProfileDir, downloadItem.SuggestedFileName), g_bAskDownloadLocation)
         End If
-        'Reset the downloaded file path at the start of downloading the file
-        g_strDownloadedFilePath = ""
     End Sub
 
     Public Sub OnDownloadUpdated(browser As CefSharp.IBrowser, downloadItem As CefSharp.DownloadItem, callback As CefSharp.IDownloadItemCallback) Implements CefSharp.IDownloadHandler.OnDownloadUpdated
+        If callback.IsDisposed = False Then
+            'Stop the download if Navigation cancelled or <Esc> was pressed
+            If g_bCancelNav = True Then
+                callback.Cancel()
+            End If
+        End If
+
+        'Update the download progress bar in the UI
         g_Main.updateDownload(downloadItem.PercentComplete, downloadItem.IsComplete, downloadItem.IsCancelled)
+
         If downloadItem.IsComplete = True Then
             'Set the downloaded file path 
             g_strDownloadedFilePath = downloadItem.FullPath
