@@ -4,8 +4,8 @@
 
 
 ;---- Helper defines / constants ----
-!define PRODUCT_VERSION "5"  ;Match the displayed version in the program title. Example: 1.2.3
-!define PRODUCT_4_VALUE_VERSION "5.0.0.0"  ;Match the executable version: Right-click the program executable file | Properties | Version. Example: 1.2.3.4
+!define PRODUCT_VERSION "6"  ;Match the displayed version in the program title. Example: 1.2.3
+!define PRODUCT_4_VALUE_VERSION "6.0.0.0"  ;Match the executable version: Right-click the program executable file | Properties | Version. Example: 1.2.3.4
 !define PRODUCT_YEAR "2016"
 !define PRODUCT_NAME "FoldingBrowser"
 !define PRODUCT_EXE_NAME "FoldingBrowser"  ;Executable name without extension
@@ -14,6 +14,9 @@
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\${PRODUCT_EXE_NAME}.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_EXE_NAME "Uninstall_${PRODUCT_EXE_NAME}"  ;Executable name without extension
+
+;This constant must match the CureCoin installer version
+!define CURECOIN_VERSION "0.1.3.3"
 
 !define REQUIRED_MS_DOT_NET_VERSION "4.0*"
 
@@ -44,6 +47,9 @@ SetCompressor lzma  ;Set compression method
 
 ;License page
 !insertmacro MUI_PAGE_LICENSE "LICENSE.txt"
+
+;Components page
+!insertmacro MUI_PAGE_COMPONENTS
 
 ;Directory page
 !insertmacro MUI_PAGE_DIRECTORY
@@ -90,7 +96,7 @@ SilentInstall normal  ;Silent install or uninstall: run from the command line wi
   VIAddVersionKey /LANG=${LANG_ENGLISH} "FileVersion" "${PRODUCT_VERSION}"
 
 ;---- Installer sections, selectable on configuration page if shown ----
-Section "!Main Program Installation" SEC01
+Section "!${PRODUCT_NAME} v${PRODUCT_VERSION}" SEC01
   SetOverwrite on
   SectionIn RO  ;RO = Read only, which forces this section to be required
   SetShellVarContext all  ;Try to use the 'All Users' folder for shortcuts (WinXP only), otherwise default to the user's folder
@@ -107,6 +113,7 @@ Section "!Main Program Installation" SEC01
   File "..\Browser\bin\Release\d3dcompiler_43.dll"
   File "..\Browser\bin\Release\d3dcompiler_47.dll"
   File "..\Browser\bin\Release\FoldingBrowser.exe"
+  File "..\Browser\bin\Release\FoldingBrowser.exe.config"
   File "..\Browser\bin\Release\icudtl.dat"
   File "..\Browser\bin\Release\libcef.dll"
   File "..\Browser\bin\Release\libEGL.dll"
@@ -129,9 +136,11 @@ Section "!Main Program Installation" SEC01
   CreateShortCut "$SMPROGRAMS\Folding Browser.lnk" "$INSTDIR\FoldingBrowser.exe"
 SectionEnd
 
-Section "Additional Files" SEC02
+Section "CureCoin Qt Wallet v${CURECOIN_VERSION}" SEC02
   SetOverwrite on
-  SectionIn RO  ;Required section
+  SectionIn 1
+  ;NOTE: CureCoin will not be uninstalled from this program's uninstaller, but it can be uninstalled with its own uninstlaller.
+  Call CureCoinInstall
 SectionEnd
 
 Section -Post
@@ -144,6 +153,14 @@ Section -Post
   WriteRegStr HKLM "${PRODUCT_UNINST_KEY}" "URLInfoAbout" "${PRODUCT_WEB_SITE}"
   WriteRegStr HKLM "${PRODUCT_UNINST_KEY}" "Publisher" "${PRODUCT_PUBLISHER}"
 SectionEnd
+
+LangString DESC_Section1 ${LANG_ENGLISH} "Web browser for FoldingCoin (FLDC) web wallet"
+LangString DESC_Section2 ${LANG_ENGLISH} "CureCoin Wallet: Needed for earning CURE"
+
+!insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
+  !insertmacro MUI_DESCRIPTION_TEXT ${SEC01} $(DESC_Section1)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SEC02} $(DESC_Section2)
+!insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 
 ; ---- Installer functions ----
@@ -173,6 +190,23 @@ UninstallFinished:
   MessageBox MB_YESNO|MB_ICONEXCLAMATION "$0" /SD IDYES IDYES NETFrameworkInstalled IDNO 0
   Abort
 NETFrameworkInstalled:
+FunctionEnd
+
+Function CureCoinInstall
+  ;Destination: $PLUGINSDIR is a temporary folder that is automatically deleted when the installer exits
+  SetOutPath "$PLUGINSDIR"
+  File "CureInst\Install CureCoin v${CURECOIN_VERSION}.exe"
+
+  ;Initializes the plugins directory ($PLUGINSDIR) if it's not already initialized.
+  InitPluginsDir
+
+  ;The CureCoin installer was made with NSIS, so it can be run silently with /S
+  ExecWait '"$PLUGINSDIR\Install CureCoin v${CURECOIN_VERSION}.exe" /S' $1
+  IntCmp $1 0 CureCoinInstEnd  ;Skip error message if the installation was OK
+  StrCpy $2 "CureCoin install error: $1 (undefined = error running exe, 0 = no error, 1 = cancel button, 2 = aborted by script)"
+  MessageBox MB_OK "$2" /SD IDOK
+  DetailPrint $2
+CureCoinInstEnd:
 FunctionEnd
 
 Function .oninstsuccess
