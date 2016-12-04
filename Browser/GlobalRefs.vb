@@ -15,18 +15,23 @@ Public Module GlobalRefs
     Public Const URL_Twitter_CureCoin As String = "https://twitter.com/CureCoin_Team"
     Public Const URL_BlockchainCURE As String = "https://chainz.cryptoid.info/cure/"
     Public Const URL_EOC As String = "http://folding.extremeoverclocking.com/user_summary.php?s=&u="
-    Public Const URL_CURECOIN_EOC As String = "http://folding.extremeoverclocking.com/team_summary.php?s=&t=224497"
+    Public Const URL_CureCoin_EOC As String = "http://folding.extremeoverclocking.com/team_summary.php?s=&t=224497"
     Public Const URL_FAH As String = "http://folding.stanford.edu/"
     Public Const URL_FAH_Client As String = "http://folding.stanford.edu/client/"
+    Public Const URL_CureCoinFoldingPoolRegistration As String = "https://www.cryptobullionpools.com/"
 
     Public Const Id As String = "Id"
     'Wallet Id specific
     Public Const DAT_BTC_Addr As String = "BTCAddress"
-    Public Const DAT_CP12Words As String = "CP12Words"
+    Public Const DAT_CP12Words As String = "CounterParty12WordPassphrase"
     Public Const DAT_FAH_Username As String = "FAHUsername"
     Public Const DAT_FAH_Team As String = "FAHTeam"
+    Public Const DAT_FAH_Passkey As String = "FAHPasskey"
     Public Const DAT_Email As String = "Email"
-    Public Const DAT_Passkey As String = "Passkey"
+    Public Const DAT_CureCoin_Pwd As String = "CureCoinPoolPassword"
+    Public Const DAT_CureCoin_Pin As String = "CureCoinPoolPin"
+    Public Const DAT_CureCoin_Wallet_Version As String = "CureCoinWalletVersion"
+    Public Const DAT_CureCoin_Addr As String = "CureCoinAddress"
 
     Public INI As New IniFile
     Public Const INI_Settings As String = "Settings"

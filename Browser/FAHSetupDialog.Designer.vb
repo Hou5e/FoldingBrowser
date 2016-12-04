@@ -97,6 +97,7 @@ Partial Class FAHSetupDialog
         Me.txtUsername.Size = New System.Drawing.Size(111, 24)
         Me.txtUsername.TabIndex = 0
         Me.txtUsername.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        Me.ToolTip1.SetToolTip(Me.txtUsername, "Existing users can paste their entire FAH username here")
         '
         'lblPasskeyFromEmail
         '
@@ -303,6 +304,8 @@ Partial Class FAHSetupDialog
         Me.txtBitcoinAddress.Size = New System.Drawing.Size(316, 24)
         Me.txtBitcoinAddress.TabIndex = 2
         Me.txtBitcoinAddress.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        Me.ToolTip1.SetToolTip(Me.txtBitcoinAddress, "BTC address must be compatible with Counterparty." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Do Not Use An Exchange BTC/FLD" &
+        "C Address:" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "     You will lose other Merged Folding tokens")
         '
         'lblBitcoinAddress
         '

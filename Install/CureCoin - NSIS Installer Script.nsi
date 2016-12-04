@@ -91,6 +91,9 @@ Section "!Main Program Installation" SEC01
   SectionIn RO  ;RO = Read only, which forces this section to be required
   SetShellVarContext all  ;Try to use the 'All Users' folder for shortcuts (WinXP only), otherwise default to the user's folder
 
+  ;If the CureCoin Wallet is running, then close it
+  Call CloseCureCoin
+
   ;Program files to put in the installtion directory
   SetOutPath "$INSTDIR"  ;Destination
   File "CureCoin\license.txt"
@@ -137,11 +140,59 @@ Function .oninstsuccess
   Exec "$INSTDIR\${PRODUCT_EXE_NAME}.exe"
 FunctionEnd
 
+;Based on 'Close Delphi With User Approval' that was inspired by 'Close/exit a program' (WinAmp)
+Function CloseCureCoin
+  Push $R1
+RetryLoop:
+  ;Ask to Close program
+  MessageBox MB_RETRYCANCEL "Please close the running CureCoin Wallet software, and press 'Retry'. CureCoin maybe running in the system tray in the lower righthand corner of your screen."  IDCANCEL ExitWhenNotFound
+
+  ;Try exiting loop
+  FindWindow $R1 "" "curecoin-qt"
+  IntCmp $R1 0 ExitWhenNotFound
+  Sleep 5000
+
+  ;Try exiting loop
+  FindWindow $R1 "" "curecoin-qt"
+  IntCmp $R1 0 ExitWhenNotFound
+  Sleep 5000
+
+  ;Try exiting loop
+  FindWindow $R1 "" "curecoin-qt"
+  IntCmp $R1 0 ExitWhenNotFound
+  Sleep 5000
+
+  ;Try exiting loop
+  FindWindow $R1 "" "curecoin-qt"
+  IntCmp $R1 0 ExitWhenNotFound
+  Sleep 3000
+
+  ;Try exiting loop
+  FindWindow $R1 "" "curecoin-qt"
+  IntCmp $R1 0 ExitWhenNotFound
+  Sleep 3000
+
+  ;Try exiting loop
+  FindWindow $R1 "" "curecoin-qt"
+  IntCmp $R1 0 ExitWhenNotFound
+  Sleep 2000
+
+  ;Try exiting loop
+  FindWindow $R1 "" "curecoin-qt"
+  IntCmp $R1 0 ExitWhenNotFound
+  Sleep 2000
+  Goto RetryLoop
+ExitWhenNotFound:
+  Pop $R1
+FunctionEnd
 
 
 ;---- Uninstaller ----
 Section Uninstall
   SetShellVarContext all  ;Uninstall shortcuts from the 'All Users' folder (WinXP only), otherwise uninstall shortcuts from the user's folder
+
+  ;If the CureCoin Wallet is running, then close it
+  Call un.CloseCureCoin
 
   ;Delete the program shortcuts
   Delete "$SMPROGRAMS\CureCoin.lnk"
@@ -173,6 +224,7 @@ Section Uninstall
   SetAutoClose true
 SectionEnd
 
+
 ;---- Uninstaller functions ----
 Function un.onInit
   !insertmacro MULTIUSER_UNINIT  ;On uninstall startup, ensure Admin user privilege level
@@ -184,4 +236,51 @@ FunctionEnd
 Function un.onUninstSuccess
   HideWindow
   MessageBox MB_ICONINFORMATION|MB_OK "$(^Name) was successfully removed from your computer." /SD IDOK
+FunctionEnd
+
+
+;Based on 'Close Delphi With User Approval' that was inspired by 'Close/exit a program' (WinAmp)
+Function un.CloseCureCoin
+  Push $R1
+unRetryLoop:
+  ;Ask to Close program
+  MessageBox MB_RETRYCANCEL "Please close the running CureCoin Wallet software, and press 'Retry'. CureCoin maybe running in the system tray in the lower righthand corner of your screen."  IDCANCEL unExitWhenNotFound
+
+  ;Try exiting loop
+  FindWindow $R1 "" "curecoin-qt"
+  IntCmp $R1 0 unExitWhenNotFound
+  Sleep 5000
+
+  ;Try exiting loop
+  FindWindow $R1 "" "curecoin-qt"
+  IntCmp $R1 0 unExitWhenNotFound
+  Sleep 5000
+
+  ;Try exiting loop
+  FindWindow $R1 "" "curecoin-qt"
+  IntCmp $R1 0 unExitWhenNotFound
+  Sleep 5000
+
+  ;Try exiting loop
+  FindWindow $R1 "" "curecoin-qt"
+  IntCmp $R1 0 unExitWhenNotFound
+  Sleep 3000
+
+  ;Try exiting loop
+  FindWindow $R1 "" "curecoin-qt"
+  IntCmp $R1 0 unExitWhenNotFound
+  Sleep 3000
+
+  ;Try exiting loop
+  FindWindow $R1 "" "curecoin-qt"
+  IntCmp $R1 0 unExitWhenNotFound
+  Sleep 2000
+
+  ;Try exiting loop
+  FindWindow $R1 "" "curecoin-qt"
+  IntCmp $R1 0 unExitWhenNotFound
+  Sleep 2000
+  Goto unRetryLoop
+unExitWhenNotFound:
+  Pop $R1
 FunctionEnd

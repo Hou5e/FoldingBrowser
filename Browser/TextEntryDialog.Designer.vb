@@ -46,7 +46,7 @@ Partial Class TextEntryDialog
         Me.MsgTextLower.Location = New System.Drawing.Point(21, 35)
         Me.MsgTextLower.Name = "MsgTextLower"
         Me.MsgTextLower.Size = New System.Drawing.Size(45, 18)
-        Me.MsgTextLower.TabIndex = 1
+        Me.MsgTextLower.TabIndex = 5
         Me.MsgTextLower.Text = "Msg:"
         '
         'btnCancel
@@ -80,7 +80,7 @@ Partial Class TextEntryDialog
         Me.MsgTextUpper.Location = New System.Drawing.Point(21, 9)
         Me.MsgTextUpper.Name = "MsgTextUpper"
         Me.MsgTextUpper.Size = New System.Drawing.Size(45, 18)
-        Me.MsgTextUpper.TabIndex = 1
+        Me.MsgTextUpper.TabIndex = 4
         Me.MsgTextUpper.Text = "Msg:"
         '
         'TextEnteredLower

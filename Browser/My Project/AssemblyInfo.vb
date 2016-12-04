@@ -12,7 +12,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("FoldingCoin (FLDC) All-In-One Installer and Web Wallet interface")> 
 <Assembly: AssemblyCompany("")> 
 <Assembly: AssemblyProduct("FoldingBrowser")> 
-<Assembly: AssemblyCopyright("Copyright © 2016 FoldingCoin Inc")> 
+<Assembly: AssemblyCopyright("Copyright © 2016 FoldingCoin")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
@@ -31,5 +31,5 @@ Imports System.Runtime.InteropServices
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("5.0.0.0")>
-<Assembly: AssemblyFileVersion("5.0.0.0")>
+<Assembly: AssemblyVersion("6.0.0.0")>
+<Assembly: AssemblyFileVersion("6.0.0.0")>

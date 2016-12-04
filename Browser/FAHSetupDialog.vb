@@ -120,8 +120,8 @@
             'Try loading the Passkey, if it exists already
             If Me.txtPasskey.Text.Length = 0 Then
                 Try
-                    If DAT.GetSection(Id & g_Main.cbxWalletId.Text).GetKey(DAT_Passkey) IsNot Nothing Then
-                        Me.txtPasskey.Text = DAT.GetSection(Id & g_Main.cbxWalletId.Text).GetKey(DAT_Passkey).GetValue()
+                    If DAT.GetSection(Id & g_Main.cbxWalletId.Text).GetKey(DAT_FAH_Passkey) IsNot Nothing Then
+                        Me.txtPasskey.Text = DAT.GetSection(Id & g_Main.cbxWalletId.Text).GetKey(DAT_FAH_Passkey).GetValue()
                     End If
                 Catch ex As Exception
                     g_Main.Msg("FAH Cfg: Error loading Passkey: " & ex.Message.ToString)
@@ -557,7 +557,7 @@
             If Me.lblUsernamePreview.Text.Length > 0 Then DAT.AddSection(Id & g_Main.cbxWalletId.Text).AddKey(DAT_FAH_Username).Value = Me.lblUsernamePreview.Text
             If Me.lblTeamNumber.Text.Length > 0 Then DAT.AddSection(Id & g_Main.cbxWalletId.Text).AddKey(DAT_FAH_Team).Value = Me.lblTeamNumber.Text
             If Me.txtEmail.Text.Length > 0 Then DAT.AddSection(Id & g_Main.cbxWalletId.Text).AddKey(DAT_Email).Value = Me.txtEmail.Text
-            If Me.txtPasskey.Text.Length > 0 Then DAT.AddSection(Id & g_Main.cbxWalletId.Text).AddKey(DAT_Passkey).Value = Me.txtPasskey.Text
+            If Me.txtPasskey.Text.Length > 0 Then DAT.AddSection(Id & g_Main.cbxWalletId.Text).AddKey(DAT_FAH_Passkey).Value = Me.txtPasskey.Text
 
             'Create text from the INI, Encrypt, and Write/flush DAT text to file
             SaveDat(Encrypt(DAT.SaveToString))

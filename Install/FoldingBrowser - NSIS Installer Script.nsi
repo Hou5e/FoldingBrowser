@@ -20,6 +20,8 @@
 
 !define REQUIRED_MS_DOT_NET_VERSION "4.0*"
 
+Var RunFoldingBrowser
+
 SetCompressor lzma  ;Set compression method
 
 
@@ -134,13 +136,20 @@ Section "!${PRODUCT_NAME} v${PRODUCT_VERSION}" SEC01
   SetOutPath "$INSTDIR"  ;Destination. Required to make the EXE shortcut 'start in' path correct
   CreateShortCut "$DESKTOP\Folding Browser.lnk" "$INSTDIR\FoldingBrowser.exe"
   CreateShortCut "$SMPROGRAMS\Folding Browser.lnk" "$INSTDIR\FoldingBrowser.exe"
+  ;Set the default commandline options to indicate FoldingBrowser was installed. This initiates the 'Get Setup for Folding' dialog in the FoldingBrowser
+  StrCpy $RunFoldingBrowser "$INSTDIR\${PRODUCT_EXE_NAME}.exe -Instl"
 SectionEnd
 
 Section "CureCoin Qt Wallet v${CURECOIN_VERSION}" SEC02
   SetOverwrite on
+  AddSize 22500
   SectionIn 1
+  ;If the CureCoin Wallet is running, then close it
+  Call CloseCureCoin
   ;NOTE: CureCoin will not be uninstalled from this program's uninstaller, but it can be uninstalled with its own uninstlaller.
   Call CureCoinInstall
+  ;Change the commandline options to indicate the CureCoin wallet was installed
+  StrCpy $RunFoldingBrowser "$INSTDIR\${PRODUCT_EXE_NAME}.exe -InstWithCure"
 SectionEnd
 
 Section -Post
@@ -155,7 +164,7 @@ Section -Post
 SectionEnd
 
 LangString DESC_Section1 ${LANG_ENGLISH} "Web browser for FoldingCoin (FLDC) web wallet"
-LangString DESC_Section2 ${LANG_ENGLISH} "CureCoin Wallet: Needed for earning CURE"
+LangString DESC_Section2 ${LANG_ENGLISH} "CureCoin Wallet: Needed for earning CureCoin, in addition to earning FoldingCoin"
 
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC01} $(DESC_Section1)
@@ -210,9 +219,55 @@ CureCoinInstEnd:
 FunctionEnd
 
 Function .oninstsuccess
-  Exec "$INSTDIR\${PRODUCT_EXE_NAME}.exe -Instl"
+  ;MessageBox MB_OK "$RunFoldingBrowser" /SD IDOK
+  Exec $RunFoldingBrowser
 FunctionEnd
 
+;Based on 'Close Delphi With User Approval' that was inspired by 'Close/exit a program' (WinAmp)
+Function CloseCureCoin
+  Push $R1
+RetryLoop:
+  ;Ask to Close program
+  MessageBox MB_RETRYCANCEL "Please close the running CureCoin Wallet software, and press 'Retry'. CureCoin maybe running in the system tray in the lower righthand corner of your screen."  IDCANCEL ExitWhenNotFound
+
+  ;Try exiting loop
+  FindWindow $R1 "" "curecoin-qt"
+  IntCmp $R1 0 ExitWhenNotFound
+  Sleep 5000
+
+  ;Try exiting loop
+  FindWindow $R1 "" "curecoin-qt"
+  IntCmp $R1 0 ExitWhenNotFound
+  Sleep 5000
+
+  ;Try exiting loop
+  FindWindow $R1 "" "curecoin-qt"
+  IntCmp $R1 0 ExitWhenNotFound
+  Sleep 5000
+
+  ;Try exiting loop
+  FindWindow $R1 "" "curecoin-qt"
+  IntCmp $R1 0 ExitWhenNotFound
+  Sleep 3000
+
+  ;Try exiting loop
+  FindWindow $R1 "" "curecoin-qt"
+  IntCmp $R1 0 ExitWhenNotFound
+  Sleep 3000
+
+  ;Try exiting loop
+  FindWindow $R1 "" "curecoin-qt"
+  IntCmp $R1 0 ExitWhenNotFound
+  Sleep 2000
+
+  ;Try exiting loop
+  FindWindow $R1 "" "curecoin-qt"
+  IntCmp $R1 0 ExitWhenNotFound
+  Sleep 2000
+  Goto RetryLoop
+ExitWhenNotFound:
+  Pop $R1
+FunctionEnd
 
 
 ;---- Uninstaller ----
