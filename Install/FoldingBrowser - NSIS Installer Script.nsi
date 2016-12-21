@@ -20,16 +20,16 @@
 
 !define REQUIRED_MS_DOT_NET_VERSION "4.0*"
 
+SetCompressor lzma  ;Set compression method
 Var RunFoldingBrowser
 
-SetCompressor lzma  ;Set compression method
-
-
-!define MULTIUSER_EXECUTIONLEVEL admin ;Set the execution level for 'MultiUser.nsh'
+!define MULTIUSER_EXECUTIONLEVEL admin  ;Set the execution level for 'MultiUser.nsh'
 !include MultiUser.nsh  ;Used for testing execution level. Does the installee have admin rights?
 
 !include FileFunc.nsh  ;File Functions Header, for RefreshShellIcons
 !insertmacro un.RefreshShellIcons
+
+!include nsProcess.nsh  ;Used to see if the program is running and to close it if it is
 
 ;---- Modern UI section ----
 !include MUI2.nsh
@@ -102,6 +102,9 @@ Section "!${PRODUCT_NAME} v${PRODUCT_VERSION}" SEC01
   SetOverwrite on
   SectionIn RO  ;RO = Read only, which forces this section to be required
   SetShellVarContext all  ;Try to use the 'All Users' folder for shortcuts (WinXP only), otherwise default to the user's folder
+
+  ;If the FoldingBrowser is running, then close it
+  Call CloseFoldingBrowser
 
   ;Program files to put in the installtion directory
   SetOutPath "$INSTDIR"  ;Destination
@@ -199,6 +202,15 @@ UninstallFinished:
   MessageBox MB_YESNO|MB_ICONEXCLAMATION "$0" /SD IDYES IDYES NETFrameworkInstalled IDNO 0
   Abort
 NETFrameworkInstalled:
+
+  ;Test if the Microsoft Visual C++ 2013 (x86) Redistributable is installed, and popup a message if it's not. Required by the CefSharp component
+  ReadRegStr $3 HKLM "SOFTWARE\Wow6432Node\Microsoft\VisualStudio\12.0\VC\Runtimes\x86" "Installed"
+  StrCmp $3 1 VCRedistributableInstalled
+  ReadRegStr $3 HKLM "SOFTWARE\Microsoft\VisualStudio\12.0\VC\Runtimes\x86" "Installed"
+  StrCmp $3 1 VCRedistributableInstalled
+  MessageBox MB_YESNO|MB_ICONEXCLAMATION "Please install the Microsoft Visual C++ 2013 (x86) Redistributable.$\r$\n${PRODUCT_NAME} v${PRODUCT_VERSION} will not run without it.$\r$\n$\r$\nContinue installing ${PRODUCT_NAME} v${PRODUCT_VERSION}?" /SD IDYES IDYES VCRedistributableInstalled IDNO 0
+  Abort
+VCRedistributableInstalled:
 FunctionEnd
 
 Function CureCoinInstall
@@ -219,53 +231,91 @@ CureCoinInstEnd:
 FunctionEnd
 
 Function .oninstsuccess
-  ;MessageBox MB_OK "$RunFoldingBrowser" /SD IDOK
+  ;MessageBox MB_OK "$RunFoldingBrowser"   ;Enable for debugging commandline string
   Exec $RunFoldingBrowser
 FunctionEnd
 
-;Based on 'Close Delphi With User Approval' that was inspired by 'Close/exit a program' (WinAmp)
+Function CloseFoldingBrowser
+  Push $R0
+RetryMsg:
+  ;See if program is running
+  ${nsProcess::FindProcess} "FoldingBrowser.exe" $R0
+  IntCmp $R0 0 0 0 ProceedWhenNotFound
+
+  ;Close the program
+  ${nsProcess::KillProcess} "FoldingBrowser.exe" $R0
+  Sleep 400
+
+  ;See if program is running
+  ${nsProcess::FindProcess} "FoldingBrowser.exe" $R0
+  IntCmp $R0 0 0 0 ProceedWhenNotFound
+  Sleep 600
+
+  ;See if program is running
+  ${nsProcess::FindProcess} "FoldingBrowser.exe" $R0
+  MessageBox MB_OK "Found: $R0"    ;Enable for debugging
+  IntCmp $R0 0 0 0 ProceedWhenNotFound
+  
+  ;Ask to close program
+  MessageBox MB_RETRYCANCEL "Please close the running FoldingBrowser software, and press 'Retry'.$\r$\n$\r$\nNote: FoldingBrowser maybe running in the system tray in the lower righthand corner of your screen." /SD IDCANCEL IDCANCEL ProceedWhenNotFound
+
+  ;See if program is running
+  ${nsProcess::FindProcess} "FoldingBrowser.exe" $R0
+  IntCmp $R0 0 0 0 ProceedWhenNotFound
+
+  Goto RetryMsg
+ProceedWhenNotFound:
+  Pop $R0
+  ${nsProcess::Unload}
+FunctionEnd
+
 Function CloseCureCoin
   Push $R1
 RetryLoop:
-  ;Ask to Close program
-  MessageBox MB_RETRYCANCEL "Please close the running CureCoin Wallet software, and press 'Retry'. CureCoin maybe running in the system tray in the lower righthand corner of your screen."  IDCANCEL ExitWhenNotFound
+  ;See if program is running
+  FindWindow $R1 "" "curecoin-qt"
+  IntCmp $R1 0 ContinueWhenNotFound
+
+  ;Ask to close program
+  MessageBox MB_RETRYCANCEL "Please close the running CureCoin Wallet software,$\r$\nand press 'Retry' (takes about 20 seconds).$\r$\n$\r$\nNote: CureCoin maybe running in the system tray in the lower righthand corner of your screen." /SD IDCANCEL IDCANCEL ContinueWhenNotFound
 
   ;Try exiting loop
   FindWindow $R1 "" "curecoin-qt"
-  IntCmp $R1 0 ExitWhenNotFound
+  IntCmp $R1 0 ContinueWhenNotFound
   Sleep 5000
 
   ;Try exiting loop
   FindWindow $R1 "" "curecoin-qt"
-  IntCmp $R1 0 ExitWhenNotFound
+  IntCmp $R1 0 ContinueWhenNotFound
   Sleep 5000
 
   ;Try exiting loop
   FindWindow $R1 "" "curecoin-qt"
-  IntCmp $R1 0 ExitWhenNotFound
+  IntCmp $R1 0 ContinueWhenNotFound
   Sleep 5000
 
   ;Try exiting loop
   FindWindow $R1 "" "curecoin-qt"
-  IntCmp $R1 0 ExitWhenNotFound
+  IntCmp $R1 0 ContinueWhenNotFound
   Sleep 3000
 
   ;Try exiting loop
   FindWindow $R1 "" "curecoin-qt"
-  IntCmp $R1 0 ExitWhenNotFound
+  IntCmp $R1 0 ContinueWhenNotFound
   Sleep 3000
 
   ;Try exiting loop
   FindWindow $R1 "" "curecoin-qt"
-  IntCmp $R1 0 ExitWhenNotFound
-  Sleep 2000
+  IntCmp $R1 0 ContinueWhenNotFound
+  Sleep 3000
 
   ;Try exiting loop
   FindWindow $R1 "" "curecoin-qt"
-  IntCmp $R1 0 ExitWhenNotFound
-  Sleep 2000
+  IntCmp $R1 0 ContinueWhenNotFound
+  Sleep 3000
+
   Goto RetryLoop
-ExitWhenNotFound:
+ContinueWhenNotFound:
   Pop $R1
 FunctionEnd
 
@@ -273,6 +323,9 @@ FunctionEnd
 ;---- Uninstaller ----
 Section Uninstall
   SetShellVarContext all  ;Uninstall shortcuts from the 'All Users' folder (WinXP only), otherwise uninstall shortcuts from the user's folder
+
+  ;If the FoldingBrowser is running, then close it
+  Call un.CloseFoldingBrowser
 
   ;Delete the program shortcuts
   Delete "$SMPROGRAMS\Folding Browser.lnk"
@@ -321,11 +374,45 @@ SectionEnd
 Function un.onInit
   !insertmacro MULTIUSER_UNINIT  ;On uninstall startup, ensure Admin user privilege level
 
-  MessageBox MB_ICONQUESTION|MB_YESNO "Are you sure you want to completely remove $(^Name) and all of its components?" /SD IDYES IDYES +2
+  MessageBox MB_ICONQUESTION|MB_YESNO "Are you sure you want to remove $(^Name)?$\r$\n(User settings will be left in your user profile)" /SD IDYES IDYES +2
   Abort
 FunctionEnd
 
 Function un.onUninstSuccess
   HideWindow
   MessageBox MB_ICONINFORMATION|MB_OK "$(^Name) was successfully removed from your computer." /SD IDOK
+FunctionEnd
+
+Function un.CloseFoldingBrowser
+  Push $R0
+unRetryMsg:
+  ;See if program is running
+  ${nsProcess::FindProcess} "FoldingBrowser.exe" $R0
+  IntCmp $R0 0 0 0 unProceedWhenNotFound
+
+  ;Close the program
+  ${nsProcess::KillProcess} "FoldingBrowser.exe" $R0
+  Sleep 400
+
+  ;See if program is running
+  ${nsProcess::FindProcess} "FoldingBrowser.exe" $R0
+  IntCmp $R0 0 0 0 unProceedWhenNotFound
+  Sleep 600
+
+  ;See if program is running
+  ${nsProcess::FindProcess} "FoldingBrowser.exe" $R0
+  MessageBox MB_OK "Found: $R0"    ;Enable for debugging
+  IntCmp $R0 0 0 0 unProceedWhenNotFound
+
+  ;Ask to close program
+  MessageBox MB_RETRYCANCEL "Please close the running FoldingBrowser software, and press 'Retry'.$\r$\n$\r$\nNote: FoldingBrowser maybe running in the system tray in the lower righthand corner of your screen." /SD IDCANCEL IDCANCEL unProceedWhenNotFound
+
+  ;See if program is running
+  ${nsProcess::FindProcess} "FoldingBrowser.exe" $R0
+  IntCmp $R0 0 0 0 unProceedWhenNotFound
+
+  Goto unRetryMsg
+unProceedWhenNotFound:
+  Pop $R0
+  ${nsProcess::Unload}
 FunctionEnd

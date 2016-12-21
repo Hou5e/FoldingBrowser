@@ -23,7 +23,6 @@ Partial Class FAHSetupDialog
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FAHSetupDialog))
         Me.txtUsername = New System.Windows.Forms.TextBox()
         Me.lblPasskeyFromEmail = New System.Windows.Forms.Label()
         Me.btnCancel = New System.Windows.Forms.Button()
@@ -37,7 +36,6 @@ Partial Class FAHSetupDialog
         Me.gbxTeamSelection = New System.Windows.Forms.GroupBox()
         Me.lblTeamNumber = New System.Windows.Forms.Label()
         Me.lblTeam = New System.Windows.Forms.Label()
-        Me.lllCureCoinLink = New System.Windows.Forms.LinkLabel()
         Me.lllTeamNumbersLink = New System.Windows.Forms.LinkLabel()
         Me.lblTeamNotes = New System.Windows.Forms.Label()
         Me.btnGetPasskey = New System.Windows.Forms.Button()
@@ -92,7 +90,7 @@ Partial Class FAHSetupDialog
         '
         'txtUsername
         '
-        Me.txtUsername.Location = New System.Drawing.Point(4, 71)
+        Me.txtUsername.Location = New System.Drawing.Point(4, 78)
         Me.txtUsername.Name = "txtUsername"
         Me.txtUsername.Size = New System.Drawing.Size(111, 24)
         Me.txtUsername.TabIndex = 0
@@ -138,7 +136,7 @@ Partial Class FAHSetupDialog
         Me.lblUsernamePreview.AutoSize = True
         Me.lblUsernamePreview.BackColor = System.Drawing.Color.White
         Me.lblUsernamePreview.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblUsernamePreview.Location = New System.Drawing.Point(9, 27)
+        Me.lblUsernamePreview.Location = New System.Drawing.Point(9, 30)
         Me.lblUsernamePreview.Name = "lblUsernamePreview"
         Me.lblUsernamePreview.Size = New System.Drawing.Size(144, 18)
         Me.lblUsernamePreview.TabIndex = 1
@@ -197,7 +195,6 @@ Partial Class FAHSetupDialog
         '
         Me.gbxTeamSelection.Controls.Add(Me.lblTeamNumber)
         Me.gbxTeamSelection.Controls.Add(Me.lblTeam)
-        Me.gbxTeamSelection.Controls.Add(Me.lllCureCoinLink)
         Me.gbxTeamSelection.Controls.Add(Me.lllTeamNumbersLink)
         Me.gbxTeamSelection.Controls.Add(Me.lblTeamNotes)
         Me.gbxTeamSelection.Controls.Add(Me.rbnOtherTeam)
@@ -205,9 +202,9 @@ Partial Class FAHSetupDialog
         Me.gbxTeamSelection.Controls.Add(Me.rbnFoldingCoin)
         Me.gbxTeamSelection.Controls.Add(Me.txtOtherTeam)
         Me.gbxTeamSelection.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.gbxTeamSelection.Location = New System.Drawing.Point(43, 121)
+        Me.gbxTeamSelection.Location = New System.Drawing.Point(43, 128)
         Me.gbxTeamSelection.Name = "gbxTeamSelection"
-        Me.gbxTeamSelection.Size = New System.Drawing.Size(510, 178)
+        Me.gbxTeamSelection.Size = New System.Drawing.Size(510, 171)
         Me.gbxTeamSelection.TabIndex = 7
         Me.gbxTeamSelection.TabStop = False
         Me.gbxTeamSelection.Text = "Team Number Selection"
@@ -235,22 +232,11 @@ Partial Class FAHSetupDialog
         Me.lblTeam.Text = "Team:"
         Me.lblTeam.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'lllCureCoinLink
-        '
-        Me.lllCureCoinLink.AutoSize = True
-        Me.lllCureCoinLink.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lllCureCoinLink.Location = New System.Drawing.Point(105, 133)
-        Me.lllCureCoinLink.Name = "lllCureCoinLink"
-        Me.lllCureCoinLink.Size = New System.Drawing.Size(99, 13)
-        Me.lllCureCoinLink.TabIndex = 4
-        Me.lllCureCoinLink.TabStop = True
-        Me.lllCureCoinLink.Text = "CureCoin's Website"
-        '
         'lllTeamNumbersLink
         '
         Me.lllTeamNumbersLink.AutoSize = True
         Me.lllTeamNumbersLink.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lllTeamNumbersLink.Location = New System.Drawing.Point(90, 158)
+        Me.lllTeamNumbersLink.Location = New System.Drawing.Point(90, 146)
         Me.lllTeamNumbersLink.Name = "lllTeamNumbersLink"
         Me.lllTeamNumbersLink.Size = New System.Drawing.Size(298, 13)
         Me.lllTeamNumbersLink.TabIndex = 5
@@ -263,9 +249,10 @@ Partial Class FAHSetupDialog
         Me.lblTeamNotes.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblTeamNotes.Location = New System.Drawing.Point(35, 107)
         Me.lblTeamNotes.Name = "lblTeamNotes"
-        Me.lblTeamNotes.Size = New System.Drawing.Size(325, 65)
+        Me.lblTeamNotes.Size = New System.Drawing.Size(350, 52)
         Me.lblTeamNotes.TabIndex = 7
-        Me.lblTeamNotes.Text = resources.GetString("lblTeamNotes.Text")
+        Me.lblTeamNotes.Text = "NOTE: You can fold on any team and earn FoldingCoin." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Folding on team CureCoin al" &
+    "lows earning both FoldingCoin and CureCoin." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Team List:"
         '
         'btnGetPasskey
         '
@@ -281,7 +268,7 @@ Partial Class FAHSetupDialog
         '
         Me.lblUsername.AutoSize = True
         Me.lblUsername.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblUsername.Location = New System.Drawing.Point(20, 50)
+        Me.lblUsername.Location = New System.Drawing.Point(20, 57)
         Me.lblUsername.Name = "lblUsername"
         Me.lblUsername.Size = New System.Drawing.Size(77, 18)
         Me.lblUsername.TabIndex = 1
@@ -291,7 +278,7 @@ Partial Class FAHSetupDialog
         '
         Me.lblSeparator.AutoSize = True
         Me.lblSeparator.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblSeparator.Location = New System.Drawing.Point(117, 50)
+        Me.lblSeparator.Location = New System.Drawing.Point(117, 57)
         Me.lblSeparator.Name = "lblSeparator"
         Me.lblSeparator.Size = New System.Drawing.Size(73, 18)
         Me.lblSeparator.TabIndex = 1
@@ -299,7 +286,7 @@ Partial Class FAHSetupDialog
         '
         'txtBitcoinAddress
         '
-        Me.txtBitcoinAddress.Location = New System.Drawing.Point(189, 71)
+        Me.txtBitcoinAddress.Location = New System.Drawing.Point(189, 78)
         Me.txtBitcoinAddress.Name = "txtBitcoinAddress"
         Me.txtBitcoinAddress.Size = New System.Drawing.Size(316, 24)
         Me.txtBitcoinAddress.TabIndex = 2
@@ -311,7 +298,7 @@ Partial Class FAHSetupDialog
         '
         Me.lblBitcoinAddress.AutoSize = True
         Me.lblBitcoinAddress.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblBitcoinAddress.Location = New System.Drawing.Point(245, 50)
+        Me.lblBitcoinAddress.Location = New System.Drawing.Point(245, 57)
         Me.lblBitcoinAddress.Name = "lblBitcoinAddress"
         Me.lblBitcoinAddress.Size = New System.Drawing.Size(200, 18)
         Me.lblBitcoinAddress.TabIndex = 1
@@ -340,7 +327,7 @@ Partial Class FAHSetupDialog
         Me.gbxUsername.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.gbxUsername.Location = New System.Drawing.Point(43, 7)
         Me.gbxUsername.Name = "gbxUsername"
-        Me.gbxUsername.Size = New System.Drawing.Size(510, 100)
+        Me.gbxUsername.Size = New System.Drawing.Size(510, 109)
         Me.gbxUsername.TabIndex = 10
         Me.gbxUsername.TabStop = False
         Me.gbxUsername.Text = "Username (Case Sensitive)"
@@ -349,7 +336,7 @@ Partial Class FAHSetupDialog
         '
         Me.cbxSeparator.FormattingEnabled = True
         Me.cbxSeparator.Items.AddRange(New Object() {"_", "_ALL_", "_FLDC_"})
-        Me.cbxSeparator.Location = New System.Drawing.Point(116, 71)
+        Me.cbxSeparator.Location = New System.Drawing.Point(116, 78)
         Me.cbxSeparator.Name = "cbxSeparator"
         Me.cbxSeparator.Size = New System.Drawing.Size(72, 26)
         Me.cbxSeparator.TabIndex = 1
@@ -360,7 +347,7 @@ Partial Class FAHSetupDialog
         Me.lblErrorNote.AutoSize = True
         Me.lblErrorNote.BackColor = System.Drawing.Color.Tomato
         Me.lblErrorNote.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblErrorNote.Location = New System.Drawing.Point(201, 10)
+        Me.lblErrorNote.Location = New System.Drawing.Point(201, 12)
         Me.lblErrorNote.Name = "lblErrorNote"
         Me.lblErrorNote.Size = New System.Drawing.Size(33, 13)
         Me.lblErrorNote.TabIndex = 7
@@ -777,7 +764,6 @@ Partial Class FAHSetupDialog
     Friend WithEvents lblPasskeyError As Label
     Friend WithEvents lbl4 As Label
     Friend WithEvents SplitContainer2 As SplitContainer
-    Friend WithEvents lllCureCoinLink As LinkLabel
     Friend WithEvents ToolTip1 As ToolTip
     Friend WithEvents txtTelnetFAHCfg As TextBox
     Friend WithEvents btnTelnetSave As Button

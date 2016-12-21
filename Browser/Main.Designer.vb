@@ -42,7 +42,7 @@ Partial Class Main
         Me.gbxTools = New System.Windows.Forms.GroupBox()
         Me.btnCurePool = New System.Windows.Forms.Button()
         Me.btnCureCoinSetup = New System.Windows.Forms.Button()
-        Me.btnShowDat = New System.Windows.Forms.Button()
+        Me.btnSavedData = New System.Windows.Forms.Button()
         Me.txtWalletName = New System.Windows.Forms.TextBox()
         Me.cbxWalletId = New System.Windows.Forms.ComboBox()
         Me.btnFAHConfig = New System.Windows.Forms.Button()
@@ -114,7 +114,7 @@ Partial Class Main
         Me.lblURL.Location = New System.Drawing.Point(81, 52)
         Me.lblURL.Name = "lblURL"
         Me.lblURL.Size = New System.Drawing.Size(32, 13)
-        Me.lblURL.TabIndex = 80
+        Me.lblURL.TabIndex = 21
         Me.lblURL.Text = "URL:"
         '
         'ToolStripContainer1
@@ -154,7 +154,7 @@ Partial Class Main
         Me.btnMyWallet.Location = New System.Drawing.Point(0, 0)
         Me.btnMyWallet.Name = "btnMyWallet"
         Me.btnMyWallet.Size = New System.Drawing.Size(72, 37)
-        Me.btnMyWallet.TabIndex = 9
+        Me.btnMyWallet.TabIndex = 7
         Me.btnMyWallet.Text = "My Wallet"
         Me.btnMyWallet.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         Me.ToolTip1.SetToolTip(Me.btnMyWallet, "View wallet at CounterWallet")
@@ -178,7 +178,7 @@ Partial Class Main
         Me.btnFAHControl.Location = New System.Drawing.Point(71, 0)
         Me.btnFAHControl.Name = "btnFAHControl"
         Me.btnFAHControl.Size = New System.Drawing.Size(87, 37)
-        Me.btnFAHControl.TabIndex = 10
+        Me.btnFAHControl.TabIndex = 8
         Me.btnFAHControl.Text = "F@H Control"
         Me.btnFAHControl.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         Me.ToolTip1.SetToolTip(Me.btnFAHControl, "View Folding@Home App Status")
@@ -189,7 +189,7 @@ Partial Class Main
         Me.btnBrowserTools.Location = New System.Drawing.Point(530, 36)
         Me.btnBrowserTools.Name = "btnBrowserTools"
         Me.btnBrowserTools.Size = New System.Drawing.Size(69, 20)
-        Me.btnBrowserTools.TabIndex = 4
+        Me.btnBrowserTools.TabIndex = 17
         Me.btnBrowserTools.Text = "Web Tools"
         Me.btnBrowserTools.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         Me.ToolTip1.SetToolTip(Me.btnBrowserTools, "Web Browser Debug Tools")
@@ -202,7 +202,7 @@ Partial Class Main
         Me.btnFoldingCoinWebsite.Location = New System.Drawing.Point(157, 0)
         Me.btnFoldingCoinWebsite.Name = "btnFoldingCoinWebsite"
         Me.btnFoldingCoinWebsite.Size = New System.Drawing.Size(82, 37)
-        Me.btnFoldingCoinWebsite.TabIndex = 11
+        Me.btnFoldingCoinWebsite.TabIndex = 9
         Me.btnFoldingCoinWebsite.Text = "FoldingCoin"
         Me.btnFoldingCoinWebsite.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         Me.ToolTip1.SetToolTip(Me.btnFoldingCoinWebsite, "FoldingCoin Website")
@@ -215,7 +215,7 @@ Partial Class Main
         Me.btnFLDC_DailyDistro.Location = New System.Drawing.Point(309, 0)
         Me.btnFLDC_DailyDistro.Name = "btnFLDC_DailyDistro"
         Me.btnFLDC_DailyDistro.Size = New System.Drawing.Size(79, 37)
-        Me.btnFLDC_DailyDistro.TabIndex = 14
+        Me.btnFLDC_DailyDistro.TabIndex = 12
         Me.btnFLDC_DailyDistro.Text = "Daily Dist."
         Me.btnFLDC_DailyDistro.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         Me.ToolTip1.SetToolTip(Me.btnFLDC_DailyDistro, "FoldingCoin Daily Distributions")
@@ -228,7 +228,7 @@ Partial Class Main
         Me.btnCureCoin.Location = New System.Drawing.Point(387, 0)
         Me.btnCureCoin.Name = "btnCureCoin"
         Me.btnCureCoin.Size = New System.Drawing.Size(66, 37)
-        Me.btnCureCoin.TabIndex = 15
+        Me.btnCureCoin.TabIndex = 13
         Me.btnCureCoin.Text = "CureCoin"
         Me.btnCureCoin.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         Me.ToolTip1.SetToolTip(Me.btnCureCoin, "CureCoin Website")
@@ -285,7 +285,7 @@ Partial Class Main
         Me.gbxTools.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.gbxTools.Controls.Add(Me.btnCurePool)
         Me.gbxTools.Controls.Add(Me.btnCureCoinSetup)
-        Me.gbxTools.Controls.Add(Me.btnShowDat)
+        Me.gbxTools.Controls.Add(Me.btnSavedData)
         Me.gbxTools.Controls.Add(Me.txtWalletName)
         Me.gbxTools.Controls.Add(Me.cbxWalletId)
         Me.gbxTools.Controls.Add(Me.btnFAHConfig)
@@ -295,7 +295,7 @@ Partial Class Main
         Me.gbxTools.Location = New System.Drawing.Point(654, 1)
         Me.gbxTools.Name = "gbxTools"
         Me.gbxTools.Size = New System.Drawing.Size(396, 46)
-        Me.gbxTools.TabIndex = 133
+        Me.gbxTools.TabIndex = 19
         Me.gbxTools.TabStop = False
         '
         'btnCurePool
@@ -303,7 +303,7 @@ Partial Class Main
         Me.btnCurePool.Location = New System.Drawing.Point(326, -1)
         Me.btnCurePool.Name = "btnCurePool"
         Me.btnCurePool.Size = New System.Drawing.Size(68, 20)
-        Me.btnCurePool.TabIndex = 132
+        Me.btnCurePool.TabIndex = 4
         Me.btnCurePool.Text = "Pool Login"
         Me.btnCurePool.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         Me.ToolTip1.SetToolTip(Me.btnCurePool, "Login to the CureCoin Folding Pool")
@@ -314,29 +314,29 @@ Partial Class Main
         Me.btnCureCoinSetup.Location = New System.Drawing.Point(238, -1)
         Me.btnCureCoinSetup.Name = "btnCureCoinSetup"
         Me.btnCureCoinSetup.Size = New System.Drawing.Size(89, 20)
-        Me.btnCureCoinSetup.TabIndex = 131
+        Me.btnCureCoinSetup.TabIndex = 3
         Me.btnCureCoinSetup.Text = "4. CURE Setup"
         Me.btnCureCoinSetup.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         Me.ToolTip1.SetToolTip(Me.btnCureCoinSetup, "(One-Time only) Setup CureCoin Folding Pool info")
         Me.btnCureCoinSetup.UseVisualStyleBackColor = True
         '
-        'btnShowDat
+        'btnSavedData
         '
-        Me.btnShowDat.Location = New System.Drawing.Point(47, 22)
-        Me.btnShowDat.Name = "btnShowDat"
-        Me.btnShowDat.Size = New System.Drawing.Size(67, 20)
-        Me.btnShowDat.TabIndex = 3
-        Me.btnShowDat.Text = "Saved Info"
-        Me.btnShowDat.TextAlign = System.Drawing.ContentAlignment.BottomCenter
-        Me.ToolTip1.SetToolTip(Me.btnShowDat, "Show Saved Settings from .Dat File")
-        Me.btnShowDat.UseVisualStyleBackColor = True
+        Me.btnSavedData.Location = New System.Drawing.Point(47, 22)
+        Me.btnSavedData.Name = "btnSavedData"
+        Me.btnSavedData.Size = New System.Drawing.Size(72, 20)
+        Me.btnSavedData.TabIndex = 5
+        Me.btnSavedData.Text = "Saved Data"
+        Me.btnSavedData.TextAlign = System.Drawing.ContentAlignment.BottomCenter
+        Me.ToolTip1.SetToolTip(Me.btnSavedData, "Show Saved Settings from .Dat File")
+        Me.btnSavedData.UseVisualStyleBackColor = True
         '
         'txtWalletName
         '
         Me.txtWalletName.Location = New System.Drawing.Point(238, 22)
         Me.txtWalletName.Name = "txtWalletName"
         Me.txtWalletName.Size = New System.Drawing.Size(128, 20)
-        Me.txtWalletName.TabIndex = 6
+        Me.txtWalletName.TabIndex = 8
         Me.ToolTip1.SetToolTip(Me.txtWalletName, "Change wallet name, press <Enter> to save it")
         '
         'cbxWalletId
@@ -346,7 +346,7 @@ Partial Class Main
         Me.cbxWalletId.Location = New System.Drawing.Point(207, 22)
         Me.cbxWalletId.Name = "cbxWalletId"
         Me.cbxWalletId.Size = New System.Drawing.Size(30, 21)
-        Me.cbxWalletId.TabIndex = 5
+        Me.cbxWalletId.TabIndex = 7
         Me.cbxWalletId.Text = "0"
         Me.ToolTip1.SetToolTip(Me.cbxWalletId, "Wallet Id (0-9) to use. Default: 0.")
         '
@@ -367,7 +367,7 @@ Partial Class Main
         Me.lblWalletNum.Location = New System.Drawing.Point(138, 25)
         Me.lblWalletNum.Name = "lblWalletNum"
         Me.lblWalletNum.Size = New System.Drawing.Size(72, 13)
-        Me.lblWalletNum.TabIndex = 130
+        Me.lblWalletNum.TabIndex = 6
         Me.lblWalletNum.Text = "Use Wallet #:"
         '
         'chkShowTools
@@ -389,7 +389,7 @@ Partial Class Main
         Me.btnTwitterFoldingCoin.Location = New System.Drawing.Point(232, 18)
         Me.btnTwitterFoldingCoin.Name = "btnTwitterFoldingCoin"
         Me.btnTwitterFoldingCoin.Size = New System.Drawing.Size(78, 19)
-        Me.btnTwitterFoldingCoin.TabIndex = 13
+        Me.btnTwitterFoldingCoin.TabIndex = 11
         Me.btnTwitterFoldingCoin.Text = "Twitter"
         Me.btnTwitterFoldingCoin.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         Me.ToolTip1.SetToolTip(Me.btnTwitterFoldingCoin, "FoldingCoin Twitter")
@@ -402,7 +402,7 @@ Partial Class Main
         Me.btnTwitterCureCoin.Location = New System.Drawing.Point(446, 18)
         Me.btnTwitterCureCoin.Name = "btnTwitterCureCoin"
         Me.btnTwitterCureCoin.Size = New System.Drawing.Size(78, 19)
-        Me.btnTwitterCureCoin.TabIndex = 17
+        Me.btnTwitterCureCoin.TabIndex = 15
         Me.btnTwitterCureCoin.Text = "Twitter"
         Me.btnTwitterCureCoin.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         Me.ToolTip1.SetToolTip(Me.btnTwitterCureCoin, "CureCoin Twitter")
@@ -414,7 +414,7 @@ Partial Class Main
         Me.btnBlockchainFLDC.Location = New System.Drawing.Point(232, 0)
         Me.btnBlockchainFLDC.Name = "btnBlockchainFLDC"
         Me.btnBlockchainFLDC.Size = New System.Drawing.Size(78, 19)
-        Me.btnBlockchainFLDC.TabIndex = 12
+        Me.btnBlockchainFLDC.TabIndex = 10
         Me.btnBlockchainFLDC.Text = "Blockchain"
         Me.btnBlockchainFLDC.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         Me.ToolTip1.SetToolTip(Me.btnBlockchainFLDC, "FoldingCoin Blockchain Explorer")
@@ -427,7 +427,7 @@ Partial Class Main
         Me.btnEOC.Location = New System.Drawing.Point(523, 0)
         Me.btnEOC.Name = "btnEOC"
         Me.btnEOC.Size = New System.Drawing.Size(83, 37)
-        Me.btnEOC.TabIndex = 18
+        Me.btnEOC.TabIndex = 16
         Me.btnEOC.Text = "F@H Points"
         Me.btnEOC.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         Me.ToolTip1.SetToolTip(Me.btnEOC, "Extreme Overclocking Folding Stats")
@@ -439,7 +439,7 @@ Partial Class Main
         Me.btnBlockchainCURE.Location = New System.Drawing.Point(446, 0)
         Me.btnBlockchainCURE.Name = "btnBlockchainCURE"
         Me.btnBlockchainCURE.Size = New System.Drawing.Size(78, 19)
-        Me.btnBlockchainCURE.TabIndex = 16
+        Me.btnBlockchainCURE.TabIndex = 14
         Me.btnBlockchainCURE.Text = "Blockchain"
         Me.btnBlockchainCURE.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         Me.ToolTip1.SetToolTip(Me.btnBlockchainCURE, "CureCoin Blockchain Explorer")
@@ -454,7 +454,7 @@ Partial Class Main
         Me.txtMsg.Name = "txtMsg"
         Me.txtMsg.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.txtMsg.Size = New System.Drawing.Size(47, 74)
-        Me.txtMsg.TabIndex = 135
+        Me.txtMsg.TabIndex = 18
         '
         'gbxCheckboxForTools
         '
@@ -463,7 +463,7 @@ Partial Class Main
         Me.gbxCheckboxForTools.Location = New System.Drawing.Point(987, 42)
         Me.gbxCheckboxForTools.Name = "gbxCheckboxForTools"
         Me.gbxCheckboxForTools.Size = New System.Drawing.Size(63, 28)
-        Me.gbxCheckboxForTools.TabIndex = 136
+        Me.gbxCheckboxForTools.TabIndex = 20
         Me.gbxCheckboxForTools.TabStop = False
         '
         'ProgressBar1
@@ -473,7 +473,7 @@ Partial Class Main
         Me.ProgressBar1.Location = New System.Drawing.Point(4, 14)
         Me.ProgressBar1.Name = "ProgressBar1"
         Me.ProgressBar1.Size = New System.Drawing.Size(152, 21)
-        Me.ProgressBar1.TabIndex = 137
+        Me.ProgressBar1.TabIndex = 0
         '
         'lblPercent
         '
@@ -483,7 +483,7 @@ Partial Class Main
         Me.lblPercent.Location = New System.Drawing.Point(69, 18)
         Me.lblPercent.Name = "lblPercent"
         Me.lblPercent.Size = New System.Drawing.Size(23, 13)
-        Me.lblPercent.TabIndex = 138
+        Me.lblPercent.TabIndex = 1
         Me.lblPercent.Text = "0%"
         Me.lblPercent.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
@@ -493,10 +493,10 @@ Partial Class Main
         Me.gbxDownload.Controls.Add(Me.lblPercent)
         Me.gbxDownload.Controls.Add(Me.ProgressBar1)
         Me.gbxDownload.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.gbxDownload.Location = New System.Drawing.Point(609, 5)
+        Me.gbxDownload.Location = New System.Drawing.Point(610, 1)
         Me.gbxDownload.Name = "gbxDownload"
         Me.gbxDownload.Size = New System.Drawing.Size(160, 42)
-        Me.gbxDownload.TabIndex = 139
+        Me.gbxDownload.TabIndex = 0
         Me.gbxDownload.TabStop = False
         Me.gbxDownload.Text = "Download:"
         Me.gbxDownload.Visible = False
@@ -516,8 +516,8 @@ Partial Class Main
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1052, 708)
-        Me.Controls.Add(Me.btnBrowserTools)
         Me.Controls.Add(Me.gbxDownload)
+        Me.Controls.Add(Me.btnBrowserTools)
         Me.Controls.Add(Me.txtMsg)
         Me.Controls.Add(Me.gbxTools)
         Me.Controls.Add(Me.btnFwd)
@@ -587,7 +587,7 @@ Partial Class Main
     Friend WithEvents cbxWalletId As ComboBox
     Friend WithEvents lblWalletNum As Label
     Friend WithEvents txtWalletName As TextBox
-    Friend WithEvents btnShowDat As Button
+    Friend WithEvents btnSavedData As Button
     Friend WithEvents btnBlockchainFLDC As Button
     Friend WithEvents btnBlockchainCURE As Button
     Friend WithEvents btnCureCoinSetup As Button

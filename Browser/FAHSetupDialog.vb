@@ -5,7 +5,7 @@
 
     Private Const PATH_FAH_ALL_USER_CFG As String = "C:\ProgramData\FAHClient\config.xml"
     Private Path_FAH_CurrentUserCfg As String = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "FAHClient\config.xml")
-    Private m_strFAHCfgPath As String = PATH_FAH_ALL_USER_CFG
+    Private m_strFAHCfgPath As String = ""
 
     'BTC public address regular expression matching pattern. Base58 encoding (excludes: 0, O, I, l characters that look similar)
     Private m_regexBTC As System.Text.RegularExpressions.Regex = New System.Text.RegularExpressions.Regex("^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$")
@@ -25,7 +25,7 @@
         m_bSkipUpdating = True
 
         Try
-            'Find the Config file location
+            'Find the FAH Config file location
             If System.IO.File.Exists(PATH_FAH_ALL_USER_CFG) = True Then
                 'First try: C:\ProgramData\FAHClient
                 m_strFAHCfgPath = PATH_FAH_ALL_USER_CFG
@@ -33,23 +33,6 @@
             ElseIf System.IO.File.Exists(Path_FAH_CurrentUserCfg) = True Then
                 'Then try: <user account>\FAHClient
                 m_strFAHCfgPath = Path_FAH_CurrentUserCfg
-
-            Else
-                'Ask for file location. Use a File Open Dialog to select the Config file
-                Dim OpenDlg As New System.Windows.Forms.OpenFileDialog
-                OpenDlg.Title = "Select FAH Config File"
-                OpenDlg.DefaultExt = "xml"
-                OpenDlg.Filter = "Config File (*.xml)|*.xml"
-                OpenDlg.FileName = System.IO.Path.GetFileName(PATH_FAH_ALL_USER_CFG)
-                OpenDlg.InitialDirectory = System.IO.Path.GetDirectoryName(PATH_FAH_ALL_USER_CFG)
-                OpenDlg.CheckPathExists = True
-                OpenDlg.CheckFileExists = True
-                OpenDlg.RestoreDirectory = False
-                OpenDlg.Multiselect = False
-                OpenDlg.FilterIndex = 0
-                If OpenDlg.ShowDialog() = DialogResult.OK Then
-                    m_strFAHCfgPath = OpenDlg.FileName
-                End If
             End If
 
         Catch ex As Exception
@@ -131,56 +114,60 @@
         End If
 
         'Load the XML from the file
-        Try
-            Me.txtCfgPath.Text = m_strFAHCfgPath
-            Me.txtXmlBefore.Text = System.IO.File.ReadAllText(m_strFAHCfgPath)
-
-        Catch ex As Exception
-            Dim strMsg As String = "Could not read the FAH Config file: " & vbNewLine & m_strFAHCfgPath & vbNewLine & vbNewLine & ex.ToString
-            g_Main.Msg(strMsg)
-            MessageBox.Show(strMsg)
-        End Try
-
-        'If no BTC address, try getting the info from the Config.XML FAH settings file
-        If Me.txtBitcoinAddress.Text.Length = 0 Then
-            'Read existing Username, Team #, and Passkey from XML config file
+        If m_strFAHCfgPath.Length > 0 Then
             Try
-                m_xmlCfg.LoadXml(Me.txtXmlBefore.Text)
-                Dim xmlnlNodes As Xml.XmlNodeList = Nothing
-
-                'Get existing 'passkey' info
-                xmlnlNodes = m_xmlCfg.GetElementsByTagName("passkey")
-                If xmlnlNodes.Count > 0 Then
-                    Me.txtPasskey.Text = xmlnlNodes.Item(0).Attributes("v").Value
-                End If
-
-                'Get existing 'team' info
-                xmlnlNodes = m_xmlCfg.GetElementsByTagName("team")
-                If xmlnlNodes.Count > 0 Then
-                    strTeam = xmlnlNodes.Item(0).Attributes("v").Value
-                    If strTeam = "224497" Then
-                        Me.rbnCureCoin.Checked = True
-                    ElseIf strTeam = "226728" Then
-                        Me.rbnFoldingCoin.Checked = True
-                    Else
-                        Me.txtOtherTeam.Text = strTeam
-                    End If
-                End If
-
-                'Get existing 'user' info
-                xmlnlNodes = m_xmlCfg.GetElementsByTagName("user")
-                If xmlnlNodes.Count > 0 Then
-                    Me.txtUsername.Text = xmlnlNodes.Item(0).Attributes("v").Value
-                End If
+                Me.txtCfgPath.Text = m_strFAHCfgPath
+                Me.txtXmlBefore.Text = System.IO.File.ReadAllText(m_strFAHCfgPath)
 
             Catch ex As Exception
-                Dim strMsg As String = "Error parsing existing XML settings: " & ex.Message.ToString
+                Dim strMsg As String = "Could not read the FAH Config file: " & vbNewLine & m_strFAHCfgPath & vbNewLine & vbNewLine & ex.ToString
                 g_Main.Msg(strMsg)
                 MessageBox.Show(strMsg)
             End Try
+
+            'If no BTC address, try getting the info from the Config.XML FAH settings file
+            If Me.txtBitcoinAddress.Text.Length = 0 Then
+                'Read existing Username, Team #, and Passkey from XML config file
+                Try
+                    m_xmlCfg.LoadXml(Me.txtXmlBefore.Text)
+                    Dim xmlnlNodes As Xml.XmlNodeList = Nothing
+
+                    'Get existing 'passkey' info
+                    xmlnlNodes = m_xmlCfg.GetElementsByTagName("passkey")
+                    If xmlnlNodes.Count > 0 Then
+                        Me.txtPasskey.Text = xmlnlNodes.Item(0).Attributes("v").Value
+                    End If
+
+                    'Get existing 'team' info
+                    xmlnlNodes = m_xmlCfg.GetElementsByTagName("team")
+                    If xmlnlNodes.Count > 0 Then
+                        strTeam = xmlnlNodes.Item(0).Attributes("v").Value
+                        If strTeam = "224497" Then
+                            Me.rbnCureCoin.Checked = True
+                        ElseIf strTeam = "226728" Then
+                            Me.rbnFoldingCoin.Checked = True
+                        Else
+                            Me.txtOtherTeam.Text = strTeam
+                        End If
+                    End If
+
+                    'Get existing 'user' info
+                    xmlnlNodes = m_xmlCfg.GetElementsByTagName("user")
+                    If xmlnlNodes.Count > 0 Then
+                        Me.txtUsername.Text = xmlnlNodes.Item(0).Attributes("v").Value
+                    End If
+
+                Catch ex As Exception
+                    Dim strMsg As String = "Error parsing existing XML settings: " & ex.Message.ToString
+                    g_Main.Msg(strMsg)
+                    MessageBox.Show(strMsg)
+                End Try
+            End If
+        Else
+            Me.txtXmlBefore.Text = "No Config.xml"
         End If
 
-        'Turn on auto-updating the XML Config file, now that any existing info was loaded
+        'Turn on auto-updating the settings, now that any existing info was loaded
         m_bSkipUpdating = False
         CreateFAHUserName()
         Me.chkShowFAHCfg.Checked = False
@@ -366,15 +353,6 @@
         End If
     End Sub
 
-    'Web link for CureCoin for additional setup info, or if someone from FoldingCoin hadn't heard of CureCoin before
-    Private Sub lllCureCoinLink_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles lllCureCoinLink.LinkClicked
-        'Set web link visited
-        Me.lllCureCoinLink.LinkVisited = True
-
-        'Open the web page in the user's default browser
-        System.Diagnostics.Process.Start("https://www.curecoin.net/")
-    End Sub
-
     'Web link for the Team Number list
     Private Sub lllTeamNumbersLink_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles lllTeamNumbersLink.LinkClicked
         'Set web link visited
@@ -398,7 +376,11 @@
             'Run the script to send the Passkey. Like: http://fah-web.stanford.edu/cgi-bin/getpasskey.py?name=[user]&email=[email]
             If g_Main.GetFAHpasskey("http://fah-web.stanford.edu/cgi-bin/getpasskey.py?name=" & Me.lblUsernamePreview.Text & "&email=" & Me.txtEmail.Text) = True Then
                 'Good - Check your email
-                MessageBox.Show("Please check your email for the passkey." & vbNewLine & "It may take a few minutes")
+                Dim MsgBx As New MsgBoxDialog
+                MsgBx.Text = "Check your email"
+                MsgBx.MsgText.Text = "Please check your email for the passkey." & vbNewLine & "It may take a few minutes"
+                MsgBx.Width = (MsgBx.MsgText.Left * 2) + MsgBx.MsgText.Width + 10
+                MsgBx.ShowDialog()
             End If
             Wait(500)
             Me.btnGetPasskey.Enabled = True
@@ -656,16 +638,60 @@
     End Sub
 
     Private Sub btnReload_Click(sender As Object, e As EventArgs) Handles btnReload.Click
-        'Load the XML from the file
-        Try
-            Me.txtCfgPath.Text = m_strFAHCfgPath
-            Me.txtXmlAfter.Text = System.IO.File.ReadAllText(m_strFAHCfgPath)
+        If m_strFAHCfgPath.Length = 0 Then
+            Try
+                'Find the Config file location
+                If System.IO.File.Exists(PATH_FAH_ALL_USER_CFG) = True Then
+                    'First try: C:\ProgramData\FAHClient
+                    m_strFAHCfgPath = PATH_FAH_ALL_USER_CFG
 
-        Catch ex As Exception
-            Dim strMsg As String = "Could not read the FAH Config file: " & vbNewLine & m_strFAHCfgPath & vbNewLine & vbNewLine & ex.ToString
-            g_Main.Msg(strMsg)
-            MessageBox.Show(strMsg)
-        End Try
+                ElseIf System.IO.File.Exists(Path_FAH_CurrentUserCfg) = True Then
+                    'Then try: <user account>\FAHClient
+                    m_strFAHCfgPath = Path_FAH_CurrentUserCfg
+
+                Else
+                    'Ask for file location. Use a File Open Dialog to select the Config file
+                    Dim OpenDlg As New System.Windows.Forms.OpenFileDialog
+                    OpenDlg.Title = "Select FAH Config File"
+                    OpenDlg.DefaultExt = "xml"
+                    OpenDlg.Filter = "Config File (*.xml)|*.xml"
+                    OpenDlg.FileName = System.IO.Path.GetFileName(PATH_FAH_ALL_USER_CFG)
+                    OpenDlg.InitialDirectory = System.IO.Path.GetDirectoryName(PATH_FAH_ALL_USER_CFG)
+                    OpenDlg.CheckPathExists = True
+                    OpenDlg.CheckFileExists = True
+                    OpenDlg.RestoreDirectory = False
+                    OpenDlg.Multiselect = False
+                    OpenDlg.FilterIndex = 0
+                    If OpenDlg.ShowDialog() = DialogResult.OK Then
+                        m_strFAHCfgPath = OpenDlg.FileName
+                    End If
+                End If
+
+                If m_strFAHCfgPath.Length > 0 Then
+                    Me.txtXmlBefore.Text = System.IO.File.ReadAllText(m_strFAHCfgPath)
+                Else
+                    Me.txtXmlBefore.Text = "Could not find the FAH Config.xml"
+                End If
+
+            Catch ex As Exception
+                MessageBox.Show("Could not find the FAH Config file: " & vbNewLine & m_strFAHCfgPath & vbNewLine & vbNewLine & ex.ToString)
+            End Try
+        End If
+
+        'Load the XML from the file
+        If m_strFAHCfgPath.Length > 0 Then
+            Try
+                Me.txtCfgPath.Text = m_strFAHCfgPath
+                Me.txtXmlAfter.Text = System.IO.File.ReadAllText(m_strFAHCfgPath)
+
+            Catch ex As Exception
+                Dim strMsg As String = "Could not read the FAH Config file: " & vbNewLine & m_strFAHCfgPath & vbNewLine & vbNewLine & ex.ToString
+                g_Main.Msg(strMsg)
+                MessageBox.Show(strMsg)
+            End Try
+        Else
+            Me.txtXmlAfter.Text = "Could not find the FAH Config.xml"
+        End If
     End Sub
 #End Region
 End Class

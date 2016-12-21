@@ -6,3 +6,4 @@
 /Browser/.vs
 /Browser/bin/Release/*.pdb
 /Browser/bin/Release/*.xml
+/Browser/bin/Release/FoldingBrowser.vshost.exe.config

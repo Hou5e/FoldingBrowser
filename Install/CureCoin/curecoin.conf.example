@@ -1,0 +1,4 @@
+server=1
+rpcuser=username
+rpcpassword=password
+rpcport=18512

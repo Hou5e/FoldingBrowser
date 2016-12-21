@@ -31,19 +31,19 @@ Partial Class MsgBoxDialog
         Me.BtnOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.BtnOK.DialogResult = System.Windows.Forms.DialogResult.OK
         Me.BtnOK.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.BtnOK.Location = New System.Drawing.Point(221, 61)
+        Me.BtnOK.Location = New System.Drawing.Point(221, 74)
         Me.BtnOK.Name = "BtnOK"
         Me.BtnOK.Size = New System.Drawing.Size(92, 28)
         Me.BtnOK.TabIndex = 0
         Me.BtnOK.Text = "OK"
         Me.BtnOK.UseVisualStyleBackColor = True
         '
-        'MsgTextUpper
+        'MsgText
         '
         Me.MsgText.AutoSize = True
         Me.MsgText.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.MsgText.Location = New System.Drawing.Point(21, 9)
-        Me.MsgText.Name = "MsgTextUpper"
+        Me.MsgText.Name = "MsgText"
         Me.MsgText.Size = New System.Drawing.Size(45, 18)
         Me.MsgText.TabIndex = 2
         Me.MsgText.Text = "Msg:"
@@ -52,7 +52,7 @@ Partial Class MsgBoxDialog
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(335, 101)
+        Me.ClientSize = New System.Drawing.Size(335, 114)
         Me.Controls.Add(Me.BtnOK)
         Me.Controls.Add(Me.MsgText)
         Me.Name = "MsgBoxDialog"

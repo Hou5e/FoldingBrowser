@@ -65,14 +65,13 @@ Partial Class DisplayTextDialog
         Me.MsgTextTop.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.MsgTextTop.Location = New System.Drawing.Point(21, 9)
         Me.MsgTextTop.Name = "MsgTextTop"
-        Me.MsgTextTop.Size = New System.Drawing.Size(45, 18)
+        Me.MsgTextTop.Size = New System.Drawing.Size(233, 18)
         Me.MsgTextTop.TabIndex = 6
-        Me.MsgTextTop.Text = "Msg:"
+        Me.MsgTextTop.Text = "Encrypted Data File Contents:"
         '
         'btnSaveChanges
         '
         Me.btnSaveChanges.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btnSaveChanges.DialogResult = System.Windows.Forms.DialogResult.Yes
         Me.btnSaveChanges.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnSaveChanges.Location = New System.Drawing.Point(24, 425)
         Me.btnSaveChanges.Name = "btnSaveChanges"
@@ -138,7 +137,8 @@ Partial Class DisplayTextDialog
         Me.Controls.Add(Me.txtDisplayText)
         Me.Name = "DisplayTextDialog"
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
+        Me.Text = "Saved Data"
         Me.ResumeLayout(False)
         Me.PerformLayout()
 

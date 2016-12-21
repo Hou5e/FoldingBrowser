@@ -18,7 +18,10 @@ Public Module GlobalRefs
     Public Const URL_CureCoin_EOC As String = "http://folding.extremeoverclocking.com/team_summary.php?s=&t=224497"
     Public Const URL_FAH As String = "http://folding.stanford.edu/"
     Public Const URL_FAH_Client As String = "http://folding.stanford.edu/client/"
-    Public Const URL_CureCoinFoldingPoolRegistration As String = "https://www.cryptobullionpools.com/"
+    Public Const URL_CureCoinFoldingPoolPage As String = "https://www.cryptobullionpools.com/"
+
+    'Encrypted DAT file password
+    Public Const Default_DAT_PW As String = "(Default Password) If you change this line, remember to make backups. I can't restore it for you."
 
     Public Const Id As String = "Id"
     'Wallet Id specific
@@ -40,19 +43,22 @@ Public Module GlobalRefs
     Public Const INI_WindowState As String = "WindowState"
     Public Const INI_LastWalletId As String = "LastWalletId"
     Public Const INI_LastBrowserVersion As String = "LastBrowserVersion"
-    Public Const INI_ShowTheShowDatButton As String = "ShowTheShowDatButton"
+    Public Const INI_HideSavedDataButton As String = "HideSavedDataButton"
 
     'Wallet Id specific
     Public Const INI_FAH_Username As String = "FAHUsername"
     Public Const INI_EOC_ID As String = "ExtremeOverclockingUserId"
     Public Const INI_WalletName As String = "WalletName"
 
+    'Website title to search for
+    Public Const NameCryptoBullions As String = "CryptoBullions"
+
     Public UserProfileDir As String = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), Prog_Name)
     Public IniFilePath As String = System.IO.Path.Combine(UserProfileDir, Prog_Name & ".ini")
     Public DatFilePath As String = System.IO.Path.Combine(UserProfileDir, Prog_Name & ".dat")
     Public LogFilePath As String = System.IO.Path.Combine(UserProfileDir, Prog_Name & ".txt")
 
-    'Cancel navigaion / downloads indicator
+    'Cancel navigation / downloads indicator
     Public g_bCancelNav As Boolean = False
     Public g_bAskDownloadLocation As Boolean = True
     'Holds on to the last downloaded file path, when the download completes
@@ -106,6 +112,10 @@ Public Module GlobalRefs
             Next
         End If
     End Sub
+
+    Public Async Function Wait2(iMilSec As Integer) As Threading.Tasks.Task
+        Await Threading.Tasks.Task.Delay(iMilSec)
+    End Function
 #End Region
 End Module
 
@@ -120,13 +130,13 @@ Public Class DownloadHandler
 
         If callback.IsDisposed = False Then
             'For g_bAskDownloadLocation = true, then show the download location dialog, otherwise don't
-            callback.Continue(System.IO.Path.Combine(UserProfileDir, downloadItem.SuggestedFileName), g_bAskDownloadLocation)
+            callback.Continue(System.IO.Path.Combine(UserProfileDir, "Cache", downloadItem.SuggestedFileName), g_bAskDownloadLocation)
         End If
     End Sub
 
     Public Sub OnDownloadUpdated(browser As CefSharp.IBrowser, downloadItem As CefSharp.DownloadItem, callback As CefSharp.IDownloadItemCallback) Implements CefSharp.IDownloadHandler.OnDownloadUpdated
         If callback.IsDisposed = False Then
-            'Stop the download if Navigation cancelled or <Esc> was pressed
+            'Stop the download if Navigation canceled or <Esc> was pressed
             If g_bCancelNav = True Then
                 callback.Cancel()
             End If
