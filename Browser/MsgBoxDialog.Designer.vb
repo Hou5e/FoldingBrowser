@@ -55,6 +55,7 @@ Partial Class MsgBoxDialog
         Me.ClientSize = New System.Drawing.Size(335, 114)
         Me.Controls.Add(Me.BtnOK)
         Me.Controls.Add(Me.MsgText)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
         Me.Name = "MsgBoxDialog"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.ResumeLayout(False)

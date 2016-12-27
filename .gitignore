@@ -7,3 +7,11 @@
 /Browser/bin/Release/*.pdb
 /Browser/bin/Release/*.xml
 /Browser/bin/Release/FoldingBrowser.vshost.exe.config
+/Browser/packages
+/Browser/bin/Release/*.pak
+/Browser/bin/Release/*.config
+/Browser/bin/Release/*.dll
+/Browser/bin/Release/*.bin
+/Browser/bin/Release/*.dat
+/Browser/bin/Release/CefSharp.BrowserSubprocess.exe
+/Browser/bin/Release/locales

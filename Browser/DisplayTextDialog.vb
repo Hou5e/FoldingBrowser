@@ -54,7 +54,7 @@
             Dim SaveDlg As New System.Windows.Forms.FolderBrowserDialog
             SaveDlg.ShowNewFolderButton = False
             SaveDlg.Description = "Select a backup location:"
-            If SaveDlg.ShowDialog() = DialogResult.OK Then
+            If SaveDlg.ShowDialog(Me) = DialogResult.OK Then
                 Dim strBackupPath As String = System.IO.Path.Combine(SaveDlg.SelectedPath, "FoldingBrowserBackup-" & Now.ToString("yyyy-MM-dd_HH_mm_ss"))
                 Dim strRestoreInfo As String = ""
 
@@ -144,6 +144,7 @@
                 'Copy the ReadMe text file to backup location
                 System.IO.File.Copy(ReadmeFilePath, System.IO.Path.Combine(strBackupPath, System.IO.Path.GetFileName(ReadmeFilePath)))
             End If
+            SaveDlg.Dispose()
 
         Catch ex As Exception
             MessageBox.Show("Error creating backup: " & ex.ToString)

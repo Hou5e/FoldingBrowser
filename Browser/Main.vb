@@ -292,9 +292,8 @@
             Select Case args(1)
                         'This command line option represents the FoldingBrowser was just installed
                 Case "-Instl", "-InstWithCure"
-                    'Create a dialog that sets the default selections based on stored wallet and F@H info
+                    'Create a dialog that sets the default checkbox selections based on stored wallet and F@H info.
                     Dim Setup As New SetupDialog
-                    'Try to set the check boxes based on the available info
 
                     'Look for FAH username for FAH installation to un-check the dialog for existing users
                     If INI.GetSection(Id & Me.cbxWalletId.Text) IsNot Nothing AndAlso INI.GetSection(Id & Me.cbxWalletId.Text).GetKey(INI_FAH_Username) IsNot Nothing Then
@@ -340,7 +339,7 @@
                     End If
 
                     'Show modal dialog box
-                    If Setup.ShowDialog() = DialogResult.OK Then
+                    If Setup.ShowDialog(Me) = DialogResult.OK Then
                         'Run the tasks the operator selected
 
                         'FAH adavanced client installation
@@ -373,11 +372,6 @@
 
                         'Show DAT file saved info. Ask to make backups / store data in a safe place
                         If Setup.chkGetFAHSoftware.Checked = True OrElse Setup.chkGetWalletForFLDC.Checked = True OrElse Setup.chkSetupCURE.Checked = True Then
-                            'Load the FAH Web Client in the background.
-                            'TODO: Remove: This is slow and doesn't always work without a Refresh, which new users aren't going to want to deal with.
-                            'OpenURL(URL_FAH_Client, False)
-                            'LoginToCounterwallet()
-
                             'Setup a timer to finish the process to avoid the backup Dat file window from freezing
                             m_timerErr.Interval = 1000
                             AddHandler m_timerErr.Elapsed, AddressOf OnErrEvent
@@ -385,6 +379,7 @@
                             m_timerErr.Start()
                         End If
                     End If
+                    Setup.Dispose()
             End Select
         End If
     End Sub
@@ -403,11 +398,12 @@
         'TODO: this part would freeze as the last part of the automated install for v6 / CefSharp v49. It was moved to the timer to try and avoid the unknown problem.
 
         'Process completed - Make a backup reminder
-        Dim MsgBx As New MsgBoxDialog
-        MsgBx.Text = "Setup Complete"
-        MsgBx.MsgText.Text = "Setup is complete." & vbNewLine & vbNewLine & "Please use the 'Make Backup' button to save your settings in a safe place"
-        MsgBx.Width = (MsgBx.MsgText.Left * 2) + MsgBx.MsgText.Width + 10
-        MsgBx.ShowDialog()
+        Dim OkMsg As New MsgBoxDialog
+        OkMsg.Text = "Setup Complete"
+        OkMsg.MsgText.Text = "Setup is complete." & vbNewLine & vbNewLine & "Please use the 'Make Backup' button to save your settings in a safe place"
+        OkMsg.Width = (OkMsg.MsgText.Left * 2) + OkMsg.MsgText.Width + 10
+        OkMsg.ShowDialog(Me)
+        OkMsg.Dispose()
     End Sub
 
     Private Sub onBrowserFrameLoadEnd(sender As Object, e As CefSharp.FrameLoadEndEventArgs)
@@ -588,19 +584,21 @@
                 strUsername = INI.GetSection(Id & Me.cbxWalletId.Text).GetKey(INI_FAH_Username).GetValue()
             Else
                 'Fix missing value. Ask for FAH Username
-                Dim Prompt As New TextEntryDialog
-                Prompt.Text = "Save Folding@Home Username"
-                Prompt.MsgTextUpper.Text = "Folding@Home Username not found."
-                Prompt.MsgTextLower.Text = "Please enter your Folding@Home Username:"
-                Prompt.Width = (Prompt.MsgTextLower.Left * 2) + Prompt.MsgTextLower.Width + 10
-                Prompt.TextEnteredLower.Visible = False
+                Dim TxtEntry As New TextEntryDialog
+                TxtEntry.Text = "Save Folding@Home Username"
+                TxtEntry.MsgTextUpper.Text = "Folding@Home Username not found."
+                TxtEntry.MsgTextLower.Text = "Please enter your Folding@Home Username:"
+                TxtEntry.Width = (TxtEntry.MsgTextLower.Left * 2) + TxtEntry.MsgTextLower.Width + 10
+                TxtEntry.TextEnteredLower.Visible = False
                 'Show modal dialog box
-                If Prompt.ShowDialog() = DialogResult.OK Then
+                If TxtEntry.ShowDialog(Me) = DialogResult.OK Then
                     'Store FAH Username
-                    INI.AddSection(Id & Me.cbxWalletId.Text).AddKey(INI_FAH_Username).Value = Prompt.TextEnteredUpper.Text
+                    INI.AddSection(Id & Me.cbxWalletId.Text).AddKey(INI_FAH_Username).Value = TxtEntry.TextEnteredUpper.Text
                     INI.Save(IniFilePath)
-                    strUsername = Prompt.TextEnteredUpper.Text
+                    strUsername = TxtEntry.TextEnteredUpper.Text
+                    TxtEntry.Dispose()
                 Else
+                    TxtEntry.Dispose()
                     OpenURL(URL_CureCoin_EOC, False)
                     PageTitleWait("Curecoin")
                     Wait(100)
@@ -637,21 +635,22 @@
                     OpenURL(URL_EOC & strUserId, False)
                 Else
                     'Fix missing value. Ask for EOC User ID
-                    Dim Prompt As New TextEntryDialog
-                    Prompt.Text = "Save ExtremeOverclocking.com Username Id"
-                    Prompt.MsgTextUpper.Text = "ExtremeOverclocking.com Username Id not found."
-                    Prompt.MsgTextLower.Text = "Please enter your ExtremeOverclocking.com Username Id number:"
-                    Prompt.Width = (Prompt.MsgTextLower.Left * 2) + Prompt.MsgTextLower.Width + 10
-                    Prompt.TextEnteredLower.Visible = False
+                    Dim TxtEntry As New TextEntryDialog
+                    TxtEntry.Text = "Save ExtremeOverclocking.com Username Id"
+                    TxtEntry.MsgTextUpper.Text = "ExtremeOverclocking.com Username Id not found."
+                    TxtEntry.MsgTextLower.Text = "Please enter your ExtremeOverclocking.com Username Id number:"
+                    TxtEntry.Width = (TxtEntry.MsgTextLower.Left * 2) + TxtEntry.MsgTextLower.Width + 10
+                    TxtEntry.TextEnteredLower.Visible = False
                     'Show modal dialog box
-                    If Prompt.ShowDialog() = DialogResult.OK AndAlso IsNumeric(Prompt.TextEnteredUpper.Text) Then
+                    If TxtEntry.ShowDialog(Me) = DialogResult.OK AndAlso IsNumeric(TxtEntry.TextEnteredUpper.Text) Then
                         'Store ExtremeOverclocking.com Username Id
-                        INI.AddSection(Id & Me.cbxWalletId.Text).AddKey(INI_EOC_ID).Value = Prompt.TextEnteredUpper.Text
+                        INI.AddSection(Id & Me.cbxWalletId.Text).AddKey(INI_EOC_ID).Value = TxtEntry.TextEnteredUpper.Text
                         INI.Save(IniFilePath)
-                        strUsername = Prompt.TextEnteredUpper.Text
+                        strUsername = TxtEntry.TextEnteredUpper.Text
                         'Open the user's EOC stats page
                         OpenURL(URL_EOC & strUserId, False)
                     End If
+                    TxtEntry.Dispose()
                 End If
             Else
                 'Open the user's EOC stats page
@@ -706,11 +705,12 @@
                 MessageBox.Show("Task 'Setup CureCoin Folding Pool' did not complete.")
             Else
                 'Good
-                Dim MsgBx As New MsgBoxDialog
-                MsgBx.Text = "CureCoin Folding Pool Setup Complete"
-                MsgBx.MsgText.Text = "CureCoin Folding Pool Setup Complete" & vbNewLine & "Please review settings, but they should be OK"
-                MsgBx.Width = (MsgBx.MsgText.Left * 2) + MsgBx.MsgText.Width + 10
-                MsgBx.ShowDialog()
+                Dim OkMsg As New MsgBoxDialog
+                OkMsg.Text = "CureCoin Folding Pool Setup Complete"
+                OkMsg.MsgText.Text = "CureCoin Folding Pool Setup Complete" & vbNewLine & "Please review settings, but they should be OK"
+                OkMsg.Width = (OkMsg.MsgText.Left * 2) + OkMsg.MsgText.Width + 10
+                OkMsg.ShowDialog(Me)
+                OkMsg.Dispose()
             End If
         End If
     End Sub
@@ -771,18 +771,18 @@
             'If there is no DAT file, then prompt to make one. If no saved data, then ask for the 12-word Passphrase
             If DAT.GetSection(Id & Me.cbxWalletId.Text) Is Nothing OrElse DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CP12Words) Is Nothing Then
                 'Prompt for PW, and save it
-                Dim Prompt As New TextEntryDialog
-                Prompt.Text = "Save Wallet Password"
-                Prompt.MsgTextUpper.Text = "No saved wallet info yet."
-                Prompt.MsgTextLower.Text = "Please enter your 12-word Passphrase:"
-                Prompt.Width = (Prompt.MsgTextLower.Left * 2) + Prompt.MsgTextLower.Width + 10
-                Prompt.TextEnteredLower.Visible = False
+                Dim TxtEntry As New TextEntryDialog
+                TxtEntry.Text = "Save Wallet Password"
+                TxtEntry.MsgTextUpper.Text = "No saved wallet info yet."
+                TxtEntry.MsgTextLower.Text = "Please enter your 12-word Passphrase:"
+                TxtEntry.Width = (TxtEntry.MsgTextLower.Left * 2) + TxtEntry.MsgTextLower.Width + 10
+                TxtEntry.TextEnteredLower.Visible = False
                 'Show modal dialog box
-                If Prompt.ShowDialog() = DialogResult.OK Then
+                If TxtEntry.ShowDialog(Me) = DialogResult.OK Then
                     'Save and encrypt 12-word Passphrase
-                    If Prompt.TextEnteredUpper.Text.Length > 24 Then
+                    If TxtEntry.TextEnteredUpper.Text.Length > 24 Then
                         DAT.AddSection(Id & Me.cbxWalletId.Text)
-                        DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_CP12Words).Value = Prompt.TextEnteredUpper.Text
+                        DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_CP12Words).Value = TxtEntry.TextEnteredUpper.Text
                     End If
 
                     'Create text from the INI, Encrypt, and Write/Flush DAT text to file
@@ -799,6 +799,7 @@
                     cbxWalletId_SelectedIndexChanged(Nothing, Nothing)
                     bSaved12W = True
                 End If
+                TxtEntry.Dispose()
             Else
                 bSaved12W = True
             End If
@@ -1073,10 +1074,11 @@
             'Prompt for FAH info: Ask for: (existing) Username, Merged Folding Coin Selection, FAH Team #. Show Username as typing and check it for errors. (Optional) Get Passkey by email. Show before and after of the FAH Config file changes 
             Dim DialogFAH As New FAHSetupDialog
             'Show modal dialog box
-            If DialogFAH.ShowDialog() = DialogResult.OK Then
+            If DialogFAH.ShowDialog(Me) = DialogResult.OK Then
                 'Return true, if you get here
                 SetupFAHUserTeamAndCfg = True
             End If
+            DialogFAH.Dispose()
 
         Catch ex As Exception
             Msg("Setup FAH User, Team, and Config error:" & ex.ToString)
@@ -1239,19 +1241,20 @@
             'If the wallet address is still not found, then pop-up a message saying to fill in the address
             If strWalletAddress.Length < 24 Then
                 'Prompt for PW, and save it
-                Dim Prompt As New TextEntryDialog
-                Prompt.Text = "Save CureCoin Wallet Address"
-                Prompt.MsgTextUpper.Text = "From the 'Receive coins' address tab in the CureCoin Wallet Software,"
-                Prompt.MsgTextLower.Text = "Please enter your CureCoin Wallet Address (right-click, Copy Address):"
-                Prompt.Width = (Prompt.MsgTextLower.Left * 2) + Prompt.MsgTextLower.Width + 10
-                Prompt.TextEnteredLower.Visible = False
+                Dim TxtEntry As New TextEntryDialog
+                TxtEntry.Text = "Save CureCoin Wallet Address"
+                TxtEntry.MsgTextUpper.Text = "From the 'Receive coins' address tab in the CureCoin Wallet Software,"
+                TxtEntry.MsgTextLower.Text = "Please enter your CureCoin Wallet Address (right-click, Copy Address):"
+                TxtEntry.Width = (TxtEntry.MsgTextLower.Left * 2) + TxtEntry.MsgTextLower.Width + 10
+                TxtEntry.TextEnteredLower.Visible = False
                 'Show modal dialog box
-                If Prompt.ShowDialog() = DialogResult.OK Then
+                If TxtEntry.ShowDialog(Me) = DialogResult.OK Then
                     'Get the Wallet Address
-                    If Prompt.TextEnteredUpper.Text.Length > 24 Then
-                        strWalletAddress = Prompt.TextEnteredUpper.Text
+                    If TxtEntry.TextEnteredUpper.Text.Length > 24 Then
+                        strWalletAddress = TxtEntry.TextEnteredUpper.Text
                     End If
                 End If
+                TxtEntry.Dispose()
             End If
 
             'Exit / Return false, if there is no CureCoin wallet address
@@ -1267,21 +1270,22 @@
                 strFAHUser = DAT.GetSection(Id & g_Main.cbxWalletId.Text).GetKey(DAT_FAH_Username).GetValue()
             End If
             If strFAHUser.Length < 2 Then
-                'Prompt for FAH username (and all the other info?). Can be short for a CureCoin only username...
-                Dim Pmt As New TextEntryDialog
-                Pmt.Text = "Save Folding Username / CureCoin Pool Login"
-                Pmt.MsgTextUpper.Text = "Please enter your Folding Username."
-                Pmt.MsgTextLower.Text = "This is used as the CureCoin Pool Login:"
-                Pmt.Width = (Pmt.MsgTextLower.Left * 2) + Pmt.MsgTextLower.Width + 10
-                Pmt.TextEnteredLower.Visible = False
+                'Prompt for FAH username. Can be short for a CureCoin only username...
+                Dim TxtEntry As New TextEntryDialog
+                TxtEntry.Text = "Save Folding Username / CureCoin Pool Login"
+                TxtEntry.MsgTextUpper.Text = "Please enter your Folding Username."
+                TxtEntry.MsgTextLower.Text = "This is used as the CureCoin Pool Login:"
+                TxtEntry.Width = (TxtEntry.MsgTextLower.Left * 2) + TxtEntry.MsgTextLower.Width + 10
+                TxtEntry.TextEnteredLower.Visible = False
                 'Show modal dialog box
-                If Pmt.ShowDialog() = DialogResult.OK Then
-                    'Get the Wallet Address
-                    If Pmt.TextEnteredUpper.Text.Length > 1 Then
-                        strFAHUser = Pmt.TextEnteredUpper.Text
+                If TxtEntry.ShowDialog(Me) = DialogResult.OK Then
+                    'Get the Folding Username / CureCoin Pool Login
+                    If TxtEntry.TextEnteredUpper.Text.Length > 1 Then
+                        strFAHUser = TxtEntry.TextEnteredUpper.Text
                         DAT.AddSection(Id & g_Main.cbxWalletId.Text).AddKey(DAT_FAH_Username).Value = strFAHUser
                     End If
                 End If
+                TxtEntry.Dispose()
             End If
 
             'Try to get the Email from saved info first
@@ -1289,21 +1293,22 @@
                 strEmail = DAT.GetSection(Id & g_Main.cbxWalletId.Text).GetKey(DAT_Email).GetValue()
             End If
             If strEmail.Length < 4 Then
-                'Prompt for FAH username (and all the other info?). Can be short for a CureCoin only username...
-                Dim Prmt As New TextEntryDialog
-                Prmt.Text = "Save Email Address"
-                Prmt.MsgTextUpper.Text = "Please enter your Email Address."
-                Prmt.MsgTextLower.Text = "This is used for the CureCoin Pool sign up:"
-                Prmt.Width = (Prmt.MsgTextLower.Left * 2) + Prmt.MsgTextLower.Width + 10
-                Prmt.TextEnteredLower.Visible = False
+                'Prompt for Email Address
+                Dim TxtEntry As New TextEntryDialog
+                TxtEntry.Text = "Save Email Address"
+                TxtEntry.MsgTextUpper.Text = "Please enter your Email Address."
+                TxtEntry.MsgTextLower.Text = "This is used for the CureCoin Pool sign up:"
+                TxtEntry.Width = (TxtEntry.MsgTextLower.Left * 2) + TxtEntry.MsgTextLower.Width + 10
+                TxtEntry.TextEnteredLower.Visible = False
                 'Show modal dialog box
-                If Prmt.ShowDialog() = DialogResult.OK Then
-                    'Get the Wallet Address
-                    If Prmt.TextEnteredUpper.Text.Length > 3 Then
-                        strEmail = Prmt.TextEnteredUpper.Text
+                If TxtEntry.ShowDialog(Me) = DialogResult.OK Then
+                    'Get the Email Address
+                    If TxtEntry.TextEnteredUpper.Text.Length > 3 Then
+                        strEmail = TxtEntry.TextEnteredUpper.Text
                         DAT.AddSection(Id & g_Main.cbxWalletId.Text).AddKey(DAT_Email).Value = strEmail
                     End If
                 End If
+                TxtEntry.Dispose()
             End If
 
             'Try to get the CureCoin pool password from saved info first
@@ -1405,15 +1410,16 @@
                 Await Wait2(50)
 
                 'Ask for the Captcha in a modal dialog, to enter in the form (to keep the user from mofifying the passwords)
-                Dim Dlg As New TextEntryDialog
-                Dlg.Text = "Enter Captcha Text"
-                Dlg.MsgTextUpper.Text = "From the bottom of the registration page,"
-                Dlg.MsgTextLower.Text = "Please enter the captcha text:"
-                Dlg.Width = (Dlg.MsgTextUpper.Left * 2) + Dlg.MsgTextUpper.Width + 10
-                Dlg.TextEnteredLower.Visible = False
+                Dim TxtEntry As New TextEntryDialog
+                TxtEntry.Text = "Enter Captcha Text"
+                TxtEntry.MsgTextUpper.Text = "From the bottom of the registration page,"
+                TxtEntry.MsgTextLower.Text = "Please enter the captcha text:"
+                TxtEntry.Width = (TxtEntry.MsgTextUpper.Left * 2) + TxtEntry.MsgTextUpper.Width + 10
+                TxtEntry.TextEnteredLower.Visible = False
                 'Show modal dialog box
-                If Dlg.ShowDialog() = DialogResult.OK Then
-                    EnterTextByName("captcha_code", Dlg.TextEnteredUpper.Text)
+                If TxtEntry.ShowDialog(Me) = DialogResult.OK Then
+                    EnterTextByName("captcha_code", TxtEntry.TextEnteredUpper.Text)
+                    TxtEntry.Dispose()
 
                     'Click "Register" (There are 2 buttons with this class. Click the 2nd button [1])
                     Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementsByClassName('submit small')[1].click();")
@@ -1448,11 +1454,12 @@
                     Await Wait2(50)
 
                     'Ask user to solve the captcha
-                    Dim MsgBx As New MsgBoxDialog
-                    MsgBx.Text = "Please Login"
-                    MsgBx.MsgText.Text = "If your account was created:" & vbNewLine & "<-- Please click 'I'm not a robot', solve the captcha, and 'Login'" & vbNewLine & "Otherwise, try the account creation captcha again"
-                    MsgBx.Width = (MsgBx.MsgText.Left * 2) + MsgBx.MsgText.Width + 10
-                    MsgBx.ShowDialog()
+                    Dim OkMsg As New MsgBoxDialog
+                    OkMsg.Text = "Please Login"
+                    OkMsg.MsgText.Text = "If your account was created:" & vbNewLine & "<-- Please click 'I'm not a robot', solve the captcha, and 'Login'" & vbNewLine & "Otherwise, try the account creation captcha again"
+                    OkMsg.Width = (OkMsg.MsgText.Left * 2) + OkMsg.MsgText.Width + 10
+                    OkMsg.ShowDialog(Me)
+                    OkMsg.Dispose()
 
                     'Wait to be logged into the 'My Account' page: look for text on that page to know when logged in...
                     Dim strTemp As String = ""
@@ -1500,6 +1507,8 @@
 
                     'Return true, if you get here
                     Return True
+                Else
+                    TxtEntry.Dispose()
                 End If
             Next
 
@@ -1579,10 +1588,16 @@
                 PageTitleWait(NameCryptoBullions)
                 Await Wait2(1000)
                 System.Windows.Forms.Application.DoEvents()
+
                 For i = 0 To 20
                     Await Wait2(200)
                     If Me.Text.Contains(NameCryptoBullions) = True Then Exit For
                 Next
+
+                PageLoadWait()
+                PageTitleWait(NameCryptoBullions)
+                Await Wait2(1000)
+                System.Windows.Forms.Application.DoEvents()
                 'TODO: ensure the Pool page loaded before proceeding (and it's not still loading CloudFlare...)
 
                 If System.IO.File.Exists(DatFilePath) = True Then
@@ -1600,21 +1615,22 @@
                 End If
                 If strFAHUser.Length < 2 Then
                     'Prompt for FAH username (and all the other info?). Can be short for a CureCoin only username...
-                    Dim Pmt As New TextEntryDialog
-                    Pmt.Text = "Save Folding Username / CureCoin Pool Login"
-                    Pmt.MsgTextUpper.Text = "Please enter your Folding Username."
-                    Pmt.MsgTextLower.Text = "This is used as the CureCoin Pool Login:"
-                    Pmt.Width = (Pmt.MsgTextLower.Left * 2) + Pmt.MsgTextLower.Width + 10
-                    Pmt.TextEnteredLower.Visible = False
+                    Dim TxtEntry As New TextEntryDialog
+                    TxtEntry.Text = "Save Folding Username / CureCoin Pool Login"
+                    TxtEntry.MsgTextUpper.Text = "Please enter your Folding Username."
+                    TxtEntry.MsgTextLower.Text = "This is used as the CureCoin Pool Login:"
+                    TxtEntry.Width = (TxtEntry.MsgTextLower.Left * 2) + TxtEntry.MsgTextLower.Width + 10
+                    TxtEntry.TextEnteredLower.Visible = False
                     'Show modal dialog box
-                    If Pmt.ShowDialog() = DialogResult.OK Then
-                        'Get the Wallet Address
-                        If Pmt.TextEnteredUpper.Text.Length > 1 Then
-                            strFAHUser = Pmt.TextEnteredUpper.Text
+                    If TxtEntry.ShowDialog(Me) = DialogResult.OK Then
+                        'Get the Folding Username / CureCoin Pool Login
+                        If TxtEntry.TextEnteredUpper.Text.Length > 1 Then
+                            strFAHUser = TxtEntry.TextEnteredUpper.Text
                             DAT.AddSection(Id & g_Main.cbxWalletId.Text).AddKey(DAT_FAH_Username).Value = strFAHUser
                             bSaveDat = True
                         End If
                     End If
+                    TxtEntry.Dispose()
                 End If
 
                 'Try to get the CureCoin pool password from saved info first
@@ -1623,21 +1639,28 @@
                 End If
                 If strPoolPW.Length < 5 Then
                     'Ask for existing password
-                    Dim Prmt As New TextEntryDialog
-                    Prmt.Text = "Save Folding Username / CureCoin Pool Login"
-                    Prmt.MsgTextUpper.Text = "Please enter your Folding Username."
-                    Prmt.MsgTextLower.Text = "This is used as the CureCoin Pool Login:"
-                    Prmt.Width = (Prmt.MsgTextLower.Left * 2) + Prmt.MsgTextLower.Width + 10
-                    Prmt.TextEnteredLower.Visible = False
+                    Dim TxtEntry As New TextEntryDialog
+                    TxtEntry.Text = "Save CureCoin Pool Passwords"
+                    TxtEntry.MsgTextUpper.Text = "Please enter your CureCoin Pool Password (Top text box):"
+                    TxtEntry.MsgTextLower.Text = "(Optional) Enter your CureCoin Pool Pin (Bottom text box):"
+                    TxtEntry.Width = (TxtEntry.MsgTextLower.Left * 2) + TxtEntry.MsgTextLower.Width + 10
+                    TxtEntry.TextEnteredLower.Visible = True
                     'Show modal dialog box
-                    If Prmt.ShowDialog() = DialogResult.OK Then
-                        'Get the Wallet Address
-                        If Prmt.TextEnteredUpper.Text.Length > 1 Then
-                            strPoolPW = Prmt.TextEnteredUpper.Text
+                    If TxtEntry.ShowDialog(Me) = DialogResult.OK Then
+                        'Get the CureCoin Pool Password (Top text box)
+                        If TxtEntry.TextEnteredUpper.Text.Length > 1 Then
+                            strPoolPW = TxtEntry.TextEnteredUpper.Text
                             DAT.AddSection(Id & g_Main.cbxWalletId.Text).AddKey(DAT_CureCoin_Pwd).Value = strPoolPW
                             bSaveDat = True
                         End If
+
+                        'Get the CureCoin Pool Pin (Bottom text box)
+                        If TxtEntry.TextEnteredLower.Text.Length > 1 Then
+                            DAT.AddSection(Id & g_Main.cbxWalletId.Text).AddKey(DAT_CureCoin_Pin).Value = TxtEntry.TextEnteredLower.Text
+                            bSaveDat = True
+                        End If
                     End If
+                    TxtEntry.Dispose()
                 End If
 
                 If bSaveDat = True Then
@@ -1652,12 +1675,18 @@
                 EnterTextByName("password", strPoolPW)
 
                 'Ask user to solve the captcha
-                Dim MsgBx As New MsgBoxDialog
-                MsgBx.Text = "Please Login"
-                MsgBx.MsgText.Text = "<-- Please solve the 'I'm not a robot' captcha, and Login"
-                MsgBx.Width = (MsgBx.MsgText.Left * 2) + MsgBx.MsgText.Width + 10
+                Dim OkMsg As New MsgBoxDialog
+                OkMsg.Text = "Please Login"
+                OkMsg.MsgText.Text = "<-- Please solve the 'I'm not a robot' captcha, and Login"
+                OkMsg.Width = (OkMsg.MsgText.Left * 2) + OkMsg.MsgText.Width + 10
                 'Show modal dialog box
-                If MsgBx.ShowDialog() = DialogResult.OK Then Exit For
+                If OkMsg.ShowDialog(Me) = DialogResult.OK Then
+                    OkMsg.Dispose()
+                    'Exit the retry loop
+                    Exit For
+                Else
+                    OkMsg.Dispose()
+                End If
             Next
 
         Catch ex As Exception

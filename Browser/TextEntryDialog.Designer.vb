@@ -103,6 +103,7 @@ Partial Class TextEntryDialog
         Me.Controls.Add(Me.MsgTextLower)
         Me.Controls.Add(Me.TextEnteredLower)
         Me.Controls.Add(Me.TextEnteredUpper)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
         Me.Name = "TextEntryDialog"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.ResumeLayout(False)

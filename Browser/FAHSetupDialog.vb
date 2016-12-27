@@ -376,11 +376,12 @@
             'Run the script to send the Passkey. Like: http://fah-web.stanford.edu/cgi-bin/getpasskey.py?name=[user]&email=[email]
             If g_Main.GetFAHpasskey("http://fah-web.stanford.edu/cgi-bin/getpasskey.py?name=" & Me.lblUsernamePreview.Text & "&email=" & Me.txtEmail.Text) = True Then
                 'Good - Check your email
-                Dim MsgBx As New MsgBoxDialog
-                MsgBx.Text = "Check your email"
-                MsgBx.MsgText.Text = "Please check your email for the passkey." & vbNewLine & "It may take a few minutes"
-                MsgBx.Width = (MsgBx.MsgText.Left * 2) + MsgBx.MsgText.Width + 10
-                MsgBx.ShowDialog()
+                Dim OkMsg As New MsgBoxDialog
+                OkMsg.Text = "Check your email"
+                OkMsg.MsgText.Text = "Please check your email for the passkey." & vbNewLine & "It may take a few minutes"
+                OkMsg.Width = (OkMsg.MsgText.Left * 2) + OkMsg.MsgText.Width + 10
+                OkMsg.ShowDialog(Me)
+                OkMsg.Dispose()
             End If
             Wait(500)
             Me.btnGetPasskey.Enabled = True
@@ -662,9 +663,10 @@
                     OpenDlg.RestoreDirectory = False
                     OpenDlg.Multiselect = False
                     OpenDlg.FilterIndex = 0
-                    If OpenDlg.ShowDialog() = DialogResult.OK Then
+                    If OpenDlg.ShowDialog(Me) = DialogResult.OK Then
                         m_strFAHCfgPath = OpenDlg.FileName
                     End If
+                    OpenDlg.Dispose()
                 End If
 
                 If m_strFAHCfgPath.Length > 0 Then

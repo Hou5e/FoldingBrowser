@@ -143,6 +143,7 @@ Partial Class SetupDialog
         Me.Controls.Add(Me.chkGetWalletForFLDC)
         Me.Controls.Add(Me.BtnOK)
         Me.Controls.Add(Me.btnCancel)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
         Me.Name = "SetupDialog"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Get Setup for Folding"

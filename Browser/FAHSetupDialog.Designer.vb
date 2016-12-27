@@ -553,7 +553,7 @@ Partial Class FAHSetupDialog
         Me.chkShowFAHCfg.AutoSize = True
         Me.chkShowFAHCfg.Checked = True
         Me.chkShowFAHCfg.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.chkShowFAHCfg.Location = New System.Drawing.Point(382, 56)
+        Me.chkShowFAHCfg.Location = New System.Drawing.Point(380, 56)
         Me.chkShowFAHCfg.Name = "chkShowFAHCfg"
         Me.chkShowFAHCfg.Size = New System.Drawing.Size(128, 22)
         Me.chkShowFAHCfg.TabIndex = 5
@@ -615,7 +615,7 @@ Partial Class FAHSetupDialog
         'btnTelnetSave
         '
         Me.btnTelnetSave.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnTelnetSave.Location = New System.Drawing.Point(271, 53)
+        Me.btnTelnetSave.Location = New System.Drawing.Point(269, 53)
         Me.btnTelnetSave.Name = "btnTelnetSave"
         Me.btnTelnetSave.Size = New System.Drawing.Size(103, 27)
         Me.btnTelnetSave.TabIndex = 4
