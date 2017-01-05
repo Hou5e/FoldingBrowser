@@ -540,6 +540,7 @@ Partial Class Main
         Me.Controls.Add(Me.gbxCheckboxForTools)
         Me.Controls.Add(Me.btnBlockchainCURE)
         Me.Controls.Add(Me.btnBlockchainFLDC)
+        Me.KeyPreview = True
         Me.MinimumSize = New System.Drawing.Size(16, 38)
         Me.Name = "Main"
         Me.ToolStripContainer1.ResumeLayout(False)

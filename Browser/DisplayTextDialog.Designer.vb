@@ -135,6 +135,7 @@ Partial Class DisplayTextDialog
         Me.Controls.Add(Me.BtnOK)
         Me.Controls.Add(Me.MsgTextTop)
         Me.Controls.Add(Me.txtDisplayText)
+        Me.KeyPreview = True
         Me.Name = "DisplayTextDialog"
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen

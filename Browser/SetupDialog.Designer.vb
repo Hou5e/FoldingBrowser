@@ -145,7 +145,7 @@ Partial Class SetupDialog
         Me.Controls.Add(Me.btnCancel)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
         Me.Name = "SetupDialog"
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Get Setup for Folding"
         Me.ResumeLayout(False)
         Me.PerformLayout()

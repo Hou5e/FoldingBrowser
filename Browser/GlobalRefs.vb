@@ -10,7 +10,7 @@ Public Module GlobalRefs
     Public Const URL_FoldingCoin As String = "http://foldingcoin.net/"
     Public Const URL_Twitter_FoldingCoin As String = "https://twitter.com/FoldingCoin"
     Public Const URL_BlockchainFLDC As String = "http://blockscan.com/assetInfo/FLDC"
-    Public Const URL_FLDC_Distro As String = "http://foldingcoin.xyz/?token=FLDC&total=500000&start=2016-10-25&end=2016-10-26"
+    Public Const URL_FLDC_Distro As String = "http://foldingcoin.xyz/?token=FLDC&total=250000&start=2017-01-01&end=2017-01-02"
     Public Const URL_CureCoin As String = "https://www.curecoin.net/"
     Public Const URL_Twitter_CureCoin As String = "https://twitter.com/CureCoin_Team"
     Public Const URL_BlockchainCURE As String = "https://chainz.cryptoid.info/cure/"
@@ -95,27 +95,17 @@ Public Module GlobalRefs
     End Function
 
 #Region "Wait (Milliseconds)"
-    Private iWaits As Integer = 0
-    Public Sub Wait(iMilSec As Integer)
-        If iMilSec > 0 Then
-            'Split the time interval up into 50ms intervals to allow the program to update for DoEvents
-            iWaits = iMilSec \ 50
-
-            For i As Integer = 1 To iWaits
-                System.Windows.Forms.Application.DoEvents()
-                'Test for closing app
-                If System.Windows.Forms.Application.OpenForms.Count = 0 Then Exit For
-                'Test for Stop button being pressed
-                If g_bCancelNav = True Then Exit For
-                'Sleep to free up system resources
-                Threading.Thread.Sleep(50)
-            Next
-        End If
-    End Sub
-
-    Public Async Function Wait2(iMilSec As Integer) As Threading.Tasks.Task
+    Public Async Function Wait(iMilSec As Integer) As Threading.Tasks.Task
         Await Threading.Tasks.Task.Delay(iMilSec)
     End Function
+
+    'Simple delay using DoEvents
+    Public Sub Delay(iMilSec As Integer)
+        Dim time As Date = Now.AddMilliseconds(iMilSec)
+        Do While time > Now
+            Application.DoEvents()
+        Loop
+    End Sub
 #End Region
 End Module
 
@@ -150,4 +140,26 @@ Public Class DownloadHandler
             g_strDownloadedFilePath = downloadItem.FullPath
         End If
     End Sub
+End Class
+
+
+'Keypress example, see: https://github.com/cefsharp/CefSharp/blob/master/CefSharp.WinForms.Example/Handlers/KeyboardHandler.cs
+Public Class KeyboardHandler
+    Implements CefSharp.IKeyboardHandler
+    Public Function OnPreKeyEvent(browserControl As CefSharp.IWebBrowser, browser As CefSharp.IBrowser, type As CefSharp.KeyType, windowsKeyCode As Integer, nativeKeyCode As Integer, modifiers As CefSharp.CefEventFlags, isSystemKey As Boolean, ByRef isKeyboardShortcut As Boolean) As Boolean Implements CefSharp.IKeyboardHandler.OnPreKeyEvent
+        If type = CefSharp.KeyType.RawKeyDown Then
+            Select Case windowsKeyCode
+            'Entire Window: Press ESC to cancel Navigation, Press F5 to Refresh
+                Case Keys.Escape, Keys.F5
+                    g_Main.updateKeyPress(windowsKeyCode)
+                    Return True
+            End Select
+        End If
+
+        Return False
+    End Function
+
+    Public Function OnKeyEvent(browserControl As CefSharp.IWebBrowser, browser As CefSharp.IBrowser, type As CefSharp.KeyType, windowsKeyCode As Integer, nativeKeyCode As Integer, modifiers As CefSharp.CefEventFlags, isSystemKey As Boolean) As Boolean Implements CefSharp.IKeyboardHandler.OnKeyEvent
+        Return False
+    End Function
 End Class

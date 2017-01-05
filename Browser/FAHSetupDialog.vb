@@ -365,7 +365,7 @@
 
 #Region "Passkey Auto-Update"
     'Run the script to send the Passkey. Web page: http://fah-web.stanford.edu/cgi-bin/getpasskey.py
-    Private Sub btnGetPasskey_Click(sender As Object, e As EventArgs) Handles btnGetPasskey.Click
+    Private Async Sub btnGetPasskey_Click(sender As Object, e As EventArgs) Handles btnGetPasskey.Click
         'Check to see if email looks valid, and indicate if it isn't
         If Me.txtEmail.Text.Length > 5 AndAlso Me.txtEmail.Text.Contains("@") AndAlso Me.txtEmail.Text.Contains(".") Then
             'Temporarily disable the get passkey button
@@ -374,7 +374,7 @@
             Me.txtEmail.BackColor = Color.White
 
             'Run the script to send the Passkey. Like: http://fah-web.stanford.edu/cgi-bin/getpasskey.py?name=[user]&email=[email]
-            If g_Main.GetFAHpasskey("http://fah-web.stanford.edu/cgi-bin/getpasskey.py?name=" & Me.lblUsernamePreview.Text & "&email=" & Me.txtEmail.Text) = True Then
+            If Await g_Main.GetFAHpasskey("http://fah-web.stanford.edu/cgi-bin/getpasskey.py?name=" & Me.lblUsernamePreview.Text & "&email=" & Me.txtEmail.Text) = True Then
                 'Good - Check your email
                 Dim OkMsg As New MsgBoxDialog
                 OkMsg.Text = "Check your email"
@@ -383,7 +383,7 @@
                 OkMsg.ShowDialog(Me)
                 OkMsg.Dispose()
             End If
-            Wait(500)
+            Await Wait(500)
             Me.btnGetPasskey.Enabled = True
         Else
             'Indicate invalid email address
@@ -404,7 +404,7 @@
     Private stream As System.Net.Sockets.NetworkStream
     Private sbData As New System.Text.StringBuilder
 
-    Private Sub btnTelnetSave_Click(sender As Object, e As EventArgs) Handles btnTelnetSave.Click
+    Private Async Sub btnTelnetSave_Click(sender As Object, e As EventArgs) Handles btnTelnetSave.Click
         'You should only be able to press the 'Save' button when the data looks Good. Use Telnet to set the FAH settings to the FAH client
         Try
             'Start Telnet session
@@ -419,14 +419,14 @@
                         g_Main.Msg("Telnet started on " & Me.txtAddress.Text & ":" & Me.txtPort.Text & ".")
 
                         'Check for new data: Get the connected message from FAH
-                        If NewData() = False Then
+                        If Await NewData() = False Then
                             If MessageBox.Show("No data received. If FAH was just started, it may take a minute. Retry?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) = MsgBoxResult.Ok Then
                                 'Close Telnet session
                                 If client.Connected = True Then
                                     stream.Close()
                                     client.Close()
                                     g_Main.Msg("Telnet stopped on " & Me.txtAddress.Text & ":" & Me.txtPort.Text)
-                                    Wait(200)
+                                    Await Wait(200)
                                 End If
 
                                 'Verify FAH is running. If not, then start it
@@ -442,7 +442,7 @@
                                     If bRunning = False Then
                                         'Still not running...  Ask the user to start FAH
                                         MessageBox.Show("Please Start the Folding@Home software, then press 'OK'.")
-                                        Wait(1000)
+                                        Await Wait(1000)
                                     End If
 
                                 Catch ex As Exception
@@ -455,7 +455,7 @@
                             'Connected - Good
                             Exit For
                         End If
-                        Wait(50)
+                        Await Wait(50)
                     Next
 
                     If client.Connected = True Then
@@ -468,8 +468,8 @@
                             stream.Write(byteAuth, 0, byteAuth.Length)
                             g_Main.Msg("Telnet Send: auth ********")
                             'Get the response from FAH
-                            NewData()
-                            Wait(50)
+                            Await NewData()
+                            Await Wait(50)
                         End If
 
                         'Send Telnet data. Add a Chr(10) for a linefeed at the end
@@ -477,23 +477,23 @@
                         stream.Write(byteCfg, 0, byteCfg.Length)
                         g_Main.Msg("Telnet Send: " & Me.txtTelnetFAHCfg.Text)
                         'Get the response from FAH
-                        NewData()
-                        Wait(50)
+                        Await NewData()
+                        Await Wait(50)
 
                         'Send Telnet data. Add a Chr(10) for a linefeed at the end
                         Dim byteSave As Byte() = System.Text.Encoding.ASCII.GetBytes("save" & Chr(10))
                         stream.Write(byteSave, 0, byteSave.Length)
                         g_Main.Msg("Telnet Send: save")
                         'Get the response from FAH
-                        NewData()
-                        Wait(50)
+                        Await NewData()
+                        Await Wait(50)
 
                         'Send Telnet data. Add a Chr(10) for a linefeed at the end
                         Dim byteExit As Byte() = System.Text.Encoding.ASCII.GetBytes("exit" & Chr(10))
                         stream.Write(byteExit, 0, byteExit.Length)
                         g_Main.Msg("Telnet Send: exit")
                         'There is no response for this command from FAH
-                        Wait(50)
+                        Await Wait(50)
 
                         'Close Telnet session
                         If client.Connected = True Then
@@ -558,7 +558,7 @@
                 INI.AddSection(Id & g_Main.cbxWalletId.Text).AddKey(INI_FAH_Username).Value = Me.lblUsernamePreview.Text
             End If
             INI.Save(IniFilePath)
-            Wait(100)
+            Await Wait(100)
             'Refresh the Wallet Names
             g_Main.cbxWalletId_SelectedIndexChanged(Nothing, Nothing)
 
@@ -573,7 +573,7 @@
         m_bTelnetSavePressed = True
 
         'Reload the new Config file to show changes
-        Wait(500)
+        Await Wait(500)
         btnReload_Click(Nothing, Nothing)
 
         'Reset the save button
@@ -582,8 +582,7 @@
 
     'Process new Telnet data
     Private byteBuf() As Byte = New Byte(255) {}
-    Private Function NewData() As Boolean
-        NewData = False
+    Private Async Function NewData() As Threading.Tasks.Task(Of Boolean)
         Try
             If client.Connected = True Then
                 sbData.Length = 0
@@ -603,12 +602,12 @@
                         Next
                     Else
                         If sbData.Length > 0 Then Exit For
-                        Wait(50)
+                        Await Wait(50)
                     End If
                 Next
 
                 'Return True, that data was received
-                If sbData.Length > 0 Then NewData = True
+                If sbData.Length > 0 Then Return True
 
                 'Display the text
                 g_Main.Msg(sbData.ToString)
@@ -618,6 +617,7 @@
         Catch ex As Exception
             g_Main.Msg("Telnet receive error: " & ex.Message.ToString)
         End Try
+        Return False
     End Function
 
     Private Sub chkShowFAHCfg_CheckedChanged(sender As Object, e As EventArgs) Handles chkShowFAHCfg.CheckedChanged

@@ -14,6 +14,51 @@
         Try
             InitializeComponent()
 
+            Dim settings As New CefSharp.CefSettings()
+            'Set the Cache path to the user's appdata roaming folder
+            settings.CachePath = System.IO.Path.Combine(UserProfileDir, "Cache")
+            settings.UserDataPath = settings.CachePath
+            settings.LogFile = System.IO.Path.Combine(settings.CachePath, "debug.log")
+#If DEBUG Then
+            'Debug: Log everything - verbose
+            settings.LogSeverity = CefSharp.LogSeverity.Verbose
+#Else
+            'Release: Only log info, warnings, errors
+            settings.LogSeverity = CefSharp.LogSeverity.Info
+#End If
+            Try
+                'The log file gets appended to each time, so delete it or else it can get large over time
+                If System.IO.File.Exists(settings.LogFile) = True Then
+                    System.IO.File.Delete(settings.LogFile)
+                    Threading.Thread.Sleep(50)
+                End If
+            Catch ex As Exception
+                Msg("Error: deleting temp file " & settings.LogFile & ": " & ex.ToString)
+            End Try
+
+            If CefSharp.Cef.Initialize(settings) = True Then
+                Me.browser = New CefSharp.WinForms.ChromiumWebBrowser(URL_BLANK)
+                'Add browser event handlers to pass events back to the main UI
+                AddHandler Me.browser.FrameLoadEnd, AddressOf onBrowserFrameLoadEnd
+                AddHandler Me.browser.ConsoleMessage, AddressOf onBrowserConsoleMessage
+                AddHandler Me.browser.StatusMessage, AddressOf OnBrowserStatusMessage
+                AddHandler Me.browser.LoadingStateChanged, AddressOf OnBrowserLoadingStateChanged
+                AddHandler Me.browser.TitleChanged, AddressOf OnBrowserTitleChanged
+                AddHandler Me.browser.AddressChanged, AddressOf OnBrowserAddressChanged
+                Me.browser.KeyboardHandler = New KeyboardHandler()
+                'Add download handler
+                Me.browser.DownloadHandler = New DownloadHandler()
+                'Add to a UI container
+                Me.ToolStripContainer1.ContentPanel.Controls.Add(browser)
+
+                'Default homepage / portal set to the FoldingCoin webpage
+#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
+                OpenURL(URL_FoldingCoin, False)
+                'OpenURL("http://folding.stanford.edu/nacl/", False)
+#Enable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
+            End If
+
+            'Setup the rest of the window
             Me.Icon = My.Resources.FoldingCoin_16_32_48
             Me.Text = Prog_Name & " v" & My.Application.Info.Version.Major.ToString
 
@@ -52,223 +97,16 @@
             Me.chkShowTools.Checked = False
 #End If
 
-            Dim settings As New CefSharp.CefSettings()
-            settings.LogSeverity = CefSharp.LogSeverity.Verbose
-            'Set the Cache path to the user's appdata roaming folder
-            settings.CachePath = System.IO.Path.Combine(UserProfileDir, "Cache")
-            settings.UserDataPath = settings.CachePath
-            settings.LogFile = System.IO.Path.Combine(settings.CachePath, "debug.log")
-            If CefSharp.Cef.Initialize(settings) = True Then
-                Me.browser = New CefSharp.WinForms.ChromiumWebBrowser(URL_BLANK)
-                'Add browser event handlers to pass events back to the main UI
-                AddHandler Me.browser.FrameLoadEnd, AddressOf onBrowserFrameLoadEnd
-                AddHandler Me.browser.ConsoleMessage, AddressOf onBrowserConsoleMessage
-                AddHandler Me.browser.StatusMessage, AddressOf OnBrowserStatusMessage
-                AddHandler Me.browser.LoadingStateChanged, AddressOf OnBrowserLoadingStateChanged
-                AddHandler Me.browser.TitleChanged, AddressOf OnBrowserTitleChanged
-                AddHandler Me.browser.AddressChanged, AddressOf OnBrowserAddressChanged
-                'Add download handler
-                Me.browser.DownloadHandler = New DownloadHandler()
-                'Add to a UI container
-                Me.ToolStripContainer1.ContentPanel.Controls.Add(browser)
-
-                'Default homepage / portal set to the FoldingCoin webpage
-                OpenURL(URL_FoldingCoin, False)
-                'OpenURL("http://folding.stanford.edu/nacl/", False)
-            End If
-
             'Hide the form while it's being adjusted
             Me.WindowState = FormWindowState.Minimized
             'Create the main form (needs to come before the window size restore)
             Me.Show()
 
+            'Force the URL text to scroll all the way to the left
+            Me.txtURL.Select(0, 0)
 
-            'Look to see if there is an INI file first
-            If System.IO.File.Exists(IniFilePath) = True Then
-                INI.Load(IniFilePath)
-                'Make sure the INI key/value exists
-                If INI.GetSection(INI_Settings).GetKey(INI_Size) IsNot Nothing Then
-                    'Restore dimensions from string: {Left};{Top};{Width};{Height}
-                    Dim strDim As String() = INI.GetSection(INI_Settings).GetKey(INI_Size).GetValue().Split(";"c)
-                    Me.Left = CInt(strDim(0))
-                    Me.Top = CInt(strDim(1))
-                    Me.Width = CInt(strDim(2))
-                    Me.Height = CInt(strDim(3))
-                End If
-
-                'Make sure the INI key/value exists
-                If INI.GetSection(INI_Settings).GetKey(INI_LastWalletId) IsNot Nothing Then
-                    'Restore last Wallet Id used
-                    Me.cbxWalletId.Text = INI.GetSection(INI_Settings).GetKey(INI_LastWalletId).GetValue()
-                End If
-
-                'Make sure the INI key/value exists
-                If INI.GetSection(INI_Settings).GetKey(INI_WindowState) IsNot Nothing Then
-                    'Restore last window state: Normal or Maximized
-                    If INI.GetSection(INI_Settings).GetKey(INI_WindowState).GetValue() = "Maximized" Then
-                        Me.WindowState = FormWindowState.Maximized
-                    Else
-                        Me.WindowState = FormWindowState.Normal
-                    End If
-                Else
-                    Me.WindowState = FormWindowState.Normal
-                End If
-
-                'Make sure the INI key/value exists
-                If INI.AddSection(INI_Settings).AddKey(INI_HideSavedDataButton) IsNot Nothing Then
-                    'Show/hide the 'Show Dat' file button
-                    If INI.AddSection(INI_Settings).AddKey(INI_HideSavedDataButton).GetValue() = "False" Then
-                        Me.btnSavedData.Visible = True
-                    Else
-                        Me.btnSavedData.Visible = False
-                    End If
-                End If
-
-            Else
-                'NOTE: closing the program will create most all of the other missing INI file settings
-
-                'Create folder for user info, if it doesn't exist
-                If System.IO.Directory.Exists(UserProfileDir) = False Then
-                    My.Computer.FileSystem.CreateDirectory(UserProfileDir)
-                End If
-                'Create the 10 wallet slot sections
-                Dim i As Integer = 0
-                For i = 0 To 9
-                    INI.AddSection(Id & i.ToString)
-                Next
-                INI.AddSection(INI_Settings)
-                'Last FoldingBrowser version. Used for updating old settings, if needed, for upgrading versions
-                INI.AddSection(INI_Settings).AddKey(INI_LastBrowserVersion).Value = My.Application.Info.Version.Major.ToString
-                'Create a new INI for first time use. Set the default encryption PW
-                INI.AddSection(INI_Settings).AddKey(INI_PW).Value = Default_DAT_PW
-                'Store window size: {Left};{Top};{Width};{Height}. This will get updated when the program exits normally.
-                INI.AddSection(INI_Settings).AddKey(INI_Size).Value = "5;5;955;805"
-                'Show/hide the 'Show Dat' file button
-                INI.AddSection(INI_Settings).AddKey(INI_HideSavedDataButton).Value = "False"
-                INI.Save(IniFilePath)
-
-                'Save and encrypt the 12 word Passphrase and the Bitcoin address
-                Dim DAT As New IniFile
-                If System.IO.File.Exists(DatFilePath) = True Then
-                    'Load DAT file, decrypt it
-                    DAT.LoadText(Decrypt(LoadDat))
-                    If DAT.ToString.Length = 0 Then
-                        'Decryption failed
-                        Msg(DAT_ErrorMsg)
-                        MessageBox.Show(DAT_ErrorMsg)
-                    End If
-                End If
-
-                'Create the initial 10 wallet slot sections in the DAT file
-                For i = 0 To 9
-                    DAT.AddSection(Id & i.ToString)
-                Next
-
-                'Create text from the INI, Encrypt, and Write/flush DAT text to file
-                SaveDat(Encrypt(DAT.SaveToString))
-                DAT = Nothing
-                'Allow time for the file to be written out
-                Wait(100)
-
-                'Make the main form visible
-                Me.WindowState = FormWindowState.Normal
-            End If
-
-            'Fix old settings, if needed, for upgrading versions
-            If System.IO.File.Exists(DatFilePath) = True Then
-                'Make sure the INI key/value exists
-                If INI.GetSection(INI_Settings).GetKey(INI_LastBrowserVersion) Is Nothing Then
-                    'Folding Browser v4 or older upgrade (no stored version number for v4 or older): 12-word PW needing to go to a new location
-                    Dim DAT As New IniFile
-                    'Load DAT file, decrypt it
-                    DAT.LoadText(Decrypt(LoadDat))
-                    If DAT.ToString.Length = 0 Then
-                        'Decryption failed
-                        Msg(DAT_ErrorMsg)
-                        MessageBox.Show(DAT_ErrorMsg)
-                    End If
-
-                    Const OldSection As String = "FLDC"
-                    Const Old012W As String = "012W"
-
-                    'Make sure the INI key/value exists
-                    If DAT.GetSection(OldSection) IsNot Nothing AndAlso DAT.GetSection(OldSection).GetKey(Old012W) IsNot Nothing Then
-                        'Save the old info to the new location and delete old info
-                        DAT.AddSection(Id & Me.cbxWalletId.Text)
-                        DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_CP12Words).Value = DAT.GetSection(OldSection).GetKey(Old012W).GetValue
-                        DAT.GetSection(OldSection).RemoveAllKeys()
-                        DAT.RemoveSection(OldSection)
-                        'Create text from the INI, Encrypt, and Write/flush DAT text to file
-                        SaveDat(Encrypt(DAT.SaveToString))
-
-                        'Save a wallet name
-                        INI.AddSection(Id & Me.cbxWalletId.Text)
-                        INI.AddSection(Id & Me.cbxWalletId.Text).AddKey(INI_WalletName).Value = "My Wallet"
-                        'Last FoldingBrowser version, now upgraded to v5
-                        INI.AddSection(INI_Settings).AddKey(INI_LastBrowserVersion).Value = "5"
-                        INI.Save(IniFilePath)
-                        Wait(100)
-                    End If
-
-                    DAT = Nothing
-                End If
-
-                Dim strBrowserVersion As String = INI.GetSection(INI_Settings).GetKey(INI_LastBrowserVersion).Value
-                If strBrowserVersion <> My.Application.Info.Version.Major.ToString Then
-                    'Fix old settings, if needed, for upgrading versions for v5 or higher:
-                    If strBrowserVersion = "5" Then
-                        'Folding Browser v5 upgrade: 12-word PW needing to go to a better key name
-                        Dim DAT As New IniFile
-                        'Load DAT file, decrypt it
-                        DAT.LoadText(Decrypt(LoadDat))
-                        If DAT.ToString.Length = 0 Then
-                            'Decryption failed
-                            Msg(DAT_ErrorMsg)
-                            MessageBox.Show(DAT_ErrorMsg)
-                        End If
-
-                        Const OldCP12Words As String = "CP12Words"
-                        Const OldPasskey As String = "Passkey"
-                        'Fix the 10 wallet slot sections
-                        Dim i As Integer = 0
-                        For i = 0 To 9
-                            'Make sure the INI key/value exists
-                            If DAT.GetSection(Id & i.ToString) IsNot Nothing AndAlso DAT.GetSection(Id & i.ToString).GetKey(OldCP12Words) IsNot Nothing Then
-                                'Save the old info to the new location and delete old info
-                                DAT.AddSection(Id & i.ToString).AddKey(DAT_CP12Words).Value = DAT.GetSection(Id & i.ToString).GetKey(OldCP12Words).GetValue
-                                DAT.GetSection(Id & i.ToString).RemoveKey(OldCP12Words)
-                            End If
-
-                            If DAT.GetSection(Id & i.ToString) IsNot Nothing AndAlso DAT.GetSection(Id & i.ToString).GetKey(OldPasskey) IsNot Nothing Then
-                                'Save the old info to the new location and delete old info
-                                DAT.AddSection(Id & i.ToString).AddKey(DAT_FAH_Passkey).Value = DAT.GetSection(Id & i.ToString).GetKey(OldPasskey).GetValue
-                                DAT.GetSection(Id & i.ToString).RemoveKey(OldPasskey)
-                            End If
-                        Next
-
-                        'Ensure the initial 10 wallet slot sections are in the DAT file
-                        For i = 0 To 9
-                            DAT.AddSection(Id & i.ToString)
-                        Next
-
-                        'Create text from the INI, Encrypt, and Write/flush DAT text to file
-                        SaveDat(Encrypt(DAT.SaveToString))
-                        Wait(100)
-                        DAT = Nothing
-
-                        Const OldShowTheShowDatButton As String = "ShowTheShowDatButton"
-                        'Renamed the 'Show Dat' file button to 'Saved Data'
-                        INI.AddSection(INI_Settings).AddKey(INI_HideSavedDataButton).Value = "False"
-                        INI.GetSection(INI_Settings).RemoveKey(OldShowTheShowDatButton)
-                        'Last FoldingBrowser version, now upgraded to v6
-                        INI.AddSection(INI_Settings).AddKey(INI_LastBrowserVersion).Value = "6"
-                        INI.Save(IniFilePath)
-                        Wait(100)
-                    End If
-
-                    'Next DAT format version upgrade would go here
-                End If
-            End If
+            'Load, fix, or update the INI and DAT files for the stored settings
+            FixSettingsFiles()
 
             'Refresh the Wallet Names
             cbxWalletId_SelectedIndexChanged(Nothing, Nothing)
@@ -282,6 +120,197 @@
             Msg("Error: initialization failed: " & ex.ToString)
             MessageBox.Show("Error: initialization failed: " & ex.ToString)
         End Try
+    End Sub
+
+#Region "Extra Setup"
+    'This was done because the New() constructor can't be run as Async. So, this was moved out to here
+    Private Async Sub FixSettingsFiles()
+        'Look to see if there is an INI file first
+        If System.IO.File.Exists(IniFilePath) = True Then
+            INI.Load(IniFilePath)
+            'Make sure the INI key/value exists
+            If INI.GetSection(INI_Settings).GetKey(INI_Size) IsNot Nothing Then
+                'Restore dimensions from string: {Left};{Top};{Width};{Height}
+                Dim strDim As String() = INI.GetSection(INI_Settings).GetKey(INI_Size).GetValue().Split(";"c)
+                Me.Left = CInt(strDim(0))
+                Me.Top = CInt(strDim(1))
+                Me.Width = CInt(strDim(2))
+                Me.Height = CInt(strDim(3))
+            End If
+
+            'Make sure the INI key/value exists
+            If INI.GetSection(INI_Settings).GetKey(INI_LastWalletId) IsNot Nothing Then
+                'Restore last Wallet Id used
+                Me.cbxWalletId.Text = INI.GetSection(INI_Settings).GetKey(INI_LastWalletId).GetValue()
+            End If
+
+            'Make sure the INI key/value exists
+            If INI.GetSection(INI_Settings).GetKey(INI_WindowState) IsNot Nothing Then
+                'Restore last window state: Normal or Maximized
+                If INI.GetSection(INI_Settings).GetKey(INI_WindowState).GetValue() = "Maximized" Then
+                    Me.WindowState = FormWindowState.Maximized
+                Else
+                    Me.WindowState = FormWindowState.Normal
+                End If
+            Else
+                Me.WindowState = FormWindowState.Normal
+            End If
+
+            'Make sure the INI key/value exists
+            If INI.AddSection(INI_Settings).AddKey(INI_HideSavedDataButton) IsNot Nothing Then
+                'Show/hide the 'Show Dat' file button
+                If INI.AddSection(INI_Settings).AddKey(INI_HideSavedDataButton).GetValue() = "False" Then
+                    Me.btnSavedData.Visible = True
+                Else
+                    Me.btnSavedData.Visible = False
+                End If
+            End If
+
+        Else
+            'NOTE: closing the program will create most all of the other missing INI file settings
+
+            'Create folder for user info, if it doesn't exist
+            If System.IO.Directory.Exists(UserProfileDir) = False Then
+                My.Computer.FileSystem.CreateDirectory(UserProfileDir)
+            End If
+            'Create the 10 wallet slot sections
+            Dim i As Integer = 0
+            For i = 0 To 9
+                INI.AddSection(Id & i.ToString)
+            Next
+            INI.AddSection(INI_Settings)
+            'Last FoldingBrowser version. Used for updating old settings, if needed, for upgrading versions
+            INI.AddSection(INI_Settings).AddKey(INI_LastBrowserVersion).Value = My.Application.Info.Version.Major.ToString
+            'Create a new INI for first time use. Set the default encryption PW
+            INI.AddSection(INI_Settings).AddKey(INI_PW).Value = Default_DAT_PW
+            'Store window size: {Left};{Top};{Width};{Height}. This will get updated when the program exits normally.
+            INI.AddSection(INI_Settings).AddKey(INI_Size).Value = "5;5;955;805"
+            'Show/hide the 'Show Dat' file button
+            INI.AddSection(INI_Settings).AddKey(INI_HideSavedDataButton).Value = "False"
+            INI.Save(IniFilePath)
+
+            'Save and encrypt the 12 word Passphrase and the Bitcoin address
+            Dim DAT As New IniFile
+            If System.IO.File.Exists(DatFilePath) = True Then
+                'Load DAT file, decrypt it
+                DAT.LoadText(Decrypt(LoadDat))
+                If DAT.ToString.Length = 0 Then
+                    'Decryption failed
+                    Msg(DAT_ErrorMsg)
+                    MessageBox.Show(DAT_ErrorMsg)
+                End If
+            End If
+
+            'Create the initial 10 wallet slot sections in the DAT file
+            For i = 0 To 9
+                DAT.AddSection(Id & i.ToString)
+            Next
+
+            'Create text from the INI, Encrypt, and Write/flush DAT text to file
+            SaveDat(Encrypt(DAT.SaveToString))
+            DAT = Nothing
+            'Allow time for the file to be written out
+            Await Wait(100)
+
+            'Make the main form visible
+            Me.WindowState = FormWindowState.Normal
+        End If
+
+        'Fix old settings, if needed, for upgrading versions
+        If System.IO.File.Exists(DatFilePath) = True Then
+            'Make sure the INI key/value exists
+            If INI.GetSection(INI_Settings).GetKey(INI_LastBrowserVersion) Is Nothing Then
+                'Folding Browser v4 or older upgrade (no stored version number for v4 or older): 12-word PW needing to go to a new location
+                Dim DAT As New IniFile
+                'Load DAT file, decrypt it
+                DAT.LoadText(Decrypt(LoadDat))
+                If DAT.ToString.Length = 0 Then
+                    'Decryption failed
+                    Msg(DAT_ErrorMsg)
+                    MessageBox.Show(DAT_ErrorMsg)
+                End If
+
+                Const OldSection As String = "FLDC"
+                Const Old012W As String = "012W"
+
+                'Make sure the INI key/value exists
+                If DAT.GetSection(OldSection) IsNot Nothing AndAlso DAT.GetSection(OldSection).GetKey(Old012W) IsNot Nothing Then
+                    'Save the old info to the new location and delete old info
+                    DAT.AddSection(Id & Me.cbxWalletId.Text)
+                    DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_CP12Words).Value = DAT.GetSection(OldSection).GetKey(Old012W).GetValue
+                    DAT.GetSection(OldSection).RemoveAllKeys()
+                    DAT.RemoveSection(OldSection)
+                    'Create text from the INI, Encrypt, and Write/flush DAT text to file
+                    SaveDat(Encrypt(DAT.SaveToString))
+
+                    'Save a wallet name
+                    INI.AddSection(Id & Me.cbxWalletId.Text)
+                    INI.AddSection(Id & Me.cbxWalletId.Text).AddKey(INI_WalletName).Value = "My Wallet"
+                    'Last FoldingBrowser version, now upgraded to v5
+                    INI.AddSection(INI_Settings).AddKey(INI_LastBrowserVersion).Value = "5"
+                    INI.Save(IniFilePath)
+                    Await Wait(100)
+                End If
+
+                DAT = Nothing
+            End If
+
+            Dim strBrowserVersion As String = INI.GetSection(INI_Settings).GetKey(INI_LastBrowserVersion).Value
+            If strBrowserVersion <> My.Application.Info.Version.Major.ToString Then
+                'Fix old settings, if needed, for upgrading versions for v5 or higher:
+                If strBrowserVersion = "5" Then
+                    'Folding Browser v5 upgrade: 12-word PW needing to go to a better key name
+                    Dim DAT As New IniFile
+                    'Load DAT file, decrypt it
+                    DAT.LoadText(Decrypt(LoadDat))
+                    If DAT.ToString.Length = 0 Then
+                        'Decryption failed
+                        Msg(DAT_ErrorMsg)
+                        MessageBox.Show(DAT_ErrorMsg)
+                    End If
+
+                    Const OldCP12Words As String = "CP12Words"
+                    Const OldPasskey As String = "Passkey"
+                    'Fix the 10 wallet slot sections
+                    Dim i As Integer = 0
+                    For i = 0 To 9
+                        'Make sure the INI key/value exists
+                        If DAT.GetSection(Id & i.ToString) IsNot Nothing AndAlso DAT.GetSection(Id & i.ToString).GetKey(OldCP12Words) IsNot Nothing Then
+                            'Save the old info to the new location and delete old info
+                            DAT.AddSection(Id & i.ToString).AddKey(DAT_CP12Words).Value = DAT.GetSection(Id & i.ToString).GetKey(OldCP12Words).GetValue
+                            DAT.GetSection(Id & i.ToString).RemoveKey(OldCP12Words)
+                        End If
+
+                        If DAT.GetSection(Id & i.ToString) IsNot Nothing AndAlso DAT.GetSection(Id & i.ToString).GetKey(OldPasskey) IsNot Nothing Then
+                            'Save the old info to the new location and delete old info
+                            DAT.AddSection(Id & i.ToString).AddKey(DAT_FAH_Passkey).Value = DAT.GetSection(Id & i.ToString).GetKey(OldPasskey).GetValue
+                            DAT.GetSection(Id & i.ToString).RemoveKey(OldPasskey)
+                        End If
+                    Next
+
+                    'Ensure the initial 10 wallet slot sections are in the DAT file
+                    For i = 0 To 9
+                        DAT.AddSection(Id & i.ToString)
+                    Next
+
+                    'Create text from the INI, Encrypt, and Write/flush DAT text to file
+                    SaveDat(Encrypt(DAT.SaveToString))
+                    Await Wait(100)
+                    DAT = Nothing
+
+                    Const OldShowTheShowDatButton As String = "ShowTheShowDatButton"
+                    'Renamed the 'Show Dat' file button to 'Saved Data'
+                    INI.AddSection(INI_Settings).AddKey(INI_HideSavedDataButton).Value = "False"
+                    INI.GetSection(INI_Settings).RemoveKey(OldShowTheShowDatButton)
+                    'Last FoldingBrowser version, now upgraded to v6
+                    INI.AddSection(INI_Settings).AddKey(INI_LastBrowserVersion).Value = "6"
+                    INI.Save(IniFilePath)
+                    Await Wait(100)
+                End If
+
+                'Next DAT format version upgrade would go here
+            End If
+        End If
     End Sub
 
     'This was done because the New() constructor can't be run as Async. So, this was moved out to here
@@ -345,7 +374,7 @@
                         'FAH adavanced client installation
                         If Setup.chkGetFAHSoftware.Checked = True Then
                             g_bAskDownloadLocation = False
-                            If GetFAH() = False Then MessageBox.Show("Task 'Get Folding@Home App' did not complete.")
+                            If Await GetFAH() = False Then MessageBox.Show("Task 'Get Folding@Home App' did not complete.")
                         End If
 
                         'Get Wallet
@@ -363,11 +392,11 @@
                             Await SetupCureCoin()
 
                             'Logout of the CureCoin folding pool (CryptoBullionPools) website
-                            OpenURL(URL_CureCoinFoldingPoolPage & "logout", False)
+                            Await OpenURL(URL_CureCoinFoldingPoolPage & "logout", False)
                             'Wait for the page to load
-                            PageLoadWait()
-                            PageTitleWait(NameCryptoBullions)
-                            Await Wait2(200)
+                            Await PageLoadWait()
+                            Await PageTitleWait(NameCryptoBullions)
+                            Await Wait(200)
                         End If
 
                         'Show DAT file saved info. Ask to make backups / store data in a safe place
@@ -390,10 +419,12 @@
     End Sub
     Private Sub FixErrEvent(sender As Object, e As EventArgs)
         m_timerErr.Stop()
+        RemoveHandler m_timerErr.Elapsed, AddressOf OnErrEvent
 
         'Show the Saved Data dialog
         Dim DlgDisplaySavedData As New DisplayTextDialog
-        DlgDisplaySavedData.Show()
+        DlgDisplaySavedData.ShowDialog(Me)
+        DlgDisplaySavedData.Dispose()
 
         'TODO: this part would freeze as the last part of the automated install for v6 / CefSharp v49. It was moved to the timer to try and avoid the unknown problem.
 
@@ -405,6 +436,7 @@
         OkMsg.ShowDialog(Me)
         OkMsg.Dispose()
     End Sub
+#End Region
 
     Private Sub onBrowserFrameLoadEnd(sender As Object, e As CefSharp.FrameLoadEndEventArgs)
         'Set a flag to indicate the web page has finished loading. This event is fired for each frame that loads, so compare URLs before setting the flag as loaded (NOTE: Me.browser.IsLoading = True, doesn't work)
@@ -452,7 +484,24 @@
         Me.Invoke(Sub()
                       Me.txtURL.Text = strURL
                       m_strPageURL = strURL
+                      Me.txtURL.Focus()
+                      Me.txtURL.Select(Me.txtURL.Text.Length, 0)
                   End Sub)
+    End Sub
+
+    Public Delegate Sub updateKP(iKeyCode As Integer)
+    Public Sub updateKeyPress(iKeyCode As Integer)
+        Me.Invoke(New updateKP(AddressOf upKeyPress), {iKeyCode})
+    End Sub
+
+    Public Sub upKeyPress(iKeyCode As Integer)
+        Select Case iKeyCode
+            Case Keys.Escape
+                StopNavigaion()
+
+            Case Keys.F5
+                Me.browser.GetBrowser.Reload(True)
+        End Select
     End Sub
 
     Public Delegate Sub updateDL(iPercent As Integer, bComplete As Boolean, bCancelled As Boolean)
@@ -483,18 +532,22 @@
     End Sub
 
     Private Sub Main_FormClosing(sender As Object, e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
-        'Last Wallet Id used
-        INI.AddSection(INI_Settings).AddKey(INI_LastWalletId).Value = Me.cbxWalletId.Text
-        'Last Window State
-        INI.AddSection(INI_Settings).AddKey(INI_WindowState).Value = Me.WindowState.ToString
-        'Skip saving the window position, if closed while being minimized or full screen
-        If Me.WindowState = FormWindowState.Normal Then
-            'Store window size: {Left};{Top};{Width};{Height}
-            INI.AddSection(INI_Settings).AddKey(INI_Size).Value = IIf(Me.Left < 0, "0", Me.Left).ToString() & ";" & IIf(Me.Top < 0, "0", Me.Top).ToString() & ";" & IIf(Me.Width < 700, "700", Me.Width).ToString() & ";" & IIf(Me.Height < 500, "500", Me.Height).ToString()
-        End If
-        'Last FoldingBrowser version. Used for updating old settings, if needed, for upgrading versions
-        INI.AddSection(INI_Settings).AddKey(INI_LastBrowserVersion).Value = My.Application.Info.Version.Major.ToString
-        INI.Save(IniFilePath)
+        Try
+            'Last Wallet Id used
+            INI.AddSection(INI_Settings).AddKey(INI_LastWalletId).Value = Me.cbxWalletId.Text
+            'Last Window State
+            INI.AddSection(INI_Settings).AddKey(INI_WindowState).Value = Me.WindowState.ToString
+            'Skip saving the window position, if closed while being minimized or full screen
+            If Me.WindowState = FormWindowState.Normal Then
+                'Store window size: {Left};{Top};{Width};{Height}
+                INI.AddSection(INI_Settings).AddKey(INI_Size).Value = IIf(Me.Left < 0, "0", Me.Left).ToString() & ";" & IIf(Me.Top < 0, "0", Me.Top).ToString() & ";" & IIf(Me.Width < 700, "700", Me.Width).ToString() & ";" & IIf(Me.Height < 500, "500", Me.Height).ToString()
+            End If
+            'Last FoldingBrowser version. Used for updating old settings, if needed, for upgrading versions
+            INI.AddSection(INI_Settings).AddKey(INI_LastBrowserVersion).Value = My.Application.Info.Version.Major.ToString
+            INI.Save(IniFilePath)
+        Catch ex As Exception
+            Msg("Error: Saving INI file settings on exiting: " & ex.ToString)
+        End Try
 
         Try
             If g_strDownloadedFilePath.Length > 0 Then
@@ -507,65 +560,97 @@
             Msg("Error: Deleting temp FAH install file: " & ex.ToString)
         End Try
 
-        If Me.browser IsNot Nothing Then
-            RemoveHandler Me.browser.FrameLoadEnd, AddressOf onBrowserFrameLoadEnd
-            RemoveHandler Me.browser.ConsoleMessage, AddressOf onBrowserConsoleMessage
-            RemoveHandler Me.browser.StatusMessage, AddressOf OnBrowserStatusMessage
-            RemoveHandler Me.browser.LoadingStateChanged, AddressOf OnBrowserLoadingStateChanged
-            RemoveHandler Me.browser.TitleChanged, AddressOf OnBrowserTitleChanged
-            RemoveHandler Me.browser.AddressChanged, AddressOf OnBrowserAddressChanged
-
-            'Shutdown the web browser control
-            CefSharp.Cef.Shutdown()
-
+        Try
             'Save any log messages from the screen to a text file. This may make it easier for users to report issues
             If Me.txtMsg.Text.Length > 0 Then
                 SaveLogFile(Me.txtMsg.Text)
             End If
+        Catch ex As Exception
+            Msg("Error: Saving log file: " & ex.ToString)
+        End Try
 
-            'For CefSharp.Cef.Shutdown(): This 100ms delay seems to help prevent the messed up state for older (and current) CefSharp versions, where the cache needs to be deleted for the FAH Control web page (at least with CEF1, v25)
-            Wait(100)
-            g_bCancelNav = True
-        End If
+        Try
+            'Keep this before CefSharp.Cef.Shutdown() to avoid the browser hanging: when exiting the wallet & click yes, then close the Browser (like the javascript running causes the hang)
+            StopNavigaion()
+            Application.DoEvents()
+            ClearWebpage()
+            Delay(50)
+
+            If Me.browser IsNot Nothing Then
+                RemoveHandler Me.browser.FrameLoadEnd, AddressOf onBrowserFrameLoadEnd
+                RemoveHandler Me.browser.ConsoleMessage, AddressOf onBrowserConsoleMessage
+                RemoveHandler Me.browser.StatusMessage, AddressOf OnBrowserStatusMessage
+                RemoveHandler Me.browser.LoadingStateChanged, AddressOf OnBrowserLoadingStateChanged
+                RemoveHandler Me.browser.TitleChanged, AddressOf OnBrowserTitleChanged
+                RemoveHandler Me.browser.AddressChanged, AddressOf OnBrowserAddressChanged
+
+                'Shutdown the web browser control
+                If Me.browser.IsDisposed = False Then
+                    CefSharp.Cef.Shutdown()
+                    'Wait for CefSharp.Cef.Shutdown(): This 100ms delay seems to help prevent the messed up state for older (and current) CefSharp versions. Otherwise, the cache needs to be deleted for the FAH Control web page to work (at least with CEF1, v25)
+                    Delay(100)
+                End If
+            End If
+        Catch ex As Exception
+            Msg("Error: Exiting: " & ex.ToString)
+        End Try
+
+        g_bCancelNav = True
     End Sub
 #End Region
 
 #Region "Button, Checkbox, Combobox - Form Control Events"
-    Private Sub btnMyWallet_Click(sender As System.Object, e As System.EventArgs) Handles btnMyWallet.Click
-        If LoginToCounterwallet() = False Then MessageBox.Show("Task 'Log Into Wallet' did not complete. Please try again.")
+    Private Async Sub btnMyWallet_Click(sender As System.Object, e As System.EventArgs) Handles btnMyWallet.Click
+        If Await LoginToCounterwallet() = False Then MessageBox.Show("Task 'Log Into Wallet' did not complete. Please try again.")
     End Sub
 
     Private Sub btnFAHControl_Click(sender As System.Object, e As System.EventArgs) Handles btnFAHControl.Click
+#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
         OpenURL(URL_FAH_Client, False)
+#Enable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
     End Sub
 
     Private Sub btnFoldingCoinWebsite_Click(sender As System.Object, e As System.EventArgs) Handles btnFoldingCoinWebsite.Click
+#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
         OpenURL(URL_FoldingCoin, False)
+#Enable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
     End Sub
     Private Sub btnTwitterFoldingCoin_Click(sender As System.Object, e As System.EventArgs) Handles btnTwitterFoldingCoin.Click
+#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
         OpenURL(URL_Twitter_FoldingCoin, False)
+#Enable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
     End Sub
     Private Sub btnBlockchainFLDC_Click(sender As Object, e As EventArgs) Handles btnBlockchainFLDC.Click
+#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
         OpenURL(URL_BlockchainFLDC, False)
+#Enable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
     End Sub
 
     Private Sub btnFLDC_DailyDistro_Click(sender As System.Object, e As System.EventArgs) Handles btnFLDC_DailyDistro.Click
+#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
         OpenURL(URL_FLDC_Distro, False)
+#Enable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
     End Sub
 
     Private Sub btnCureCoin_Click(sender As System.Object, e As System.EventArgs) Handles btnCureCoin.Click
+#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
         OpenURL(URL_CureCoin, False)
+#Enable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
     End Sub
     Private Sub btnTwitterCureCoin_Click(sender As System.Object, e As System.EventArgs) Handles btnTwitterCureCoin.Click
+#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
         OpenURL(URL_Twitter_CureCoin, False)
+#Enable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
     End Sub
     Private Sub btnBlockchainCURE_Click(sender As Object, e As EventArgs) Handles btnBlockchainCURE.Click
+#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
         OpenURL(URL_BlockchainCURE, False)
+#Enable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
     End Sub
 
 
     'Extreme Overclocking's User Stats page: Needs to know user ID # ...  Once known, store the info in the INI file
-    Private Sub btnEOC_Click(sender As System.Object, e As System.EventArgs) Handles btnEOC.Click
+    Private Async Sub btnEOC_Click(sender As System.Object, e As System.EventArgs) Handles btnEOC.Click
         Dim strUserId As String = "0"
         Dim strUsername As String = ""
 
@@ -599,9 +684,9 @@
                     TxtEntry.Dispose()
                 Else
                     TxtEntry.Dispose()
-                    OpenURL(URL_CureCoin_EOC, False)
-                    PageTitleWait("Curecoin")
-                    Wait(100)
+                    Await OpenURL(URL_CureCoin_EOC, False)
+                    Await PageTitleWait("Curecoin")
+                    Await Wait(100)
                     Exit Sub
                 End If
             End If
@@ -612,18 +697,18 @@
         Try
             'No UserId, but if you have the FAH Username stored, then go look up the Id on EOC
             If strUserId = "0" Then
-                OpenURL(URL_CureCoin_EOC, False)
-                PageTitleWait("Curecoin")
-                Wait(100)
+                Await OpenURL(URL_CureCoin_EOC, False)
+                Await PageTitleWait("Curecoin")
+                Await Wait(100)
 
                 'Enter FAH Username in the Search TextBox
                 EnterTextByName("searchbox", strUsername)
-                Wait(100)
+                Await Wait(100)
 
                 'Click the search button. Submit the form data since there are no real Ids, Names, or Tags for this button element, just use the 1st item in the array of forms
                 Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.forms[0].submit();")
-                PageTitleWait("Search")
-                Wait(100)
+                Await PageTitleWait("Search")
+                Await Wait(100)
 
                 'Get link, and parse Id. The line with the Username has the EOC User ID number
                 If FindTextInDoc("/user_summary.php?s=&amp;u=*"">" & strUsername & "</a></td>", strUserId, "") = True AndAlso strUserId.Length > 1 AndAlso IsNumeric(strUserId) Then
@@ -632,7 +717,7 @@
                     INI.Save(IniFilePath)
 
                     'Open the user's EOC stats page
-                    OpenURL(URL_EOC & strUserId, False)
+                    Await OpenURL(URL_EOC & strUserId, False)
                 Else
                     'Fix missing value. Ask for EOC User ID
                     Dim TxtEntry As New TextEntryDialog
@@ -648,17 +733,19 @@
                         INI.Save(IniFilePath)
                         strUsername = TxtEntry.TextEnteredUpper.Text
                         'Open the user's EOC stats page
-                        OpenURL(URL_EOC & strUserId, False)
+                        Await OpenURL(URL_EOC & strUserId, False)
                     End If
                     TxtEntry.Dispose()
                 End If
             Else
                 'Open the user's EOC stats page
-                OpenURL(URL_EOC & strUserId, False)
+                Await OpenURL(URL_EOC & strUserId, False)
             End If
 
         Catch ex As Exception
+#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
             OpenURL(URL_CureCoin_EOC, False)
+#Enable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
             Msg("Error: Extreme Overclocking Username ID lookup failed: " & ex.ToString & vbNewLine & vbNewLine & "Please fix value in user's INI file:" & vbNewLine & IniFilePath)
         End Try
     End Sub
@@ -681,7 +768,9 @@
 
         If MessageBox.Show("Get Folding@Home Software: Are you sure?", "", MessageBoxButtons.OKCancel) = MsgBoxResult.Ok Then
             g_bAskDownloadLocation = True
+#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
             GetFAH()
+#Enable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
             'If GetFAH() = False Then MessageBox.Show("Task 'Get Folding@Home App' did not complete.")
         End If
     End Sub
@@ -691,7 +780,17 @@
 
 
         If MessageBox.Show("Get Wallet: Are you sure?", "", MessageBoxButtons.OKCancel) = MsgBoxResult.Ok Then
-            If Await GetWallet() = False Then MessageBox.Show("Task 'Get Wallet' did not complete.")
+            If Await GetWallet() = False Then
+                MessageBox.Show("Task 'Get Wallet' did not complete.")
+            Else
+                'Good
+                Dim OkMsg As New MsgBoxDialog
+                OkMsg.Text = "Wallet Setup Complete"
+                OkMsg.MsgText.Text = "Wallet Setup Complete"
+                OkMsg.Width = (OkMsg.MsgText.Left * 2) + OkMsg.MsgText.Width + 10
+                OkMsg.ShowDialog(Me)
+                OkMsg.Dispose()
+            End If
         End If
     End Sub
 
@@ -747,15 +846,14 @@
 #End Region
 
 #Region "Auto-Wallet Login"
-    Private Function LoginToCounterwallet() As Boolean
-        LoginToCounterwallet = False
+    Private Async Function LoginToCounterwallet() As Threading.Tasks.Task(Of Boolean)
         Dim DAT As New IniFile
         Dim bSaved12W As Boolean = False
         Try
             'CounterWallet web page 
-            OpenURL(URL_Counterwallet, False)
-            PageTitleWait("Counterwallet")
-            Wait(700)
+            Await OpenURL(URL_Counterwallet, False)
+            Await PageTitleWait("Counterwallet")
+            Await Wait(700)
 
             'Make sure DAT file exists
             If System.IO.File.Exists(DatFilePath) = True Then
@@ -793,7 +891,7 @@
                     INI.Save(IniFilePath)
 
                     'Allow time for the file to be written out
-                    Wait(100)
+                    Await Wait(100)
 
                     'Refresh the Wallet Names
                     cbxWalletId_SelectedIndexChanged(Nothing, Nothing)
@@ -807,22 +905,25 @@
             If bSaved12W = True Then
                 'Enter 12-word Passphrase to login
                 EnterTextById("password", DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CP12Words).GetValue())
-                Wait(50)
+                Await Wait(50)
                 DAT = Nothing
 
                 'Trigger event to enable the Login button, since there was no keystroke event to enable the button
                 Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("ko.utils.triggerEvent(document.getElementById('password'), 'input');")
 
                 'Click Login button
-                ClickById("walletLoginButton", True)
+                Await ClickById("walletLoginButton", True)
 
-                LoginToCounterwallet = True
+                'Return true, if you get here
+                Return True
             End If
 
         Catch ex As Exception
             Msg("Auto-Wallet Login error:" & ex.ToString)
             If DAT IsNot Nothing Then DAT = Nothing
         End Try
+
+        Return False
     End Function
 #End Region
 
@@ -838,12 +939,12 @@
             End If
 
             'CounterWallet web page 
-            OpenURL(URL_Counterwallet, False)
-            PageTitleWait("Counterwallet")
-            Await Wait2(700)
+            Await OpenURL(URL_Counterwallet, False)
+            Await PageTitleWait("Counterwallet")
+            Await Wait(700)
 
             'Click Create New CounterWallet
-            ClickById("newWalletButton", False)
+            Await ClickById("newWalletButton", False)
 
             'Save 12-word Passphrase and BTC address
             Dim str12W As String = ""
@@ -853,23 +954,22 @@
                 If FindTextInDoc("generatedPassphrase"">*</span>", str12W, "") = True AndAlso str12W.Length > 24 Then
                     Exit For
                 End If
-                Await Wait2(200)
+                Await Wait(200)
             Next
 
             If str12W.Length > 24 Then
                 'Click the "I've written it down" check box
-                ClickByName("passphraseSaved", False)
+                Await ClickByName("passphraseSaved", False)
                 'Click Continue button
-                ClickById("continueWalletCreation", False)
-                Await Wait2(100)
+                Await ClickById("continueWalletCreation", False)
+                Await Wait(100)
 
                 'There are 3 buttons with this ID: finishWalletCreation. Use the class to get the ('btn btn-primary') 4th instance for the Create Wallet button:
                 Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementsByClassName('btn btn-primary')[3].click();")
-                Await Wait2(100)
+                Await Wait(100)
 
                 'Click the 'X' close button.  Not working: click OK, the ('btn btn-primary') 9th instance for the OK button.
-                Dim FileURL As String = ""
-                ClickByClass("bootbox-close-button close", False, FileURL)
+                Await ClickByClass("bootbox-close-button close", False)
 
                 'Enter 12-word Passphrase to login
                 EnterTextById("password", str12W)
@@ -877,14 +977,14 @@
                 Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("ko.utils.triggerEvent(document.getElementById('password'), 'input');")
 
                 'Click Login button
-                ClickById("walletLoginButton", True)
-                Await Wait2(1000)
+                Await ClickById("walletLoginButton", True)
+                Await Wait(1000)
 
                 'First login, accept terms. ('btn btn-success') 2nd instance for the Accept button:
                 Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementsByClassName('btn btn-success')[1].click();")
 
                 'The logged into wallet web page has no title, but the previous page had a title
-                PageNoTitleWait()
+                Await PageNoTitleWait()
 
                 For i As Integer = 1 To 40
                     If FindTextInDoc("selectAddressText, text: dispAddress"">*</span>", strBTCAddr, "") = True Then
@@ -892,7 +992,7 @@
                             Exit For
                         End If
                     End If
-                    Await Wait2(200)
+                    Await Wait(200)
                 Next
 
                 'Save and encrypt the 12 word Passphrase and the Bitcoin address
@@ -923,12 +1023,12 @@
                 DAT = Nothing
 
                 'Allow time for the file to be written out
-                Await Wait2(100)
+                Await Wait(100)
 
                 'Refresh the Wallet Names
                 cbxWalletId_SelectedIndexChanged(Nothing, Nothing)
 
-                'Exit / Return true
+                'Return true, if you get here
                 Return True
 
             Else
@@ -943,29 +1043,25 @@
         Return False
     End Function
 
-    Private Function GetFAH() As Boolean
-        GetFAH = False
+    Private Async Function GetFAH() As Threading.Tasks.Task(Of Boolean)
         Try
             'Get Folding@Home App
-            OpenURL(URL_FAH, False)
-            PageTitleWait("Folding@home")
-            Wait(100)
-
-            'Get EXE file name to execute
-            Dim FileURL As String = ""
+            Await OpenURL(URL_FAH, False)
+            Await PageTitleWait("Folding@home")
+            Await Wait(100)
 
             'Click the link for Windows download (This initial step appears to be needed? even though the link is in the HTML)
-            ClickByClass("download-btn", False, FileURL)
-            Wait(200)
+            Await ClickByClass("download-btn", False)
+            Await Wait(200)
 
             'Make the download progress visible
             Me.gbxDownload.Visible = True
             'Start the download: Click the link for Windows download
-            ClickByClass("fah-platform-downloads", False, FileURL)
-            Wait(200)
+            Await ClickByClass("fah-platform-downloads", False)
+            Await Wait(200)
 
             'Close the download pop-up window
-            ClickByClass("modalCloseImg simplemodal-close", False, FileURL)
+            Await ClickByClass("modalCloseImg simplemodal-close", False)
 
             'Close any running instances of FAH
             Dim p As Process
@@ -973,7 +1069,7 @@
                 For Each p In Process.GetProcessesByName("FAHClient")
                     Msg("Asking to close FAH process: " & p.Id.ToString() & " - " & p.ProcessName)
                     MessageBox.Show("Please close the Folding@Home software before proceeding.", "", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-                    Wait(1000)
+                    Await Wait(1000)
                     Exit For
                 Next
 
@@ -1033,12 +1129,12 @@
             'Wait for the web page, or 2 hours
             Do Until Me.gbxDownload.Visible = False OrElse g_bCancelNav = True OrElse i > 2400
                 i += 1
-                Wait(500)
+                Await Wait(500)
             Loop
             'Download didn't finish or was canceled. Don't reset: g_bCancelNav = False, here because it messes up canceling the download
             If i >= 2400 Then Exit Try
             'Let the screen refresh
-            Wait(50)
+            Await Wait(50)
 
             'Run FAH installer (stops any running instances and un-installs previous version) and wait for it to finish
             If g_strDownloadedFilePath.Length > 0 Then
@@ -1056,7 +1152,7 @@
                 process1.Close()
 
                 'Return true, if the FAH config setup completes
-                GetFAH = True
+                Return True
             End If
 
         Catch ex As Exception
@@ -1066,6 +1162,7 @@
         'Reset flag
         g_bAskDownloadLocation = True
         Me.gbxDownload.Visible = False
+        Return False
     End Function
 
     Public Function SetupFAHUserTeamAndCfg() As Boolean
@@ -1086,20 +1183,21 @@
     End Function
 
     'This is called by the 'FAHSetupDialog' window to get the Passkey email from Stanford
-    Public Function GetFAHpasskey(URL As String) As Boolean
-        GetFAHpasskey = False
+    Public Async Function GetFAHpasskey(URL As String) As Threading.Tasks.Task(Of Boolean)
         Try
             'Get Folding@Home App
-            OpenURL(URL, False)
-            PageTitleWait("Folding@home")
-            Wait(100)
+            Await OpenURL(URL, False)
+            Await PageTitleWait("Folding@home")
+            Await Wait(100)
 
             'Return true, if you get here
-            GetFAHpasskey = True
+            Return True
 
         Catch ex As Exception
             Msg("Get FAH passkey error:" & ex.ToString)
         End Try
+
+        Return False
     End Function
 
     Public Async Function SetupCureCoin() As Threading.Tasks.Task(Of Boolean)
@@ -1112,12 +1210,16 @@
         Dim strEmail As String = ""
         Dim strPasskey As String = ""
 
+        Dim i As Integer = 0
         Dim randNum As New Random()
         Dim DAT As New IniFile
 
         Try
+            'Try to make the window tall enough to see the captcha at the botttom of the screen
+            If Me.Height < 975 Then Me.Height = 975
+
             'Go to the CureCoin folding pool (CryptoBullionPools) website
-            OpenURL(URL_CureCoinFoldingPoolPage & "register", False)
+            Await OpenURL(URL_CureCoinFoldingPoolPage, False)
 
             If System.IO.File.Exists(DatFilePath) = True Then
                 'Load DAT file, decrypt it
@@ -1178,7 +1280,7 @@
                             process1.Close()
 
                             Msg("CureCoin Wallet started")
-                            Await Wait2(2000)
+                            Await Wait(2000)
 
                             'Test if the CureCoin wallet process is running
                             bRunning = False
@@ -1204,18 +1306,18 @@
                             Msg("HTTP JSON-RPC on http://username:password@localhost:18512.")
 
                             'Get the wallet version, mostly for debugging issues later
-                            strWalletVersion = SendHTTP_JSON_RPC("{""jsonrpc"": ""1.0"", ""id"":""GetVers"", ""method"": ""getinfo"", ""params"": [] }")
+                            strWalletVersion = Await SendHTTP_JSON_RPC("{""jsonrpc"": ""1.0"", ""id"":""GetVers"", ""method"": ""getinfo"", ""params"": [] }")
                             If strWalletVersion.Contains("GetVers") AndAlso FindTextInDoc(""":""*"",""", strWalletVersion, strWalletVersion) = True AndAlso strWalletVersion.Length > 5 Then
                                 'Setup a loop for a few retries
-                                For i As Integer = 0 To 2
-                                    Await Wait2(700)
+                                For i = 0 To 2
+                                    Await Wait(700)
                                     'Get the wallet name to get the wallet address
-                                    strWalletName = SendHTTP_JSON_RPC("{""jsonrpc"": ""1.0"", ""id"":""GetMyWalletName"", ""method"": ""listaccounts""}")
+                                    strWalletName = Await SendHTTP_JSON_RPC("{""jsonrpc"": ""1.0"", ""id"":""GetMyWalletName"", ""method"": ""listaccounts""}")
 
                                     If strWalletName.Contains("GetMyWalletName") AndAlso FindTextInDoc(":{""*"":", strWalletName, strWalletName) = True Then
-                                        Await Wait2(700)
+                                        Await Wait(700)
                                         'Get the Wallet Address using the wallet name from the first request
-                                        strWalletAddress = SendHTTP_JSON_RPC("{""jsonrpc"": ""1.0"", ""id"":""GetMyCureCoinAddress"", ""method"": ""getaddressesbyaccount"", ""params"":[""" & strWalletName & """]}")
+                                        strWalletAddress = Await SendHTTP_JSON_RPC("{""jsonrpc"": ""1.0"", ""id"":""GetMyCureCoinAddress"", ""method"": ""getaddressesbyaccount"", ""params"":[""" & strWalletName & """]}")
 
                                         If strWalletAddress.Contains("GetMyCureCoinAddress") AndAlso FindTextInDoc("{""result"":[""*""],", strWalletAddress, strWalletAddress) = True AndAlso strWalletAddress.Length > 24 Then
                                             Exit For
@@ -1229,7 +1331,7 @@
                     If strWalletAddress.Length > 24 Then
                         Exit For
                     End If
-                    Await Wait2(3000)
+                    Await Wait(3000)
                 Next
             End If
 
@@ -1349,45 +1451,31 @@
             SaveDat(Encrypt(DAT.SaveToString))
             DAT = Nothing
 
-            Await Wait2(1000)
-            PageLoadWait()
-            PageTitleWait(NameCryptoBullions)
+            Await PageLoadWait()
+            Await PageTitleWait(NameCryptoBullions)
             System.Windows.Forms.Application.DoEvents()
+            'Wait for the registration page to load, if not already (needs to wait for CloudFlare to reload the page)
+            For i = 0 To 40
+                If Me.Text.Contains("Just") = False Then Exit For
+                Await Wait(300)
+            Next
 
             'Setup retries if the captcha fails / CloudFlare takes too long (~5s)
             For m As Integer = 0 To 2
-                'Wait for the registration page to load, if not already (needs to wait for CloudFlare to reload the page)
-                Await Wait2(1000)
-                PageLoadWait()
-                PageTitleWait(NameCryptoBullions)
+                'Go to the CureCoin folding pool (CryptoBullionPools) website
+                Await OpenURL(URL_CureCoinFoldingPoolPage & "register", False)
+                Await PageLoadWait()
+                Await PageTitleWait(NameCryptoBullions)
                 System.Windows.Forms.Application.DoEvents()
 
+                'Ensure the Pool page loaded before proceeding (and it's not still loading CloudFlare...)
+                Dim jsResp As CefSharp.JavascriptResponse
                 For i = 0 To 20
-                    If Me.Text.Contains("Just") = False Then Exit For
-                    Await Wait2(300)
+                    'There should be a count of 2 of these elements on the registration page
+                    jsResp = Await Me.browser.GetBrowser.MainFrame.EvaluateScriptAsync("document.getElementsByClassName('submit small').length;")
+                    If jsResp.Success = True AndAlso IsNumeric(jsResp.Result) = True AndAlso CInt(jsResp.Result) > 0 Then Exit For
+                    Await Wait(300)
                 Next
-
-                For i = 0 To 20
-                    If Me.Text.Contains(NameCryptoBullions) = True Then Exit For
-                    Await Wait2(300)
-                Next
-
-                PageLoadWait()
-                PageTitleWait(NameCryptoBullions)
-                Await Wait2(1000)
-                System.Windows.Forms.Application.DoEvents()
-
-                For i = 0 To 20
-                    Await Wait2(200)
-                    If Me.Text.Contains(NameCryptoBullions) = True Then Exit For
-                Next
-
-                PageLoadWait()
-                PageTitleWait(NameCryptoBullions)
-                Await Wait2(1000)
-                System.Windows.Forms.Application.DoEvents()
-                'TODO: ensure the Pool page loaded before proceeding (and it's not still loading CloudFlare...)
-
 
                 'Fill in form info from the data
                 'Enter FAH Username
@@ -1400,14 +1488,16 @@
                 EnterTextByName("email2", strEmail)
                 'Pin
                 EnterTextByName("authPin", strPoolPin)
-                Await Wait2(50)
+                Await Wait(50)
 
+                'Scroll to the bottom of the page, so you can see the captcha when the modal dialog is in the way
+                Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("window.scrollTo(0,document.body.scrollHeight);")
 
                 'Login: Enter FAH Username
                 EnterTextByName("username", strFAHUser)
                 'Password
                 EnterTextByName("password", strPoolPW)
-                Await Wait2(50)
+                Await Wait(50)
 
                 'Ask for the Captcha in a modal dialog, to enter in the form (to keep the user from mofifying the passwords)
                 Dim TxtEntry As New TextEntryDialog
@@ -1423,11 +1513,11 @@
 
                     'Click "Register" (There are 2 buttons with this class. Click the 2nd button [1])
                     Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementsByClassName('submit small')[1].click();")
-                    Await Wait2(1000)
+                    Await Wait(1000)
 
                     'Wait for the page to load
-                    PageLoadWait()
-                    PageTitleWait(NameCryptoBullions)
+                    Await PageLoadWait()
+                    Await PageTitleWait(NameCryptoBullions)
 
                     'TODO: Set an INI file flag that the account was created? (This can be undesirable if you want to redo a failed first attempt?)
                     'TODO: Find account created text? or Error account already created, to show the correct dialog box below
@@ -1444,14 +1534,14 @@
                     EnterTextByName("email2", strEmail)
                     'Pin
                     EnterTextByName("authPin", strPoolPin)
-                    Await Wait2(50)
+                    Await Wait(50)
 
 
                     'Login: Enter FAH Username
                     EnterTextByName("username", strFAHUser)
                     'Password
                     EnterTextByName("password", strPoolPW)
-                    Await Wait2(50)
+                    Await Wait(50)
 
                     'Ask user to solve the captcha
                     Dim OkMsg As New MsgBoxDialog
@@ -1471,15 +1561,15 @@
                                 Exit For
                             End If
                         End If
-                        Await Wait2(2000)
+                        Await Wait(2000)
                     Next
 
                     'Go to the CureCoin folding pool (CryptoBullionPools) website, and go to the 'My Account' settings page
-                    OpenURL(URL_CureCoinFoldingPoolPage & "accountdetails", False)
+                    Await OpenURL(URL_CureCoinFoldingPoolPage & "accountdetails", False)
                     'Wait for the page to load
-                    PageLoadWait()
-                    PageTitleWait(NameCryptoBullions)
-                    Await Wait2(200)
+                    Await PageLoadWait()
+                    Await PageTitleWait(NameCryptoBullions)
+                    Await Wait(200)
                     'Wait to be logged into the 'My Account' page: look for text on that page to know when logged in...
                     strTemp = ""
                     For l As Integer = 1 To 60
@@ -1490,7 +1580,7 @@
                                 Exit For
                             End If
                         End If
-                        Await Wait2(2000)
+                        Await Wait(2000)
                     Next
 
                     'Fill in CureCoin address
@@ -1499,11 +1589,11 @@
                     EnterTextByName("payoutThreshold", "1")
                     'Pin
                     EnterTextByName("authPin", strPoolPin)
-                    Await Wait2(50)
+                    Await Wait(50)
 
                     'Click "Update Settings"
                     Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementsByClassName('submit long')[0].click();")
-                    Await Wait2(700)
+                    Await Wait(700)
 
                     'Return true, if you get here
                     Return True
@@ -1519,8 +1609,7 @@
         Return False
     End Function
 
-    Private Function SendHTTP_JSON_RPC(strJSON_Cmd As String) As String
-        SendHTTP_JSON_RPC = ""
+    Private Async Function SendHTTP_JSON_RPC(strJSON_Cmd As String) As Threading.Tasks.Task(Of String)
         Try
             'Start Telnet session
             If My.Computer.Network.IsAvailable = True Then
@@ -1534,7 +1623,7 @@
                     webRequest.ContentLength = byteArray.Length
                     Dim dataStream As IO.Stream = webRequest.GetRequestStream()
                     dataStream.Write(byteArray, 0, byteArray.Length)
-                    Wait(200)
+                    Await Wait(200)
 
                     'Get response
                     Dim response As Net.WebResponse = webRequest.GetResponse()
@@ -1543,7 +1632,7 @@
                     Dim reader As New IO.StreamReader(dataStream)
                     Dim responseFromServer As String = reader.ReadToEnd()
                     Msg(responseFromServer)
-                    SendHTTP_JSON_RPC = responseFromServer
+                    Return responseFromServer
 
                     'Close objects
                     reader.Close()
@@ -1554,6 +1643,8 @@
         Catch ex As Exception
             Msg("Error: " & ex.Message & "." & vbNewLine & vbNewLine & ex.ToString)
         End Try
+
+        Return ""
     End Function
 
     Private Async Sub btnCurePool_Click(sender As Object, e As EventArgs) Handles btnCurePool.Click
@@ -1563,131 +1654,113 @@
         Dim DAT As New IniFile
 
         Try
-            'Setup retries if the captcha fails / CloudFlare takes too long (~5s)
-            For m As Integer = 0 To 2
-                'Go to the CureCoin folding pool (CryptoBullionPools) website
-                OpenURL(URL_CureCoinFoldingPoolPage, False)
+            'Go to the CureCoin folding pool (CryptoBullionPools) website
+            Await OpenURL(URL_CureCoinFoldingPoolPage, False)
 
-                'Wait for the registration page to load, if not already (needs to wait for CloudFlare to reload the page)
-                Await Wait2(2000)
-                PageLoadWait()
-                PageTitleWait(NameCryptoBullions)
-                System.Windows.Forms.Application.DoEvents()
+            'Wait for the registration page to load, if not already (needs to wait for CloudFlare to reload the page)
+            Await PageLoadWait()
+            Await PageTitleWait(NameCryptoBullions)
+            System.Windows.Forms.Application.DoEvents()
 
-                For i = 0 To 20
-                    If Me.Text.Contains("Just") = False Then Exit For
-                    Await Wait2(200)
-                Next
-
-                For i = 0 To 20
-                    If Me.Text.Contains(NameCryptoBullions) = True Then Exit For
-                    Await Wait2(200)
-                Next
-
-                PageLoadWait()
-                PageTitleWait(NameCryptoBullions)
-                Await Wait2(1000)
-                System.Windows.Forms.Application.DoEvents()
-
-                For i = 0 To 20
-                    Await Wait2(200)
-                    If Me.Text.Contains(NameCryptoBullions) = True Then Exit For
-                Next
-
-                PageLoadWait()
-                PageTitleWait(NameCryptoBullions)
-                Await Wait2(1000)
-                System.Windows.Forms.Application.DoEvents()
-                'TODO: ensure the Pool page loaded before proceeding (and it's not still loading CloudFlare...)
-
-                If System.IO.File.Exists(DatFilePath) = True Then
-                    'Load DAT file, decrypt it
-                    DAT.LoadText(Decrypt(LoadDat))
-                    If DAT.ToString.Length = 0 Then
-                        'Decryption failed
-                        Msg(DAT_ErrorMsg)
-                        MessageBox.Show(DAT_ErrorMsg)
-                    End If
-                End If
-                'Try to get the FAH Username from saved info first
-                If DAT.GetSection(Id & g_Main.cbxWalletId.Text).GetKey(DAT_FAH_Username) IsNot Nothing Then
-                    strFAHUser = DAT.GetSection(Id & g_Main.cbxWalletId.Text).GetKey(DAT_FAH_Username).GetValue()
-                End If
-                If strFAHUser.Length < 2 Then
-                    'Prompt for FAH username (and all the other info?). Can be short for a CureCoin only username...
-                    Dim TxtEntry As New TextEntryDialog
-                    TxtEntry.Text = "Save Folding Username / CureCoin Pool Login"
-                    TxtEntry.MsgTextUpper.Text = "Please enter your Folding Username."
-                    TxtEntry.MsgTextLower.Text = "This is used as the CureCoin Pool Login:"
-                    TxtEntry.Width = (TxtEntry.MsgTextLower.Left * 2) + TxtEntry.MsgTextLower.Width + 10
-                    TxtEntry.TextEnteredLower.Visible = False
-                    'Show modal dialog box
-                    If TxtEntry.ShowDialog(Me) = DialogResult.OK Then
-                        'Get the Folding Username / CureCoin Pool Login
-                        If TxtEntry.TextEnteredUpper.Text.Length > 1 Then
-                            strFAHUser = TxtEntry.TextEnteredUpper.Text
-                            DAT.AddSection(Id & g_Main.cbxWalletId.Text).AddKey(DAT_FAH_Username).Value = strFAHUser
-                            bSaveDat = True
-                        End If
-                    End If
-                    TxtEntry.Dispose()
-                End If
-
-                'Try to get the CureCoin pool password from saved info first
-                If DAT.GetSection(Id & g_Main.cbxWalletId.Text).GetKey(DAT_CureCoin_Pwd) IsNot Nothing Then
-                    strPoolPW = DAT.GetSection(Id & g_Main.cbxWalletId.Text).GetKey(DAT_CureCoin_Pwd).GetValue()
-                End If
-                If strPoolPW.Length < 5 Then
-                    'Ask for existing password
-                    Dim TxtEntry As New TextEntryDialog
-                    TxtEntry.Text = "Save CureCoin Pool Passwords"
-                    TxtEntry.MsgTextUpper.Text = "Please enter your CureCoin Pool Password (Top text box):"
-                    TxtEntry.MsgTextLower.Text = "(Optional) Enter your CureCoin Pool Pin (Bottom text box):"
-                    TxtEntry.Width = (TxtEntry.MsgTextLower.Left * 2) + TxtEntry.MsgTextLower.Width + 10
-                    TxtEntry.TextEnteredLower.Visible = True
-                    'Show modal dialog box
-                    If TxtEntry.ShowDialog(Me) = DialogResult.OK Then
-                        'Get the CureCoin Pool Password (Top text box)
-                        If TxtEntry.TextEnteredUpper.Text.Length > 1 Then
-                            strPoolPW = TxtEntry.TextEnteredUpper.Text
-                            DAT.AddSection(Id & g_Main.cbxWalletId.Text).AddKey(DAT_CureCoin_Pwd).Value = strPoolPW
-                            bSaveDat = True
-                        End If
-
-                        'Get the CureCoin Pool Pin (Bottom text box)
-                        If TxtEntry.TextEnteredLower.Text.Length > 1 Then
-                            DAT.AddSection(Id & g_Main.cbxWalletId.Text).AddKey(DAT_CureCoin_Pin).Value = TxtEntry.TextEnteredLower.Text
-                            bSaveDat = True
-                        End If
-                    End If
-                    TxtEntry.Dispose()
-                End If
-
-                If bSaveDat = True Then
-                    'Create text from the INI, Encrypt, and Write/flush DAT text to file
-                    SaveDat(Encrypt(DAT.SaveToString))
-                End If
-                DAT = Nothing
-
-                'Login: Enter FAH Username
-                EnterTextByName("username", strFAHUser)
-                'Password
-                EnterTextByName("password", strPoolPW)
-
-                'Ask user to solve the captcha
-                Dim OkMsg As New MsgBoxDialog
-                OkMsg.Text = "Please Login"
-                OkMsg.MsgText.Text = "<-- Please solve the 'I'm not a robot' captcha, and Login"
-                OkMsg.Width = (OkMsg.MsgText.Left * 2) + OkMsg.MsgText.Width + 10
-                'Show modal dialog box
-                If OkMsg.ShowDialog(Me) = DialogResult.OK Then
-                    OkMsg.Dispose()
-                    'Exit the retry loop
-                    Exit For
-                Else
-                    OkMsg.Dispose()
-                End If
+            For i As Integer = 0 To 40
+                If Me.Text.Contains("Just") = False Then Exit For
+                Await Wait(300)
             Next
+            Await PageLoadWait()
+            Await PageTitleWait(NameCryptoBullions)
+            System.Windows.Forms.Application.DoEvents()
+
+            'Ensure the Pool page loaded before proceeding (and it's not still loading CloudFlare...)
+            Dim jsResp As CefSharp.JavascriptResponse
+            For i = 0 To 20
+                'There should be a count of 1 of these elements on the main page
+                jsResp = Await Me.browser.GetBrowser.MainFrame.EvaluateScriptAsync("document.getElementsByClassName('submit small').length;")
+                If jsResp.Success = True AndAlso IsNumeric(jsResp.Result) = True AndAlso CInt(jsResp.Result) > 0 Then Exit For
+                Await Wait(300)
+            Next
+
+            If System.IO.File.Exists(DatFilePath) = True Then
+                'Load DAT file, decrypt it
+                DAT.LoadText(Decrypt(LoadDat))
+                If DAT.ToString.Length = 0 Then
+                    'Decryption failed
+                    Msg(DAT_ErrorMsg)
+                    MessageBox.Show(DAT_ErrorMsg)
+                End If
+            End If
+            'Try to get the FAH Username from saved info first
+            If DAT.GetSection(Id & g_Main.cbxWalletId.Text).GetKey(DAT_FAH_Username) IsNot Nothing Then
+                strFAHUser = DAT.GetSection(Id & g_Main.cbxWalletId.Text).GetKey(DAT_FAH_Username).GetValue()
+            End If
+            If strFAHUser.Length < 2 Then
+                'Prompt for FAH username (and all the other info?). Can be short for a CureCoin only username...
+                Dim TxtEntry As New TextEntryDialog
+                TxtEntry.Text = "Save Folding Username / CureCoin Pool Login"
+                TxtEntry.MsgTextUpper.Text = "Please enter your Folding Username."
+                TxtEntry.MsgTextLower.Text = "This is used as the CureCoin Pool Login:"
+                TxtEntry.Width = (TxtEntry.MsgTextLower.Left * 2) + TxtEntry.MsgTextLower.Width + 10
+                TxtEntry.TextEnteredLower.Visible = False
+                'Show modal dialog box
+                If TxtEntry.ShowDialog(Me) = DialogResult.OK Then
+                    'Get the Folding Username / CureCoin Pool Login
+                    If TxtEntry.TextEnteredUpper.Text.Length > 1 Then
+                        strFAHUser = TxtEntry.TextEnteredUpper.Text
+                        DAT.AddSection(Id & g_Main.cbxWalletId.Text).AddKey(DAT_FAH_Username).Value = strFAHUser
+                        bSaveDat = True
+                    End If
+                End If
+                TxtEntry.Dispose()
+            End If
+
+            'Try to get the CureCoin pool password from saved info first
+            If DAT.GetSection(Id & g_Main.cbxWalletId.Text).GetKey(DAT_CureCoin_Pwd) IsNot Nothing Then
+                strPoolPW = DAT.GetSection(Id & g_Main.cbxWalletId.Text).GetKey(DAT_CureCoin_Pwd).GetValue()
+            End If
+            If strPoolPW.Length < 5 Then
+                'Ask for existing password
+                Dim TxtEntry As New TextEntryDialog
+                TxtEntry.Text = "Save CureCoin Pool Passwords"
+                TxtEntry.MsgTextUpper.Text = "Please enter your CureCoin Pool Password (Top text box):"
+                TxtEntry.MsgTextLower.Text = "(Optional) Enter your CureCoin Pool Pin (Bottom text box):"
+                TxtEntry.Width = (TxtEntry.MsgTextLower.Left * 2) + TxtEntry.MsgTextLower.Width + 10
+                TxtEntry.TextEnteredLower.Visible = True
+                'Show modal dialog box
+                If TxtEntry.ShowDialog(Me) = DialogResult.OK Then
+                    'Get the CureCoin Pool Password (Top text box)
+                    If TxtEntry.TextEnteredUpper.Text.Length > 1 Then
+                        strPoolPW = TxtEntry.TextEnteredUpper.Text
+                        DAT.AddSection(Id & g_Main.cbxWalletId.Text).AddKey(DAT_CureCoin_Pwd).Value = strPoolPW
+                        bSaveDat = True
+                    End If
+
+                    'Get the CureCoin Pool Pin (Bottom text box)
+                    If TxtEntry.TextEnteredLower.Text.Length > 1 Then
+                        DAT.AddSection(Id & g_Main.cbxWalletId.Text).AddKey(DAT_CureCoin_Pin).Value = TxtEntry.TextEnteredLower.Text
+                        bSaveDat = True
+                    End If
+                End If
+                TxtEntry.Dispose()
+            End If
+
+            If bSaveDat = True Then
+                'Create text from the INI, Encrypt, and Write/flush DAT text to file
+                SaveDat(Encrypt(DAT.SaveToString))
+            End If
+            DAT = Nothing
+
+            'Login: Enter FAH Username
+            EnterTextByName("username", strFAHUser)
+            'Password
+            EnterTextByName("password", strPoolPW)
+
+            'Ask user to solve the captcha
+            Dim OkMsg As New MsgBoxDialog
+            OkMsg.Text = "Please Login"
+            OkMsg.MsgText.Text = "<-- Please solve the 'I'm not a robot' captcha, and Login"
+            OkMsg.Width = (OkMsg.MsgText.Left * 2) + OkMsg.MsgText.Width + 10
+            'Show modal dialog box
+            OkMsg.ShowDialog(Me)
+            OkMsg.Dispose()
 
         Catch ex As Exception
             Msg("Error: " & ex.Message & "." & vbNewLine & vbNewLine & ex.ToString)
@@ -1725,58 +1798,65 @@
     End Function
 
     'Specify object {Object Id} to click, and if you wait for the page to load or not
-    Private Function ClickById(ObjectId As String, bWait As Boolean) As Boolean
-        ClickById = False
+    Private Async Function ClickById(ObjectId As String, bWait As Boolean) As Threading.Tasks.Task(Of Boolean)
         Try
             If ObjectId.Length > 0 Then
                 Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementById('" & ObjectId & "').click();")
-                ClickById = True
+
                 'Wait for the page, if specified
                 If bWait = True Then
-                    If PageLoadWait() = True Then ClickById = True Else ClickById = False
+                    If Await PageLoadWait() = True Then Return True Else Return False
+                Else
+                    Return True
                 End If
             End If
+
         Catch ex As Exception
             Msg("Click By Id error: " & Err.Description)
         End Try
+
+        Return False
     End Function
 
     'Specify object {Object Class} to click, and if you wait for the page to load or not
-    Private Function ClickByClass(ObjectClass As String, bWait As Boolean, ByRef href As String) As Boolean
-        ClickByClass = False
+    Private Async Function ClickByClass(ObjectClass As String, bWait As Boolean) As Threading.Tasks.Task(Of Boolean)
         Try
             If ObjectClass.Length > 0 Then
-                'Get the href URL to pass back
-                href = Me.browser.GetBrowser.MainFrame.EvaluateScriptAsync("document.getElementsByClassName('" & ObjectClass & "')[0].attributes.getNamedItem('href').value;").ToString
                 'Click it
                 Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementsByClassName('" & ObjectClass & "')[0].click();")
-                ClickByClass = True
                 'Wait for the page, if specified
                 If bWait = True Then
-                    If PageLoadWait() = True Then ClickByClass = True Else ClickByClass = False
+                    If Await PageLoadWait() = True Then Return True Else Return False
+                Else
+                    Return True
                 End If
             End If
 
         Catch ex As Exception
             Msg("Click By Class error: " & Err.Description)
         End Try
+
+        Return False
     End Function
 
     'Specify object {Object Name} to click, and if you wait for the page to load or not
-    Private Function ClickByName(Name As String, bWait As Boolean) As Boolean
-        ClickByName = False
+    Private Async Function ClickByName(Name As String, bWait As Boolean) As Threading.Tasks.Task(Of Boolean)
         Try
             If Name.Length > 0 Then
                 Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementsByName('" & Name & "')[0].click();")
-                ClickByName = True
                 'Wait for the page, if specified
                 If bWait = True Then
-                    If PageLoadWait() = True Then ClickByName = True Else ClickByName = False
+                    If Await PageLoadWait() = True Then Return True Else Return False
+                Else
+                    Return True
                 End If
             End If
+
         Catch ex As Exception
             Msg("Click By Name error: " & Err.Description)
         End Try
+
+        Return False
     End Function
 
     'Specify text to find in HTML document, or supplied text
@@ -1854,27 +1934,47 @@
         Me.browser.GetBrowser.GoForward()
     End Sub
 
-    'After entering the URL: Open the URL if 'Enter' is pressed, or Cancel navigation if ESC is pressed.
-    Private Sub txtURL_KeyPress(sender As Object, e As System.Windows.Forms.KeyPressEventArgs) Handles txtURL.KeyPress
-        If e.KeyChar = ChrW(Keys.Enter) Then
+    'URL bar only: Open the URL if 'Enter' is pressed
+    Private Sub txtURL_KeyDown(sender As Object, e As KeyEventArgs) Handles txtURL.KeyDown
+        If e.KeyCode = Keys.Enter Then
+#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
             OpenURL(Me.txtURL.Text, True)
-
-        ElseIf e.KeyChar = ChrW(Keys.Escape) Then
-            StopNavigaion()
+#Enable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
+            e.SuppressKeyPress = True
         End If
+    End Sub
+
+    'Entire Window: Press ESC to cancel Navigation, Press F5 to Refresh
+    Private Sub Main_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
+        Select Case e.KeyCode
+            Case Keys.Escape
+                StopNavigaion()
+                e.SuppressKeyPress = True
+            Case Keys.F5
+                Me.browser.GetBrowser.Reload(True)
+                e.SuppressKeyPress = True
+        End Select
     End Sub
 
     Private Sub btnStopNavigation_Click(sender As System.Object, e As System.EventArgs) Handles btnStopNav.Click
         StopNavigaion()
     End Sub
 
+    Private Sub StopNavigaion()
+        g_bCancelNav = True
+        If Me.browser IsNot Nothing Then
+            Me.browser.GetBrowser.StopLoad()
+        End If
+    End Sub
+
     Private Sub btnConnect_Click(sender As System.Object, e As System.EventArgs) Handles btnGo.Click
+#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
         OpenURL(Me.txtURL.Text, True)
+#Enable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
     End Sub
 
     'Open URL with the specified settings
-    Public Function OpenURL(ByRef sURL As String, Optional bShowErrorDialogBoxes As Boolean = False) As Boolean
-        OpenURL = False
+    Public Async Function OpenURL(sURL As String, Optional bShowErrorDialogBoxes As Boolean = False) As Threading.Tasks.Task(Of Boolean)
         Try
             'Load the web page
             If sURL.Length > 0 And Uri.IsWellFormedUriString(sURL, UriKind.RelativeOrAbsolute) = True Then
@@ -1892,9 +1992,9 @@
                 m_strPageURL = Me.txtURL.Text
                 Me.browser.Load(Me.txtURL.Text)
                 'Wait for the web page or 1 minute
-                PageLoadWait()
+                Await PageLoadWait()
 
-                OpenURL = True
+                Return True
 
             Else
                 'Error
@@ -1909,69 +2009,67 @@
                 MessageBox.Show(sRtnErrMsg, "", MessageBoxButtons.OK, MessageBoxIcon.Error)
             End If
         End Try
+
+        Return False
     End Function
 
     'Wait for the page to load. Requires the AddHandler to be done before the page loading event, and then call this function.
-    Public Function PageLoadWait() As Boolean
-        PageLoadWait = False
+    Public Async Function PageLoadWait() As Threading.Tasks.Task(Of Boolean)
         Try
             Dim i As Integer = 0
             'Wait for the web page, or 1 minute
             Do Until m_bPageLoaded = True OrElse g_bCancelNav = True OrElse i > 600
                 i += 1
-                Wait(100)
+                Await Wait(100)
             Loop
             g_bCancelNav = False
 
-            If i < 600 Then PageLoadWait = True
+            If i < 600 Then Return True
 
         Catch ex As Exception
             Msg("Page Loading Wait error: " & Err.Description)
         End Try
+
+        Return False
     End Function
 
     'Wait for the page title to load
-    Public Function PageTitleWait(ByRef sPageTitle As String) As Boolean
-        PageTitleWait = False
+    Public Async Function PageTitleWait(sPageTitle As String) As Threading.Tasks.Task(Of Boolean)
         Try
             Dim i As Integer = 0
             'Wait for the webpage title, or 3 seconds
             For i = 0 To 30
                 If Me.Text.Contains(sPageTitle) = True OrElse g_bCancelNav = True Then Exit For
-                Wait(100)
+                Await Wait(100)
             Next
             g_bCancelNav = False
-            If i < 30 Then PageTitleWait = True
+            If i < 30 Then Return True
 
         Catch ex As Exception
             Msg("Page Title Wait error: " & Err.Description)
         End Try
+
+        Return False
     End Function
 
     'Wait for No page title for page loading
-    Public Function PageNoTitleWait() As Boolean
-        PageNoTitleWait = False
+    Public Async Function PageNoTitleWait() As Threading.Tasks.Task(Of Boolean)
         Try
             Dim i As Integer = 0
             'Wait for the web page title, or 3 seconds
             For i = 0 To 30
                 If Me.Text.StartsWith(Prog_Name) = True OrElse g_bCancelNav = True Then Exit For
-                Wait(100)
+                Await Wait(100)
             Next
             g_bCancelNav = False
-            If i < 30 Then PageNoTitleWait = True
+            If i < 30 Then Return True
 
         Catch ex As Exception
             Msg("Page No Title Wait error: " & Err.Description)
         End Try
-    End Function
 
-    Private Sub StopNavigaion()
-        If Me.browser IsNot Nothing Then
-            g_bCancelNav = True
-            Me.browser.GetBrowser.StopLoad()
-        End If
-    End Sub
+        Return False
+    End Function
 
     Public Function ValidateCertificate(sender As Object, certificate As Security.Cryptography.X509Certificates.X509Certificate, chain As Security.Cryptography.X509Certificates.X509Chain, sslPolicyErrors As Net.Security.SslPolicyErrors) As Boolean
         'Return True to force the certificate to be accepted.
@@ -1982,7 +2080,9 @@
     Public Function ClearWebpage() As Boolean
         ClearWebpage = False
         Try
+#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
             OpenURL(URL_BLANK, True)
+#Enable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
             ClearWebpage = True
 
         Catch ex As Exception

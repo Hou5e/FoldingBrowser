@@ -2,13 +2,13 @@
 ; Requires that NSIS (Nullsoft Scriptable Install System) compiler be installed.
 
 ;---- Helper defines / constants ----
-!define PRODUCT_VERSION "0.1.3.3"  ;Match the displayed version in the program title. Example: 1.2.3
-!define PRODUCT_4_VALUE_VERSION "0.1.3.3"  ;Match the executable version: Right-click the program executable file | Properties | Version. Example: 1.2.3.4
-!define PRODUCT_YEAR "2016"
+!define PRODUCT_VERSION "0.1.3.4"  ;Match the displayed version in the program title. Example: 1.2.3
+!define PRODUCT_4_VALUE_VERSION "0.1.3.4"  ;Match the executable version: Right-click the program executable file | Properties | Version. Example: 1.2.3.4
+!define PRODUCT_YEAR "2017"
 !define PRODUCT_NAME "CureCoin"
 !define PRODUCT_EXE_NAME "curecoin-qt"  ;Executable name without extension
 !define PRODUCT_PUBLISHER "CureCoin"
-!define PRODUCT_WEB_SITE "https://github.com/Hou5e/FoldingBrowser/releases"
+!define PRODUCT_WEB_SITE "https://github.com/cygnusxi/CurecoinSource/releases"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\${PRODUCT_EXE_NAME}.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_EXE_NAME "Uninstall_${PRODUCT_EXE_NAME}"  ;Executable name without extension
@@ -21,6 +21,8 @@ SetCompressor lzma  ;Set compression method
 
 !include FileFunc.nsh  ;File Functions Header, for RefreshShellIcons
 !insertmacro un.RefreshShellIcons
+
+!include nsProcess.nsh  ;Used to see if the program is running and to close it, if it is
 
 ;---- Modern UI section ----
 !include MUI2.nsh
@@ -144,50 +146,50 @@ Function CloseCureCoin
   Push $R1
 RetryLoop:
   ;See if program is running
-  FindWindow $R1 "" "curecoin-qt"
+  ${nsProcess::FindProcess} "curecoin-qt.exe" $R1    ;Returns 0 when found, or some number when not found.
   ;MessageBox MB_OK "Found: $R1"    ;Enable for debugging
-  IntCmp $R1 0 ExitWhenNotFound
+  IntCmp $R1 0 0 0 ContinueWhenNotFound
 
-  ;Ask to Close program
-  MessageBox MB_RETRYCANCEL "Please close the running CureCoin Wallet software,$\r$\nand press 'Retry' (takes about 20 seconds).$\r$\n$\r$\nNote: CureCoin maybe running in the system tray in the lower righthand corner of your screen." /SD IDCANCEL IDCANCEL ExitWhenNotFound
+  ;Ask to close program
+  MessageBox MB_RETRYCANCEL "Please close the running CureCoin Wallet software,$\r$\nand press 'Retry' (takes about 20 seconds).$\r$\n$\r$\nNote: CureCoin maybe running in the system tray in the lower righthand corner of your screen." /SD IDCANCEL IDCANCEL ContinueWhenNotFound
 
   ;Try exiting loop
-  FindWindow $R1 "" "curecoin-qt"
-  IntCmp $R1 0 ExitWhenNotFound
+  ${nsProcess::FindProcess} "curecoin-qt.exe" $R1
+  IntCmp $R1 0 0 0 ContinueWhenNotFound
   Sleep 5000
 
   ;Try exiting loop
-  FindWindow $R1 "" "curecoin-qt"
-  IntCmp $R1 0 ExitWhenNotFound
+  ${nsProcess::FindProcess} "curecoin-qt.exe" $R1
+  IntCmp $R1 0 0 0 ContinueWhenNotFound
   Sleep 5000
 
   ;Try exiting loop
-  FindWindow $R1 "" "curecoin-qt"
-  IntCmp $R1 0 ExitWhenNotFound
+  ${nsProcess::FindProcess} "curecoin-qt.exe" $R1
+  IntCmp $R1 0 0 0 ContinueWhenNotFound
   Sleep 5000
 
   ;Try exiting loop
-  FindWindow $R1 "" "curecoin-qt"
-  IntCmp $R1 0 ExitWhenNotFound
+  ${nsProcess::FindProcess} "curecoin-qt.exe" $R1
+  IntCmp $R1 0 0 0 ContinueWhenNotFound
   Sleep 3000
 
   ;Try exiting loop
-  FindWindow $R1 "" "curecoin-qt"
-  IntCmp $R1 0 ExitWhenNotFound
+  ${nsProcess::FindProcess} "curecoin-qt.exe" $R1
+  IntCmp $R1 0 0 0 ContinueWhenNotFound
   Sleep 3000
 
   ;Try exiting loop
-  FindWindow $R1 "" "curecoin-qt"
-  IntCmp $R1 0 ExitWhenNotFound
+  ${nsProcess::FindProcess} "curecoin-qt.exe" $R1
+  IntCmp $R1 0 0 0 ContinueWhenNotFound
   Sleep 3000
 
   ;Try exiting loop
-  FindWindow $R1 "" "curecoin-qt"
-  IntCmp $R1 0 ExitWhenNotFound
+  ${nsProcess::FindProcess} "curecoin-qt.exe" $R1
+  IntCmp $R1 0 0 0 ContinueWhenNotFound
   Sleep 3000
 
   Goto RetryLoop
-ExitWhenNotFound:
+ContinueWhenNotFound:
   Pop $R1
 FunctionEnd
 
@@ -234,7 +236,7 @@ SectionEnd
 Function un.onInit
   !insertmacro MULTIUSER_UNINIT  ;On uninstall startup, ensure Admin user privilege level
 
-  MessageBox MB_ICONQUESTION|MB_YESNO "Are you sure you want to remove $(^Name)?$\r$\n(User settings will be left in your user profile)" /SD IDYES IDYES +2
+  MessageBox MB_ICONQUESTION|MB_YESNO "Are you sure you want to remove $(^Name)?$\r$\n(User settings and blockchain will be left in your user profile)" /SD IDYES IDYES +2
   Abort
 FunctionEnd
 
@@ -247,48 +249,49 @@ Function un.CloseCureCoin
   Push $R1
 unRetryLoop:
   ;See if program is running
-  FindWindow $R1 "" "curecoin-qt"
-  IntCmp $R1 0 unExitWhenNotFound
+  ${nsProcess::FindProcess} "curecoin-qt.exe" $R1    ;Returns 0 when found, or some number when not found.
+  ;MessageBox MB_OK "Found: $R1"    ;Enable for debugging
+  IntCmp $R1 0 0 0 ExitWhenNotFound
 
-  ;Ask to Close program
-  MessageBox MB_RETRYCANCEL "Please close the running CureCoin Wallet software,$\r$\nand press 'Retry' (takes about 20 seconds).$\r$\n$\r$\nNote: CureCoin maybe running in the system tray in the lower righthand corner of your screen." /SD IDCANCEL IDCANCEL unExitWhenNotFound
+  ;Ask to close program
+  MessageBox MB_RETRYCANCEL "Please close the running CureCoin Wallet software,$\r$\nand press 'Retry' (takes about 20 seconds).$\r$\n$\r$\nNote: CureCoin maybe running in the system tray in the lower righthand corner of your screen." /SD IDCANCEL IDCANCEL ExitWhenNotFound
 
   ;Try exiting loop
-  FindWindow $R1 "" "curecoin-qt"
-  IntCmp $R1 0 unExitWhenNotFound
+  ${nsProcess::FindProcess} "curecoin-qt.exe" $R1
+  IntCmp $R1 0 0 0 ExitWhenNotFound
   Sleep 5000
 
   ;Try exiting loop
-  FindWindow $R1 "" "curecoin-qt"
-  IntCmp $R1 0 unExitWhenNotFound
+  ${nsProcess::FindProcess} "curecoin-qt.exe" $R1
+  IntCmp $R1 0 0 0 ExitWhenNotFound
   Sleep 5000
 
   ;Try exiting loop
-  FindWindow $R1 "" "curecoin-qt"
-  IntCmp $R1 0 unExitWhenNotFound
+  ${nsProcess::FindProcess} "curecoin-qt.exe" $R1
+  IntCmp $R1 0 0 0 ExitWhenNotFound
   Sleep 5000
 
   ;Try exiting loop
-  FindWindow $R1 "" "curecoin-qt"
-  IntCmp $R1 0 unExitWhenNotFound
+  ${nsProcess::FindProcess} "curecoin-qt.exe" $R1
+  IntCmp $R1 0 0 0 ExitWhenNotFound
   Sleep 3000
 
   ;Try exiting loop
-  FindWindow $R1 "" "curecoin-qt"
-  IntCmp $R1 0 unExitWhenNotFound
+  ${nsProcess::FindProcess} "curecoin-qt.exe" $R1
+  IntCmp $R1 0 0 0 ExitWhenNotFound
   Sleep 3000
 
   ;Try exiting loop
-  FindWindow $R1 "" "curecoin-qt"
-  IntCmp $R1 0 unExitWhenNotFound
+  ${nsProcess::FindProcess} "curecoin-qt.exe" $R1
+  IntCmp $R1 0 0 0 ExitWhenNotFound
   Sleep 3000
 
   ;Try exiting loop
-  FindWindow $R1 "" "curecoin-qt"
-  IntCmp $R1 0 unExitWhenNotFound
+  ${nsProcess::FindProcess} "curecoin-qt.exe" $R1
+  IntCmp $R1 0 0 0 ExitWhenNotFound
   Sleep 3000
 
   Goto unRetryLoop
-unExitWhenNotFound:
+ExitWhenNotFound:
   Pop $R1
 FunctionEnd

@@ -1,12 +1,12 @@
 ; Edit this installer script with HM NIS Edit.
 ; Requires that NSIS (Nullsoft Scriptable Install System) compiler be installed.
-; Copyright © 2016 FoldingCoin Inc
+; Copyright © 2017 FoldingCoin Inc
 
 
 ;---- Helper defines / constants ----
-!define PRODUCT_VERSION "6"  ;Match the displayed version in the program title. Example: 1.2.3
-!define PRODUCT_4_VALUE_VERSION "6.0.0.0"  ;Match the executable version: Right-click the program executable file | Properties | Version. Example: 1.2.3.4
-!define PRODUCT_YEAR "2016"
+!define PRODUCT_VERSION "7"  ;Match the displayed version in the program title. Example: 1.2.3
+!define PRODUCT_4_VALUE_VERSION "7.0.0.0"  ;Match the executable version: Right-click the program executable file | Properties | Version. Example: 1.2.3.4
+!define PRODUCT_YEAR "2017"
 !define PRODUCT_NAME "FoldingBrowser"
 !define PRODUCT_EXE_NAME "FoldingBrowser"  ;Executable name without extension
 !define PRODUCT_PUBLISHER "FoldingBrowser"
@@ -16,7 +16,7 @@
 !define PRODUCT_UNINST_EXE_NAME "Uninstall_${PRODUCT_EXE_NAME}"  ;Executable name without extension
 
 ;This constant must match the CureCoin installer version
-!define CURECOIN_VERSION "0.1.3.3"
+!define CURECOIN_VERSION "0.1.3.4"
 
 !define REQUIRED_MS_DOT_NET_VERSION "4.0*"
 
@@ -29,7 +29,7 @@ Var RunFoldingBrowser
 !include FileFunc.nsh  ;File Functions Header, for RefreshShellIcons
 !insertmacro un.RefreshShellIcons
 
-!include nsProcess.nsh  ;Used to see if the program is running and to close it if it is
+!include nsProcess.nsh  ;Used to see if the program is running and to close it, if it is
 
 ;---- Modern UI section ----
 !include MUI2.nsh
@@ -111,7 +111,6 @@ Section "!${PRODUCT_NAME} v${PRODUCT_VERSION}" SEC01
   File "..\Browser\bin\Release\*.pak"
   File "..\Browser\bin\Release\CefSharp.BrowserSubprocess.Core.dll"
   File "..\Browser\bin\Release\CefSharp.BrowserSubprocess.exe"
-  File "..\Browser\bin\Release\CefSharp.BrowserSubprocess.exe.config"
   File "..\Browser\bin\Release\CefSharp.Core.dll"
   File "..\Browser\bin\Release\CefSharp.dll"
   File "..\Browser\bin\Release\CefSharp.WinForms.dll"
@@ -239,7 +238,7 @@ Function CloseFoldingBrowser
   Push $R0
 RetryMsg:
   ;See if program is running
-  ${nsProcess::FindProcess} "FoldingBrowser.exe" $R0
+  ${nsProcess::FindProcess} "FoldingBrowser.exe" $R0    ;Returns 0 when found, or some number when not found.
   IntCmp $R0 0 0 0 ProceedWhenNotFound
 
   ;Close the program
@@ -253,7 +252,7 @@ RetryMsg:
 
   ;See if program is running
   ${nsProcess::FindProcess} "FoldingBrowser.exe" $R0
-  MessageBox MB_OK "Found: $R0"    ;Enable for debugging
+  ;MessageBox MB_OK "Found: $R0"    ;Enable for debugging
   IntCmp $R0 0 0 0 ProceedWhenNotFound
   
   ;Ask to close program
@@ -273,45 +272,46 @@ Function CloseCureCoin
   Push $R1
 RetryLoop:
   ;See if program is running
-  FindWindow $R1 "" "curecoin-qt"
-  IntCmp $R1 0 ContinueWhenNotFound
+  ${nsProcess::FindProcess} "curecoin-qt.exe" $R1    ;Returns 0 when found, or some number when not found.
+  ;MessageBox MB_OK "Found: $R1"    ;Enable for debugging
+  IntCmp $R1 0 0 0 ContinueWhenNotFound
 
   ;Ask to close program
   MessageBox MB_RETRYCANCEL "Please close the running CureCoin Wallet software,$\r$\nand press 'Retry' (takes about 20 seconds).$\r$\n$\r$\nNote: CureCoin maybe running in the system tray in the lower righthand corner of your screen." /SD IDCANCEL IDCANCEL ContinueWhenNotFound
 
   ;Try exiting loop
-  FindWindow $R1 "" "curecoin-qt"
-  IntCmp $R1 0 ContinueWhenNotFound
+  ${nsProcess::FindProcess} "curecoin-qt.exe" $R1
+  IntCmp $R1 0 0 0 ContinueWhenNotFound
   Sleep 5000
 
   ;Try exiting loop
-  FindWindow $R1 "" "curecoin-qt"
-  IntCmp $R1 0 ContinueWhenNotFound
+  ${nsProcess::FindProcess} "curecoin-qt.exe" $R1
+  IntCmp $R1 0 0 0 ContinueWhenNotFound
   Sleep 5000
 
   ;Try exiting loop
-  FindWindow $R1 "" "curecoin-qt"
-  IntCmp $R1 0 ContinueWhenNotFound
+  ${nsProcess::FindProcess} "curecoin-qt.exe" $R1
+  IntCmp $R1 0 0 0 ContinueWhenNotFound
   Sleep 5000
 
   ;Try exiting loop
-  FindWindow $R1 "" "curecoin-qt"
-  IntCmp $R1 0 ContinueWhenNotFound
+  ${nsProcess::FindProcess} "curecoin-qt.exe" $R1
+  IntCmp $R1 0 0 0 ContinueWhenNotFound
   Sleep 3000
 
   ;Try exiting loop
-  FindWindow $R1 "" "curecoin-qt"
-  IntCmp $R1 0 ContinueWhenNotFound
+  ${nsProcess::FindProcess} "curecoin-qt.exe" $R1
+  IntCmp $R1 0 0 0 ContinueWhenNotFound
   Sleep 3000
 
   ;Try exiting loop
-  FindWindow $R1 "" "curecoin-qt"
-  IntCmp $R1 0 ContinueWhenNotFound
+  ${nsProcess::FindProcess} "curecoin-qt.exe" $R1
+  IntCmp $R1 0 0 0 ContinueWhenNotFound
   Sleep 3000
 
   ;Try exiting loop
-  FindWindow $R1 "" "curecoin-qt"
-  IntCmp $R1 0 ContinueWhenNotFound
+  ${nsProcess::FindProcess} "curecoin-qt.exe" $R1
+  IntCmp $R1 0 0 0 ContinueWhenNotFound
   Sleep 3000
 
   Goto RetryLoop
@@ -350,6 +350,10 @@ Section Uninstall
 
   SetShellVarContext current   ;for 'Current': $AppData = C:\Users\%username%\AppData\Roaming, otherwise for 'all': $AppData = C:\ProgramData
   ;Delete temp files and folders
+  Delete "$APPDATA\${PRODUCT_NAME}\Cache\Cache\*"
+  RMDir /r "$APPDATA\${PRODUCT_NAME}\Cache\Cache"
+  Delete "$APPDATA\${PRODUCT_NAME}\Cache\databases\*"
+  RMDir /r "$APPDATA\${PRODUCT_NAME}\Cache\databases"
   Delete "$APPDATA\${PRODUCT_NAME}\Cache\Dictionaries\*"
   RMDir /r "$APPDATA\${PRODUCT_NAME}\Cache\Dictionaries"
   Delete "$APPDATA\${PRODUCT_NAME}\Cache\GPUCache\*"
@@ -387,7 +391,7 @@ Function un.CloseFoldingBrowser
   Push $R0
 unRetryMsg:
   ;See if program is running
-  ${nsProcess::FindProcess} "FoldingBrowser.exe" $R0
+  ${nsProcess::FindProcess} "FoldingBrowser.exe" $R0    ;Returns 0 when found, or some number when not found.
   IntCmp $R0 0 0 0 unProceedWhenNotFound
 
   ;Close the program
@@ -401,7 +405,7 @@ unRetryMsg:
 
   ;See if program is running
   ${nsProcess::FindProcess} "FoldingBrowser.exe" $R0
-  MessageBox MB_OK "Found: $R0"    ;Enable for debugging
+  ;MessageBox MB_OK "Found: $R0"    ;Enable for debugging
   IntCmp $R0 0 0 0 unProceedWhenNotFound
 
   ;Ask to close program

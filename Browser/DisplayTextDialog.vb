@@ -14,6 +14,7 @@
                 Me.txtDisplayText.Select(Me.txtDisplayText.Text.Length, 0)
                 'Reset the Save button to be disabled until some changes to the text are made
                 Me.btnSaveChanges.Enabled = False
+                Me.BtnOK.Focus()
                 Me.Show()
 
                 DAT = Nothing
@@ -42,13 +43,17 @@
         If Me.txtDisplayText.Text.Length > 10 Then
             'Create text from the INI, Encrypt, and Write/flush DAT text to file
             SaveDat(Encrypt(Me.txtDisplayText.Text))
+
+            'Disable the save button again
+            Me.btnSaveChanges.Enabled = False
+            Me.BtnOK.Focus()
         Else
-            g_Main.Msg("No DAT file yet")
-            MessageBox.Show("No DAT file yet")
+            g_Main.Msg("No displayed text to save.")
+            MessageBox.Show("No displayed text to save.")
         End If
     End Sub
 
-    Private Sub btnMakeBackup_Click(sender As Object, e As EventArgs) Handles btnMakeBackup.Click
+    Private Async Sub btnMakeBackup_Click(sender As Object, e As EventArgs) Handles btnMakeBackup.Click
         Try
             'Ask for backup folder location, a new folder will be made there for the files
             Dim SaveDlg As New System.Windows.Forms.FolderBrowserDialog
@@ -68,7 +73,7 @@
 
                 If System.IO.Directory.Exists(strBackupPath) = False Then
                     My.Computer.FileSystem.CreateDirectory(strBackupPath)
-                    Wait(100)
+                    Await Wait(100)
                 End If
 
                 'FoldingBrowser settings files:
@@ -130,7 +135,7 @@
 
                     'Flush the text to the file 
                     twLog.Flush()
-                    Wait(100)
+                    Await Wait(100)
 
                 Catch ex As Exception
                     MsgBox("Saving restore info file Error: " & ex.ToString, MsgBoxStyle.Exclamation)
@@ -146,12 +151,22 @@
             End If
             SaveDlg.Dispose()
 
+            Me.BtnOK.Focus()
+
         Catch ex As Exception
             MessageBox.Show("Error creating backup: " & ex.ToString)
         End Try
     End Sub
 
     Private Sub BtnOK_Click(sender As Object, e As EventArgs) Handles BtnOK.Click
+        'The Closing event clears out the displayed text
         Me.Close()
+    End Sub
+
+    Private Sub DisplayTextDialog_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
+        If e.KeyCode = Keys.Escape Then
+            'The Closing event clears out the displayed text
+            Me.Close()
+        End If
     End Sub
 End Class
