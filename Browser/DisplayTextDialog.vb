@@ -4,24 +4,16 @@
             InitializeComponent()
 
             Me.Icon = My.Resources.FoldingCoin_16_32_48
-            If System.IO.File.Exists(DatFilePath) = True Then
-                Dim DAT As New IniFile
-                'Load DAT file, decrypt it
-                DAT.LoadText(Decrypt(LoadDat))
+            Me.SplitContainer1.SplitterWidth = 2
+            Me.SplitContainer1.Panel1Collapsed = True
 
-                'Show data
-                Me.txtDisplayText.Text = DAT.SaveToString
-                Me.txtDisplayText.Select(Me.txtDisplayText.Text.Length, 0)
-                'Reset the Save button to be disabled until some changes to the text are made
-                Me.btnSaveChanges.Enabled = False
-                Me.BtnOK.Focus()
-                Me.Show()
+            'Refresh the Wallet Names
+            cbxWalletId_SelectedIndexChanged(Nothing, Nothing)
 
-                DAT = Nothing
-            Else
-                g_Main.Msg("No DAT file yet")
-                MessageBox.Show("No DAT file yet")
-            End If
+            'Reset the Save button to be disabled until some changes to the text are made
+            Me.btnSaveChanges.Enabled = False
+            Me.BtnOK.Focus()
+            Me.Show()
 
         Catch ex As Exception
             g_Main.Msg(ex.ToString)
@@ -38,8 +30,96 @@
         Me.btnSaveChanges.Enabled = True
     End Sub
 
+    Private Sub chkShowAddData_CheckedChanged(sender As Object, e As EventArgs) Handles chkShowAddData.CheckedChanged
+        If Me.chkShowAddData.Checked = True Then
+            'Use the individual textboxes
+            Me.SplitContainer1.Panel1Collapsed = False
+            Me.txtDisplayText.BackColor = Color.LightGray
+        Else
+            'Use the large single textbox with the raw INI data
+            Me.SplitContainer1.Panel1Collapsed = True
+            Me.txtDisplayText.BackColor = Color.White
+        End If
+
+        'Disable the save button again
+        Me.btnSaveChanges.Enabled = False
+    End Sub
+
     Private Sub btnSaveChanges_Click(sender As Object, e As EventArgs) Handles btnSaveChanges.Click
-        'Show modal dialog box
+        If Me.chkShowAddData.Checked = True Then
+            'Use the individual textboxes
+            Dim DAT As New IniFile
+            'Build the new DAT file
+            If System.IO.File.Exists(DatFilePath) = True Then
+                'Load DAT file, decrypt it
+                DAT.LoadText(Decrypt(LoadDat))
+            End If
+
+            Me.txtFAHUsername.Text = Me.txtFAHUsername.Text.Trim
+            Me.txtFAHTeam.Text = Me.txtFAHTeam.Text.Trim
+            Me.txtFAHPasskey.Text = Me.txtFAHPasskey.Text.Trim
+            Me.txtEmail.Text = Me.txtEmail.Text.Trim
+
+            Me.txtBTCAddress.Text = Me.txtBTCAddress.Text.Trim
+            Me.txtCounterParty12WordPassphrase.Text = Me.txtCounterParty12WordPassphrase.Text.Trim
+
+            Me.txtCureCoinAddress.Text = Me.txtCureCoinAddress.Text.Trim
+            Me.txtCureCoinPoolPassword.Text = Me.txtCureCoinPoolPassword.Text.Trim
+            Me.txtCureCoinPoolPin.Text = Me.txtCureCoinPoolPin.Text.Trim
+
+            Me.txtExtremeOverclockingId.Text = Me.txtExtremeOverclockingId.Text.Trim
+
+
+            'Save textboxes with DAT data for the Wallet Id...
+            INI.AddSection(Id & Me.cbxWalletId.Text)
+            DAT.AddSection(Id & Me.cbxWalletId.Text)
+            If Me.txtFAHUsername.Text.Length <> 0 Then
+                INI.AddSection(Id & Me.cbxWalletId.Text).AddKey(INI_FAH_Username).Value = Me.txtFAHUsername.Text
+                DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_FAH_Username).Value = Me.txtFAHUsername.Text
+            End If
+            If Me.txtFAHTeam.Text.Length <> 0 Then
+                DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_FAH_Team).Value = Me.txtFAHTeam.Text
+            End If
+            If Me.txtFAHPasskey.Text.Length <> 0 Then
+                DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_FAH_Passkey).Value = Me.txtFAHPasskey.Text
+            End If
+            If Me.txtEmail.Text.Length <> 0 Then
+                DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_Email).Value = Me.txtEmail.Text
+            End If
+
+
+            If Me.txtBTCAddress.Text.Length <> 0 Then
+                DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_BTC_Addr).Value = Me.txtBTCAddress.Text
+            End If
+            If Me.txtCounterParty12WordPassphrase.Text.Length <> 0 Then
+                DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_CP12Words).Value = Me.txtCounterParty12WordPassphrase.Text
+            End If
+
+
+            If Me.txtCureCoinAddress.Text.Length <> 0 Then
+                DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_CureCoin_Addr).Value = Me.txtCureCoinAddress.Text
+            End If
+            If Me.txtCureCoinPoolPassword.Text.Length <> 0 Then
+                DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_CureCoin_Pwd).Value = Me.txtCureCoinPoolPassword.Text
+            End If
+            If Me.txtCureCoinPoolPin.Text.Length <> 0 Then
+                DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_CureCoin_Pin).Value = Me.txtCureCoinPoolPin.Text
+            End If
+
+
+            If Me.txtExtremeOverclockingId.Text.Length <> 0 Then
+                INI.AddSection(Id & Me.cbxWalletId.Text).AddKey(INI_EOC_ID).Value = Me.txtExtremeOverclockingId.Text
+            End If
+            INI.Save(IniFilePath)
+
+            'Show all data (Main textbox) / Display the new DAT file to be saved
+            Me.txtDisplayText.Text = DAT.SaveToString
+            Me.txtDisplayText.Select(Me.txtDisplayText.Text.Length, 0)
+
+            DAT = Nothing
+        End If
+
+        'Use the large single textbox with the raw INI data
         If Me.txtDisplayText.Text.Length > 10 Then
             'Create text from the INI, Encrypt, and Write/flush DAT text to file
             SaveDat(Encrypt(Me.txtDisplayText.Text))
@@ -161,6 +241,135 @@
     Private Sub BtnOK_Click(sender As Object, e As EventArgs) Handles BtnOK.Click
         'The Closing event clears out the displayed text
         Me.Close()
+    End Sub
+
+    Public Sub cbxWalletId_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbxWalletId.SelectedIndexChanged
+        Me.txtFAHUsername.Text = ""
+        Me.txtFAHTeam.Text = ""
+        Me.txtFAHPasskey.Text = ""
+        Me.txtEmail.Text = ""
+
+        Me.txtBTCAddress.Text = ""
+        Me.txtCounterParty12WordPassphrase.Text = ""
+
+        Me.txtCureCoinAddress.Text = ""
+        Me.txtCureCoinPoolPassword.Text = ""
+        Me.txtCureCoinPoolPin.Text = ""
+
+        Me.txtExtremeOverclockingId.Text = ""
+
+        'Make sure the INI key/value exists
+        If INI.GetSection(Id & Me.cbxWalletId.Text) IsNot Nothing AndAlso INI.GetSection(Id & Me.cbxWalletId.Text).GetKey(INI_WalletName) IsNot Nothing Then
+            'Load the Wallet name from the INI file based on the Wallet Id#
+            Me.txtWalletName.Text = INI.GetSection(Id & Me.cbxWalletId.Text).GetKey(INI_WalletName).GetValue()
+
+            If System.IO.File.Exists(DatFilePath) = True Then
+                Dim DAT As New IniFile
+                'Load DAT file, decrypt it
+                DAT.LoadText(Decrypt(LoadDat))
+
+                'Show all data (Main textbox)
+                Me.txtDisplayText.Text = DAT.SaveToString
+                Me.txtDisplayText.Select(Me.txtDisplayText.Text.Length, 0)
+
+
+                'Load textboxes with DAT data for the Wallet Id...
+                If INI.GetSection(Id & Me.cbxWalletId.Text).GetKey(INI_FAH_Username) IsNot Nothing Then
+                    Me.txtFAHUsername.Text = INI.GetSection(Id & Me.cbxWalletId.Text).GetKey(INI_FAH_Username).GetValue()
+                End If
+                If Me.txtFAHUsername.Text.Length = 0 Then
+                    If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FAH_Username) IsNot Nothing Then
+                        Me.txtFAHUsername.Text = DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FAH_Username).GetValue()
+                    End If
+                End If
+
+                If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FAH_Team) IsNot Nothing Then
+                    Me.txtFAHTeam.Text = DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FAH_Team).GetValue()
+                End If
+                If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FAH_Passkey) IsNot Nothing Then
+                    Me.txtFAHPasskey.Text = DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FAH_Passkey).GetValue()
+                End If
+                If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_Email) IsNot Nothing Then
+                    Me.txtEmail.Text = DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_Email).GetValue()
+                End If
+
+
+                If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_BTC_Addr) IsNot Nothing Then
+                    Me.txtBTCAddress.Text = DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_BTC_Addr).GetValue()
+                End If
+                If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CP12Words) IsNot Nothing Then
+                    Me.txtCounterParty12WordPassphrase.Text = DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CP12Words).GetValue()
+                End If
+
+
+                If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CureCoin_Addr) IsNot Nothing Then
+                    Me.txtCureCoinAddress.Text = DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CureCoin_Addr).GetValue()
+                End If
+                If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CureCoin_Pwd) IsNot Nothing Then
+                    Me.txtCureCoinPoolPassword.Text = DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CureCoin_Pwd).GetValue()
+                End If
+                If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CureCoin_Pin) IsNot Nothing Then
+                    Me.txtCureCoinPoolPin.Text = DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CureCoin_Pin).GetValue()
+                End If
+
+
+                If INI.GetSection(Id & Me.cbxWalletId.Text).GetKey(INI_EOC_ID) IsNot Nothing Then
+                    Me.txtExtremeOverclockingId.Text = INI.GetSection(Id & Me.cbxWalletId.Text).GetKey(INI_EOC_ID).GetValue()
+                End If
+
+                DAT = Nothing
+            Else
+                g_Main.Msg("No DAT file yet")
+                MessageBox.Show("No DAT file yet")
+            End If
+        Else
+            Me.txtWalletName.Text = "<Not Used>"
+        End If
+    End Sub
+
+    Private Sub txtFAHUsername_TextChanged(sender As Object, e As EventArgs) Handles txtFAHUsername.TextChanged
+        Me.btnSaveChanges.Enabled = True
+    End Sub
+    Private Sub txtFAHTeam_TextChanged(sender As Object, e As EventArgs) Handles txtFAHTeam.TextChanged
+        Me.btnSaveChanges.Enabled = True
+    End Sub
+    Private Sub txtFAHPasskey_TextChanged(sender As Object, e As EventArgs) Handles txtFAHPasskey.TextChanged
+        Me.btnSaveChanges.Enabled = True
+    End Sub
+    Private Sub txtEmail_TextChanged(sender As Object, e As EventArgs) Handles txtEmail.TextChanged
+        Me.btnSaveChanges.Enabled = True
+    End Sub
+
+    Private Sub txtBTCAddress_TextChanged(sender As Object, e As EventArgs) Handles txtBTCAddress.TextChanged
+        Me.btnSaveChanges.Enabled = True
+    End Sub
+    Private Sub txtCounterParty12WordPassphrase_TextChanged(sender As Object, e As EventArgs) Handles txtCounterParty12WordPassphrase.TextChanged
+        Me.btnSaveChanges.Enabled = True
+    End Sub
+
+    Private Sub txtCureCoinAddress_TextChanged(sender As Object, e As EventArgs) Handles txtCureCoinAddress.TextChanged
+        Me.btnSaveChanges.Enabled = True
+    End Sub
+    Private Sub txtCureCoinPoolPassword_TextChanged(sender As Object, e As EventArgs) Handles txtCureCoinPoolPassword.TextChanged
+        Me.btnSaveChanges.Enabled = True
+    End Sub
+    Private Sub txtCureCoinPoolPin_TextChanged(sender As Object, e As EventArgs) Handles txtCureCoinPoolPin.TextChanged
+        Me.btnSaveChanges.Enabled = True
+    End Sub
+
+    Private Sub txtExtremeOverclockingId_TextChanged(sender As Object, e As EventArgs) Handles txtExtremeOverclockingId.TextChanged
+        Me.btnSaveChanges.Enabled = True
+    End Sub
+
+    Private Sub txtWalletName_KeyDown(sender As Object, e As KeyEventArgs) Handles txtWalletName.KeyDown
+        'Change wallet name when text is changed and <enter> is pressed
+        If e.KeyCode = Keys.Enter Then
+            If Me.txtWalletName.Text.Length > 0 Then
+                'Save a wallet name
+                INI.AddSection(Id & Me.cbxWalletId.Text).AddKey(INI_WalletName).Value = Me.txtWalletName.Text
+                INI.Save(IniFilePath)
+            End If
+        End If
     End Sub
 
     Private Sub DisplayTextDialog_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown

@@ -75,7 +75,7 @@ Partial Class Main
         Me.btnStopNav.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.GradientActiveCaption
         Me.btnStopNav.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.GradientInactiveCaption
         Me.btnStopNav.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnStopNav.Location = New System.Drawing.Point(936, 49)
+        Me.btnStopNav.Location = New System.Drawing.Point(1098, 49)
         Me.btnStopNav.Name = "btnStopNav"
         Me.btnStopNav.Size = New System.Drawing.Size(17, 17)
         Me.btnStopNav.TabIndex = 2
@@ -89,7 +89,7 @@ Partial Class Main
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtURL.Location = New System.Drawing.Point(111, 48)
         Me.txtURL.Name = "txtURL"
-        Me.txtURL.Size = New System.Drawing.Size(820, 20)
+        Me.txtURL.Size = New System.Drawing.Size(982, 20)
         Me.txtURL.TabIndex = 0
         '
         'btnGo
@@ -100,7 +100,7 @@ Partial Class Main
         Me.btnGo.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.GradientActiveCaption
         Me.btnGo.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.GradientInactiveCaption
         Me.btnGo.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnGo.Location = New System.Drawing.Point(913, 49)
+        Me.btnGo.Location = New System.Drawing.Point(1075, 49)
         Me.btnGo.Name = "btnGo"
         Me.btnGo.Size = New System.Drawing.Size(17, 17)
         Me.btnGo.TabIndex = 1
@@ -126,12 +126,12 @@ Partial Class Main
         '
         'ToolStripContainer1.ContentPanel
         '
-        Me.ToolStripContainer1.ContentPanel.Size = New System.Drawing.Size(1052, 634)
+        Me.ToolStripContainer1.ContentPanel.Size = New System.Drawing.Size(1214, 634)
         Me.ToolStripContainer1.LeftToolStripPanelVisible = False
         Me.ToolStripContainer1.Location = New System.Drawing.Point(0, 73)
         Me.ToolStripContainer1.Name = "ToolStripContainer1"
         Me.ToolStripContainer1.RightToolStripPanelVisible = False
-        Me.ToolStripContainer1.Size = New System.Drawing.Size(1052, 634)
+        Me.ToolStripContainer1.Size = New System.Drawing.Size(1214, 634)
         Me.ToolStripContainer1.TabIndex = 4
         Me.ToolStripContainer1.Text = "ToolStripContainer1"
         Me.ToolStripContainer1.TopToolStripPanelVisible = False
@@ -242,7 +242,7 @@ Partial Class Main
         Me.btnReload.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.GradientActiveCaption
         Me.btnReload.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.GradientInactiveCaption
         Me.btnReload.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnReload.Location = New System.Drawing.Point(957, 49)
+        Me.btnReload.Location = New System.Drawing.Point(1119, 49)
         Me.btnReload.Name = "btnReload"
         Me.btnReload.Size = New System.Drawing.Size(17, 17)
         Me.btnReload.TabIndex = 3
@@ -292,7 +292,7 @@ Partial Class Main
         Me.gbxTools.Controls.Add(Me.btnGetFAH)
         Me.gbxTools.Controls.Add(Me.btnGetWallet)
         Me.gbxTools.Controls.Add(Me.lblWalletNum)
-        Me.gbxTools.Location = New System.Drawing.Point(654, 1)
+        Me.gbxTools.Location = New System.Drawing.Point(816, 1)
         Me.gbxTools.Name = "gbxTools"
         Me.gbxTools.Size = New System.Drawing.Size(396, 46)
         Me.gbxTools.TabIndex = 19
@@ -449,18 +449,18 @@ Partial Class Main
         '
         Me.txtMsg.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtMsg.Location = New System.Drawing.Point(606, 0)
+        Me.txtMsg.Location = New System.Drawing.Point(772, 0)
         Me.txtMsg.Multiline = True
         Me.txtMsg.Name = "txtMsg"
         Me.txtMsg.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtMsg.Size = New System.Drawing.Size(47, 74)
+        Me.txtMsg.Size = New System.Drawing.Size(43, 74)
         Me.txtMsg.TabIndex = 18
         '
         'gbxCheckboxForTools
         '
         Me.gbxCheckboxForTools.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.gbxCheckboxForTools.Controls.Add(Me.chkShowTools)
-        Me.gbxCheckboxForTools.Location = New System.Drawing.Point(987, 42)
+        Me.gbxCheckboxForTools.Location = New System.Drawing.Point(1149, 42)
         Me.gbxCheckboxForTools.Name = "gbxCheckboxForTools"
         Me.gbxCheckboxForTools.Size = New System.Drawing.Size(63, 28)
         Me.gbxCheckboxForTools.TabIndex = 20
@@ -493,7 +493,7 @@ Partial Class Main
         Me.gbxDownload.Controls.Add(Me.lblPercent)
         Me.gbxDownload.Controls.Add(Me.ProgressBar1)
         Me.gbxDownload.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.gbxDownload.Location = New System.Drawing.Point(610, 1)
+        Me.gbxDownload.Location = New System.Drawing.Point(609, 1)
         Me.gbxDownload.Name = "gbxDownload"
         Me.gbxDownload.Size = New System.Drawing.Size(160, 42)
         Me.gbxDownload.TabIndex = 0
@@ -504,7 +504,7 @@ Partial Class Main
         'PictureBox2
         '
         Me.PictureBox2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.PictureBox2.Location = New System.Drawing.Point(992, 11)
+        Me.PictureBox2.Location = New System.Drawing.Point(1154, 11)
         Me.PictureBox2.Name = "PictureBox2"
         Me.PictureBox2.Size = New System.Drawing.Size(50, 30)
         Me.PictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
@@ -515,7 +515,7 @@ Partial Class Main
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1052, 708)
+        Me.ClientSize = New System.Drawing.Size(1214, 708)
         Me.Controls.Add(Me.gbxDownload)
         Me.Controls.Add(Me.btnBrowserTools)
         Me.Controls.Add(Me.txtMsg)
@@ -543,6 +543,7 @@ Partial Class Main
         Me.KeyPreview = True
         Me.MinimumSize = New System.Drawing.Size(16, 38)
         Me.Name = "Main"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.ToolStripContainer1.ResumeLayout(False)
         Me.ToolStripContainer1.PerformLayout()
         Me.gbxTools.ResumeLayout(False)

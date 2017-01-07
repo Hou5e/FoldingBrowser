@@ -105,16 +105,8 @@
             'Force the URL text to scroll all the way to the left
             Me.txtURL.Select(0, 0)
 
-            'Load, fix, or update the INI and DAT files for the stored settings
-            FixSettingsFiles()
-
-            'Refresh the Wallet Names
-            cbxWalletId_SelectedIndexChanged(Nothing, Nothing)
-
-            'Process command line values. Only for initial installations
-            If Environment.CommandLine.Length > 0 Then
-                RunSetup()
-            End If
+            'Fix INI file, if needed. Process command line values (Only for initial installations). NOTE: Async and can't be awaited here
+            RunSetup()
 
         Catch ex As Exception
             Msg("Error: initialization failed: " & ex.ToString)
@@ -124,8 +116,8 @@
 
 #Region "Extra Setup"
     'This was done because the New() constructor can't be run as Async. So, this was moved out to here
-    Private Async Sub FixSettingsFiles()
-        'Look to see if there is an INI file first
+    Private Async Sub RunSetup()
+        'Load, fix, or update the INI and DAT files for the stored settings. Look to see if there is an INI file first
         If System.IO.File.Exists(IniFilePath) = True Then
             INI.Load(IniFilePath)
             'Make sure the INI key/value exists
@@ -311,105 +303,108 @@
                 'Next DAT format version upgrade would go here
             End If
         End If
-    End Sub
+        'Refresh the Wallet Names
+        cbxWalletId_SelectedIndexChanged(Nothing, Nothing)
 
-    'This was done because the New() constructor can't be run as Async. So, this was moved out to here
-    Private Async Sub RunSetup()
-        'MessageBox.Show(Environment.CommandLine.ToString)
-        Dim args As String() = Environment.GetCommandLineArgs()
-        If args.Length > 1 Then
-            Select Case args(1)
+        '''''''''''''''''''''
+        'Process command line values (Only for initial installations).
+        If Environment.CommandLine.Length > 0 Then
+            'MessageBox.Show(Environment.CommandLine.ToString)
+            Dim args As String() = Environment.GetCommandLineArgs()
+            If args.Length > 1 Then
+                Select Case args(1)
                         'This command line option represents the FoldingBrowser was just installed
-                Case "-Instl", "-InstWithCure"
-                    'Create a dialog that sets the default checkbox selections based on stored wallet and F@H info.
-                    Dim Setup As New SetupDialog
+                    Case "-Instl", "-InstWithCure"
+                        'Create a dialog that sets the default checkbox selections based on stored wallet and F@H info.
+                        Dim Setup As New SetupDialog
 
-                    'Look for FAH username for FAH installation to un-check the dialog for existing users
-                    If INI.GetSection(Id & Me.cbxWalletId.Text) IsNot Nothing AndAlso INI.GetSection(Id & Me.cbxWalletId.Text).GetKey(INI_FAH_Username) IsNot Nothing Then
-                        'Has FAH setup already
-                        Setup.chkGetFAHSoftware.Checked = False
-                    Else
-                        'Needs FAH
+                        'Look for FAH username for FAH installation to un-check the dialog for existing users
+                        If INI.GetSection(Id & Me.cbxWalletId.Text) IsNot Nothing AndAlso INI.GetSection(Id & Me.cbxWalletId.Text).GetKey(INI_FAH_Username) IsNot Nothing Then
+                            'Has FAH setup already
+                            Setup.chkGetFAHSoftware.Checked = False
+                        Else
+                            'Needs FAH
 
-                        'TODO: Additionally look for FAH installation on PC?
+                            'TODO: Additionally look for FAH installation on PC?
 
-                        Setup.chkGetFAHSoftware.Checked = True
-                    End If
-
-                    Dim DAT As New IniFile
-                    'Load DAT file, decrypt it
-                    DAT.LoadText(Decrypt(LoadDat))
-                    If DAT.ToString.Length = 0 Then
-                        'Decryption failed
-                        Msg(DAT_ErrorMsg)
-                        MessageBox.Show(DAT_ErrorMsg)
-                    End If
-
-                    'Look for 12-word Passphrase (or BTC address?) to un-check the dialog for existing users
-                    If DAT.GetSection(Id & Me.cbxWalletId.Text) IsNot Nothing AndAlso DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CP12Words) IsNot Nothing Then
-                        'Wallet info exists
-                        Setup.chkGetWalletForFLDC.Checked = False
-                    Else
-                        'No saved Wallet info
-                        Setup.chkGetWalletForFLDC.Checked = True
-
-                        'TODO: Ask for existing wallet info? (probably too confusing / too many options)
-                    End If
-
-                    'Done with the DAT file
-                    DAT = Nothing
-
-
-                    'If installing the CureCoin wallet, set this check box to setup the CureCoin pool info
-                    If args(1) = "-InstWithCure" Then
-                        Setup.chkSetupCURE.Checked = True
-                    Else
-                        Setup.chkSetupCURE.Checked = False
-                    End If
-
-                    'Show modal dialog box
-                    If Setup.ShowDialog(Me) = DialogResult.OK Then
-                        'Run the tasks the operator selected
-
-                        'FAH adavanced client installation
-                        If Setup.chkGetFAHSoftware.Checked = True Then
-                            g_bAskDownloadLocation = False
-                            If Await GetFAH() = False Then MessageBox.Show("Task 'Get Folding@Home App' did not complete.")
+                            Setup.chkGetFAHSoftware.Checked = True
                         End If
 
-                        'Get Wallet
-                        If Setup.chkGetWalletForFLDC.Checked = True Then
-                            If Await GetWallet() = False Then MessageBox.Show("Task 'Get Wallet' did not complete.")
+                        Dim DAT As New IniFile
+                        'Load DAT file, decrypt it
+                        DAT.LoadText(Decrypt(LoadDat))
+                        If DAT.ToString.Length = 0 Then
+                            'Decryption failed
+                            Msg(DAT_ErrorMsg)
+                            MessageBox.Show(DAT_ErrorMsg)
                         End If
 
-                        'FAH Username / Teamname settings setup
-                        If Setup.chkGetFAHSoftware.Checked = True OrElse Setup.chkGetWalletForFLDC.Checked = True Then
-                            btnFAHConfig_Click(Nothing, Nothing)
+                        'Look for 12-word Passphrase (or BTC address?) to un-check the dialog for existing users
+                        If DAT.GetSection(Id & Me.cbxWalletId.Text) IsNot Nothing AndAlso DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CP12Words) IsNot Nothing Then
+                            'Wallet info exists
+                            Setup.chkGetWalletForFLDC.Checked = False
+                        Else
+                            'No saved Wallet info
+                            Setup.chkGetWalletForFLDC.Checked = True
+
+                            'TODO: Ask for existing wallet info? (probably too confusing / too many options)
                         End If
 
-                        'TODO: Only do this step for a CureCoin wallet installation (and/or a CureCoin folding team selection?)
-                        If Setup.chkSetupCURE.Checked = True Then
-                            Await SetupCureCoin()
+                        'Done with the DAT file
+                        DAT = Nothing
 
-                            'Logout of the CureCoin folding pool (CryptoBullionPools) website
-                            Await OpenURL(URL_CureCoinFoldingPoolPage & "logout", False)
-                            'Wait for the page to load
-                            Await PageLoadWait()
-                            Await PageTitleWait(NameCryptoBullions)
-                            Await Wait(200)
+
+                        'If installing the CureCoin wallet, set this check box to setup the CureCoin pool info
+                        If args(1) = "-InstWithCure" Then
+                            Setup.chkSetupCURE.Checked = True
+                        Else
+                            Setup.chkSetupCURE.Checked = False
                         End If
 
-                        'Show DAT file saved info. Ask to make backups / store data in a safe place
-                        If Setup.chkGetFAHSoftware.Checked = True OrElse Setup.chkGetWalletForFLDC.Checked = True OrElse Setup.chkSetupCURE.Checked = True Then
-                            'Setup a timer to finish the process to avoid the backup Dat file window from freezing
-                            m_timerErr.Interval = 1000
-                            AddHandler m_timerErr.Elapsed, AddressOf OnErrEvent
-                            'Finish the last part about asking to make a backup from the timer event, to avoid the make a backup window freezing (multithreading issue?).
-                            m_timerErr.Start()
+                        'Show modal dialog box
+                        If Setup.ShowDialog(Me) = DialogResult.OK Then
+                            'Run the tasks the operator selected
+
+                            'FAH adavanced client installation
+                            If Setup.chkGetFAHSoftware.Checked = True Then
+                                g_bAskDownloadLocation = False
+                                If Await GetFAH() = False Then MessageBox.Show("Task 'Get Folding@Home App' did not complete.")
+                            End If
+
+                            'Get Wallet
+                            If Setup.chkGetWalletForFLDC.Checked = True Then
+                                If Await GetWallet() = False Then MessageBox.Show("Task 'Get Wallet' did not complete.")
+                            End If
+
+                            'FAH Username / Teamname settings setup
+                            If Setup.chkGetFAHSoftware.Checked = True OrElse Setup.chkGetWalletForFLDC.Checked = True Then
+                                btnFAHConfig_Click(Nothing, Nothing)
+                            End If
+
+                            'TODO: Only do this step for a CureCoin wallet installation (and/or a CureCoin folding team selection?)
+                            If Setup.chkSetupCURE.Checked = True Then
+                                Await SetupCureCoin()
+
+                                'Logout of the CureCoin folding pool (CryptoBullionPools) website
+                                Await OpenURL(URL_CureCoinFoldingPoolPage & "logout", False)
+                                'Wait for the page to load
+                                Await PageLoadWait()
+                                Await PageTitleWait(NameCryptoBullions)
+                                Await Wait(200)
+                            End If
+
+                            'Show DAT file saved info. Ask to make backups / store data in a safe place
+                            If Setup.chkGetFAHSoftware.Checked = True OrElse Setup.chkGetWalletForFLDC.Checked = True OrElse Setup.chkSetupCURE.Checked = True Then
+                                'Setup a timer to finish the process to avoid the backup Dat file window from freezing
+                                m_timerErr.Interval = 1000
+                                AddHandler m_timerErr.Elapsed, AddressOf OnErrEvent
+                                'Finish the last part about asking to make a backup from the timer event, to avoid the make a backup window freezing (multithreading issue?).
+                                m_timerErr.Start()
+                            End If
                         End If
-                    End If
-                    Setup.Dispose()
-            End Select
+                        Setup.Dispose()
+                End Select
+            End If
         End If
     End Sub
 
@@ -423,8 +418,7 @@
 
         'Show the Saved Data dialog
         Dim DlgDisplaySavedData As New DisplayTextDialog
-        DlgDisplaySavedData.ShowDialog(Me)
-        DlgDisplaySavedData.Dispose()
+        DlgDisplaySavedData.Show(Me)
 
         'TODO: this part would freeze as the last part of the automated install for v6 / CefSharp v49. It was moved to the timer to try and avoid the unknown problem.
 
@@ -433,7 +427,7 @@
         OkMsg.Text = "Setup Complete"
         OkMsg.MsgText.Text = "Setup is complete." & vbNewLine & vbNewLine & "Please use the 'Make Backup' button to save your settings in a safe place"
         OkMsg.Width = (OkMsg.MsgText.Left * 2) + OkMsg.MsgText.Width + 10
-        OkMsg.ShowDialog(Me)
+        OkMsg.ShowDialog(DlgDisplaySavedData)
         OkMsg.Dispose()
     End Sub
 #End Region
@@ -771,7 +765,6 @@
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
             GetFAH()
 #Enable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
-            'If GetFAH() = False Then MessageBox.Show("Task 'Get Folding@Home App' did not complete.")
         End If
     End Sub
 
@@ -1048,7 +1041,7 @@
             'Get Folding@Home App
             Await OpenURL(URL_FAH, False)
             Await PageTitleWait("Folding@home")
-            Await Wait(100)
+            Await Wait(700)
 
             'Click the link for Windows download (This initial step appears to be needed? even though the link is in the HTML)
             Await ClickByClass("download-btn", False)
@@ -1064,64 +1057,67 @@
             Await ClickByClass("modalCloseImg simplemodal-close", False)
 
             'Close any running instances of FAH
-            Dim p As Process
             Try
-                For Each p In Process.GetProcessesByName("FAHClient")
-                    Msg("Asking to close FAH process: " & p.Id.ToString() & " - " & p.ProcessName)
+                Dim proc As Process
+                For Each proc In Process.GetProcessesByName("FAHClient")
+                    Msg("Asking user to close FAH process: " & proc.Id.ToString() & " - " & proc.ProcessName)
                     MessageBox.Show("Please close the Folding@Home software before proceeding.", "", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                     Await Wait(1000)
+
+                    'If still open, then close it
+                    Dim p As Process
+                    Try
+                        For Each p In Process.GetProcessesByName("FAHClient")
+                            Msg("Closing process: " & p.Id.ToString() & " - " & p.ProcessName)
+                            p.CloseMainWindow()
+                            p.WaitForExit(3000)
+
+                            'Check for the process being closed
+                            If p.HasExited = False Then
+                                Msg("Killing process: " & p.Id.ToString() & " - " & p.ProcessName)
+                                p.Kill()
+                                Await Wait(400)
+                            End If
+                        Next
+
+                        'Try closing any FAH Core processes still active
+                        For Each p In Process.GetProcesses
+                            If p.ProcessName.ToLower.StartsWith("fahcore_") = True Then
+                                Msg("Killing process: " & p.Id.ToString() & " - " & p.ProcessName)
+                                p.Kill()
+                            End If
+                        Next
+                    Catch ex As Exception
+                        Msg("Couldn't kill FAH: " & ex.ToString)
+                    End Try
+
+                    '2nd try to close any running instances of FAH
+                    Try
+                        For Each p In Process.GetProcessesByName("FAHClient")
+                            'Wait for FAH to exit before trying again
+                            Await Wait(5000)
+                            Msg("Killing process: " & p.Id.ToString() & " - " & p.ProcessName)
+                            p.Kill()
+                            Await Wait(3000)
+                        Next
+
+                        'Try closing any FAH Core processes still active
+                        For Each p In Process.GetProcesses
+                            If p.ProcessName.ToLower.StartsWith("fahcore_") = True Then
+                                Msg("Killing process: " & p.Id.ToString() & " - " & p.ProcessName)
+                                p.Kill()
+                            End If
+                        Next
+                    Catch ex As Exception
+                        Msg("Couldn't kill FAH: " & ex.ToString)
+                    End Try
+
+                    'If you get here, exit searching through the processes
                     Exit For
                 Next
 
             Catch ex As Exception
                 Msg("Error asking for FAH to be closed: " & ex.ToString)
-            End Try
-
-            'If still open, then close it
-            Try
-                For Each p In Process.GetProcessesByName("FAHClient")
-                    Msg("Closing process: " & p.Id.ToString() & " - " & p.ProcessName)
-                    p.CloseMainWindow()
-                    p.WaitForExit(3000)
-
-                    'Check for the process being closed
-                    If p.HasExited = False Then
-                        Msg("Killing process: " & p.Id.ToString() & " - " & p.ProcessName)
-                        p.Kill()
-                        System.Threading.Thread.Sleep(400)
-                    End If
-                Next
-
-                'Try closing any FAH Core processes still active
-                For Each p In Process.GetProcesses
-                    If p.ProcessName.ToLower.StartsWith("fahcore_") = True Then
-                        Msg("Killing process: " & p.Id.ToString() & " - " & p.ProcessName)
-                        p.Kill()
-                    End If
-                Next
-            Catch ex As Exception
-                Msg("Couldn't kill FAH: " & ex.ToString)
-            End Try
-
-            '2nd try to close any running instances of FAH
-            Try
-                For Each p In Process.GetProcessesByName("FAHClient")
-                    'Wait for FAH to exit before trying again
-                    System.Threading.Thread.Sleep(5000)
-                    Msg("Killing process: " & p.Id.ToString() & " - " & p.ProcessName)
-                    p.Kill()
-                    System.Threading.Thread.Sleep(3000)
-                Next
-
-                'Try closing any FAH Core processes still active
-                For Each p In Process.GetProcesses
-                    If p.ProcessName.ToLower.StartsWith("fahcore_") = True Then
-                        Msg("Killing process: " & p.Id.ToString() & " - " & p.ProcessName)
-                        p.Kill()
-                    End If
-                Next
-            Catch ex As Exception
-                Msg("Couldn't kill FAH: " & ex.ToString)
             End Try
 
             'Is the download done?

@@ -32,18 +32,47 @@ Partial Class DisplayTextDialog
         Me.txtWarningMessage = New System.Windows.Forms.TextBox()
         Me.btnMakeBackup = New System.Windows.Forms.Button()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
+        Me.txtWalletName = New System.Windows.Forms.TextBox()
+        Me.cbxWalletId = New System.Windows.Forms.ComboBox()
+        Me.chkShowAddData = New System.Windows.Forms.CheckBox()
+        Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
+        Me.txtCureCoinPoolPin = New System.Windows.Forms.TextBox()
+        Me.lblCureCoinPoolPin = New System.Windows.Forms.Label()
+        Me.txtCureCoinPoolPassword = New System.Windows.Forms.TextBox()
+        Me.lblCureCoinPoolPassword = New System.Windows.Forms.Label()
+        Me.txtCureCoinAddress = New System.Windows.Forms.TextBox()
+        Me.lblCureCoinAddress = New System.Windows.Forms.Label()
+        Me.txtCounterParty12WordPassphrase = New System.Windows.Forms.TextBox()
+        Me.lblCounterParty12WordPassphrase = New System.Windows.Forms.Label()
+        Me.txtBTCAddress = New System.Windows.Forms.TextBox()
+        Me.lblBTCAddress = New System.Windows.Forms.Label()
+        Me.txtExtremeOverclockingId = New System.Windows.Forms.TextBox()
+        Me.lblExtremeOverclockingId = New System.Windows.Forms.Label()
+        Me.txtEmail = New System.Windows.Forms.TextBox()
+        Me.lblEmail = New System.Windows.Forms.Label()
+        Me.txtFAHPasskey = New System.Windows.Forms.TextBox()
+        Me.lblFAHPasskey = New System.Windows.Forms.Label()
+        Me.txtFAHTeam = New System.Windows.Forms.TextBox()
+        Me.lblFAHTeam = New System.Windows.Forms.Label()
+        Me.txtFAHUsername = New System.Windows.Forms.TextBox()
+        Me.lblFAHUsername = New System.Windows.Forms.Label()
+        Me.lblWalletNum = New System.Windows.Forms.Label()
+        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.SplitContainer1.Panel1.SuspendLayout()
+        Me.SplitContainer1.Panel2.SuspendLayout()
+        Me.SplitContainer1.SuspendLayout()
         Me.SuspendLayout()
         '
         'txtDisplayText
         '
-        Me.txtDisplayText.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtDisplayText.Location = New System.Drawing.Point(24, 30)
+        Me.txtDisplayText.BackColor = System.Drawing.Color.White
+        Me.txtDisplayText.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.txtDisplayText.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.txtDisplayText.Location = New System.Drawing.Point(0, 0)
         Me.txtDisplayText.Multiline = True
         Me.txtDisplayText.Name = "txtDisplayText"
         Me.txtDisplayText.ScrollBars = System.Windows.Forms.ScrollBars.Both
-        Me.txtDisplayText.Size = New System.Drawing.Size(734, 291)
+        Me.txtDisplayText.Size = New System.Drawing.Size(241, 287)
         Me.txtDisplayText.TabIndex = 1
         Me.txtDisplayText.WordWrap = False
         '
@@ -123,23 +152,277 @@ Partial Class DisplayTextDialog
         " INI and DAT, CureCoin wallet.dat")
         Me.btnMakeBackup.UseVisualStyleBackColor = True
         '
+        'txtWalletName
+        '
+        Me.txtWalletName.Location = New System.Drawing.Point(133, 9)
+        Me.txtWalletName.Name = "txtWalletName"
+        Me.txtWalletName.Size = New System.Drawing.Size(128, 20)
+        Me.txtWalletName.TabIndex = 11
+        Me.ToolTip1.SetToolTip(Me.txtWalletName, "Change wallet name, press <Enter> to save it")
+        '
+        'cbxWalletId
+        '
+        Me.cbxWalletId.FormattingEnabled = True
+        Me.cbxWalletId.Items.AddRange(New Object() {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"})
+        Me.cbxWalletId.Location = New System.Drawing.Point(102, 9)
+        Me.cbxWalletId.Name = "cbxWalletId"
+        Me.cbxWalletId.Size = New System.Drawing.Size(30, 21)
+        Me.cbxWalletId.TabIndex = 10
+        Me.cbxWalletId.Text = "0"
+        Me.ToolTip1.SetToolTip(Me.cbxWalletId, "Wallet Id (0-9) to use. Default: 0.")
+        '
+        'chkShowAddData
+        '
+        Me.chkShowAddData.AutoSize = True
+        Me.chkShowAddData.Location = New System.Drawing.Point(479, 9)
+        Me.chkShowAddData.Name = "chkShowAddData"
+        Me.chkShowAddData.Size = New System.Drawing.Size(162, 17)
+        Me.chkShowAddData.TabIndex = 7
+        Me.chkShowAddData.Text = "Add New or Existing Settings"
+        Me.chkShowAddData.UseVisualStyleBackColor = True
+        '
+        'SplitContainer1
+        '
+        Me.SplitContainer1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.SplitContainer1.BackColor = System.Drawing.SystemColors.Highlight
+        Me.SplitContainer1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.SplitContainer1.Location = New System.Drawing.Point(24, 32)
+        Me.SplitContainer1.Name = "SplitContainer1"
+        '
+        'SplitContainer1.Panel1
+        '
+        Me.SplitContainer1.Panel1.AutoScroll = True
+        Me.SplitContainer1.Panel1.BackColor = System.Drawing.SystemColors.Control
+        Me.SplitContainer1.Panel1.Controls.Add(Me.txtCureCoinPoolPin)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.lblCureCoinPoolPin)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.txtCureCoinPoolPassword)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.lblCureCoinPoolPassword)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.txtCureCoinAddress)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.lblCureCoinAddress)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.txtCounterParty12WordPassphrase)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.lblCounterParty12WordPassphrase)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.txtBTCAddress)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.lblBTCAddress)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.txtExtremeOverclockingId)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.lblExtremeOverclockingId)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.txtEmail)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.lblEmail)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.txtFAHPasskey)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.lblFAHPasskey)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.txtFAHTeam)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.lblFAHTeam)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.txtFAHUsername)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.lblFAHUsername)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.txtWalletName)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.cbxWalletId)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.lblWalletNum)
+        '
+        'SplitContainer1.Panel2
+        '
+        Me.SplitContainer1.Panel2.BackColor = System.Drawing.SystemColors.Control
+        Me.SplitContainer1.Panel2.Controls.Add(Me.txtDisplayText)
+        Me.SplitContainer1.Size = New System.Drawing.Size(734, 289)
+        Me.SplitContainer1.SplitterDistance = 489
+        Me.SplitContainer1.SplitterWidth = 2
+        Me.SplitContainer1.TabIndex = 8
+        '
+        'txtCureCoinPoolPin
+        '
+        Me.txtCureCoinPoolPin.Location = New System.Drawing.Point(165, 233)
+        Me.txtCureCoinPoolPin.Name = "txtCureCoinPoolPin"
+        Me.txtCureCoinPoolPin.Size = New System.Drawing.Size(296, 20)
+        Me.txtCureCoinPoolPin.TabIndex = 13
+        Me.ToolTip1.SetToolTip(Me.txtCureCoinPoolPin, "Pin number needed to make any changes to the pool information")
+        '
+        'lblCureCoinPoolPin
+        '
+        Me.lblCureCoinPoolPin.AutoSize = True
+        Me.lblCureCoinPoolPin.Location = New System.Drawing.Point(72, 236)
+        Me.lblCureCoinPoolPin.Name = "lblCureCoinPoolPin"
+        Me.lblCureCoinPoolPin.Size = New System.Drawing.Size(92, 13)
+        Me.lblCureCoinPoolPin.TabIndex = 12
+        Me.lblCureCoinPoolPin.Text = "CureCoin Pool Pin"
+        '
+        'txtCureCoinPoolPassword
+        '
+        Me.txtCureCoinPoolPassword.Location = New System.Drawing.Point(165, 211)
+        Me.txtCureCoinPoolPassword.Name = "txtCureCoinPoolPassword"
+        Me.txtCureCoinPoolPassword.Size = New System.Drawing.Size(296, 20)
+        Me.txtCureCoinPoolPassword.TabIndex = 13
+        '
+        'lblCureCoinPoolPassword
+        '
+        Me.lblCureCoinPoolPassword.AutoSize = True
+        Me.lblCureCoinPoolPassword.Location = New System.Drawing.Point(41, 214)
+        Me.lblCureCoinPoolPassword.Name = "lblCureCoinPoolPassword"
+        Me.lblCureCoinPoolPassword.Size = New System.Drawing.Size(123, 13)
+        Me.lblCureCoinPoolPassword.TabIndex = 12
+        Me.lblCureCoinPoolPassword.Text = "CureCoin Pool Password"
+        '
+        'txtCureCoinAddress
+        '
+        Me.txtCureCoinAddress.Location = New System.Drawing.Point(165, 189)
+        Me.txtCureCoinAddress.Name = "txtCureCoinAddress"
+        Me.txtCureCoinAddress.Size = New System.Drawing.Size(296, 20)
+        Me.txtCureCoinAddress.TabIndex = 13
+        '
+        'lblCureCoinAddress
+        '
+        Me.lblCureCoinAddress.AutoSize = True
+        Me.lblCureCoinAddress.Location = New System.Drawing.Point(73, 192)
+        Me.lblCureCoinAddress.Name = "lblCureCoinAddress"
+        Me.lblCureCoinAddress.Size = New System.Drawing.Size(91, 13)
+        Me.lblCureCoinAddress.TabIndex = 12
+        Me.lblCureCoinAddress.Text = "CureCoin Address"
+        '
+        'txtCounterParty12WordPassphrase
+        '
+        Me.txtCounterParty12WordPassphrase.Location = New System.Drawing.Point(165, 158)
+        Me.txtCounterParty12WordPassphrase.Name = "txtCounterParty12WordPassphrase"
+        Me.txtCounterParty12WordPassphrase.Size = New System.Drawing.Size(296, 20)
+        Me.txtCounterParty12WordPassphrase.TabIndex = 13
+        '
+        'lblCounterParty12WordPassphrase
+        '
+        Me.lblCounterParty12WordPassphrase.AutoSize = True
+        Me.lblCounterParty12WordPassphrase.Location = New System.Drawing.Point(3, 161)
+        Me.lblCounterParty12WordPassphrase.Name = "lblCounterParty12WordPassphrase"
+        Me.lblCounterParty12WordPassphrase.Size = New System.Drawing.Size(161, 13)
+        Me.lblCounterParty12WordPassphrase.TabIndex = 12
+        Me.lblCounterParty12WordPassphrase.Text = "CounterParty12WordPassphrase"
+        '
+        'txtBTCAddress
+        '
+        Me.txtBTCAddress.Location = New System.Drawing.Point(165, 136)
+        Me.txtBTCAddress.Name = "txtBTCAddress"
+        Me.txtBTCAddress.Size = New System.Drawing.Size(296, 20)
+        Me.txtBTCAddress.TabIndex = 13
+        '
+        'lblBTCAddress
+        '
+        Me.lblBTCAddress.AutoSize = True
+        Me.lblBTCAddress.Location = New System.Drawing.Point(95, 139)
+        Me.lblBTCAddress.Name = "lblBTCAddress"
+        Me.lblBTCAddress.Size = New System.Drawing.Size(69, 13)
+        Me.lblBTCAddress.TabIndex = 12
+        Me.lblBTCAddress.Text = "BTC Address"
+        '
+        'txtExtremeOverclockingId
+        '
+        Me.txtExtremeOverclockingId.Location = New System.Drawing.Point(165, 263)
+        Me.txtExtremeOverclockingId.Name = "txtExtremeOverclockingId"
+        Me.txtExtremeOverclockingId.Size = New System.Drawing.Size(296, 20)
+        Me.txtExtremeOverclockingId.TabIndex = 13
+        Me.ToolTip1.SetToolTip(Me.txtExtremeOverclockingId, "Extreme Overclocking Id from your EOC stats URL")
+        '
+        'lblExtremeOverclockingId
+        '
+        Me.lblExtremeOverclockingId.AutoSize = True
+        Me.lblExtremeOverclockingId.Location = New System.Drawing.Point(41, 266)
+        Me.lblExtremeOverclockingId.Name = "lblExtremeOverclockingId"
+        Me.lblExtremeOverclockingId.Size = New System.Drawing.Size(123, 13)
+        Me.lblExtremeOverclockingId.TabIndex = 12
+        Me.lblExtremeOverclockingId.Text = "Extreme Overclocking Id"
+        '
+        'txtEmail
+        '
+        Me.txtEmail.Location = New System.Drawing.Point(165, 106)
+        Me.txtEmail.Name = "txtEmail"
+        Me.txtEmail.Size = New System.Drawing.Size(296, 20)
+        Me.txtEmail.TabIndex = 13
+        '
+        'lblEmail
+        '
+        Me.lblEmail.AutoSize = True
+        Me.lblEmail.Location = New System.Drawing.Point(132, 109)
+        Me.lblEmail.Name = "lblEmail"
+        Me.lblEmail.Size = New System.Drawing.Size(32, 13)
+        Me.lblEmail.TabIndex = 12
+        Me.lblEmail.Text = "Email"
+        '
+        'txtFAHPasskey
+        '
+        Me.txtFAHPasskey.Location = New System.Drawing.Point(165, 84)
+        Me.txtFAHPasskey.Name = "txtFAHPasskey"
+        Me.txtFAHPasskey.Size = New System.Drawing.Size(296, 20)
+        Me.txtFAHPasskey.TabIndex = 13
+        '
+        'lblFAHPasskey
+        '
+        Me.lblFAHPasskey.AutoSize = True
+        Me.lblFAHPasskey.Location = New System.Drawing.Point(93, 87)
+        Me.lblFAHPasskey.Name = "lblFAHPasskey"
+        Me.lblFAHPasskey.Size = New System.Drawing.Size(71, 13)
+        Me.lblFAHPasskey.TabIndex = 12
+        Me.lblFAHPasskey.Text = "FAH Passkey"
+        '
+        'txtFAHTeam
+        '
+        Me.txtFAHTeam.Location = New System.Drawing.Point(165, 62)
+        Me.txtFAHTeam.Name = "txtFAHTeam"
+        Me.txtFAHTeam.Size = New System.Drawing.Size(296, 20)
+        Me.txtFAHTeam.TabIndex = 13
+        '
+        'lblFAHTeam
+        '
+        Me.lblFAHTeam.AutoSize = True
+        Me.lblFAHTeam.Location = New System.Drawing.Point(106, 65)
+        Me.lblFAHTeam.Name = "lblFAHTeam"
+        Me.lblFAHTeam.Size = New System.Drawing.Size(58, 13)
+        Me.lblFAHTeam.TabIndex = 12
+        Me.lblFAHTeam.Text = "FAH Team"
+        '
+        'txtFAHUsername
+        '
+        Me.txtFAHUsername.Location = New System.Drawing.Point(165, 40)
+        Me.txtFAHUsername.Name = "txtFAHUsername"
+        Me.txtFAHUsername.Size = New System.Drawing.Size(296, 20)
+        Me.txtFAHUsername.TabIndex = 13
+        '
+        'lblFAHUsername
+        '
+        Me.lblFAHUsername.AutoSize = True
+        Me.lblFAHUsername.Location = New System.Drawing.Point(85, 43)
+        Me.lblFAHUsername.Name = "lblFAHUsername"
+        Me.lblFAHUsername.Size = New System.Drawing.Size(79, 13)
+        Me.lblFAHUsername.TabIndex = 12
+        Me.lblFAHUsername.Text = "FAH Username"
+        '
+        'lblWalletNum
+        '
+        Me.lblWalletNum.AutoSize = True
+        Me.lblWalletNum.Location = New System.Drawing.Point(33, 12)
+        Me.lblWalletNum.Name = "lblWalletNum"
+        Me.lblWalletNum.Size = New System.Drawing.Size(72, 13)
+        Me.lblWalletNum.TabIndex = 9
+        Me.lblWalletNum.Text = "Use Wallet #:"
+        '
         'DisplayTextDialog
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(780, 465)
+        Me.Controls.Add(Me.SplitContainer1)
+        Me.Controls.Add(Me.chkShowAddData)
         Me.Controls.Add(Me.btnMakeBackup)
         Me.Controls.Add(Me.txtWarningMessage)
         Me.Controls.Add(Me.lblWarningInfo)
         Me.Controls.Add(Me.btnSaveChanges)
         Me.Controls.Add(Me.BtnOK)
         Me.Controls.Add(Me.MsgTextTop)
-        Me.Controls.Add(Me.txtDisplayText)
         Me.KeyPreview = True
         Me.Name = "DisplayTextDialog"
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Saved Data"
+        Me.SplitContainer1.Panel1.ResumeLayout(False)
+        Me.SplitContainer1.Panel1.PerformLayout()
+        Me.SplitContainer1.Panel2.ResumeLayout(False)
+        Me.SplitContainer1.Panel2.PerformLayout()
+        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.SplitContainer1.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -152,4 +435,29 @@ Partial Class DisplayTextDialog
     Friend WithEvents txtWarningMessage As TextBox
     Friend WithEvents btnMakeBackup As Button
     Friend WithEvents ToolTip1 As ToolTip
+    Friend WithEvents chkShowAddData As CheckBox
+    Friend WithEvents SplitContainer1 As SplitContainer
+    Friend WithEvents txtWalletName As TextBox
+    Friend WithEvents cbxWalletId As ComboBox
+    Friend WithEvents lblWalletNum As Label
+    Friend WithEvents txtCureCoinPoolPin As TextBox
+    Friend WithEvents lblCureCoinPoolPin As Label
+    Friend WithEvents txtCureCoinPoolPassword As TextBox
+    Friend WithEvents lblCureCoinPoolPassword As Label
+    Friend WithEvents txtCureCoinAddress As TextBox
+    Friend WithEvents lblCureCoinAddress As Label
+    Friend WithEvents txtCounterParty12WordPassphrase As TextBox
+    Friend WithEvents lblCounterParty12WordPassphrase As Label
+    Friend WithEvents txtBTCAddress As TextBox
+    Friend WithEvents lblBTCAddress As Label
+    Friend WithEvents txtEmail As TextBox
+    Friend WithEvents lblEmail As Label
+    Friend WithEvents txtFAHPasskey As TextBox
+    Friend WithEvents lblFAHPasskey As Label
+    Friend WithEvents txtFAHTeam As TextBox
+    Friend WithEvents lblFAHTeam As Label
+    Friend WithEvents txtFAHUsername As TextBox
+    Friend WithEvents lblFAHUsername As Label
+    Friend WithEvents txtExtremeOverclockingId As TextBox
+    Friend WithEvents lblExtremeOverclockingId As Label
 End Class
