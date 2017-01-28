@@ -36,6 +36,7 @@
                 Msg("Error: deleting temp file " & settings.LogFile & ": " & ex.ToString)
             End Try
 
+            CefSharp.Cef.EnableHighDPISupport()
             If CefSharp.Cef.Initialize(settings) = True Then
                 Me.browser = New CefSharp.WinForms.ChromiumWebBrowser(URL_BLANK)
                 'Add browser event handlers to pass events back to the main UI
@@ -117,6 +118,21 @@
 #Region "Extra Setup"
     'This was done because the New() constructor can't be run as Async. So, this was moved out to here
     Private Async Sub RunSetup()
+
+#If DEBUG Then
+        'Debug: Log version info
+        Msg("Chromium Version: " & CefSharp.Cef.ChromiumVersion.ToString)
+        Msg("Cef Version: " & CefSharp.Cef.CefVersion.ToString)
+        Msg("CefSharp Version: " & CefSharp.Cef.CefSharpVersion.ToString)
+        Dim plugins As List(Of CefSharp.Plugin) = Await CefSharp.Cef.GetPlugins
+        For Each plugin As CefSharp.Plugin In plugins
+            Msg("=================")
+            Msg("Plugin: " & plugin.Name & If(plugin.Version.Length > 0, " v" & plugin.Version, ""))
+            If plugin.Description.Length > 0 Then Msg("Plugin Description: " & plugin.Description)
+            If plugin.Path.Length > 0 Then Msg("Plugin Path: " & plugin.Path)
+        Next
+#End If
+
         'Load, fix, or update the INI and DAT files for the stored settings. Look to see if there is an INI file first
         If System.IO.File.Exists(IniFilePath) = True Then
             INI.Load(IniFilePath)
@@ -395,40 +411,23 @@
 
                             'Show DAT file saved info. Ask to make backups / store data in a safe place
                             If Setup.chkGetFAHSoftware.Checked = True OrElse Setup.chkGetWalletForFLDC.Checked = True OrElse Setup.chkSetupCURE.Checked = True Then
-                                'Setup a timer to finish the process to avoid the backup Dat file window from freezing
-                                m_timerErr.Interval = 1000
-                                AddHandler m_timerErr.Elapsed, AddressOf OnErrEvent
-                                'Finish the last part about asking to make a backup from the timer event, to avoid the make a backup window freezing (multithreading issue?).
-                                m_timerErr.Start()
+                                'Show the Saved Data dialog
+                                Dim DlgDisplaySavedData As New DisplayTextDialog
+                                DlgDisplaySavedData.Show(Me)
+
+                                'Process completed - Make a backup reminder
+                                Dim OkMsg As New MsgBoxDialog
+                                OkMsg.Text = "Setup Complete"
+                                OkMsg.MsgText.Text = "Setup is complete." & vbNewLine & vbNewLine & "Please use the 'Make Backup' button to save your settings in a safe place"
+                                OkMsg.Width = (OkMsg.MsgText.Left * 2) + OkMsg.MsgText.Width + 10
+                                OkMsg.ShowDialog(Me)
+                                OkMsg.Dispose()
                             End If
                         End If
                         Setup.Dispose()
                 End Select
             End If
         End If
-    End Sub
-
-    Private Delegate Sub OnErrorEvent(sender As Object, e As EventArgs)
-    Private Sub OnErrEvent(sender As Object, e As EventArgs)
-        Me.Invoke(New OnErrorEvent(AddressOf FixErrEvent), {sender, e})
-    End Sub
-    Private Sub FixErrEvent(sender As Object, e As EventArgs)
-        m_timerErr.Stop()
-        RemoveHandler m_timerErr.Elapsed, AddressOf OnErrEvent
-
-        'Show the Saved Data dialog
-        Dim DlgDisplaySavedData As New DisplayTextDialog
-        DlgDisplaySavedData.Show(Me)
-
-        'TODO: this part would freeze as the last part of the automated install for v6 / CefSharp v49. It was moved to the timer to try and avoid the unknown problem.
-
-        'Process completed - Make a backup reminder
-        Dim OkMsg As New MsgBoxDialog
-        OkMsg.Text = "Setup Complete"
-        OkMsg.MsgText.Text = "Setup is complete." & vbNewLine & vbNewLine & "Please use the 'Make Backup' button to save your settings in a safe place"
-        OkMsg.Width = (OkMsg.MsgText.Left * 2) + OkMsg.MsgText.Width + 10
-        OkMsg.ShowDialog(DlgDisplaySavedData)
-        OkMsg.Dispose()
     End Sub
 #End Region
 
@@ -568,7 +567,7 @@
             StopNavigaion()
             Application.DoEvents()
             ClearWebpage()
-            Delay(50)
+            Delay(100)
 
             If Me.browser IsNot Nothing Then
                 RemoveHandler Me.browser.FrameLoadEnd, AddressOf onBrowserFrameLoadEnd
@@ -834,7 +833,7 @@
 
     Private Sub btnSavedData_Click(sender As Object, e As EventArgs) Handles btnSavedData.Click
         Dim DlgDisplaySavedData As New DisplayTextDialog
-        DlgDisplaySavedData.Show()
+        DlgDisplaySavedData.Show(Me)
     End Sub
 #End Region
 

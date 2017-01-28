@@ -7,13 +7,18 @@
             Me.SplitContainer1.SplitterWidth = 2
             Me.SplitContainer1.Panel1Collapsed = True
 
-            'Refresh the Wallet Names
-            cbxWalletId_SelectedIndexChanged(Nothing, Nothing)
+            If Me.cbxWalletId.Text = g_Main.cbxWalletId.Text Then
+                'Refresh the Wallet Names
+                cbxWalletId_SelectedIndexChanged(Nothing, Nothing)
+            Else
+                'Change to the same wallet as the main interface
+                Me.cbxWalletId.Text = g_Main.cbxWalletId.Text
+            End If
 
             'Reset the Save button to be disabled until some changes to the text are made
             Me.btnSaveChanges.Enabled = False
             Me.BtnOK.Focus()
-            Me.Show()
+            'Don't put Me.Show() here because it will be shown as a dialog box.
 
         Catch ex As Exception
             g_Main.Msg(ex.ToString)
@@ -318,6 +323,7 @@
                 End If
 
                 DAT = Nothing
+                Me.btnSaveChanges.Enabled = False
             Else
                 g_Main.Msg("No DAT file yet")
                 MessageBox.Show("No DAT file yet")
