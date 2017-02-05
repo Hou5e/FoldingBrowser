@@ -136,7 +136,7 @@ Partial Class FAHSetupDialog
         Me.lblUsernamePreview.AutoSize = True
         Me.lblUsernamePreview.BackColor = System.Drawing.Color.White
         Me.lblUsernamePreview.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblUsernamePreview.Location = New System.Drawing.Point(9, 30)
+        Me.lblUsernamePreview.Location = New System.Drawing.Point(6, 30)
         Me.lblUsernamePreview.Name = "lblUsernamePreview"
         Me.lblUsernamePreview.Size = New System.Drawing.Size(144, 18)
         Me.lblUsernamePreview.TabIndex = 1
@@ -147,7 +147,7 @@ Partial Class FAHSetupDialog
         '
         Me.txtEmail.Location = New System.Drawing.Point(52, 24)
         Me.txtEmail.Name = "txtEmail"
-        Me.txtEmail.Size = New System.Drawing.Size(345, 24)
+        Me.txtEmail.Size = New System.Drawing.Size(360, 24)
         Me.txtEmail.TabIndex = 0
         Me.txtEmail.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
@@ -204,7 +204,7 @@ Partial Class FAHSetupDialog
         Me.gbxTeamSelection.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.gbxTeamSelection.Location = New System.Drawing.Point(43, 128)
         Me.gbxTeamSelection.Name = "gbxTeamSelection"
-        Me.gbxTeamSelection.Size = New System.Drawing.Size(510, 171)
+        Me.gbxTeamSelection.Size = New System.Drawing.Size(525, 171)
         Me.gbxTeamSelection.TabIndex = 7
         Me.gbxTeamSelection.TabStop = False
         Me.gbxTeamSelection.Text = "Team Number Selection"
@@ -214,7 +214,7 @@ Partial Class FAHSetupDialog
         Me.lblTeamNumber.AutoSize = True
         Me.lblTeamNumber.BackColor = System.Drawing.Color.White
         Me.lblTeamNumber.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblTeamNumber.Location = New System.Drawing.Point(425, 0)
+        Me.lblTeamNumber.Location = New System.Drawing.Point(441, 0)
         Me.lblTeamNumber.Name = "lblTeamNumber"
         Me.lblTeamNumber.Size = New System.Drawing.Size(62, 18)
         Me.lblTeamNumber.TabIndex = 9
@@ -225,7 +225,7 @@ Partial Class FAHSetupDialog
         '
         Me.lblTeam.AutoSize = True
         Me.lblTeam.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblTeam.Location = New System.Drawing.Point(371, 0)
+        Me.lblTeam.Location = New System.Drawing.Point(387, 0)
         Me.lblTeam.Name = "lblTeam"
         Me.lblTeam.Size = New System.Drawing.Size(55, 18)
         Me.lblTeam.TabIndex = 9
@@ -257,7 +257,7 @@ Partial Class FAHSetupDialog
         'btnGetPasskey
         '
         Me.btnGetPasskey.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnGetPasskey.Location = New System.Drawing.Point(402, 22)
+        Me.btnGetPasskey.Location = New System.Drawing.Point(416, 23)
         Me.btnGetPasskey.Name = "btnGetPasskey"
         Me.btnGetPasskey.Size = New System.Drawing.Size(103, 27)
         Me.btnGetPasskey.TabIndex = 1
@@ -288,7 +288,7 @@ Partial Class FAHSetupDialog
         '
         Me.txtBitcoinAddress.Location = New System.Drawing.Point(189, 78)
         Me.txtBitcoinAddress.Name = "txtBitcoinAddress"
-        Me.txtBitcoinAddress.Size = New System.Drawing.Size(316, 24)
+        Me.txtBitcoinAddress.Size = New System.Drawing.Size(330, 24)
         Me.txtBitcoinAddress.TabIndex = 2
         Me.txtBitcoinAddress.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         Me.ToolTip1.SetToolTip(Me.txtBitcoinAddress, "BTC address must be compatible with Counterparty." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Do Not Use An Exchange BTC/FLD" &
@@ -298,7 +298,7 @@ Partial Class FAHSetupDialog
         '
         Me.lblBitcoinAddress.AutoSize = True
         Me.lblBitcoinAddress.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblBitcoinAddress.Location = New System.Drawing.Point(245, 57)
+        Me.lblBitcoinAddress.Location = New System.Drawing.Point(256, 57)
         Me.lblBitcoinAddress.Name = "lblBitcoinAddress"
         Me.lblBitcoinAddress.Size = New System.Drawing.Size(200, 18)
         Me.lblBitcoinAddress.TabIndex = 1
@@ -327,7 +327,7 @@ Partial Class FAHSetupDialog
         Me.gbxUsername.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.gbxUsername.Location = New System.Drawing.Point(43, 7)
         Me.gbxUsername.Name = "gbxUsername"
-        Me.gbxUsername.Size = New System.Drawing.Size(510, 109)
+        Me.gbxUsername.Size = New System.Drawing.Size(525, 109)
         Me.gbxUsername.TabIndex = 10
         Me.gbxUsername.TabStop = False
         Me.gbxUsername.Text = "Username (Case Sensitive)"
@@ -366,7 +366,7 @@ Partial Class FAHSetupDialog
         Me.gbxPasskey.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.gbxPasskey.Location = New System.Drawing.Point(43, 313)
         Me.gbxPasskey.Name = "gbxPasskey"
-        Me.gbxPasskey.Size = New System.Drawing.Size(510, 118)
+        Me.gbxPasskey.Size = New System.Drawing.Size(525, 118)
         Me.gbxPasskey.TabIndex = 11
         Me.gbxPasskey.TabStop = False
         Me.gbxPasskey.Text = "Get Passkey by Email (Optional)"
@@ -375,7 +375,7 @@ Partial Class FAHSetupDialog
         '
         Me.txtPasskey.Location = New System.Drawing.Point(186, 88)
         Me.txtPasskey.Name = "txtPasskey"
-        Me.txtPasskey.Size = New System.Drawing.Size(319, 24)
+        Me.txtPasskey.Size = New System.Drawing.Size(333, 24)
         Me.txtPasskey.TabIndex = 2
         Me.txtPasskey.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
@@ -448,7 +448,7 @@ Partial Class FAHSetupDialog
         Me.gbxConfigPreview.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.gbxConfigPreview.Location = New System.Drawing.Point(0, 0)
         Me.gbxConfigPreview.Name = "gbxConfigPreview"
-        Me.gbxConfigPreview.Size = New System.Drawing.Size(548, 532)
+        Me.gbxConfigPreview.Size = New System.Drawing.Size(533, 532)
         Me.gbxConfigPreview.TabIndex = 15
         Me.gbxConfigPreview.TabStop = False
         Me.gbxConfigPreview.Text = "Folding@Home Config File Preview:"
@@ -456,7 +456,7 @@ Partial Class FAHSetupDialog
         'btnReload
         '
         Me.btnReload.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnReload.Location = New System.Drawing.Point(413, 18)
+        Me.btnReload.Location = New System.Drawing.Point(398, 18)
         Me.btnReload.Name = "btnReload"
         Me.btnReload.Size = New System.Drawing.Size(103, 27)
         Me.btnReload.TabIndex = 0
@@ -472,7 +472,7 @@ Partial Class FAHSetupDialog
         Me.txtCfgPath.Location = New System.Drawing.Point(253, 1)
         Me.txtCfgPath.Name = "txtCfgPath"
         Me.txtCfgPath.ReadOnly = True
-        Me.txtCfgPath.Size = New System.Drawing.Size(289, 17)
+        Me.txtCfgPath.Size = New System.Drawing.Size(274, 17)
         Me.txtCfgPath.TabIndex = 3
         Me.txtCfgPath.Text = "Path"
         '
@@ -482,7 +482,7 @@ Partial Class FAHSetupDialog
         Me.lblPreviewAfter.AutoSize = True
         Me.lblPreviewAfter.BackColor = System.Drawing.SystemColors.Window
         Me.lblPreviewAfter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lblPreviewAfter.Location = New System.Drawing.Point(361, 21)
+        Me.lblPreviewAfter.Location = New System.Drawing.Point(346, 21)
         Me.lblPreviewAfter.Name = "lblPreviewAfter"
         Me.lblPreviewAfter.Size = New System.Drawing.Size(44, 20)
         Me.lblPreviewAfter.TabIndex = 2
@@ -518,8 +518,8 @@ Partial Class FAHSetupDialog
         '
         Me.SplitContainer1.Panel2.BackColor = System.Drawing.SystemColors.Control
         Me.SplitContainer1.Panel2.Controls.Add(Me.txtXmlAfter)
-        Me.SplitContainer1.Size = New System.Drawing.Size(536, 493)
-        Me.SplitContainer1.SplitterDistance = 251
+        Me.SplitContainer1.Size = New System.Drawing.Size(521, 493)
+        Me.SplitContainer1.SplitterDistance = 243
         Me.SplitContainer1.SplitterWidth = 2
         Me.SplitContainer1.TabIndex = 0
         '
@@ -532,7 +532,7 @@ Partial Class FAHSetupDialog
         Me.txtXmlBefore.Name = "txtXmlBefore"
         Me.txtXmlBefore.ReadOnly = True
         Me.txtXmlBefore.ScrollBars = System.Windows.Forms.ScrollBars.Both
-        Me.txtXmlBefore.Size = New System.Drawing.Size(249, 491)
+        Me.txtXmlBefore.Size = New System.Drawing.Size(241, 491)
         Me.txtXmlBefore.TabIndex = 0
         Me.txtXmlBefore.WordWrap = False
         '
@@ -544,7 +544,7 @@ Partial Class FAHSetupDialog
         Me.txtXmlAfter.Multiline = True
         Me.txtXmlAfter.Name = "txtXmlAfter"
         Me.txtXmlAfter.ScrollBars = System.Windows.Forms.ScrollBars.Both
-        Me.txtXmlAfter.Size = New System.Drawing.Size(281, 491)
+        Me.txtXmlAfter.Size = New System.Drawing.Size(274, 491)
         Me.txtXmlAfter.TabIndex = 0
         Me.txtXmlAfter.WordWrap = False
         '
@@ -553,7 +553,7 @@ Partial Class FAHSetupDialog
         Me.chkShowFAHCfg.AutoSize = True
         Me.chkShowFAHCfg.Checked = True
         Me.chkShowFAHCfg.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.chkShowFAHCfg.Location = New System.Drawing.Point(380, 56)
+        Me.chkShowFAHCfg.Location = New System.Drawing.Point(389, 56)
         Me.chkShowFAHCfg.Name = "chkShowFAHCfg"
         Me.chkShowFAHCfg.Size = New System.Drawing.Size(128, 22)
         Me.chkShowFAHCfg.TabIndex = 5
@@ -572,7 +572,7 @@ Partial Class FAHSetupDialog
         Me.gbxFAHVerifyConfig.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!)
         Me.gbxFAHVerifyConfig.Location = New System.Drawing.Point(43, 445)
         Me.gbxFAHVerifyConfig.Name = "gbxFAHVerifyConfig"
-        Me.gbxFAHVerifyConfig.Size = New System.Drawing.Size(510, 83)
+        Me.gbxFAHVerifyConfig.Size = New System.Drawing.Size(525, 83)
         Me.gbxFAHVerifyConfig.TabIndex = 17
         Me.gbxFAHVerifyConfig.TabStop = False
         Me.gbxFAHVerifyConfig.Text = "Save Folding@Home Changes"
@@ -581,7 +581,7 @@ Partial Class FAHSetupDialog
         '
         Me.txtPwd.BackColor = System.Drawing.SystemColors.Control
         Me.txtPwd.ForeColor = System.Drawing.SystemColors.GrayText
-        Me.txtPwd.Location = New System.Drawing.Point(226, 54)
+        Me.txtPwd.Location = New System.Drawing.Point(231, 54)
         Me.txtPwd.Name = "txtPwd"
         Me.txtPwd.Size = New System.Drawing.Size(39, 24)
         Me.txtPwd.TabIndex = 3
@@ -592,7 +592,7 @@ Partial Class FAHSetupDialog
         '
         Me.txtPort.BackColor = System.Drawing.SystemColors.Control
         Me.txtPort.ForeColor = System.Drawing.SystemColors.GrayText
-        Me.txtPort.Location = New System.Drawing.Point(176, 54)
+        Me.txtPort.Location = New System.Drawing.Point(181, 54)
         Me.txtPort.Name = "txtPort"
         Me.txtPort.Size = New System.Drawing.Size(49, 24)
         Me.txtPort.TabIndex = 2
@@ -604,7 +604,7 @@ Partial Class FAHSetupDialog
         '
         Me.txtAddress.BackColor = System.Drawing.SystemColors.Control
         Me.txtAddress.ForeColor = System.Drawing.SystemColors.GrayText
-        Me.txtAddress.Location = New System.Drawing.Point(58, 54)
+        Me.txtAddress.Location = New System.Drawing.Point(63, 54)
         Me.txtAddress.Name = "txtAddress"
         Me.txtAddress.Size = New System.Drawing.Size(117, 24)
         Me.txtAddress.TabIndex = 1
@@ -615,7 +615,7 @@ Partial Class FAHSetupDialog
         'btnTelnetSave
         '
         Me.btnTelnetSave.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnTelnetSave.Location = New System.Drawing.Point(269, 53)
+        Me.btnTelnetSave.Location = New System.Drawing.Point(278, 53)
         Me.btnTelnetSave.Name = "btnTelnetSave"
         Me.btnTelnetSave.Size = New System.Drawing.Size(103, 27)
         Me.btnTelnetSave.TabIndex = 4
@@ -628,14 +628,14 @@ Partial Class FAHSetupDialog
         Me.txtTelnetFAHCfg.ForeColor = System.Drawing.SystemColors.GrayText
         Me.txtTelnetFAHCfg.Location = New System.Drawing.Point(4, 24)
         Me.txtTelnetFAHCfg.Name = "txtTelnetFAHCfg"
-        Me.txtTelnetFAHCfg.Size = New System.Drawing.Size(501, 24)
+        Me.txtTelnetFAHCfg.Size = New System.Drawing.Size(515, 24)
         Me.txtTelnetFAHCfg.TabIndex = 0
         '
         'lblTelnet
         '
         Me.lblTelnet.AutoSize = True
         Me.lblTelnet.ForeColor = System.Drawing.SystemColors.GrayText
-        Me.lblTelnet.Location = New System.Drawing.Point(6, 57)
+        Me.lblTelnet.Location = New System.Drawing.Point(11, 57)
         Me.lblTelnet.Name = "lblTelnet"
         Me.lblTelnet.Size = New System.Drawing.Size(52, 18)
         Me.lblTelnet.TabIndex = 21
@@ -682,7 +682,7 @@ Partial Class FAHSetupDialog
         Me.SplitContainer2.Panel2.Controls.Add(Me.gbxConfigPreview)
         Me.SplitContainer2.Panel2MinSize = 2
         Me.SplitContainer2.Size = New System.Drawing.Size(1110, 534)
-        Me.SplitContainer2.SplitterDistance = 558
+        Me.SplitContainer2.SplitterDistance = 573
         Me.SplitContainer2.SplitterWidth = 2
         Me.SplitContainer2.TabIndex = 19
         '

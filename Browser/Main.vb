@@ -46,6 +46,7 @@
                 AddHandler Me.browser.LoadingStateChanged, AddressOf OnBrowserLoadingStateChanged
                 AddHandler Me.browser.TitleChanged, AddressOf OnBrowserTitleChanged
                 AddHandler Me.browser.AddressChanged, AddressOf OnBrowserAddressChanged
+                'Add keypress handler: Press ESC to cancel Navigation, Press F5 to Refresh
                 Me.browser.KeyboardHandler = New KeyboardHandler()
                 'Add download handler
                 Me.browser.DownloadHandler = New DownloadHandler()
@@ -56,7 +57,7 @@
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
                 OpenURL(URL_FoldingCoin, False)
                 'OpenURL("http://folding.stanford.edu/nacl/", False)
-#Enable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
+#Enable Warning BC42358
             End If
 
             'Setup the rest of the window
@@ -82,7 +83,7 @@
             Me.btnMyWallet.BackgroundImage = My.Resources.Coins_4_top_24.ToBitmap
             Me.btnFAHControl.BackgroundImage = My.Resources.L_methionine_B_top_32.ToBitmap
             Me.btnFoldingCoinWebsite.BackgroundImage = My.Resources.FoldingCoin_top_32.ToBitmap
-            Me.btnFLDC_DailyDistro.BackgroundImage = My.Resources.FLDC_48.ToBitmap
+            Me.btnFLDC_Distribution.BackgroundImage = My.Resources.FLDC_48.ToBitmap
             Me.btnCureCoin.BackgroundImage = My.Resources.CureCoinLogo_top_32.ToBitmap
             Me.btnEOC.BackgroundImage = My.Resources.EOC_48.ToBitmap
 
@@ -413,13 +414,24 @@
                             If Setup.chkGetFAHSoftware.Checked = True OrElse Setup.chkGetWalletForFLDC.Checked = True OrElse Setup.chkSetupCURE.Checked = True Then
                                 'Show the Saved Data dialog
                                 Dim DlgDisplaySavedData As New DisplayTextDialog
+                                DlgDisplaySavedData.StartPosition = FormStartPosition.CenterScreen
                                 DlgDisplaySavedData.Show(Me)
+                                Delay(100)
 
                                 'Process completed - Make a backup reminder
                                 Dim OkMsg As New MsgBoxDialog
                                 OkMsg.Text = "Setup Complete"
-                                OkMsg.MsgText.Text = "Setup is complete." & vbNewLine & vbNewLine & "Please use the 'Make Backup' button to save your settings in a safe place"
+                                OkMsg.MsgText.Text = "Setup is complete:" & vbNewLine &
+                                    "==============" & vbNewLine & vbNewLine &
+                                    "-Please use the 'Make Backup' button to save your settings in a safe place" & vbNewLine & vbNewLine &
+                                    "-Note Distribution Intervals: " & vbNewLine &
+                                    "     FoldingCoin: On the 1st Saturday of each month" & vbNewLine &
+                                    "         CureCoin: Daily" & vbNewLine & vbNewLine &
+                                    "-For questions or feedback please contact us on Slack" & vbNewLine &
+                                    "        (See the FoldingCoin webpage to join Slack)"
                                 OkMsg.Width = (OkMsg.MsgText.Left * 2) + OkMsg.MsgText.Width + 10
+                                OkMsg.Height = (OkMsg.MsgText.Top * 2) + OkMsg.MsgText.Height + OkMsg.BtnOK.Height + System.Windows.Forms.SystemInformation.CaptionHeight + System.Windows.Forms.SystemInformation.BorderSize.Height + 10
+                                OkMsg.StartPosition = FormStartPosition.CenterScreen
                                 OkMsg.ShowDialog(Me)
                                 OkMsg.Dispose()
                             End If
@@ -576,6 +588,8 @@
                 RemoveHandler Me.browser.LoadingStateChanged, AddressOf OnBrowserLoadingStateChanged
                 RemoveHandler Me.browser.TitleChanged, AddressOf OnBrowserTitleChanged
                 RemoveHandler Me.browser.AddressChanged, AddressOf OnBrowserAddressChanged
+                Me.browser.KeyboardHandler = Nothing
+                Me.browser.DownloadHandler = Nothing
 
                 'Shutdown the web browser control
                 If Me.browser.IsDisposed = False Then
@@ -600,47 +614,145 @@
     Private Sub btnFAHControl_Click(sender As System.Object, e As System.EventArgs) Handles btnFAHControl.Click
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
         OpenURL(URL_FAH_Client, False)
-#Enable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
+#Enable Warning BC42358
     End Sub
 
     Private Sub btnFoldingCoinWebsite_Click(sender As System.Object, e As System.EventArgs) Handles btnFoldingCoinWebsite.Click
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
         OpenURL(URL_FoldingCoin, False)
-#Enable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
+#Enable Warning BC42358
     End Sub
-    Private Sub btnTwitterFoldingCoin_Click(sender As System.Object, e As System.EventArgs) Handles btnTwitterFoldingCoin.Click
+    Private Sub btnFoldingCoinTwitter_Click(sender As System.Object, e As System.EventArgs) Handles btnFoldingCoinTwitter.Click
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
-        OpenURL(URL_Twitter_FoldingCoin, False)
-#Enable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
+        OpenURL(URL_FoldingCoinTwitter, False)
+#Enable Warning BC42358
     End Sub
-    Private Sub btnBlockchainFLDC_Click(sender As Object, e As EventArgs) Handles btnBlockchainFLDC.Click
+    Private Sub btnFoldingCoinBlockchain_Click(sender As Object, e As EventArgs) Handles btnFoldingCoinBlockchain.Click
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
-        OpenURL(URL_BlockchainFLDC, False)
-#Enable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
-    End Sub
+        'Make sure the INI key/value exists
+        If INI.GetSection(Id & Me.cbxWalletId.Text) IsNot Nothing AndAlso INI.GetSection(Id & Me.cbxWalletId.Text).GetKey(INI_WalletName) IsNot Nothing Then
+            'Load the Wallet name from the INI file based on the Wallet Id#
+            Me.txtWalletName.Text = INI.GetSection(Id & Me.cbxWalletId.Text).GetKey(INI_WalletName).GetValue()
 
-    Private Sub btnFLDC_DailyDistro_Click(sender As System.Object, e As System.EventArgs) Handles btnFLDC_DailyDistro.Click
-#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
-        OpenURL(URL_FLDC_Distro, False)
-#Enable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
-    End Sub
+            If System.IO.File.Exists(DatFilePath) = True Then
+                Dim DAT As New IniFile
+                'Load DAT file, decrypt it
+                DAT.LoadText(Decrypt(LoadDat))
 
+                If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_BTC_Addr) IsNot Nothing Then
+                    'If the address is available, then open that URL for the users wallet
+                    OpenURL(URL_FLDC_AddressBlockchain & DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_BTC_Addr).GetValue(), False)
+                Else
+                    'Just open the main URL instead
+                    OpenURL(URL_FLDC_DefaultBlockchain, False)
+                End If
+                DAT = Nothing
+
+            Else
+                'Just open the main URL instead
+                OpenURL(URL_FLDC_DefaultBlockchain, False)
+            End If
+
+        Else
+            'Just open the main URL instead
+            OpenURL(URL_FLDC_DefaultBlockchain, False)
+        End If
+#Enable Warning BC42358
+    End Sub
+    Private Sub btnBTCBlockchain_Click(sender As Object, e As EventArgs) Handles btnBTCBlockchain.Click
+#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
+        'Make sure the INI key/value exists
+        If INI.GetSection(Id & Me.cbxWalletId.Text) IsNot Nothing AndAlso INI.GetSection(Id & Me.cbxWalletId.Text).GetKey(INI_WalletName) IsNot Nothing Then
+            'Load the Wallet name from the INI file based on the Wallet Id#
+            Me.txtWalletName.Text = INI.GetSection(Id & Me.cbxWalletId.Text).GetKey(INI_WalletName).GetValue()
+
+            If System.IO.File.Exists(DatFilePath) = True Then
+                Dim DAT As New IniFile
+                'Load DAT file, decrypt it
+                DAT.LoadText(Decrypt(LoadDat))
+
+                If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_BTC_Addr) IsNot Nothing Then
+                    'If the address is available, then open that URL for the users wallet
+                    OpenURL(URL_BTC_Blockchain & "address/" & DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_BTC_Addr).GetValue(), False)
+                Else
+                    'Just open the main URL instead
+                    OpenURL(URL_BTC_Blockchain, False)
+                End If
+                DAT = Nothing
+
+            Else
+                'Just open the main URL instead
+                OpenURL(URL_BTC_Blockchain, False)
+            End If
+
+        Else
+            'Just open the main URL instead
+            OpenURL(URL_BTC_Blockchain, False)
+        End If
+#Enable Warning BC42358
+    End Sub
+    Private Sub btnFoldingCoinSlack_Click(sender As Object, e As EventArgs) Handles btnFoldingCoinSlack.Click
+#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
+        OpenURL(URL_FoldingCoinSlack, False)
+#Enable Warning BC42358
+    End Sub
+    Private Sub btnFLDC_Stats_Click(sender As System.Object, e As System.EventArgs) Handles btnFLDC_Stats.Click
+#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
+        OpenURL(URL_FLDC_Stats & Now.ToString("yyyy-MM-dd"), False)
+#Enable Warning BC42358
+    End Sub
+    Private Sub btnFLDC_Distribution_Click(sender As System.Object, e As System.EventArgs) Handles btnFLDC_Distribution.Click
+#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
+        OpenURL(URL_FLDC_Distro & Now.AddDays(-1.0).ToString("yyyy-MM-dd") & "&end=" & Now.ToString("yyyy-MM-dd"), False)
+#Enable Warning BC42358
+    End Sub
     Private Sub btnCureCoin_Click(sender As System.Object, e As System.EventArgs) Handles btnCureCoin.Click
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
         OpenURL(URL_CureCoin, False)
-#Enable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
+#Enable Warning BC42358
     End Sub
-    Private Sub btnTwitterCureCoin_Click(sender As System.Object, e As System.EventArgs) Handles btnTwitterCureCoin.Click
+    Private Sub btnCureCoinTwitter_Click(sender As System.Object, e As System.EventArgs) Handles btnCureCoinTwitter.Click
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
-        OpenURL(URL_Twitter_CureCoin, False)
-#Enable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
+        OpenURL(URL_CureCoinTwitter, False)
+#Enable Warning BC42358
     End Sub
-    Private Sub btnBlockchainCURE_Click(sender As Object, e As EventArgs) Handles btnBlockchainCURE.Click
+    Private Sub btnCureCoinBlockchain_Click(sender As Object, e As EventArgs) Handles btnCureCoinBlockchain.Click
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
-        OpenURL(URL_BlockchainCURE, False)
-#Enable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
-    End Sub
+        'Make sure the INI key/value exists
+        If INI.GetSection(Id & Me.cbxWalletId.Text) IsNot Nothing AndAlso INI.GetSection(Id & Me.cbxWalletId.Text).GetKey(INI_WalletName) IsNot Nothing Then
+            'Load the Wallet name from the INI file based on the Wallet Id#
+            Me.txtWalletName.Text = INI.GetSection(Id & Me.cbxWalletId.Text).GetKey(INI_WalletName).GetValue()
 
+            If System.IO.File.Exists(DatFilePath) = True Then
+                Dim DAT As New IniFile
+                'Load DAT file, decrypt it
+                DAT.LoadText(Decrypt(LoadDat))
+
+                If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CureCoin_Addr) IsNot Nothing Then
+                    'If the address is available, then open that URL for the users wallet
+                    OpenURL(URL_CureCoinBlockchain & "address.dws?" & DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CureCoin_Addr).GetValue() & ".htm", False)
+                Else
+                    'Just open the main URL instead
+                    OpenURL(URL_CureCoinBlockchain, False)
+                End If
+                DAT = Nothing
+
+            Else
+                'Just open the main URL instead
+                OpenURL(URL_CureCoinBlockchain, False)
+            End If
+
+        Else
+            'Just open the main URL instead
+            OpenURL(URL_CureCoinBlockchain, False)
+        End If
+#Enable Warning BC42358
+    End Sub
+    Private Sub btnCureCoinSlack_Click(sender As Object, e As EventArgs) Handles btnCureCoinSlack.Click
+#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
+        OpenURL(URL_CureCoinSlack, False)
+#Enable Warning BC42358
+    End Sub
 
     'Extreme Overclocking's User Stats page: Needs to know user ID # ...  Once known, store the info in the INI file
     Private Async Sub btnEOC_Click(sender As System.Object, e As System.EventArgs) Handles btnEOC.Click
@@ -738,7 +850,7 @@
         Catch ex As Exception
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
             OpenURL(URL_CureCoin_EOC, False)
-#Enable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
+#Enable Warning BC42358
             Msg("Error: Extreme Overclocking Username ID lookup failed: " & ex.ToString & vbNewLine & vbNewLine & "Please fix value in user's INI file:" & vbNewLine & IniFilePath)
         End Try
     End Sub
@@ -763,7 +875,7 @@
             g_bAskDownloadLocation = True
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
             GetFAH()
-#Enable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
+#Enable Warning BC42358
         End If
     End Sub
 
@@ -833,6 +945,7 @@
 
     Private Sub btnSavedData_Click(sender As Object, e As EventArgs) Handles btnSavedData.Click
         Dim DlgDisplaySavedData As New DisplayTextDialog
+        DlgDisplaySavedData.StartPosition = FormStartPosition.CenterScreen
         DlgDisplaySavedData.Show(Me)
     End Sub
 #End Region
@@ -1934,7 +2047,7 @@
         If e.KeyCode = Keys.Enter Then
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
             OpenURL(Me.txtURL.Text, True)
-#Enable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
+#Enable Warning BC42358
             e.SuppressKeyPress = True
         End If
     End Sub
@@ -1965,7 +2078,7 @@
     Private Sub btnConnect_Click(sender As System.Object, e As System.EventArgs) Handles btnGo.Click
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
         OpenURL(Me.txtURL.Text, True)
-#Enable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
+#Enable Warning BC42358
     End Sub
 
     'Open URL with the specified settings
@@ -2077,7 +2190,7 @@
         Try
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
             OpenURL(URL_BLANK, True)
-#Enable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
+#Enable Warning BC42358
             ClearWebpage = True
 
         Catch ex As Exception

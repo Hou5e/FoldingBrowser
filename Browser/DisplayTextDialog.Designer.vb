@@ -95,7 +95,7 @@ Partial Class DisplayTextDialog
         Me.MsgTextTop.Location = New System.Drawing.Point(21, 9)
         Me.MsgTextTop.Name = "MsgTextTop"
         Me.MsgTextTop.Size = New System.Drawing.Size(233, 18)
-        Me.MsgTextTop.TabIndex = 7
+        Me.MsgTextTop.TabIndex = 1
         Me.MsgTextTop.Text = "Encrypted Data File Contents:"
         '
         'btnSaveChanges
@@ -105,7 +105,7 @@ Partial Class DisplayTextDialog
         Me.btnSaveChanges.Location = New System.Drawing.Point(24, 425)
         Me.btnSaveChanges.Name = "btnSaveChanges"
         Me.btnSaveChanges.Size = New System.Drawing.Size(124, 28)
-        Me.btnSaveChanges.TabIndex = 3
+        Me.btnSaveChanges.TabIndex = 5
         Me.btnSaveChanges.Text = "Save Changes"
         Me.ToolTip1.SetToolTip(Me.btnSaveChanges, "If modified, this button allows saving any of those changes" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "to the encrypted Dat" &
         " file. Be careful when doing this.")
@@ -120,7 +120,7 @@ Partial Class DisplayTextDialog
         Me.lblWarningInfo.Location = New System.Drawing.Point(13, 324)
         Me.lblWarningInfo.Name = "lblWarningInfo"
         Me.lblWarningInfo.Size = New System.Drawing.Size(756, 96)
-        Me.lblWarningInfo.TabIndex = 6
+        Me.lblWarningInfo.TabIndex = 3
         '
         'txtWarningMessage
         '
@@ -134,7 +134,7 @@ Partial Class DisplayTextDialog
         Me.txtWarningMessage.ReadOnly = True
         Me.txtWarningMessage.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.txtWarningMessage.Size = New System.Drawing.Size(734, 82)
-        Me.txtWarningMessage.TabIndex = 5
+        Me.txtWarningMessage.TabIndex = 4
         Me.txtWarningMessage.Text = resources.GetString("txtWarningMessage.Text")
         Me.txtWarningMessage.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
@@ -143,10 +143,10 @@ Partial Class DisplayTextDialog
         Me.btnMakeBackup.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnMakeBackup.DialogResult = System.Windows.Forms.DialogResult.Yes
         Me.btnMakeBackup.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnMakeBackup.Location = New System.Drawing.Point(329, 425)
+        Me.btnMakeBackup.Location = New System.Drawing.Point(335, 425)
         Me.btnMakeBackup.Name = "btnMakeBackup"
         Me.btnMakeBackup.Size = New System.Drawing.Size(124, 28)
-        Me.btnMakeBackup.TabIndex = 4
+        Me.btnMakeBackup.TabIndex = 7
         Me.btnMakeBackup.Text = "Make Backup"
         Me.ToolTip1.SetToolTip(Me.btnMakeBackup, "Saves a unique folder to a location you selected." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Save a copy of: FoldingBrowser" &
         " INI and DAT, CureCoin wallet.dat")
@@ -190,10 +190,10 @@ Partial Class DisplayTextDialog
         'chkShowAddData
         '
         Me.chkShowAddData.AutoSize = True
-        Me.chkShowAddData.Location = New System.Drawing.Point(479, 9)
+        Me.chkShowAddData.Location = New System.Drawing.Point(157, 433)
         Me.chkShowAddData.Name = "chkShowAddData"
         Me.chkShowAddData.Size = New System.Drawing.Size(162, 17)
-        Me.chkShowAddData.TabIndex = 1
+        Me.chkShowAddData.TabIndex = 6
         Me.chkShowAddData.Text = "Add New or Existing Settings"
         Me.chkShowAddData.UseVisualStyleBackColor = True
         '

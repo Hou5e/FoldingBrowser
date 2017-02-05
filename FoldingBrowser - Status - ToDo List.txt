@@ -1,0 +1,194 @@
+=====================
+All-in-One Installer:
+=====================
+
+---------------------------
+Ideas, Improvements, Tasks:
+---------------------------
+
+-Simplicity: Ideally, you only want to enter username and email, and you are up and Folding.
+
+-Simple version of the FoldingBrowser: mostly to only run the FAH NaCl Chrome Plugin client
+-Simple user install: Tokenly Pockets wallet chrome plugin (like the new setup FoldingCoin website instructions say) -Build our own version of the plugin for FLDC?
+-Plugin: Ad Blocker?
+-Plugin: Rare Pepe Wallet?
+
+-"Portal" web page for the browser Homepage (Can eliminate some buttons in the browser, and you can update it easily)? -> Create local portal page (more neutral for CURE & FLDC)?
+
+-CRTL-F - Find text in a page functionality? (searching for BTC address on distribution page, etc)
+-Add button titles and links to a separate INI file, that can be replaced to update
+-Replace invoking lambda functions with delegates, to see if it reduces memory usage
+-Display the FAH advanced config options from --help (Show Commands button?: Show in a separate window from the FAH username dialog) The text is probably copyrighted, so maybe run the EXE and grab the output to display. Might be better to leave out.
+-Create backup copies of the settings in a 'Backup' folder periodically?
+-Reminder on a time interval to make backups of settings on to a USB drive?
+
+-INI: when encryption PW is blank, use last PW and prompt for it (for extra security for not keeping the PW in a text file in your user account)? -Or, have a flag in INI to prompt for PW or use the one in the INI?
+-INI: set initial page option: FLDC homepage, local portal page, or Wallet. Choose from bookmarks(1-10)?
+-Add FLDC & CURE Ticker info from Coin Market Cap API (or pull from exchanges?). Do as notify icon? Might not be worth it, if the FLDC homepage gets it. See:  https://coinmarketcap.com/api/    https://api.coinmarketcap.com/v1/ticker/CureCoin/
+
+-Set FAH option for 'Only When Idle' during install? (to avoid the system being sluggish during install)
+
+-Encryption: use constant internally, Prompt for PW if encryption fails. Option to Store PW in INI file to not be prompted for it, or Don't store PW an be prompted often for it (if it's not the default).
+-Make a better way to determine if the DAT file loads. This won't work: DAT.ToString.Length = 0, it really needs to be .SaveToString(), but all you want to know is there data loaded or not. You don't need a full text string output...
+-For showing Wallet info, have option to 7-zip the INI/DAT file to add a password or not to it?
+-Button to delete all saved info for a Wallet Id?
+-Restore from backup button (or separate app)? Make something to make setting up multiple computers easier (rename existing files, and copy new one) (and telnet FAH settings from Config file)
+
+-Add pauses? (timer / do events) to the automated process to break it up and allow error to work themselves out. Might not be needed...
+-Add stop button to cancel the automated process?
+
+-Adjust msgbox height for single vs. multi-line messages
+-Get Wallet with CounterPart API instead of current methods? (or use Tokenly Pockets Plugin for this)
+
+-Improve the CureCoin HTTP JSON-RPC to use JSON, and find the wallet if there is more than one entry or (blank and a name)
+-Improve the CureCoin pool sign up process, search for: account created / captcha failed massages? Search for User/PW being blank and fill them in for Capcha retries (fill in initially, too). Stop/Exit the process? Better retries for captcha fail / retry. Reload the info periodically?
+-Make the other webpage wait loops use Javascript for detecting stuff is there(like the CureCoin webpage login)
+
+-Try '.NET Core' simple sample project, to get a feel for it, especially for Linux and MacOS.
+
+-GitHub: An installer download link that doesn't change for FoldingCoin / CureCoin website links?
+
+-Multi-language support for Browser and installer!!!!
+-Linux & Mac executables & install packages (or a live image you can just run off a USB drive)
+-(From Robert's doc - Review this idea): <Warn about this thrashing your Hard Drive / SSD would be better> The Storj "Driveshare" program will be important to include because we can promote earning SJCX at the same time as FLDC. SJCX shares your hard drive that you earn tokens for and FLDC shares your computational power you earn tokens for
+
+-CureCoin 2.0 changes? (probably Feb/March)
+
+---------------
+Immediate Need:
+---------------
+-Update to CefSharp v55 (to see if it is better for the shutdown hang issue), when released
+-On exiting: start a timer and close/kill the browser, if exiting CefSharp hangs
+-Does adding new settings add a wallet name, so you can access the data???
+
+
+-Simple version of the FoldingBrowser: mostly to only run the FAH NaCl Chrome Plugin client. -Would switching to the Electron framework be better?
+-Add notify icon (system tray icon) for folding with NaCl Chrome Plug-in
+
+-Multi-language support for installer
+
+
+
+================
+Tasks completed:
+======================================================================================================
+v8 Release (2/4/2017)
+[DONE] -Install complete message: also add for questions or feedback please contact us on Slack
+[DONE] -Improve last message for Install complete, to say the Distribution intervals (FLDC = Monthly, CURE = Daily).
+[DONE-2/4/2017] -Fix tabbing order of form items to be correct.
+[DONE] -Have button to Slack for FLDC and CURE
+[DONE] -Make the 1 day date range for the FLDC Distribution link?
+[DONE] -Have direct link to your CURE address on the blockchain websites: https://chainz.cryptoid.info/cure/address.dws?<addy>.htm
+[DONE] -Have direct link to your FLDC address on the blockchain websites: http://blockscan.com/address?q=<addy>
+[DONE] -Have a BTC blockchain button for BTC transactions (not in Blockscan or counterwallet): https://blockchain.info   https://blockchain.info/address/<addy>
+[DONE] -Fix the last dialog box of the automated setup, so it shows up and says install complete
+v7 Release (1/7/2017)
+[DONE] -Add ability to input all the 'Saved Data' settings manually, for existing users. Or, add to saved data dialog and just show/hide the 2 interfaces (raw data vs. GUI) for the data
+[DONE] -Fixing the INI & DAT file creation that wasn't being awaited before running the other setup stuff.
+[DONE] -Added more delay to let the webpage load and run Javascript for getting FAH.
+[DONE] -Made the download progress bar not overlap the Tools' Debug testbox (the download progress wasn't consistently ending up on top)
+[DONE] -Update CureCoin installer to v0.1.3.4.
+[DONE] -CURE setup: Scroll to the bottom of the page, and make the window taller, so you can see the captcha when the modal dialog is in the way
+[DONE] -Save stored data, disable the Save button afterwards
+[DONE] -Force the URL text to scroll all the way to the left
+[DONE] -Initial (3) checkbox options window came up in upper right(center parent off screen), change to center screen?
+[DONE] -Get wallet from button, should say complete at the end
+[DONE] -Fix hang when you exit the wallet (& click yes) and then close the Browser (CefSharp.Cef.Shutdown() happens when it is disposed, and hangs it)
+(Skip) -Login to CureCoin Pool: Display text for the Pool Pin once you've logged in (so you could copy and make changes later)? -Probably better as is, to lookup in saved data when needed.
+[DONE] -Press ESC anywhere in main window to cancel navigation / automated process. Add F5 for refresh, too.
+[DONE] -Press forward / Back, then set focus/activate the address bar(when they get disabled, focus goes to the My Wallet button)
+[DONE] -Try to find elements in the webpages with execute Javascript to see when the CureCoin pool page is loaded. Try to set textboxes, and they haven't loaded yet, you'll get this: Uncaught TypeError: Cannot set property 'value' of undefined
+[DONE] -Browser needs a try/catch block around writing the sticky settings to the INI file when the program is exiting...
+(Skip) -Make all the entries for each Wallet slot in the DAT, and just leave unused blank?
+[DONE] -Use the newer Await Wait(ms) function throughout the FoldingBrowser
+[DONE] -Update CefSharp to v53 (use NuGet)[DONE]. Update to a .NET v4.5.2 target[DONE]
+[DONE] -MsgBx doesn't stay on top of main window / not acting like modal. -Changed border style from Resizeable, to FixedDialog
+[DONE] -Add Dialog.Dispose() to modal dialog boxes
+v6 Release (12/21/2016)
+[DONE] -Upgrade the 'check your email for passkey' dialog to look like the others
+-For Backups, write out a text file that says what to do to restore the files? (mostly for the CureCoin wallet file)
+[DONE] -Backup the FAH Config.xml file, too. This would be useful for setting up multiple PCs with the same settings.
+[DONE] -Logout after CureCoin Pool registration (reduce being logged in issues, later from loaded info from cache)
+[DONE] -Use the newer Await Wait(ms) function to avoid issues with: Threading.Thread.Sleep(ms)
+[DONE] -Installer: Check for Microsoft Visual C++ 2013 (x86) Redistributable installation (to avoid the Browser not working after install, like the laptop)
+[DONE-12/17/2016] -Fix tabbing order of form items to be correct.
+[DONE-12/5/2016] -Spell check source code.
+[DONE] -Try to display the error with the FoldingBrowser on the laptop (try-catch block around load needs error message that you can see?). I think this issue was from the Microsoft Visual C++ 2013 (x86) Redistributable not being installed
+[DONE] -Change Passkey to FAHPasskey
+[DONE] -2nd captcha Prompt should one of my dialog boxes for a larger font
+[DONE] -Setup CureCoin pool account (Has a captcha- make the user enter the data manually, to honor the spirit of stopping spam bot/accounts). Finish last steps: click My Account, set CURE address and payout threshold
+[DONE] -Detect FAH installed already, and uncheck the initial install FAH software check box
+[DONE] -Detect previous install, INI/DAT file with Wallet info, and uncheck the initial get wallet check box
+[DONE] -At the end of the automated process, show the encrypted DAT info, as the result, and encourage making a backup?
+[DONE] -Add button for making backups of the settings in the show 'Saved Info' window: to save the DAT (and INI in a dated-name folder) in a backup location
+[DONE] -Need an OK message box
+[DONE] -Add backing up the wallet.dat file from the CureCoin wallet to the 'Make Backup' button
+[DONE] -CureCoin Pool Login button
+[DONE] -Installer: Prompt to close the CureCoin wallet if it's running to replace the files, or prompt to do this...
+[DONE] -Tooltips: for pasting existing username, Installation selections (FAH/Wallet/CURE pool)
+[DONE] -Need to exit CureCoin pool sign up process(retries on the First captcha?). Fill in all the cure sign-up fields every time
+[DONE] -Uninstaller: Say what settings will be left behind on uninstallation / update (for both FoldingBrowser and CureCoin)
+[DONE] -Installer: Close FoldingBrowser if open. Add to installer and uninstaller
+[DONE] -Checkbox for CURE setup? (Set checkbox based on: installing the wallet or not, or detect existing install of CURE?)
+[DONE] -Include CureCoin Wallet files [DONE] -Create a separate installer / uninstaller to run silently
+[DONE] -Get your CureCoin address from the Qt Wallet from the HTTP JSON-RPC server
+[DONE] -Rename 'Show Dat' to 'Saved Info' or Settings?
+v5 Release (11/13/2016)
+[DONE] -Fix starting (2) FAH Clients on a new installation, the process is running to fast. Change the way this works
+[DONE] -For Telnet, Try to fix or indicate no response back. Verify FAH is running, if not then ask to start it, retry and loop again?
+[DONE-11/12/2016] -Spell check source code.
+[DONE-11/12/2016] -Fix tabbing order of form items to be correct.
+[DONE] -Delete temp file after download for F@H install. Look for file on exit and delete it then.
+[DONE] -Save wallet name for no wallet name and manually doing FAH settings
+[DONE] -For multiple wallet accounts, list which accounts are in use in INI settings? Add pull-down, for wallet info slots 1-10, and save last used slot in the INI file (show and hide with Tools checkbox?)
+[DONE] -Have an INI setting to show/hide the buttons in tools for: 'Show DAT' file to debug/backup stored info
+[DONE] -Images on all the button links in the FoldingBrowser
+[DONE] -Fix Get Wallet failed
+[DONE] -Make a label description from the wallet BTC address in the INI file (for when you change the Wallet Id #) & Names for wallet slots, and store in INI settings. Make it so you can change the name.
+[DONE] -Have a separate window to display & save changes (separate fields or one big text box)
+[DONE] -Store INI / DAT program version number for upgrading info in those files for newer versions of FoldingBrowser
+[DONE] -Number the installation setup buttons 1. 2. 3. to give a better idea for the flow?
+[DONE] -INI setting for last wallet info used
+[DONE] -Fix installer graphics to be more universal (it's all FLDC...)
+[DONE] -Change the order to be <Search for FAH running and close it> FAH install, then Wallet, then FAH cfg
+[DONE] -Set splitter bar width to 2 for build XML form, Fill instead of Fixed dim for group box, to fix resizing issue
+[DONE] -One-time setup buttons, add: Are you sure? message before proceeding
+[DONE] -Check for characters not allowed in a FAH Username
+[DONE] -DAT: Save info for FAH info: Username, Team Number, Email. BTC address before you make Username. Delete web link and PW?(yes)
+[DONE] -Existing user: Just install FoldingBrowser (other options are in 'Tools' of FoldingBrowser)
+[DONE] -Installer to run the browser with command line option
+[DONE] -Finish getting a wallet. Simplest way first: grab the info each button press, and save it
+[DONE] -Finish install FAH. Simplest way first: just need to run the installer.
+[DONE] -Get username / team info
+v3 (8/21/2016) & v4 Release (10/1/2016)
+[DONE] -Move user's files to user account, not installation folder. Keep private data in your account.
+[DONE] -Need to fix title wait
+[DONE] -Need to fix downloads
+[DONE] -User can download the installer package for the: FoldingBrowser from GitHub
+[DONE] -Need 'License.rtf' or 'License.txt' for the Installer
+[DONE] -Run the installer, install the Browser, and run the Browser with command-line options for new install
+[DONE] -Browser: Ask if you need a CounterParty Wallet. No: then enter it on that page. Yes: get one from the website.
+[DONE] -Browser: Store wallet info for quick access button in the Browser
+[DONE] -Browser: Go to the FAH download page, use the download link on the page.
+[DONE] -Browser: Progress bar with status text for longer process indicating download / wait status.
+[DONE] -Browser: Run the FAH installer (killing the open web page at the end, or allowing the firewall exception: are unlikely to be able to do)
+[DONE] -Browser: Kill any running instances of FAH.
+[DONE] -Browser: Prompt for FAH info: Email, to get Passkey. Ask for: (existing) username, [Merged Folding Coin Selection(Not needed anymore)], team #, passkey, and how many CPU / GPU.  !!Curecoin username limit: 50 characters total
+[DONE] -Browser: Find the location of the FAH Config file, save a backup copy, and re-write a new cfg file. -Show FAH INI file changes (new vs old), and allow editing. Button w/ direct access to file for changes later?
+[DONE] -Browser: Launch FAH (restarting the PC is not required). Show control web page (in the FoldingBrowser, because it won't be the default browser)?
+(No) -FAH shortcut: Open the Properties of the FAH shortcut in the Startup folder. There should be "--open-web-control" at the end of the target; remove it and Apply. -Probably considered modifying the FAH software... can't do it.
+
+Browser buttons for:
+--------------------
+[DONE] -Viewing FAH status
+[DONE] -Checking CP Wallet
+[DONE] -FLDC, CureCoin websites
+[DONE] -FLDC, CureCoin Twitter pages
+(Needs update for new stats site) [DONE] -FLDC website daily distributions. [DONE] Change to FoldingCoin.xyz for daily distributions
+[DONE] -FAH user stats on http://folding.extremeoverclocking.com. Needs Id stored in INI from username lookup at EOC, or update bookmark links INI file (you would want this tied to wallet info?).
+[DONE] -Change/Set 12-word Passphrase / choose from the 10 save info slots
+(No) -Bookmarks, like a normal browser?
+(No) -Exchanges: Poloniex, Bittrex? (Polo link is on the FoldingCoin homepage)
+[DONE] -CureCoin Blockchain explorer
+[DONE] -FoldingCoin Blockchain explorer
+=====================
