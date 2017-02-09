@@ -4,8 +4,8 @@
 
 
 ;---- Helper defines / constants ----
-!define PRODUCT_VERSION "8"  ;Match the displayed version in the program title. Example: 1.2.3
-!define PRODUCT_4_VALUE_VERSION "8.0.0.0"  ;Match the executable version: Right-click the program executable file | Properties | Version. Example: 1.2.3.4
+!define PRODUCT_VERSION "9"  ;Match the displayed version in the program title. Example: 1.2.3
+!define PRODUCT_4_VALUE_VERSION "9.0.0.0"  ;Match the executable version: Right-click the program executable file | Properties | Version. Example: 1.2.3.4
 !define PRODUCT_YEAR "2017"
 !define PRODUCT_NAME "FoldingBrowser"
 !define PRODUCT_EXE_NAME "FoldingBrowser"  ;Executable name without extension
@@ -114,7 +114,7 @@ Section "!${PRODUCT_NAME} v${PRODUCT_VERSION}" SEC01
   File "..\Browser\bin\Release\CefSharp.Core.dll"
   File "..\Browser\bin\Release\CefSharp.dll"
   File "..\Browser\bin\Release\CefSharp.WinForms.dll"
-  File "..\Browser\bin\Release\d3dcompiler_43.dll"
+  File "..\Browser\bin\Release\chrome_elf.dll"
   File "..\Browser\bin\Release\d3dcompiler_47.dll"
   File "..\Browser\bin\Release\FoldingBrowser.exe"
   File "..\Browser\bin\Release\FoldingBrowser.exe.config"
