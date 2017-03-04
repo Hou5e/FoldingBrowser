@@ -550,7 +550,7 @@
             If INI.GetSection(Id & g_Main.cbxWalletId.Text) Is Nothing OrElse INI.GetSection(Id & g_Main.cbxWalletId.Text).GetKey(INI_WalletName) Is Nothing Then
                 'Save a wallet name, if there is none
                 INI.AddSection(Id & g_Main.cbxWalletId.Text)
-                INI.AddSection(Id & g_Main.cbxWalletId.Text).AddKey(INI_WalletName).Value = "My Wallet"
+                INI.AddSection(Id & g_Main.cbxWalletId.Text).AddKey(INI_WalletName).Value = DefaultWalletName & g_Main.cbxWalletId.Text
             End If
 
             'Store FAH Username

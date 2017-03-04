@@ -10,6 +10,7 @@ Public Module GlobalRefs
     Public Const URL_FoldingCoin As String = "http://foldingcoin.net/"
     Public Const URL_FoldingCoinTwitter As String = "https://twitter.com/FoldingCoin/"
     Public Const URL_FoldingCoinSlack As String = "https://foldingcoin.slack.com/"
+    Public Const URL_FoldingCoinJoinSlackSignup As String = "http://slack.foldingcoin.net/"
     Public Const URL_FLDC_DefaultBlockchain As String = "http://blockscan.com/assetInfo/FLDC"
     Public Const URL_FLDC_AddressBlockchain As String = "http://blockscan.com/address?q="
     Public Const URL_BTC_Blockchain As String = "https://blockchain.info/"
@@ -18,6 +19,7 @@ Public Module GlobalRefs
     Public Const URL_CureCoin As String = "https://www.curecoin.net/"
     Public Const URL_CureCoinTwitter As String = "https://twitter.com/CureCoin_Team/"
     Public Const URL_CureCoinSlack As String = "https://curecoin.slack.com/"
+    Public Const URL_CureCoinJoinSlackSignup As String = "http://slack.curecoin.net:30000/"
     Public Const URL_CureCoinBlockchain As String = "https://chainz.cryptoid.info/cure/"
     Public Const URL_EOC As String = "http://folding.extremeoverclocking.com/user_summary.php?s=&u="
     Public Const URL_CureCoin_EOC As String = "http://folding.extremeoverclocking.com/team_summary.php?s=&t=224497"
@@ -40,6 +42,14 @@ Public Module GlobalRefs
     Public Const DAT_CureCoin_Pin As String = "CureCoinPoolPin"
     Public Const DAT_CureCoin_Wallet_Version As String = "CureCoinWalletVersion"
     Public Const DAT_CureCoin_Addr As String = "CureCoinAddress"
+    Public Const DAT_CureCoinSlackEmail As String = "CureCoinSlackEmail"
+    Public Const DAT_CureCoinSlackPassword As String = "CureCoinSlackPassword"
+    Public Const DAT_FoldingCoinSlackEmail As String = "FoldingCoinSlackEmail"
+    Public Const DAT_FoldingCoinSlackPassword As String = "FoldingCoinSlackPassword"
+
+    Public Const SkipSavingDataFlag As String = "<Skip>"
+    Public Const NotUsed As String = "<Not Used>"
+    Public Const DefaultWalletName As String = "My Wallet #"
 
     Public INI As New IniFile
     Public Const INI_Settings As String = "Settings"

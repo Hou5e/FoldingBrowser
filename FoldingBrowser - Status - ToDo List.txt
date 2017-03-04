@@ -37,10 +37,10 @@ Ideas, Improvements, Tasks:
 -Add pauses? (timer / do events) to the automated process to break it up and allow error to work themselves out. Might not be needed...
 -Add stop button to cancel the automated process?
 
--Adjust msgbox height for single vs. multi-line messages
 -Get Wallet with CounterPart API instead of current methods? (or use Tokenly Pockets Plugin for this)
 
--Improve the CureCoin HTTP JSON-RPC to use JSON, and find the wallet if there is more than one entry or (blank and a name)
+-Improve the CureCoin HTTP JSON-RPC to use the JSON parser, and find the wallet if there is more than one entry or (blank and a name)
+-Show image of where to get the CURE wallet address, for message when it can't be found
 -Improve the CureCoin pool sign up process, search for: account created / captcha failed massages? Search for User/PW being blank and fill them in for Capcha retries (fill in initially, too). Stop/Exit the process? Better retries for captcha fail / retry. Reload the info periodically?
 -Make the other webpage wait loops use Javascript for detecting stuff is there(like the CureCoin webpage login)
 
@@ -48,30 +48,41 @@ Ideas, Improvements, Tasks:
 
 -GitHub: An installer download link that doesn't change for FoldingCoin / CureCoin website links?
 
--Multi-language support for Browser and installer!!!!
+-Multi-language support for Browser and installer
 -Linux & Mac executables & install packages (or a live image you can just run off a USB drive)
--(From Robert's doc - Review this idea): <Warn about this thrashing your Hard Drive / SSD would be better> The Storj "Driveshare" program will be important to include because we can promote earning SJCX at the same time as FLDC. SJCX shares your hard drive that you earn tokens for and FLDC shares your computational power you earn tokens for
+-(From Robert's doc - Review this idea): <Warn about this thrashing your Hard Drive, and SSD would be better> The Storj "Driveshare" program will be important to include because we can promote earning SJCX at the same time as FLDC. SJCX shares your hard drive that you earn tokens for and FLDC shares your computational power you earn tokens for
 
--CureCoin 2.0 changes? (probably Feb/March)
+-CureCoin 2.0 changes? (probably Apr-May?)
+
 
 ---------------
 Immediate Need:
 ---------------
--Update to CefSharp v55 (to see if it is better for the shutdown hang issue), when released
--On exiting: start a timer and close/kill the browser, if exiting CefSharp hangs
--Does adding new settings add a wallet name, so you can access the data???
-
-
+-Multi-language support for installer
 -Simple version of the FoldingBrowser: mostly to only run the FAH NaCl Chrome Plugin client. -Would switching to the Electron framework be better?
 -Add notify icon (system tray icon) for folding with NaCl Chrome Plug-in
 
--Multi-language support for installer
+-Test out the FLDC Bar Electron app
 
 
 
 ================
 Tasks completed:
 ======================================================================================================
+
+v9 Release (3/4/2017)
+[DONE] -Add note about how CureCoin's POS works, mostly for new users
+[DONE] -Check for the Wallet.dat file existing to set the checkbox for the CureCoin folding pool setup? (would need to detect this in the installer before installing / launching it from the installer)
+[DONE] -No Dat file error on initial install with previous install INI file only. HideSavedDataButton INI value not written.
+[DONE] -Message to leave the CURE wallet open
+[DONE] -Saved Data: 'Add New or Existing Info' checkbox: Renamed to: Show Raw Data, and inverted what it does
+[DONE] -Change the default Saved Data startup view to the individual check boxes. The data is much easier to look at for new users.
+[DONE] -Initially show passwords as stars, with a checkbox to show as plain text
+[DONE] -Does adding new settings add a wallet name, so you can access the new data?  No, not done in the past, this needs to be added.
+[DONE] -Slack buttons: save Slack login info in saved settings
+[DONE] -'Install complete' message for no options checked
+[DONE] -Update to CefSharp v55, when released (to see if it is better for the shutdown hang issue -Yes, fixes many issues)
+(Skip) -The CefSharp black pop-up console window from the FoldingCoin website says "NOT SANDBOXED" for less than a second. Looking into this: it's marked as a 'Won't Fix' issue, so just keep ignoring it...
 v8 Release (2/4/2017)
 [DONE] -Install complete message: also add for questions or feedback please contact us on Slack
 [DONE] -Improve last message for Install complete, to say the Distribution intervals (FLDC = Monthly, CURE = Daily).

@@ -15,6 +15,10 @@
                 Me.cbxWalletId.Text = g_Main.cbxWalletId.Text
             End If
 
+            'Start with the textboxes instead of the raw data that is hard to look at
+            chkShowRawData_CheckedChanged(Nothing, Nothing)
+            chkShowPW_CheckedChanged(Nothing, Nothing)
+
             'Reset the Save button to be disabled until some changes to the text are made
             Me.btnSaveChanges.Enabled = False
             Me.BtnOK.Focus()
@@ -31,27 +35,43 @@
         Me.txtDisplayText.Text = String.Empty
     End Sub
 
-    Private Sub txtDisplayText_TextChanged(sender As Object, e As EventArgs) Handles txtDisplayText.TextChanged
-        Me.btnSaveChanges.Enabled = True
-    End Sub
-
-    Private Sub chkShowAddData_CheckedChanged(sender As Object, e As EventArgs) Handles chkShowAddData.CheckedChanged
-        If Me.chkShowAddData.Checked = True Then
+    Private Sub chkShowRawData_CheckedChanged(sender As Object, e As EventArgs) Handles chkShowRawData.CheckedChanged
+        If Me.chkShowRawData.Checked = False Then
             'Use the individual textboxes
             Me.SplitContainer1.Panel1Collapsed = False
-            Me.txtDisplayText.BackColor = Color.LightGray
+            Me.SplitContainer1.Panel2Collapsed = True
+            Me.chkShowPW.Visible = True
         Else
-            'Use the large single textbox with the raw INI data
+            'Use the large single textbox with the Raw INI data
+            Me.SplitContainer1.Panel2Collapsed = False
             Me.SplitContainer1.Panel1Collapsed = True
-            Me.txtDisplayText.BackColor = Color.White
+            Me.chkShowPW.Visible = False
         End If
 
         'Disable the save button again
         Me.btnSaveChanges.Enabled = False
     End Sub
 
+    Private Sub chkShowPW_CheckedChanged(sender As Object, e As EventArgs) Handles chkShowPW.CheckedChanged
+        If Me.chkShowPW.Checked = True Then
+            Me.txtFAHPasskey.PasswordChar = ControlChars.NullChar
+            Me.txtCounterParty12WordPassphrase.PasswordChar = ControlChars.NullChar
+            Me.txtCureCoinPoolPassword.PasswordChar = ControlChars.NullChar
+            Me.txtCureCoinPoolPin.PasswordChar = ControlChars.NullChar
+            Me.txtCureCoinSlackPassword.PasswordChar = ControlChars.NullChar
+            Me.txtFoldingCoinSlackPassword.PasswordChar = ControlChars.NullChar
+        Else
+            Me.txtFAHPasskey.PasswordChar = "*"c
+            Me.txtCounterParty12WordPassphrase.PasswordChar = "*"c
+            Me.txtCureCoinPoolPassword.PasswordChar = "*"c
+            Me.txtCureCoinPoolPin.PasswordChar = "*"c
+            Me.txtCureCoinSlackPassword.PasswordChar = "*"c
+            Me.txtFoldingCoinSlackPassword.PasswordChar = "*"c
+        End If
+    End Sub
+
     Private Sub btnSaveChanges_Click(sender As Object, e As EventArgs) Handles btnSaveChanges.Click
-        If Me.chkShowAddData.Checked = True Then
+        If Me.chkShowRawData.Checked = False Then
             'Use the individual textboxes
             Dim DAT As New IniFile
             'Build the new DAT file
@@ -71,6 +91,12 @@
             Me.txtCureCoinAddress.Text = Me.txtCureCoinAddress.Text.Trim
             Me.txtCureCoinPoolPassword.Text = Me.txtCureCoinPoolPassword.Text.Trim
             Me.txtCureCoinPoolPin.Text = Me.txtCureCoinPoolPin.Text.Trim
+
+            Me.txtCureCoinSlackEmail.Text = Me.txtCureCoinSlackEmail.Text.Trim
+            Me.txtCureCoinSlackPassword.Text = Me.txtCureCoinSlackPassword.Text.Trim
+
+            Me.txtFoldingCoinSlackEmail.Text = Me.txtFoldingCoinSlackEmail.Text.Trim
+            Me.txtFoldingCoinSlackPassword.Text = Me.txtFoldingCoinSlackPassword.Text.Trim
 
             Me.txtExtremeOverclockingId.Text = Me.txtExtremeOverclockingId.Text.Trim
 
@@ -111,6 +137,29 @@
                 DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_CureCoin_Pin).Value = Me.txtCureCoinPoolPin.Text
             End If
 
+
+            If Me.txtCureCoinSlackEmail.Text.Length <> 0 Then
+                DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_CureCoinSlackEmail).Value = Me.txtCureCoinSlackEmail.Text
+            End If
+            If Me.txtCureCoinSlackPassword.Text.Length <> 0 Then
+                DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_CureCoinSlackPassword).Value = Me.txtCureCoinSlackPassword.Text
+            End If
+
+
+            If Me.txtFoldingCoinSlackEmail.Text.Length <> 0 Then
+                DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_FoldingCoinSlackEmail).Value = Me.txtFoldingCoinSlackEmail.Text
+            End If
+            If Me.txtFoldingCoinSlackPassword.Text.Length <> 0 Then
+                DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_FoldingCoinSlackPassword).Value = Me.txtFoldingCoinSlackPassword.Text
+            End If
+
+
+
+            'If saving settings to a new wallet slot, give it a name, so you can access it
+            If INI.GetSection(Id & Me.cbxWalletId.Text) IsNot Nothing AndAlso INI.GetSection(Id & Me.cbxWalletId.Text).GetKey(INI_WalletName) Is Nothing Then
+                'Save a wallet name
+                INI.AddSection(Id & Me.cbxWalletId.Text).AddKey(INI_WalletName).Value = DefaultWalletName & Me.cbxWalletId.Text
+            End If
 
             If Me.txtExtremeOverclockingId.Text.Length <> 0 Then
                 INI.AddSection(Id & Me.cbxWalletId.Text).AddKey(INI_EOC_ID).Value = Me.txtExtremeOverclockingId.Text
@@ -261,6 +310,12 @@
         Me.txtCureCoinPoolPassword.Text = ""
         Me.txtCureCoinPoolPin.Text = ""
 
+        Me.txtCureCoinSlackEmail.Text = ""
+        Me.txtCureCoinSlackPassword.Text = ""
+
+        Me.txtFoldingCoinSlackEmail.Text = ""
+        Me.txtFoldingCoinSlackPassword.Text = ""
+
         Me.txtExtremeOverclockingId.Text = ""
 
         'Make sure the INI key/value exists
@@ -318,6 +373,22 @@
                 End If
 
 
+                If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CureCoinSlackEmail) IsNot Nothing Then
+                    Me.txtCureCoinSlackEmail.Text = DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CureCoinSlackEmail).GetValue()
+                End If
+                If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CureCoinSlackPassword) IsNot Nothing Then
+                    Me.txtCureCoinSlackPassword.Text = DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CureCoinSlackPassword).GetValue()
+                End If
+
+
+                If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FoldingCoinSlackEmail) IsNot Nothing Then
+                    Me.txtFoldingCoinSlackEmail.Text = DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FoldingCoinSlackEmail).GetValue()
+                End If
+                If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FoldingCoinSlackPassword) IsNot Nothing Then
+                    Me.txtFoldingCoinSlackPassword.Text = DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FoldingCoinSlackPassword).GetValue()
+                End If
+
+
                 If INI.GetSection(Id & Me.cbxWalletId.Text).GetKey(INI_EOC_ID) IsNot Nothing Then
                     Me.txtExtremeOverclockingId.Text = INI.GetSection(Id & Me.cbxWalletId.Text).GetKey(INI_EOC_ID).GetValue()
                 End If
@@ -329,8 +400,12 @@
                 MessageBox.Show("No DAT file yet")
             End If
         Else
-            Me.txtWalletName.Text = "<Not Used>"
+            Me.txtWalletName.Text = NotUsed
         End If
+    End Sub
+
+    Private Sub txtDisplayText_TextChanged(sender As Object, e As EventArgs) Handles txtDisplayText.TextChanged
+        Me.btnSaveChanges.Enabled = True
     End Sub
 
     Private Sub txtFAHUsername_TextChanged(sender As Object, e As EventArgs) Handles txtFAHUsername.TextChanged
@@ -360,6 +435,20 @@
         Me.btnSaveChanges.Enabled = True
     End Sub
     Private Sub txtCureCoinPoolPin_TextChanged(sender As Object, e As EventArgs) Handles txtCureCoinPoolPin.TextChanged
+        Me.btnSaveChanges.Enabled = True
+    End Sub
+
+    Private Sub txtCureCoinSlackEmail_TextChanged(sender As Object, e As EventArgs) Handles txtCureCoinSlackEmail.TextChanged
+        Me.btnSaveChanges.Enabled = True
+    End Sub
+    Private Sub txtCureCoinSlackPassword_TextChanged(sender As Object, e As EventArgs) Handles txtCureCoinSlackPassword.TextChanged
+        Me.btnSaveChanges.Enabled = True
+    End Sub
+
+    Private Sub txtFoldingCoinSlackEmail_TextChanged(sender As Object, e As EventArgs) Handles txtFoldingCoinSlackEmail.TextChanged
+        Me.btnSaveChanges.Enabled = True
+    End Sub
+    Private Sub txtFoldingCoinSlackPassword_TextChanged(sender As Object, e As EventArgs) Handles txtFoldingCoinSlackPassword.TextChanged
         Me.btnSaveChanges.Enabled = True
     End Sub
 

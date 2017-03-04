@@ -150,8 +150,6 @@ Section "CureCoin Qt Wallet v${CURECOIN_VERSION}" SEC02
   Call CloseCureCoin
   ;NOTE: CureCoin will not be uninstalled from this program's uninstaller, but it can be uninstalled with its own uninstlaller.
   Call CureCoinInstall
-  ;Change the commandline options to indicate the CureCoin wallet was installed
-  StrCpy $RunFoldingBrowser "$INSTDIR\${PRODUCT_EXE_NAME}.exe -InstWithCure"
 SectionEnd
 
 Section -Post
@@ -213,6 +211,14 @@ VCRedistributableInstalled:
 FunctionEnd
 
 Function CureCoinInstall
+  ;Test if the CureCoin wallet.dat file is present before installing anything. Sets the check box in the initial FoldingBrowser install dialog
+  SetShellVarContext current   ;for 'Current': $AppData = C:\Users\%username%\AppData\Roaming, otherwise for 'all': $AppData = C:\ProgramData
+  ;MessageBox MB_OK "$APPDATA\curecoin\wallet.dat"
+  IfFileExists "$APPDATA\curecoin\wallet.dat" CureWalletDatExists 0
+  ;Change the commandline options to indicate the CureCoin wallet was installed
+  StrCpy $RunFoldingBrowser "$INSTDIR\${PRODUCT_EXE_NAME}.exe -InstWithCure"
+CureWalletDatExists:
+
   ;Destination: $PLUGINSDIR is a temporary folder that is automatically deleted when the installer exits
   SetOutPath "$PLUGINSDIR"
   File "CureInst\Install CureCoin v${CURECOIN_VERSION}.exe"

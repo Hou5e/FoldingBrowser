@@ -36,8 +36,16 @@ Partial Class DisplayTextDialog
         Me.cbxWalletId = New System.Windows.Forms.ComboBox()
         Me.txtCureCoinPoolPin = New System.Windows.Forms.TextBox()
         Me.txtExtremeOverclockingId = New System.Windows.Forms.TextBox()
-        Me.chkShowAddData = New System.Windows.Forms.CheckBox()
+        Me.txtCureCoinSlackEmail = New System.Windows.Forms.TextBox()
+        Me.txtCureCoinSlackPassword = New System.Windows.Forms.TextBox()
+        Me.txtFoldingCoinSlackPassword = New System.Windows.Forms.TextBox()
+        Me.txtFoldingCoinSlackEmail = New System.Windows.Forms.TextBox()
+        Me.chkShowRawData = New System.Windows.Forms.CheckBox()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
+        Me.lblFoldingCoinSlackPassword = New System.Windows.Forms.Label()
+        Me.lblFoldingCoinSlackEmail = New System.Windows.Forms.Label()
+        Me.lblCureCoinSlackPassword = New System.Windows.Forms.Label()
+        Me.lblCureCoinSlackEmail = New System.Windows.Forms.Label()
         Me.lblCureCoinPoolPin = New System.Windows.Forms.Label()
         Me.txtCureCoinPoolPassword = New System.Windows.Forms.TextBox()
         Me.lblCureCoinPoolPassword = New System.Windows.Forms.Label()
@@ -57,6 +65,7 @@ Partial Class DisplayTextDialog
         Me.txtFAHUsername = New System.Windows.Forms.TextBox()
         Me.lblFAHUsername = New System.Windows.Forms.Label()
         Me.lblWalletNum = New System.Windows.Forms.Label()
+        Me.chkShowPW = New System.Windows.Forms.CheckBox()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
@@ -72,7 +81,7 @@ Partial Class DisplayTextDialog
         Me.txtDisplayText.Multiline = True
         Me.txtDisplayText.Name = "txtDisplayText"
         Me.txtDisplayText.ScrollBars = System.Windows.Forms.ScrollBars.Both
-        Me.txtDisplayText.Size = New System.Drawing.Size(241, 287)
+        Me.txtDisplayText.Size = New System.Drawing.Size(90, 386)
         Me.txtDisplayText.TabIndex = 0
         Me.txtDisplayText.WordWrap = False
         '
@@ -81,11 +90,11 @@ Partial Class DisplayTextDialog
         Me.BtnOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.BtnOK.DialogResult = System.Windows.Forms.DialogResult.OK
         Me.BtnOK.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.BtnOK.Location = New System.Drawing.Point(668, 425)
+        Me.BtnOK.Location = New System.Drawing.Point(668, 524)
         Me.BtnOK.Name = "BtnOK"
         Me.BtnOK.Size = New System.Drawing.Size(90, 28)
         Me.BtnOK.TabIndex = 0
-        Me.BtnOK.Text = "OK"
+        Me.BtnOK.Text = "Close"
         Me.BtnOK.UseVisualStyleBackColor = True
         '
         'MsgTextTop
@@ -100,9 +109,9 @@ Partial Class DisplayTextDialog
         '
         'btnSaveChanges
         '
-        Me.btnSaveChanges.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.btnSaveChanges.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnSaveChanges.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnSaveChanges.Location = New System.Drawing.Point(24, 425)
+        Me.btnSaveChanges.Location = New System.Drawing.Point(399, 524)
         Me.btnSaveChanges.Name = "btnSaveChanges"
         Me.btnSaveChanges.Size = New System.Drawing.Size(124, 28)
         Me.btnSaveChanges.TabIndex = 5
@@ -117,7 +126,7 @@ Partial Class DisplayTextDialog
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lblWarningInfo.BackColor = System.Drawing.Color.Firebrick
         Me.lblWarningInfo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lblWarningInfo.Location = New System.Drawing.Point(13, 324)
+        Me.lblWarningInfo.Location = New System.Drawing.Point(13, 423)
         Me.lblWarningInfo.Name = "lblWarningInfo"
         Me.lblWarningInfo.Size = New System.Drawing.Size(756, 96)
         Me.lblWarningInfo.TabIndex = 3
@@ -128,7 +137,7 @@ Partial Class DisplayTextDialog
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtWarningMessage.BackColor = System.Drawing.Color.Tomato
         Me.txtWarningMessage.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Underline), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtWarningMessage.Location = New System.Drawing.Point(24, 331)
+        Me.txtWarningMessage.Location = New System.Drawing.Point(24, 430)
         Me.txtWarningMessage.Multiline = True
         Me.txtWarningMessage.Name = "txtWarningMessage"
         Me.txtWarningMessage.ReadOnly = True
@@ -143,7 +152,7 @@ Partial Class DisplayTextDialog
         Me.btnMakeBackup.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnMakeBackup.DialogResult = System.Windows.Forms.DialogResult.Yes
         Me.btnMakeBackup.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnMakeBackup.Location = New System.Drawing.Point(335, 425)
+        Me.btnMakeBackup.Location = New System.Drawing.Point(533, 524)
         Me.btnMakeBackup.Name = "btnMakeBackup"
         Me.btnMakeBackup.Size = New System.Drawing.Size(124, 28)
         Me.btnMakeBackup.TabIndex = 7
@@ -154,7 +163,7 @@ Partial Class DisplayTextDialog
         '
         'txtWalletName
         '
-        Me.txtWalletName.Location = New System.Drawing.Point(133, 9)
+        Me.txtWalletName.Location = New System.Drawing.Point(130, 6)
         Me.txtWalletName.Name = "txtWalletName"
         Me.txtWalletName.Size = New System.Drawing.Size(128, 20)
         Me.txtWalletName.TabIndex = 3
@@ -164,7 +173,7 @@ Partial Class DisplayTextDialog
         '
         Me.cbxWalletId.FormattingEnabled = True
         Me.cbxWalletId.Items.AddRange(New Object() {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"})
-        Me.cbxWalletId.Location = New System.Drawing.Point(102, 9)
+        Me.cbxWalletId.Location = New System.Drawing.Point(99, 6)
         Me.cbxWalletId.Name = "cbxWalletId"
         Me.cbxWalletId.Size = New System.Drawing.Size(30, 21)
         Me.cbxWalletId.TabIndex = 2
@@ -173,7 +182,7 @@ Partial Class DisplayTextDialog
         '
         'txtCureCoinPoolPin
         '
-        Me.txtCureCoinPoolPin.Location = New System.Drawing.Point(165, 233)
+        Me.txtCureCoinPoolPin.Location = New System.Drawing.Point(167, 228)
         Me.txtCureCoinPoolPin.Name = "txtCureCoinPoolPin"
         Me.txtCureCoinPoolPin.Size = New System.Drawing.Size(296, 20)
         Me.txtCureCoinPoolPin.TabIndex = 12
@@ -181,21 +190,54 @@ Partial Class DisplayTextDialog
         '
         'txtExtremeOverclockingId
         '
-        Me.txtExtremeOverclockingId.Location = New System.Drawing.Point(165, 263)
+        Me.txtExtremeOverclockingId.Location = New System.Drawing.Point(167, 362)
         Me.txtExtremeOverclockingId.Name = "txtExtremeOverclockingId"
         Me.txtExtremeOverclockingId.Size = New System.Drawing.Size(296, 20)
         Me.txtExtremeOverclockingId.TabIndex = 13
         Me.ToolTip1.SetToolTip(Me.txtExtremeOverclockingId, "Extreme Overclocking Id from your EOC stats URL")
         '
-        'chkShowAddData
+        'txtCureCoinSlackEmail
         '
-        Me.chkShowAddData.AutoSize = True
-        Me.chkShowAddData.Location = New System.Drawing.Point(157, 433)
-        Me.chkShowAddData.Name = "chkShowAddData"
-        Me.chkShowAddData.Size = New System.Drawing.Size(162, 17)
-        Me.chkShowAddData.TabIndex = 6
-        Me.chkShowAddData.Text = "Add New or Existing Settings"
-        Me.chkShowAddData.UseVisualStyleBackColor = True
+        Me.txtCureCoinSlackEmail.Location = New System.Drawing.Point(167, 258)
+        Me.txtCureCoinSlackEmail.Name = "txtCureCoinSlackEmail"
+        Me.txtCureCoinSlackEmail.Size = New System.Drawing.Size(296, 20)
+        Me.txtCureCoinSlackEmail.TabIndex = 24
+        Me.ToolTip1.SetToolTip(Me.txtCureCoinSlackEmail, "Email used to signup for the CureCoin Slack")
+        '
+        'txtCureCoinSlackPassword
+        '
+        Me.txtCureCoinSlackPassword.Location = New System.Drawing.Point(167, 280)
+        Me.txtCureCoinSlackPassword.Name = "txtCureCoinSlackPassword"
+        Me.txtCureCoinSlackPassword.Size = New System.Drawing.Size(296, 20)
+        Me.txtCureCoinSlackPassword.TabIndex = 26
+        Me.ToolTip1.SetToolTip(Me.txtCureCoinSlackPassword, "Password used to signup for the CureCoin Slack")
+        '
+        'txtFoldingCoinSlackPassword
+        '
+        Me.txtFoldingCoinSlackPassword.Location = New System.Drawing.Point(167, 332)
+        Me.txtFoldingCoinSlackPassword.Name = "txtFoldingCoinSlackPassword"
+        Me.txtFoldingCoinSlackPassword.Size = New System.Drawing.Size(296, 20)
+        Me.txtFoldingCoinSlackPassword.TabIndex = 30
+        Me.ToolTip1.SetToolTip(Me.txtFoldingCoinSlackPassword, "Password used to signup for the FoldingCoin Slack")
+        '
+        'txtFoldingCoinSlackEmail
+        '
+        Me.txtFoldingCoinSlackEmail.Location = New System.Drawing.Point(167, 310)
+        Me.txtFoldingCoinSlackEmail.Name = "txtFoldingCoinSlackEmail"
+        Me.txtFoldingCoinSlackEmail.Size = New System.Drawing.Size(296, 20)
+        Me.txtFoldingCoinSlackEmail.TabIndex = 28
+        Me.ToolTip1.SetToolTip(Me.txtFoldingCoinSlackEmail, "Email used to signup for the FoldingCoin Slack")
+        '
+        'chkShowRawData
+        '
+        Me.chkShowRawData.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.chkShowRawData.AutoSize = True
+        Me.chkShowRawData.Location = New System.Drawing.Point(13, 530)
+        Me.chkShowRawData.Name = "chkShowRawData"
+        Me.chkShowRawData.Size = New System.Drawing.Size(104, 17)
+        Me.chkShowRawData.TabIndex = 6
+        Me.chkShowRawData.Text = "Show Raw Data"
+        Me.chkShowRawData.UseVisualStyleBackColor = True
         '
         'SplitContainer1
         '
@@ -211,6 +253,14 @@ Partial Class DisplayTextDialog
         '
         Me.SplitContainer1.Panel1.AutoScroll = True
         Me.SplitContainer1.Panel1.BackColor = System.Drawing.SystemColors.Control
+        Me.SplitContainer1.Panel1.Controls.Add(Me.txtFoldingCoinSlackPassword)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.lblFoldingCoinSlackPassword)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.txtFoldingCoinSlackEmail)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.lblFoldingCoinSlackEmail)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.txtCureCoinSlackPassword)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.lblCureCoinSlackPassword)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.txtCureCoinSlackEmail)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.lblCureCoinSlackEmail)
         Me.SplitContainer1.Panel1.Controls.Add(Me.txtCureCoinPoolPin)
         Me.SplitContainer1.Panel1.Controls.Add(Me.lblCureCoinPoolPin)
         Me.SplitContainer1.Panel1.Controls.Add(Me.txtCureCoinPoolPassword)
@@ -239,15 +289,51 @@ Partial Class DisplayTextDialog
         '
         Me.SplitContainer1.Panel2.BackColor = System.Drawing.SystemColors.Control
         Me.SplitContainer1.Panel2.Controls.Add(Me.txtDisplayText)
-        Me.SplitContainer1.Size = New System.Drawing.Size(734, 289)
-        Me.SplitContainer1.SplitterDistance = 489
+        Me.SplitContainer1.Size = New System.Drawing.Size(734, 388)
+        Me.SplitContainer1.SplitterDistance = 640
         Me.SplitContainer1.SplitterWidth = 2
         Me.SplitContainer1.TabIndex = 2
+        '
+        'lblFoldingCoinSlackPassword
+        '
+        Me.lblFoldingCoinSlackPassword.AutoSize = True
+        Me.lblFoldingCoinSlackPassword.Location = New System.Drawing.Point(24, 335)
+        Me.lblFoldingCoinSlackPassword.Name = "lblFoldingCoinSlackPassword"
+        Me.lblFoldingCoinSlackPassword.Size = New System.Drawing.Size(141, 13)
+        Me.lblFoldingCoinSlackPassword.TabIndex = 29
+        Me.lblFoldingCoinSlackPassword.Text = "FoldingCoin Slack Password"
+        '
+        'lblFoldingCoinSlackEmail
+        '
+        Me.lblFoldingCoinSlackEmail.AutoSize = True
+        Me.lblFoldingCoinSlackEmail.Location = New System.Drawing.Point(45, 313)
+        Me.lblFoldingCoinSlackEmail.Name = "lblFoldingCoinSlackEmail"
+        Me.lblFoldingCoinSlackEmail.Size = New System.Drawing.Size(120, 13)
+        Me.lblFoldingCoinSlackEmail.TabIndex = 27
+        Me.lblFoldingCoinSlackEmail.Text = "FoldingCoin Slack Email"
+        '
+        'lblCureCoinSlackPassword
+        '
+        Me.lblCureCoinSlackPassword.AutoSize = True
+        Me.lblCureCoinSlackPassword.Location = New System.Drawing.Point(36, 283)
+        Me.lblCureCoinSlackPassword.Name = "lblCureCoinSlackPassword"
+        Me.lblCureCoinSlackPassword.Size = New System.Drawing.Size(129, 13)
+        Me.lblCureCoinSlackPassword.TabIndex = 25
+        Me.lblCureCoinSlackPassword.Text = "CureCoin Slack Password"
+        '
+        'lblCureCoinSlackEmail
+        '
+        Me.lblCureCoinSlackEmail.AutoSize = True
+        Me.lblCureCoinSlackEmail.Location = New System.Drawing.Point(57, 261)
+        Me.lblCureCoinSlackEmail.Name = "lblCureCoinSlackEmail"
+        Me.lblCureCoinSlackEmail.Size = New System.Drawing.Size(108, 13)
+        Me.lblCureCoinSlackEmail.TabIndex = 23
+        Me.lblCureCoinSlackEmail.Text = "CureCoin Slack Email"
         '
         'lblCureCoinPoolPin
         '
         Me.lblCureCoinPoolPin.AutoSize = True
-        Me.lblCureCoinPoolPin.Location = New System.Drawing.Point(72, 236)
+        Me.lblCureCoinPoolPin.Location = New System.Drawing.Point(74, 231)
         Me.lblCureCoinPoolPin.Name = "lblCureCoinPoolPin"
         Me.lblCureCoinPoolPin.Size = New System.Drawing.Size(92, 13)
         Me.lblCureCoinPoolPin.TabIndex = 0
@@ -255,7 +341,7 @@ Partial Class DisplayTextDialog
         '
         'txtCureCoinPoolPassword
         '
-        Me.txtCureCoinPoolPassword.Location = New System.Drawing.Point(165, 211)
+        Me.txtCureCoinPoolPassword.Location = New System.Drawing.Point(167, 206)
         Me.txtCureCoinPoolPassword.Name = "txtCureCoinPoolPassword"
         Me.txtCureCoinPoolPassword.Size = New System.Drawing.Size(296, 20)
         Me.txtCureCoinPoolPassword.TabIndex = 11
@@ -263,7 +349,7 @@ Partial Class DisplayTextDialog
         'lblCureCoinPoolPassword
         '
         Me.lblCureCoinPoolPassword.AutoSize = True
-        Me.lblCureCoinPoolPassword.Location = New System.Drawing.Point(41, 214)
+        Me.lblCureCoinPoolPassword.Location = New System.Drawing.Point(43, 209)
         Me.lblCureCoinPoolPassword.Name = "lblCureCoinPoolPassword"
         Me.lblCureCoinPoolPassword.Size = New System.Drawing.Size(123, 13)
         Me.lblCureCoinPoolPassword.TabIndex = 22
@@ -271,7 +357,7 @@ Partial Class DisplayTextDialog
         '
         'txtCureCoinAddress
         '
-        Me.txtCureCoinAddress.Location = New System.Drawing.Point(165, 189)
+        Me.txtCureCoinAddress.Location = New System.Drawing.Point(167, 184)
         Me.txtCureCoinAddress.Name = "txtCureCoinAddress"
         Me.txtCureCoinAddress.Size = New System.Drawing.Size(296, 20)
         Me.txtCureCoinAddress.TabIndex = 10
@@ -279,7 +365,7 @@ Partial Class DisplayTextDialog
         'lblCureCoinAddress
         '
         Me.lblCureCoinAddress.AutoSize = True
-        Me.lblCureCoinAddress.Location = New System.Drawing.Point(73, 192)
+        Me.lblCureCoinAddress.Location = New System.Drawing.Point(75, 187)
         Me.lblCureCoinAddress.Name = "lblCureCoinAddress"
         Me.lblCureCoinAddress.Size = New System.Drawing.Size(91, 13)
         Me.lblCureCoinAddress.TabIndex = 21
@@ -287,7 +373,7 @@ Partial Class DisplayTextDialog
         '
         'txtCounterParty12WordPassphrase
         '
-        Me.txtCounterParty12WordPassphrase.Location = New System.Drawing.Point(165, 158)
+        Me.txtCounterParty12WordPassphrase.Location = New System.Drawing.Point(167, 154)
         Me.txtCounterParty12WordPassphrase.Name = "txtCounterParty12WordPassphrase"
         Me.txtCounterParty12WordPassphrase.Size = New System.Drawing.Size(296, 20)
         Me.txtCounterParty12WordPassphrase.TabIndex = 9
@@ -295,7 +381,7 @@ Partial Class DisplayTextDialog
         'lblCounterParty12WordPassphrase
         '
         Me.lblCounterParty12WordPassphrase.AutoSize = True
-        Me.lblCounterParty12WordPassphrase.Location = New System.Drawing.Point(3, 161)
+        Me.lblCounterParty12WordPassphrase.Location = New System.Drawing.Point(5, 157)
         Me.lblCounterParty12WordPassphrase.Name = "lblCounterParty12WordPassphrase"
         Me.lblCounterParty12WordPassphrase.Size = New System.Drawing.Size(161, 13)
         Me.lblCounterParty12WordPassphrase.TabIndex = 20
@@ -303,7 +389,7 @@ Partial Class DisplayTextDialog
         '
         'txtBTCAddress
         '
-        Me.txtBTCAddress.Location = New System.Drawing.Point(165, 136)
+        Me.txtBTCAddress.Location = New System.Drawing.Point(167, 132)
         Me.txtBTCAddress.Name = "txtBTCAddress"
         Me.txtBTCAddress.Size = New System.Drawing.Size(296, 20)
         Me.txtBTCAddress.TabIndex = 8
@@ -311,7 +397,7 @@ Partial Class DisplayTextDialog
         'lblBTCAddress
         '
         Me.lblBTCAddress.AutoSize = True
-        Me.lblBTCAddress.Location = New System.Drawing.Point(95, 139)
+        Me.lblBTCAddress.Location = New System.Drawing.Point(97, 135)
         Me.lblBTCAddress.Name = "lblBTCAddress"
         Me.lblBTCAddress.Size = New System.Drawing.Size(69, 13)
         Me.lblBTCAddress.TabIndex = 19
@@ -320,7 +406,7 @@ Partial Class DisplayTextDialog
         'lblExtremeOverclockingId
         '
         Me.lblExtremeOverclockingId.AutoSize = True
-        Me.lblExtremeOverclockingId.Location = New System.Drawing.Point(41, 266)
+        Me.lblExtremeOverclockingId.Location = New System.Drawing.Point(43, 365)
         Me.lblExtremeOverclockingId.Name = "lblExtremeOverclockingId"
         Me.lblExtremeOverclockingId.Size = New System.Drawing.Size(123, 13)
         Me.lblExtremeOverclockingId.TabIndex = 1
@@ -328,7 +414,7 @@ Partial Class DisplayTextDialog
         '
         'txtEmail
         '
-        Me.txtEmail.Location = New System.Drawing.Point(165, 106)
+        Me.txtEmail.Location = New System.Drawing.Point(167, 102)
         Me.txtEmail.Name = "txtEmail"
         Me.txtEmail.Size = New System.Drawing.Size(296, 20)
         Me.txtEmail.TabIndex = 7
@@ -336,7 +422,7 @@ Partial Class DisplayTextDialog
         'lblEmail
         '
         Me.lblEmail.AutoSize = True
-        Me.lblEmail.Location = New System.Drawing.Point(132, 109)
+        Me.lblEmail.Location = New System.Drawing.Point(134, 105)
         Me.lblEmail.Name = "lblEmail"
         Me.lblEmail.Size = New System.Drawing.Size(32, 13)
         Me.lblEmail.TabIndex = 18
@@ -344,7 +430,7 @@ Partial Class DisplayTextDialog
         '
         'txtFAHPasskey
         '
-        Me.txtFAHPasskey.Location = New System.Drawing.Point(165, 84)
+        Me.txtFAHPasskey.Location = New System.Drawing.Point(167, 80)
         Me.txtFAHPasskey.Name = "txtFAHPasskey"
         Me.txtFAHPasskey.Size = New System.Drawing.Size(296, 20)
         Me.txtFAHPasskey.TabIndex = 6
@@ -352,7 +438,7 @@ Partial Class DisplayTextDialog
         'lblFAHPasskey
         '
         Me.lblFAHPasskey.AutoSize = True
-        Me.lblFAHPasskey.Location = New System.Drawing.Point(93, 87)
+        Me.lblFAHPasskey.Location = New System.Drawing.Point(95, 83)
         Me.lblFAHPasskey.Name = "lblFAHPasskey"
         Me.lblFAHPasskey.Size = New System.Drawing.Size(71, 13)
         Me.lblFAHPasskey.TabIndex = 17
@@ -360,7 +446,7 @@ Partial Class DisplayTextDialog
         '
         'txtFAHTeam
         '
-        Me.txtFAHTeam.Location = New System.Drawing.Point(165, 62)
+        Me.txtFAHTeam.Location = New System.Drawing.Point(167, 58)
         Me.txtFAHTeam.Name = "txtFAHTeam"
         Me.txtFAHTeam.Size = New System.Drawing.Size(296, 20)
         Me.txtFAHTeam.TabIndex = 5
@@ -368,7 +454,7 @@ Partial Class DisplayTextDialog
         'lblFAHTeam
         '
         Me.lblFAHTeam.AutoSize = True
-        Me.lblFAHTeam.Location = New System.Drawing.Point(106, 65)
+        Me.lblFAHTeam.Location = New System.Drawing.Point(108, 61)
         Me.lblFAHTeam.Name = "lblFAHTeam"
         Me.lblFAHTeam.Size = New System.Drawing.Size(58, 13)
         Me.lblFAHTeam.TabIndex = 16
@@ -376,7 +462,7 @@ Partial Class DisplayTextDialog
         '
         'txtFAHUsername
         '
-        Me.txtFAHUsername.Location = New System.Drawing.Point(165, 40)
+        Me.txtFAHUsername.Location = New System.Drawing.Point(167, 36)
         Me.txtFAHUsername.Name = "txtFAHUsername"
         Me.txtFAHUsername.Size = New System.Drawing.Size(296, 20)
         Me.txtFAHUsername.TabIndex = 4
@@ -384,7 +470,7 @@ Partial Class DisplayTextDialog
         'lblFAHUsername
         '
         Me.lblFAHUsername.AutoSize = True
-        Me.lblFAHUsername.Location = New System.Drawing.Point(85, 43)
+        Me.lblFAHUsername.Location = New System.Drawing.Point(87, 39)
         Me.lblFAHUsername.Name = "lblFAHUsername"
         Me.lblFAHUsername.Size = New System.Drawing.Size(79, 13)
         Me.lblFAHUsername.TabIndex = 15
@@ -393,19 +479,31 @@ Partial Class DisplayTextDialog
         'lblWalletNum
         '
         Me.lblWalletNum.AutoSize = True
-        Me.lblWalletNum.Location = New System.Drawing.Point(33, 12)
+        Me.lblWalletNum.Location = New System.Drawing.Point(30, 9)
         Me.lblWalletNum.Name = "lblWalletNum"
         Me.lblWalletNum.Size = New System.Drawing.Size(72, 13)
         Me.lblWalletNum.TabIndex = 14
         Me.lblWalletNum.Text = "Use Wallet #:"
         '
+        'chkShowPW
+        '
+        Me.chkShowPW.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.chkShowPW.AutoSize = True
+        Me.chkShowPW.Location = New System.Drawing.Point(123, 530)
+        Me.chkShowPW.Name = "chkShowPW"
+        Me.chkShowPW.Size = New System.Drawing.Size(107, 17)
+        Me.chkShowPW.TabIndex = 8
+        Me.chkShowPW.Text = "Show Passwords"
+        Me.chkShowPW.UseVisualStyleBackColor = True
+        '
         'DisplayTextDialog
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(780, 465)
+        Me.ClientSize = New System.Drawing.Size(780, 564)
+        Me.Controls.Add(Me.chkShowPW)
         Me.Controls.Add(Me.SplitContainer1)
-        Me.Controls.Add(Me.chkShowAddData)
+        Me.Controls.Add(Me.chkShowRawData)
         Me.Controls.Add(Me.btnMakeBackup)
         Me.Controls.Add(Me.txtWarningMessage)
         Me.Controls.Add(Me.lblWarningInfo)
@@ -435,7 +533,7 @@ Partial Class DisplayTextDialog
     Friend WithEvents txtWarningMessage As TextBox
     Friend WithEvents btnMakeBackup As Button
     Friend WithEvents ToolTip1 As ToolTip
-    Friend WithEvents chkShowAddData As CheckBox
+    Friend WithEvents chkShowRawData As CheckBox
     Friend WithEvents SplitContainer1 As SplitContainer
     Friend WithEvents txtWalletName As TextBox
     Friend WithEvents cbxWalletId As ComboBox
@@ -460,4 +558,13 @@ Partial Class DisplayTextDialog
     Friend WithEvents lblFAHUsername As Label
     Friend WithEvents txtExtremeOverclockingId As TextBox
     Friend WithEvents lblExtremeOverclockingId As Label
+    Friend WithEvents txtFoldingCoinSlackPassword As TextBox
+    Friend WithEvents lblFoldingCoinSlackPassword As Label
+    Friend WithEvents txtFoldingCoinSlackEmail As TextBox
+    Friend WithEvents lblFoldingCoinSlackEmail As Label
+    Friend WithEvents txtCureCoinSlackPassword As TextBox
+    Friend WithEvents lblCureCoinSlackPassword As Label
+    Friend WithEvents txtCureCoinSlackEmail As TextBox
+    Friend WithEvents lblCureCoinSlackEmail As Label
+    Friend WithEvents chkShowPW As CheckBox
 End Class

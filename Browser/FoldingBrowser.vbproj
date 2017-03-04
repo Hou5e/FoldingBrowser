@@ -106,6 +106,12 @@
     <Compile Include="DisplayTextDialog.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="UserPwdDialog.Designer.vb">
+      <DependentUpon>UserPwdDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="UserPwdDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="TextEntryDialog.Designer.vb">
       <DependentUpon>TextEntryDialog.vb</DependentUpon>
     </Compile>
@@ -150,6 +156,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DisplayTextDialog.resx">
       <DependentUpon>DisplayTextDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserPwdDialog.resx">
+      <DependentUpon>UserPwdDialog.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TextEntryDialog.resx">
       <DependentUpon>TextEntryDialog.vb</DependentUpon>

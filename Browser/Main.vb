@@ -119,9 +119,7 @@
 #Region "Extra Setup"
     'This was done because the New() constructor can't be run as Async. So, this was moved out to here
     Private Async Sub RunSetup()
-
-#If DEBUG Then
-        'Debug: Log version info
+        'For debugging issues: Log version info
         Msg("Chromium Version: " & CefSharp.Cef.ChromiumVersion.ToString)
         Msg("Cef Version: " & CefSharp.Cef.CefVersion.ToString)
         Msg("CefSharp Version: " & CefSharp.Cef.CefSharpVersion.ToString)
@@ -132,7 +130,6 @@
             If plugin.Description.Length > 0 Then Msg("Plugin Description: " & plugin.Description)
             If plugin.Path.Length > 0 Then Msg("Plugin Path: " & plugin.Path)
         Next
-#End If
 
         'Load, fix, or update the INI and DAT files for the stored settings. Look to see if there is an INI file first
         If System.IO.File.Exists(IniFilePath) = True Then
@@ -254,7 +251,7 @@
 
                     'Save a wallet name
                     INI.AddSection(Id & Me.cbxWalletId.Text)
-                    INI.AddSection(Id & Me.cbxWalletId.Text).AddKey(INI_WalletName).Value = "My Wallet"
+                    INI.AddSection(Id & Me.cbxWalletId.Text).AddKey(INI_WalletName).Value = DefaultWalletName & Me.cbxWalletId.Text
                     'Last FoldingBrowser version, now upgraded to v5
                     INI.AddSection(INI_Settings).AddKey(INI_LastBrowserVersion).Value = "5"
                     INI.Save(IniFilePath)
@@ -319,6 +316,29 @@
 
                 'Next DAT format version upgrade would go here
             End If
+        Else
+            'No Dat file, then start a new one
+            Dim DAT As New IniFile
+            If System.IO.File.Exists(DatFilePath) = True Then
+                'Load DAT file, decrypt it
+                DAT.LoadText(Decrypt(LoadDat))
+                If DAT.ToString.Length = 0 Then
+                    'Decryption failed
+                    Msg(DAT_ErrorMsg)
+                    MessageBox.Show(DAT_ErrorMsg)
+                End If
+            End If
+
+            'Create the initial 10 wallet slot sections in the DAT file
+            For i = 0 To 9
+                DAT.AddSection(Id & i.ToString)
+            Next
+
+            'Create text from the INI, Encrypt, and Write/flush DAT text to file
+            SaveDat(Encrypt(DAT.SaveToString))
+            DAT = Nothing
+            'Allow time for the file to be written out
+            Await Wait(100)
         End If
         'Refresh the Wallet Names
         cbxWalletId_SelectedIndexChanged(Nothing, Nothing)
@@ -332,6 +352,19 @@
                 Select Case args(1)
                         'This command line option represents the FoldingBrowser was just installed
                     Case "-Instl", "-InstWithCure"
+
+                        'If installing the CureCoin wallet, Instruct the user to leave the CureCoin Wallet open
+                        If args(1) = "-InstWithCure" Then
+                            'Canceled - Process completed - Make a backup reminder
+                            Dim OkMsg As New MsgBoxDialog
+                            OkMsg.Text = "Instructions"
+                            OkMsg.MsgText.Text = "Please leave the CureCoin wallet software open for the installation process"
+                            OkMsg.Width = (OkMsg.MsgText.Left * 2) + OkMsg.MsgText.Width + 10
+                            OkMsg.StartPosition = FormStartPosition.CenterScreen
+                            OkMsg.ShowDialog(Me)
+                            OkMsg.Dispose()
+                        End If
+
                         'Create a dialog that sets the default checkbox selections based on stored wallet and F@H info.
                         Dim Setup As New SetupDialog
 
@@ -398,7 +431,7 @@
                                 btnFAHConfig_Click(Nothing, Nothing)
                             End If
 
-                            'TODO: Only do this step for a CureCoin wallet installation (and/or a CureCoin folding team selection?)
+                            'Only do this step if the CureCoin wallet.dat file wasn't found on the PC during the initial installation, or if the user chooses this option
                             If Setup.chkSetupCURE.Checked = True Then
                                 Await SetupCureCoin()
 
@@ -412,29 +445,60 @@
 
                             'Show DAT file saved info. Ask to make backups / store data in a safe place
                             If Setup.chkGetFAHSoftware.Checked = True OrElse Setup.chkGetWalletForFLDC.Checked = True OrElse Setup.chkSetupCURE.Checked = True Then
-                                'Show the Saved Data dialog
                                 Dim DlgDisplaySavedData As New DisplayTextDialog
                                 DlgDisplaySavedData.StartPosition = FormStartPosition.CenterScreen
+                                'Show the Saved Data dialog
                                 DlgDisplaySavedData.Show(Me)
                                 Delay(100)
+                            End If
 
-                                'Process completed - Make a backup reminder
-                                Dim OkMsg As New MsgBoxDialog
-                                OkMsg.Text = "Setup Complete"
+                            'Process completed - Make a backup reminder
+                            Dim OkMsg As New MsgBoxDialog
+                            OkMsg.Text = "Setup Complete"
+                            If Setup.chkGetFAHSoftware.Checked = True OrElse Setup.chkGetWalletForFLDC.Checked = True OrElse Setup.chkSetupCURE.Checked = True Then
                                 OkMsg.MsgText.Text = "Setup is complete:" & vbNewLine &
                                     "==============" & vbNewLine & vbNewLine &
                                     "-Please use the 'Make Backup' button to save your settings in a safe place" & vbNewLine & vbNewLine &
                                     "-Note Distribution Intervals: " & vbNewLine &
                                     "     FoldingCoin: On the 1st Saturday of each month" & vbNewLine &
-                                    "         CureCoin: Daily" & vbNewLine & vbNewLine &
-                                    "-For questions or feedback please contact us on Slack" & vbNewLine &
-                                    "        (See the FoldingCoin webpage to join Slack)"
-                                OkMsg.Width = (OkMsg.MsgText.Left * 2) + OkMsg.MsgText.Width + 10
-                                OkMsg.Height = (OkMsg.MsgText.Top * 2) + OkMsg.MsgText.Height + OkMsg.BtnOK.Height + System.Windows.Forms.SystemInformation.CaptionHeight + System.Windows.Forms.SystemInformation.BorderSize.Height + 10
-                                OkMsg.StartPosition = FormStartPosition.CenterScreen
-                                OkMsg.ShowDialog(Me)
-                                OkMsg.Dispose()
+                                    "         CureCoin: Daily.     Also, Proof of Stake (PoS) when coins are" & vbNewLine &
+                                    "            30-90 days old, with wallet unlocked and left running." & vbNewLine & vbNewLine &
+                                    "-Please contact us on Slack for questions or comments" & vbNewLine &
+                                    "    (Use FoldingBrowser buttons, or see the FoldingCoin webpage to join Slack)"
+                            Else
+                                OkMsg.MsgText.Text = "Setup Finished:" & vbNewLine &
+                                    "==============" & vbNewLine & vbNewLine &
+                                    "-Please use: Tools | Saved Data | 'Make Backup' button to backup your settings" & vbNewLine & vbNewLine &
+                                    "-Note Distribution Intervals: " & vbNewLine &
+                                    "     FoldingCoin: On the 1st Saturday of each month" & vbNewLine &
+                                    "         CureCoin: Daily.     Also, Proof of Stake (PoS) when coins are" & vbNewLine &
+                                    "            30-90 days old, with wallet unlocked and left running." & vbNewLine & vbNewLine &
+                                    "-Please contact us on Slack for questions or comments" & vbNewLine &
+                                    "    (Use FoldingBrowser buttons, or see the FoldingCoin webpage to join Slack)"
                             End If
+                            OkMsg.Width = (OkMsg.MsgText.Left * 2) + OkMsg.MsgText.Width + 10
+                            OkMsg.Height = (OkMsg.MsgText.Top * 2) + OkMsg.MsgText.Height + OkMsg.BtnOK.Height + System.Windows.Forms.SystemInformation.CaptionHeight + System.Windows.Forms.SystemInformation.BorderSize.Height + 30
+                            OkMsg.StartPosition = FormStartPosition.CenterScreen
+                            OkMsg.ShowDialog(Me)
+                            OkMsg.Dispose()
+                        Else
+                            'Canceled - Process completed - Make a backup reminder
+                            Dim OkMsg As New MsgBoxDialog
+                            OkMsg.Text = "Setup Finished"
+                            OkMsg.MsgText.Text = "Setup Finished:" & vbNewLine &
+                                "==============" & vbNewLine & vbNewLine &
+                                "-Please use: Tools | Saved Data | 'Make Backup' button to backup your settings" & vbNewLine & vbNewLine &
+                                "-Note Distribution Intervals: " & vbNewLine &
+                                "     FoldingCoin: On the 1st Saturday of each month" & vbNewLine &
+                                "         CureCoin: Daily.     Also, Proof of Stake (PoS) when coins are" & vbNewLine &
+                                "            30-90 days old, with wallet unlocked and left running." & vbNewLine & vbNewLine &
+                                "-Please contact us on Slack for questions or comments" & vbNewLine &
+                                "    (Use FoldingBrowser buttons, or see the FoldingCoin webpage to join Slack)"
+                            OkMsg.Width = (OkMsg.MsgText.Left * 2) + OkMsg.MsgText.Width + 10
+                            OkMsg.Height = (OkMsg.MsgText.Top * 2) + OkMsg.MsgText.Height + OkMsg.BtnOK.Height + System.Windows.Forms.SystemInformation.CaptionHeight + System.Windows.Forms.SystemInformation.BorderSize.Height + 30
+                            OkMsg.StartPosition = FormStartPosition.CenterScreen
+                            OkMsg.ShowDialog(Me)
+                            OkMsg.Dispose()
                         End If
                         Setup.Dispose()
                 End Select
@@ -575,11 +639,10 @@
         End Try
 
         Try
-            'Keep this before CefSharp.Cef.Shutdown() to avoid the browser hanging: when exiting the wallet & click yes, then close the Browser (like the javascript running causes the hang)
-            StopNavigaion()
-            Application.DoEvents()
+            'Keep this before CefSharp.Cef.Shutdown() to avoid the browser hanging (CefSharp v53.0.1): when exiting the wallet & click yes, then close the Browser (like the javascript running causes the hang)
+            'StopNavigaion()  'In v55, this appears to cause: Exception thrown: 'System.Exception' in CefSharp.dll
             ClearWebpage()
-            Delay(100)
+            Delay(150)
 
             If Me.browser IsNot Nothing Then
                 RemoveHandler Me.browser.FrameLoadEnd, AddressOf onBrowserFrameLoadEnd
@@ -691,9 +754,113 @@
         End If
 #Enable Warning BC42358
     End Sub
-    Private Sub btnFoldingCoinSlack_Click(sender As Object, e As EventArgs) Handles btnFoldingCoinSlack.Click
+    Private Async Sub btnFoldingCoinSlack_Click(sender As Object, e As EventArgs) Handles btnFoldingCoinSlack.Click
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
-        OpenURL(URL_FoldingCoinSlack, False)
+        Dim bSkip As Boolean = False
+        'Make sure the INI key/value exists
+        If INI.GetSection(Id & Me.cbxWalletId.Text) IsNot Nothing AndAlso INI.GetSection(Id & Me.cbxWalletId.Text).GetKey(INI_WalletName) IsNot Nothing Then
+            'Load the Wallet name from the INI file based on the Wallet Id#
+            Me.txtWalletName.Text = INI.GetSection(Id & Me.cbxWalletId.Text).GetKey(INI_WalletName).GetValue()
+
+            If System.IO.File.Exists(DatFilePath) = True Then
+                'Open the Slack Sign-in page
+                Await OpenURL(URL_FoldingCoinSlack, False)
+                Await PageTitleWait("Slack")
+                Await Wait(200)
+
+                Dim DAT As New IniFile
+                'Load DAT file, decrypt it
+                DAT.LoadText(Decrypt(LoadDat))
+
+                If DAT.GetSection(Id & Me.cbxWalletId.Text) Is Nothing OrElse DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FoldingCoinSlackEmail) Is Nothing Then
+                    'Fix missing value. Ask for FAH Username
+                    Dim SlackDlg As New UserPwdDialog
+                    SlackDlg.bSetupForFoldingCoin = True
+
+                    'Suggest the Email from the saved settings, if available
+                    If DAT.GetSection(Id & Me.cbxWalletId.Text) IsNot Nothing AndAlso DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_Email) IsNot Nothing Then
+                        SlackDlg.txtEmail.Text = DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_Email).GetValue()
+                    End If
+
+                    'Show modal dialog box
+                    If SlackDlg.ShowDialog(Me) = DialogResult.OK Then
+                        'Store Slack Email
+                        If SlackDlg.txtEmail.Text.Length <> 0 Then
+                            DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_FoldingCoinSlackEmail).Value = SlackDlg.txtEmail.Text
+                        Else
+                            'Don't save info, if user doesn't enter it, or cancels
+                            DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_FoldingCoinSlackEmail).Value = SkipSavingDataFlag
+                        End If
+
+                        'Store Slack Password
+                        If SlackDlg.txtPassword.Text.Length <> 0 Then
+                            DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_FoldingCoinSlackPassword).Value = SlackDlg.txtPassword.Text
+                        Else
+                            'Don't save info, if user doesn't enter it, or cancels
+                            DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_FoldingCoinSlackPassword).Value = SkipSavingDataFlag
+                        End If
+
+                    ElseIf SlackDlg.bGetSlackPressed = True Then
+                        'Allow the sign-up process to run instead of signing-in
+                        bSkip = True
+
+                        'FoldingCoin Slack Join Link
+                        Await OpenURL(URL_FoldingCoinJoinSlackSignup, False)
+                        Await PageTitleWait("Slack")
+                        Await Wait(200)
+
+                        'Suggest the Email from the saved settings, if available
+                        If DAT.GetSection(Id & Me.cbxWalletId.Text) IsNot Nothing AndAlso DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_Email) IsNot Nothing Then
+                            EnterTextByClass("form-item", DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_Email).GetValue())
+                        End If
+
+                    Else
+                        'Don't save info, if user doesn't enter it, or cancels
+                        DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_FoldingCoinSlackEmail).Value = SkipSavingDataFlag
+                        DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_FoldingCoinSlackPassword).Value = SkipSavingDataFlag
+                    End If
+
+                    'Create text from the INI, Encrypt, and Write/Flush DAT text to file
+                    SaveDat(Encrypt(DAT.SaveToString))
+                    'Allow time for the file to be written out
+                    Await Wait(100)
+                    SlackDlg.Dispose()
+                End If
+
+                'Load Email and Password for the login web page
+                If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FoldingCoinSlackEmail) IsNot Nothing Then
+                    'Skip asking for this in the future, if originally cancelled - Don't store info
+                    If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FoldingCoinSlackEmail).GetValue() <> SkipSavingDataFlag Then
+                        'If available, then fill-in the username
+                        EnterTextById("email", DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FoldingCoinSlackEmail).GetValue())
+
+                        If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FoldingCoinSlackPassword) IsNot Nothing Then
+                            'Skip asking for this in the future, if originally cancelled - Don't store info
+                            If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FoldingCoinSlackPassword).GetValue() <> SkipSavingDataFlag Then
+                                'If available, then fill-in the password
+                                EnterTextById("password", DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FoldingCoinSlackPassword).GetValue())
+                                Await Wait(100)
+
+                                'Click Sign-in button
+                                ClickById("signin_btn", True)
+                            End If
+                        End If
+                    End If
+                Else
+                    If bSkip = False Then
+                        'Just open the main URL instead
+                        OpenURL(URL_FoldingCoinSlack, False)
+                    End If
+                End If
+                DAT = Nothing
+            Else
+                'Just open the main URL instead
+                OpenURL(URL_FoldingCoinSlack, False)
+            End If
+        Else
+            'Just open the main URL instead
+            OpenURL(URL_FoldingCoinSlack, False)
+        End If
 #Enable Warning BC42358
     End Sub
     Private Sub btnFLDC_Stats_Click(sender As System.Object, e As System.EventArgs) Handles btnFLDC_Stats.Click
@@ -748,9 +915,112 @@
         End If
 #Enable Warning BC42358
     End Sub
-    Private Sub btnCureCoinSlack_Click(sender As Object, e As EventArgs) Handles btnCureCoinSlack.Click
+    Private Async Sub btnCureCoinSlack_Click(sender As Object, e As EventArgs) Handles btnCureCoinSlack.Click
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
-        OpenURL(URL_CureCoinSlack, False)
+        Dim bSkip As Boolean = False
+        'Make sure the INI key/value exists
+        If INI.GetSection(Id & Me.cbxWalletId.Text) IsNot Nothing AndAlso INI.GetSection(Id & Me.cbxWalletId.Text).GetKey(INI_WalletName) IsNot Nothing Then
+            'Load the Wallet name from the INI file based on the Wallet Id#
+            Me.txtWalletName.Text = INI.GetSection(Id & Me.cbxWalletId.Text).GetKey(INI_WalletName).GetValue()
+
+            If System.IO.File.Exists(DatFilePath) = True Then
+                'Open the Slack Sign-in page
+                Await OpenURL(URL_CureCoinSlack, False)
+                Await PageTitleWait("Slack")
+                Await Wait(100)
+
+                Dim DAT As New IniFile
+                'Load DAT file, decrypt it
+                DAT.LoadText(Decrypt(LoadDat))
+
+                If DAT.GetSection(Id & Me.cbxWalletId.Text) Is Nothing OrElse DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CureCoinSlackEmail) Is Nothing Then
+                    'Fix missing value. Ask for FAH Username
+                    Dim SlackDlg As New UserPwdDialog
+                    SlackDlg.bSetupForFoldingCoin = False
+
+                    'Suggest the Email from the saved settings, if available
+                    If DAT.GetSection(Id & Me.cbxWalletId.Text) IsNot Nothing AndAlso DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_Email) IsNot Nothing Then
+                        SlackDlg.txtEmail.Text = DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_Email).GetValue()
+                    End If
+
+                    'Show modal dialog box
+                    If SlackDlg.ShowDialog(Me) = DialogResult.OK Then
+                        'Store Slack Email
+                        If SlackDlg.txtEmail.Text.Length <> 0 Then
+                            DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_CureCoinSlackEmail).Value = SlackDlg.txtEmail.Text
+                        Else
+                            'Don't save info, if user doesn't enter it, or cancels
+                            DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_CureCoinSlackEmail).Value = SkipSavingDataFlag
+                        End If
+
+                        'Store Slack Password
+                        If SlackDlg.txtPassword.Text.Length <> 0 Then
+                            DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_CureCoinSlackPassword).Value = SlackDlg.txtPassword.Text
+                        Else
+                            'Don't save info, if user doesn't enter it, or cancels
+                            DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_CureCoinSlackPassword).Value = SkipSavingDataFlag
+                        End If
+
+                    ElseIf SlackDlg.bGetSlackPressed = True Then
+                        'Allow the sign-up process to run instead of signing-in
+                        bSkip = True
+
+                        'CureCoin Slack Join Link
+                        Await OpenURL(URL_CureCoinJoinSlackSignup, False)
+                        Await PageTitleWait("Slack")
+                        Await Wait(100)
+
+                        'Suggest the Email from the saved settings, if available
+                        If DAT.GetSection(Id & Me.cbxWalletId.Text) IsNot Nothing AndAlso DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_Email) IsNot Nothing Then
+                            EnterTextById("slack-email", DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_Email).GetValue())
+                        End If
+                    Else
+                        'Don't save info, if user doesn't enter it, or cancels
+                        DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_CureCoinSlackEmail).Value = SkipSavingDataFlag
+                        DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_CureCoinSlackPassword).Value = SkipSavingDataFlag
+                    End If
+
+                    'Create text from the INI, Encrypt, and Write/Flush DAT text to file
+                    SaveDat(Encrypt(DAT.SaveToString))
+                    'Allow time for the file to be written out
+                    Await Wait(100)
+                    SlackDlg.Dispose()
+                End If
+
+                'Load Email and Password for the login web page
+                If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CureCoinSlackEmail) IsNot Nothing Then
+                    'Skip asking for this in the future, if originally cancelled - Don't store info
+                    If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CureCoinSlackEmail).GetValue() <> SkipSavingDataFlag Then
+                        'If available, then fill-in the username
+                        EnterTextById("email", DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CureCoinSlackEmail).GetValue())
+
+                        If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CureCoinSlackPassword) IsNot Nothing Then
+                            'Skip asking for this in the future, if originally cancelled - Don't store info
+                            If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CureCoinSlackPassword).GetValue() <> SkipSavingDataFlag Then
+                                'If available, then fill-in the password
+                                EnterTextById("password", DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CureCoinSlackPassword).GetValue())
+                                Await Wait(100)
+
+                                'Click Sign-in button
+                                ClickById("signin_btn", True)
+                            End If
+                        End If
+                    End If
+                Else
+                    If bSkip = False Then
+                        'Just open the main URL instead
+                        OpenURL(URL_CureCoinSlack, False)
+                    End If
+                End If
+                DAT = Nothing
+            Else
+                'Just open the main URL instead
+                OpenURL(URL_CureCoinSlack, False)
+            End If
+        Else
+            'Just open the main URL instead
+            OpenURL(URL_CureCoinSlack, False)
+        End If
 #Enable Warning BC42358
     End Sub
 
@@ -924,7 +1194,7 @@
             'Load the Wallet name from the INI file based on the Wallet Id#
             Me.txtWalletName.Text = INI.GetSection(Id & Me.cbxWalletId.Text).GetKey(INI_WalletName).GetValue()
         Else
-            Me.txtWalletName.Text = "<Not Used>"
+            Me.txtWalletName.Text = NotUsed
         End If
     End Sub
 
@@ -992,7 +1262,7 @@
                     SaveDat(Encrypt(DAT.SaveToString))
 
                     'Save a wallet name
-                    INI.AddSection(Id & Me.cbxWalletId.Text).AddKey(INI_WalletName).Value = "My Wallet"
+                    INI.AddSection(Id & Me.cbxWalletId.Text).AddKey(INI_WalletName).Value = DefaultWalletName & Me.cbxWalletId.Text
                     INI.Save(IniFilePath)
 
                     'Allow time for the file to be written out
@@ -1582,7 +1852,7 @@
                     'There should be a count of 2 of these elements on the registration page
                     jsResp = Await Me.browser.GetBrowser.MainFrame.EvaluateScriptAsync("document.getElementsByClassName('submit small').length;")
                     If jsResp.Success = True AndAlso IsNumeric(jsResp.Result) = True AndAlso CInt(jsResp.Result) > 0 Then Exit For
-                    Await Wait(300)
+                    Await Wait(500)
                 Next
 
                 'Fill in form info from the data
@@ -1596,7 +1866,7 @@
                 EnterTextByName("email2", strEmail)
                 'Pin
                 EnterTextByName("authPin", strPoolPin)
-                Await Wait(50)
+                Await Wait(100)
 
                 'Scroll to the bottom of the page, so you can see the captcha when the modal dialog is in the way
                 Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("window.scrollTo(0,document.body.scrollHeight);")
@@ -1605,7 +1875,7 @@
                 EnterTextByName("username", strFAHUser)
                 'Password
                 EnterTextByName("password", strPoolPW)
-                Await Wait(50)
+                Await Wait(100)
 
                 'Ask for the Captcha in a modal dialog, to enter in the form (to keep the user from mofifying the passwords)
                 Dim TxtEntry As New TextEntryDialog
@@ -1642,14 +1912,14 @@
                     EnterTextByName("email2", strEmail)
                     'Pin
                     EnterTextByName("authPin", strPoolPin)
-                    Await Wait(50)
+                    Await Wait(100)
 
 
                     'Login: Enter FAH Username
                     EnterTextByName("username", strFAHUser)
                     'Password
                     EnterTextByName("password", strPoolPW)
-                    Await Wait(50)
+                    Await Wait(100)
 
                     'Ask user to solve the captcha
                     Dim OkMsg As New MsgBoxDialog
@@ -1661,7 +1931,7 @@
 
                     'Wait to be logged into the 'My Account' page: look for text on that page to know when logged in...
                     Dim strTemp As String = ""
-                    For k As Integer = 1 To 120
+                    For k As Integer = 1 To 90
                         If g_bCancelNav = True Then Exit Try
 
                         If FindTextInDoc("<h1>News*>", strTemp, "") = True Then
@@ -1669,7 +1939,7 @@
                                 Exit For
                             End If
                         End If
-                        Await Wait(2000)
+                        Await Wait(3000)
                     Next
 
                     'Go to the CureCoin folding pool (CryptoBullionPools) website, and go to the 'My Account' settings page
@@ -1677,7 +1947,7 @@
                     'Wait for the page to load
                     Await PageLoadWait()
                     Await PageTitleWait(NameCryptoBullions)
-                    Await Wait(200)
+                    Await Wait(700)
                     'Wait to be logged into the 'My Account' page: look for text on that page to know when logged in...
                     strTemp = ""
                     For l As Integer = 1 To 60
@@ -1688,7 +1958,7 @@
                                 Exit For
                             End If
                         End If
-                        Await Wait(2000)
+                        Await Wait(3000)
                     Next
 
                     'Fill in CureCoin address
@@ -1697,7 +1967,7 @@
                     EnterTextByName("payoutThreshold", "1")
                     'Pin
                     EnterTextByName("authPin", strPoolPin)
-                    Await Wait(50)
+                    Await Wait(100)
 
                     'Click "Update Settings"
                     Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementsByClassName('submit long')[0].click();")
@@ -1902,6 +2172,20 @@
             End If
         Catch ex As Exception
             Msg("Enter Text By Name error: " & Err.Description)
+        End Try
+    End Function
+
+    'Specify text box {Object class}, and text to enter in to the text box
+    Private Function EnterTextByClass(Name As String, sText As String) As Boolean
+        EnterTextByClass = False
+
+        Try
+            If Name.Length > 0 Then
+                Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementsByClassName('" & Name & "')[0].value = '" & sText & "';")
+                EnterTextByClass = True
+            End If
+        Catch ex As Exception
+            Msg("Enter Text By Class error: " & Err.Description)
         End Try
     End Function
 
