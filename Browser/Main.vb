@@ -120,16 +120,18 @@
     'This was done because the New() constructor can't be run as Async. So, this was moved out to here
     Private Async Sub RunSetup()
         'For debugging issues: Log version info
-        Msg("Chromium Version: " & CefSharp.Cef.ChromiumVersion.ToString)
-        Msg("Cef Version: " & CefSharp.Cef.CefVersion.ToString)
-        Msg("CefSharp Version: " & CefSharp.Cef.CefSharpVersion.ToString)
+        Dim sbMsg As New System.Text.StringBuilder
+        sbMsg.Append(vbNewLine & DividerLine & vbNewLine & "Chromium Version: " & CefSharp.Cef.ChromiumVersion.ToString & vbNewLine &
+            "Cef Version: " & CefSharp.Cef.CefVersion.ToString & vbNewLine &
+            "CefSharp Version: " & CefSharp.Cef.CefSharpVersion.ToString)
         Dim plugins As List(Of CefSharp.Plugin) = Await CefSharp.Cef.GetPlugins
         For Each plugin As CefSharp.Plugin In plugins
-            Msg("=================")
-            Msg("Plugin: " & plugin.Name & If(plugin.Version.Length > 0, " v" & plugin.Version, ""))
-            If plugin.Description.Length > 0 Then Msg("Plugin Description: " & plugin.Description)
-            If plugin.Path.Length > 0 Then Msg("Plugin Path: " & plugin.Path)
+            sbMsg.Append(vbNewLine & DividerLine & vbNewLine &
+                "Plugin: " & plugin.Name & If(plugin.Version.Length > 0, " v" & plugin.Version, "") &
+                If(plugin.Description.Length > 0, vbNewLine & "Plugin Description: " & plugin.Description, "") &
+                If(plugin.Path.Length > 0, vbNewLine & "Plugin Path: " & plugin.Path, ""))
         Next
+        Msg(sbMsg.ToString & vbNewLine & DividerLine)
 
         'Load, fix, or update the INI and DAT files for the stored settings. Look to see if there is an INI file first
         If System.IO.File.Exists(IniFilePath) = True Then
@@ -163,13 +165,21 @@
             End If
 
             'Make sure the INI key/value exists
-            If INI.AddSection(INI_Settings).AddKey(INI_HideSavedDataButton) IsNot Nothing Then
+            If INI.GetSection(INI_Settings).GetKey(INI_HideSavedDataButton) IsNot Nothing Then
                 'Show/hide the 'Show Dat' file button
-                If INI.AddSection(INI_Settings).AddKey(INI_HideSavedDataButton).GetValue() = "False" Then
+                If INI.GetSection(INI_Settings).GetKey(INI_HideSavedDataButton).GetValue() = "False" Then
                     Me.btnSavedData.Visible = True
-                Else
+                ElseIf INI.GetSection(INI_Settings).GetKey(INI_HideSavedDataButton).GetValue() = "True" Then
                     Me.btnSavedData.Visible = False
+                Else
+                    'Restore value, if missing
+                    INI.AddSection(INI_Settings).AddKey(INI_HideSavedDataButton).Value = "False"
+                    Me.btnSavedData.Visible = True
                 End If
+            Else
+                'Restore value, if missing
+                INI.AddSection(INI_Settings).AddKey(INI_HideSavedDataButton).Value = "False"
+                Me.btnSavedData.Visible = True
             End If
 
         Else
@@ -403,7 +413,6 @@
                         'Done with the DAT file
                         DAT = Nothing
 
-
                         'If installing the CureCoin wallet, set this check box to setup the CureCoin pool info
                         If args(1) = "-InstWithCure" Then
                             Setup.chkSetupCURE.Checked = True
@@ -418,12 +427,18 @@
                             'FAH adavanced client installation
                             If Setup.chkGetFAHSoftware.Checked = True Then
                                 g_bAskDownloadLocation = False
-                                If Await GetFAH() = False Then MessageBox.Show("Task 'Get Folding@Home App' did not complete.")
+                                If Await GetFAH() = False Then
+                                    MessageBox.Show("Task 'Get Folding@Home App' did not complete." & vbNewLine & "Please use the buttons in the 'Tools' checkbox")
+                                    Exit Sub
+                                End If
                             End If
 
                             'Get Wallet
                             If Setup.chkGetWalletForFLDC.Checked = True Then
-                                If Await GetWallet() = False Then MessageBox.Show("Task 'Get Wallet' did not complete.")
+                                If Await GetWallet() = False Then
+                                    MessageBox.Show("Task 'Get Wallet' did not complete." & vbNewLine & "Please use the buttons in the 'Tools' checkbox")
+                                    Exit Sub
+                                End If
                             End If
 
                             'FAH Username / Teamname settings setup
@@ -451,55 +466,27 @@
                                 DlgDisplaySavedData.Show(Me)
                                 Delay(100)
                             End If
-
-                            'Process completed - Make a backup reminder
-                            Dim OkMsg As New MsgBoxDialog
-                            OkMsg.Text = "Setup Complete"
-                            If Setup.chkGetFAHSoftware.Checked = True OrElse Setup.chkGetWalletForFLDC.Checked = True OrElse Setup.chkSetupCURE.Checked = True Then
-                                OkMsg.MsgText.Text = "Setup is complete:" & vbNewLine &
-                                    "==============" & vbNewLine & vbNewLine &
-                                    "-Please use the 'Make Backup' button to save your settings in a safe place" & vbNewLine & vbNewLine &
-                                    "-Note Distribution Intervals: " & vbNewLine &
-                                    "     FoldingCoin: On the 1st Saturday of each month" & vbNewLine &
-                                    "         CureCoin: Daily.     Also, Proof of Stake (PoS) when coins are" & vbNewLine &
-                                    "            30-90 days old, with wallet unlocked and left running." & vbNewLine & vbNewLine &
-                                    "-Please contact us on Slack for questions or comments" & vbNewLine &
-                                    "    (Use FoldingBrowser buttons, or see the FoldingCoin webpage to join Slack)"
-                            Else
-                                OkMsg.MsgText.Text = "Setup Finished:" & vbNewLine &
-                                    "==============" & vbNewLine & vbNewLine &
-                                    "-Please use: Tools | Saved Data | 'Make Backup' button to backup your settings" & vbNewLine & vbNewLine &
-                                    "-Note Distribution Intervals: " & vbNewLine &
-                                    "     FoldingCoin: On the 1st Saturday of each month" & vbNewLine &
-                                    "         CureCoin: Daily.     Also, Proof of Stake (PoS) when coins are" & vbNewLine &
-                                    "            30-90 days old, with wallet unlocked and left running." & vbNewLine & vbNewLine &
-                                    "-Please contact us on Slack for questions or comments" & vbNewLine &
-                                    "    (Use FoldingBrowser buttons, or see the FoldingCoin webpage to join Slack)"
-                            End If
-                            OkMsg.Width = (OkMsg.MsgText.Left * 2) + OkMsg.MsgText.Width + 10
-                            OkMsg.Height = (OkMsg.MsgText.Top * 2) + OkMsg.MsgText.Height + OkMsg.BtnOK.Height + System.Windows.Forms.SystemInformation.CaptionHeight + System.Windows.Forms.SystemInformation.BorderSize.Height + 30
-                            OkMsg.StartPosition = FormStartPosition.CenterScreen
-                            OkMsg.ShowDialog(Me)
-                            OkMsg.Dispose()
-                        Else
-                            'Canceled - Process completed - Make a backup reminder
-                            Dim OkMsg As New MsgBoxDialog
-                            OkMsg.Text = "Setup Finished"
-                            OkMsg.MsgText.Text = "Setup Finished:" & vbNewLine &
-                                "==============" & vbNewLine & vbNewLine &
-                                "-Please use: Tools | Saved Data | 'Make Backup' button to backup your settings" & vbNewLine & vbNewLine &
-                                "-Note Distribution Intervals: " & vbNewLine &
-                                "     FoldingCoin: On the 1st Saturday of each month" & vbNewLine &
-                                "         CureCoin: Daily.     Also, Proof of Stake (PoS) when coins are" & vbNewLine &
-                                "            30-90 days old, with wallet unlocked and left running." & vbNewLine & vbNewLine &
-                                "-Please contact us on Slack for questions or comments" & vbNewLine &
-                                "    (Use FoldingBrowser buttons, or see the FoldingCoin webpage to join Slack)"
-                            OkMsg.Width = (OkMsg.MsgText.Left * 2) + OkMsg.MsgText.Width + 10
-                            OkMsg.Height = (OkMsg.MsgText.Top * 2) + OkMsg.MsgText.Height + OkMsg.BtnOK.Height + System.Windows.Forms.SystemInformation.CaptionHeight + System.Windows.Forms.SystemInformation.BorderSize.Height + 30
-                            OkMsg.StartPosition = FormStartPosition.CenterScreen
-                            OkMsg.ShowDialog(Me)
-                            OkMsg.Dispose()
                         End If
+
+                        'Automated process finished - Make a backup reminder, other informational messages
+                        Dim FinMsg As New MsgBoxDialog
+                        FinMsg.Text = "Setup Finished"
+                        FinMsg.MsgText.Text = "Setup Finished:" & vbNewLine &
+                            DividerLine & vbNewLine & vbNewLine &
+                            "-Please use: Tools | Saved Data | 'Make Backup' button to backup your settings" & vbNewLine & vbNewLine &
+                            "-Note Distribution Intervals: " & vbNewLine &
+                            "     FoldingCoin: On the 1st Saturday of each month" & vbNewLine &
+                            "         CureCoin: Daily.     Also, Proof of Stake (PoS) when coins are" & vbNewLine &
+                            "            30-90 days old, with wallet unlocked and left running." & vbNewLine & vbNewLine &
+                            "-Please contact us on Slack for questions or comments" & vbNewLine &
+                            "    (Use FoldingBrowser buttons, or see the FoldingCoin webpage to join Slack)"
+                        FinMsg.Width = (FinMsg.MsgText.Left * 2) + FinMsg.MsgText.Width + 10
+                        FinMsg.Height = (FinMsg.MsgText.Top * 2) + FinMsg.MsgText.Height + FinMsg.BtnOK.Height + System.Windows.Forms.SystemInformation.CaptionHeight + System.Windows.Forms.SystemInformation.BorderSize.Height + 30
+                        FinMsg.StartPosition = FormStartPosition.CenterScreen
+                        FinMsg.ShowDialog(Me)
+                        FinMsg.Dispose()
+
+                        'Cleanup
                         Setup.Dispose()
                 End Select
             End If
@@ -1221,12 +1208,87 @@
 #End Region
 
 #Region "Auto-Wallet Login"
+    'Main CounterWallet server is up: m_iCounterWalletServerUp = 1. If set to 2, then use the secondary server.
+    Private m_iCounterWalletServerUp As Integer = 0
+    Private Async Function IsCounterwalletUp() As Threading.Tasks.Task
+        Try
+            'Get CounterWallet server status to make sure it is up
+            Dim strResponse As String = ""
+            Msg("Getting CounterWallet server status from: " & URL_Counterwallet & CounterwalletAPI)
+            'Display status
+            Dim OkMsg As New MsgBoxDialog
+            OkMsg.Text = "Checking CounterWallet Server Status"
+            OkMsg.MsgText.Text = OkMsg.Text & vbNewLine & vbNewLine & "1. " & URL_Counterwallet & CounterwalletAPI & vbNewLine & "(Can take 40 seconds)"
+            OkMsg.MsgText.Left = 70
+            OkMsg.MsgText.Top = 70
+            OkMsg.Width = (OkMsg.MsgText.Left * 2) + OkMsg.MsgText.Width + 20
+            OkMsg.Height = (OkMsg.MsgText.Top * 2) + OkMsg.MsgText.Height + System.Windows.Forms.SystemInformation.CaptionHeight + System.Windows.Forms.SystemInformation.BorderSize.Height + 20
+            OkMsg.StartPosition = FormStartPosition.CenterScreen
+            OkMsg.BtnOK.Visible = False
+            OkMsg.BackColor = Color.Gold
+            OkMsg.Show(Me)
+
+            'Get CounterWallet status from server
+            Await OpenURL(URL_Counterwallet & CounterwalletAPI, False)
+            Await PageTitleWait("counterwallet")
+            Await Wait(50)
+
+            'Find status data in web page
+            For i As Integer = 0 To 1
+                If FindTextInDoc("""counterparty-server"": ""*K""", strResponse, "") = True AndAlso strResponse.Length > 0 Then
+                    'Search for 'OK' or 'NOT OK'. If OK, then set the flag for OK
+                    If strResponse = "O" Then m_iCounterWalletServerUp = 1
+                    Exit For
+                End If
+                Await Wait(700)
+            Next
+
+            If m_iCounterWalletServerUp <> 1 Then
+                Msg("Getting CounterWallet server status from: " & URL_CoinDaddyCounterwallet & CounterwalletAPI)
+                'Display status
+                OkMsg.BackColor = Color.Orange
+                OkMsg.MsgText.Text = OkMsg.Text & vbNewLine & vbNewLine & "2. " & URL_CoinDaddyCounterwallet & CounterwalletAPI & vbNewLine & "(Can take 40 seconds)"
+
+                'Get CounterWallet status from server
+                Await OpenURL(URL_CoinDaddyCounterwallet & CounterwalletAPI, False)
+                Await PageTitleWait("counterwallet")
+                Await Wait(50)
+
+                'Find status data in web page
+                For i As Integer = 0 To 1
+                    If FindTextInDoc("""counterparty-server"": ""*K""", strResponse, "") = True AndAlso strResponse.Length > 0 Then
+                        'Search for 'OK' or 'NOT OK'. If OK, then set the flag for OK
+                        If strResponse = "O" Then m_iCounterWalletServerUp = 2
+                        Exit For
+                    End If
+                    Await Wait(700)
+                Next
+            End If
+
+            'Close the informational message
+            OkMsg.Close()
+            OkMsg.Dispose()
+            Msg("Using CounterWallet server: #" & m_iCounterWalletServerUp)
+
+        Catch ex As Exception
+            Msg("CounterWallet Status error:" & ex.ToString)
+        End Try
+    End Function
+
     Private Async Function LoginToCounterwallet() As Threading.Tasks.Task(Of Boolean)
         Dim DAT As New IniFile
         Dim bSaved12W As Boolean = False
         Try
+            'Check server status
+            Await IsCounterwalletUp()
+            If m_iCounterWalletServerUp < 1 Then
+                If MessageBox.Show("CounterWallet Server appears to be down. Continue?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) <> MsgBoxResult.Ok Then
+                    Return True
+                End If
+            End If
+
             'CounterWallet web page 
-            Await OpenURL(URL_Counterwallet, False)
+            Await OpenURL(If(m_iCounterWalletServerUp = 2, URL_CoinDaddyCounterwallet, URL_Counterwallet), False)
             Await PageTitleWait("Counterwallet")
             Await Wait(700)
 
@@ -1313,8 +1375,16 @@
                 End If
             End If
 
+            'Check server status
+            Await IsCounterwalletUp()
+            If m_iCounterWalletServerUp < 1 Then
+                If MessageBox.Show("CounterWallet Server appears to be down. Continue?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) <> MsgBoxResult.Ok Then
+                    Return False
+                End If
+            End If
+
             'CounterWallet web page 
-            Await OpenURL(URL_Counterwallet, False)
+            Await OpenURL(If(m_iCounterWalletServerUp = 2, URL_CoinDaddyCounterwallet, URL_Counterwallet), False)
             Await PageTitleWait("Counterwallet")
             Await Wait(700)
 
@@ -1544,20 +1614,24 @@
     End Function
 
     Public Function SetupFAHUserTeamAndCfg() As Boolean
-        SetupFAHUserTeamAndCfg = False
         Try
             'Prompt for FAH info: Ask for: (existing) Username, Merged Folding Coin Selection, FAH Team #. Show Username as typing and check it for errors. (Optional) Get Passkey by email. Show before and after of the FAH Config file changes 
             Dim DialogFAH As New FAHSetupDialog
             'Show modal dialog box
             If DialogFAH.ShowDialog(Me) = DialogResult.OK Then
+                DialogFAH.Dispose()
+
                 'Return true, if you get here
-                SetupFAHUserTeamAndCfg = True
+                Return True
+            Else
+                DialogFAH.Dispose()
             End If
-            DialogFAH.Dispose()
 
         Catch ex As Exception
             Msg("Setup FAH User, Team, and Config error:" & ex.ToString)
         End Try
+
+        Return False
     End Function
 
     'This is called by the 'FAHSetupDialog' window to get the Passkey email from Stanford
@@ -1989,7 +2063,7 @@
 
     Private Async Function SendHTTP_JSON_RPC(strJSON_Cmd As String) As Threading.Tasks.Task(Of String)
         Try
-            'Start Telnet session
+            'Get HTTP JSON_RPC data from server
             If My.Computer.Network.IsAvailable = True Then
                 'Ensure IP address is available
                 If My.Computer.Network.Ping("localhost", 1500) = True Then
@@ -2010,12 +2084,13 @@
                     Dim reader As New IO.StreamReader(dataStream)
                     Dim responseFromServer As String = reader.ReadToEnd()
                     Msg(responseFromServer)
-                    Return responseFromServer
 
                     'Close objects
                     reader.Close()
                     response.Close()
                     dataStream.Close()
+
+                    Return responseFromServer
                 End If
             End If
         Catch ex As Exception
@@ -2409,14 +2484,14 @@
     Public Async Function PageLoadWait() As Threading.Tasks.Task(Of Boolean)
         Try
             Dim i As Integer = 0
-            'Wait for the web page, or 1 minute
-            Do Until m_bPageLoaded = True OrElse g_bCancelNav = True OrElse i > 600
+            'Wait for the web page, or 30 seconds
+            Do Until m_bPageLoaded = True OrElse g_bCancelNav = True OrElse i > 300
                 i += 1
                 Await Wait(100)
             Loop
             g_bCancelNav = False
 
-            If i < 600 Then Return True
+            If i < 300 Then Return True
 
         Catch ex As Exception
             Msg("Page Loading Wait error: " & Err.Description)

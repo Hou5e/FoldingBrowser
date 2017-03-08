@@ -70,6 +70,8 @@ Immediate Need:
 Tasks completed:
 ======================================================================================================
 
+[DONE] -Add secondary CounterWallet site (counterwallet.coindaddy.io) for when the main site (wallet.counterwallet.io) is down. counterwallet.io: They say it's the "same". "If having issues with one, feel free to try another. Your wallet will work on either."
+[DONE] -Deleted INI, restored, is missing setting HideSavedDataButton value
 v9 Release (3/4/2017)
 [DONE] -Add note about how CureCoin's POS works, mostly for new users
 [DONE] -Check for the Wallet.dat file existing to set the checkbox for the CureCoin folding pool setup? (would need to detect this in the installer before installing / launching it from the installer)

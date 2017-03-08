@@ -7,6 +7,8 @@ Public Module GlobalRefs
     'Common URLs
     Public Const URL_BLANK As String = "about:blank"
     Public Const URL_Counterwallet As String = "https://wallet.counterwallet.io/"
+    Public Const URL_CoinDaddyCounterwallet As String = "https://counterwallet.coindaddy.io/"
+    Public Const CounterwalletAPI As String = "_api/"
     Public Const URL_FoldingCoin As String = "http://foldingcoin.net/"
     Public Const URL_FoldingCoinTwitter As String = "https://twitter.com/FoldingCoin/"
     Public Const URL_FoldingCoinSlack As String = "https://foldingcoin.slack.com/"
@@ -47,6 +49,7 @@ Public Module GlobalRefs
     Public Const DAT_FoldingCoinSlackEmail As String = "FoldingCoinSlackEmail"
     Public Const DAT_FoldingCoinSlackPassword As String = "FoldingCoinSlackPassword"
 
+    Public Const DividerLine As String = "=============="
     Public Const SkipSavingDataFlag As String = "<Skip>"
     Public Const NotUsed As String = "<Not Used>"
     Public Const DefaultWalletName As String = "My Wallet #"
