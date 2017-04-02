@@ -38,31 +38,31 @@ Ideas, Improvements, Tasks:
 -Add stop button to cancel the automated process?
 
 -Get Wallet with CounterPart API instead of current methods? (or use Tokenly Pockets Plugin for this)
+-Support other wallets, like:  freewallet.io  or:  wallet.indiesquare.me
 
 -Improve the CureCoin HTTP JSON-RPC to use the JSON parser, and find the wallet if there is more than one entry or (blank and a name)
 -Show image of where to get the CURE wallet address, for message when it can't be found
 -Improve the CureCoin pool sign up process, search for: account created / captcha failed massages? Search for User/PW being blank and fill them in for Capcha retries (fill in initially, too). Stop/Exit the process? Better retries for captcha fail / retry. Reload the info periodically?
--Make the other webpage wait loops use Javascript for detecting stuff is there(like the CureCoin webpage login)
-
--Try '.NET Core' simple sample project, to get a feel for it, especially for Linux and MacOS.
+-Make the other webpage wait loops use Javascript for detecting stuff is there (like the CureCoin webpage login)
 
 -GitHub: An installer download link that doesn't change for FoldingCoin / CureCoin website links?
 
--Multi-language support for Browser and installer
--Linux & Mac executables & install packages (or a live image you can just run off a USB drive)
--(From Robert's doc - Review this idea): <Warn about this thrashing your Hard Drive, and SSD would be better> The Storj "Driveshare" program will be important to include because we can promote earning SJCX at the same time as FLDC. SJCX shares your hard drive that you earn tokens for and FLDC shares your computational power you earn tokens for
+-Test out the FLDC Bar Electron app
+-Try '.NET Core' simple sample project, to get a feel for it, especially for Linux and MacOS.
+-Linux & Mac executables & install packages (or a live image you can just run off a USB drive?)
 
--CureCoin 2.0 changes? (probably Apr-May?)
+-CureCoin 2.0 changes? (May-June?)
+
 
 
 ---------------
 Immediate Need:
 ---------------
--Multi-language support for installer
+-Enable Multi-language support in the FoldingBrowser app
 -Simple version of the FoldingBrowser: mostly to only run the FAH NaCl Chrome Plugin client. -Would switching to the Electron framework be better?
 -Add notify icon (system tray icon) for folding with NaCl Chrome Plug-in
 
--Test out the FLDC Bar Electron app
+
 
 
 
@@ -70,6 +70,8 @@ Immediate Need:
 Tasks completed:
 ======================================================================================================
 
+v10 Release (4/2/2017)
+[DONE] -Enable Multi-language support for installer (The license, (2) installation sections, and their descriptions are not translated)
 [DONE] -Add secondary CounterWallet site (counterwallet.coindaddy.io) for when the main site (wallet.counterwallet.io) is down. counterwallet.io: They say it's the "same". "If having issues with one, feel free to try another. Your wallet will work on either."
 [DONE] -Deleted INI, restored, is missing setting HideSavedDataButton value
 v9 Release (3/4/2017)

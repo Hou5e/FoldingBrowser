@@ -19,6 +19,9 @@
             settings.CachePath = System.IO.Path.Combine(UserProfileDir, "Cache")
             settings.UserDataPath = settings.CachePath
             settings.LogFile = System.IO.Path.Combine(settings.CachePath, "debug.log")
+            settings.LocalesDirPath = System.IO.Path.Combine(My.Application.Info.DirectoryPath, "locales")
+            settings.Locale = "en-US"
+            settings.AcceptLanguageList = settings.Locale & "," & settings.Locale.Substring(0, 2)
 #If DEBUG Then
             'Debug: Log everything - verbose
             settings.LogSeverity = CefSharp.LogSeverity.Verbose
