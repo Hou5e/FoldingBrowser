@@ -38,7 +38,8 @@ Ideas, Improvements, Tasks:
 -Add stop button to cancel the automated process?
 
 -Get Wallet with CounterPart API instead of current methods? (or use Tokenly Pockets Plugin for this)
--Support other wallets, like:  freewallet.io  or:  wallet.indiesquare.me
+-Support other wallets?  like:  freewallet.io  or:  wallet.indiesquare.me
+-Support other CounterParty block explorers?  like:  https://www.blocktrail.com/BTC/address/<addy>
 
 -Improve the CureCoin HTTP JSON-RPC to use the JSON parser, and find the wallet if there is more than one entry or (blank and a name)
 -Show image of where to get the CURE wallet address, for message when it can't be found
@@ -70,6 +71,8 @@ Immediate Need:
 Tasks completed:
 ======================================================================================================
 
+v11 Release (4/14/2017)
+[DONE] -Updated the FAH download link for the new WordPress-based website: https://folding.stanford.edu/start-folding/
 v10 Release (4/2/2017)
 [DONE] -Enable Multi-language support for installer (The license, (2) installation sections, and their descriptions are not translated)
 [DONE] -Add secondary CounterWallet site (counterwallet.coindaddy.io) for when the main site (wallet.counterwallet.io) is down. counterwallet.io: They say it's the "same". "If having issues with one, feel free to try another. Your wallet will work on either."

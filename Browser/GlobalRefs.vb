@@ -25,7 +25,7 @@ Public Module GlobalRefs
     Public Const URL_CureCoinBlockchain As String = "https://chainz.cryptoid.info/cure/"
     Public Const URL_EOC As String = "http://folding.extremeoverclocking.com/user_summary.php?s=&u="
     Public Const URL_CureCoin_EOC As String = "http://folding.extremeoverclocking.com/team_summary.php?s=&t=224497"
-    Public Const URL_FAH As String = "http://folding.stanford.edu/"
+    Public Const URL_FAH As String = "https://folding.stanford.edu/start-folding/"
     Public Const URL_FAH_Client As String = "http://folding.stanford.edu/client/"
     Public Const URL_CureCoinFoldingPoolPage As String = "https://www.cryptobullionpools.com/"
 

@@ -1495,21 +1495,14 @@
         Try
             'Get Folding@Home App
             Await OpenURL(URL_FAH, False)
-            Await PageTitleWait("Folding@home")
-            Await Wait(700)
-
-            'Click the link for Windows download (This initial step appears to be needed? even though the link is in the HTML)
-            Await ClickByClass("download-btn", False)
-            Await Wait(200)
+            Await PageTitleWait("Start folding")
+            Await Wait(500)
 
             'Make the download progress visible
             Me.gbxDownload.Visible = True
-            'Start the download: Click the link for Windows download
-            Await ClickByClass("fah-platform-downloads", False)
-            Await Wait(200)
 
-            'Close the download pop-up window
-            Await ClickByClass("modalCloseImg simplemodal-close", False)
+            'Start the download: Click the link for Windows download
+            Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementsByClassName('fah-file')[0].getElementsByTagName('a')[0].click();")
 
             'Close any running instances of FAH
             Try
