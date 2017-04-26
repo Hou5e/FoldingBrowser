@@ -39,7 +39,7 @@ Ideas, Improvements, Tasks:
 
 -Get Wallet with CounterPart API instead of current methods? (or use Tokenly Pockets Plugin for this)
 -Support other wallets?  like:  freewallet.io  or:  wallet.indiesquare.me
--Support other CounterParty block explorers?  like:  https://www.blocktrail.com/BTC/address/<addy>
+-Support other block explorers?  like:  https://www.blocktrail.com/BTC/address/<addy>, https://xcpdex.com/, https://chain.so/
 
 -Improve the CureCoin HTTP JSON-RPC to use the JSON parser, and find the wallet if there is more than one entry or (blank and a name)
 -Show image of where to get the CURE wallet address, for message when it can't be found
@@ -67,10 +67,12 @@ Immediate Need:
 
 
 
-================
-Tasks completed:
+======================================================================================================
+Release Notes - Tasks completed:
 ======================================================================================================
 
+
+[DONE] -Update link to new CounterParty block explorer: https://counterpartychain.io/
 v11 Release (4/14/2017)
 [DONE] -Updated the FAH download link for the new WordPress-based website: https://folding.stanford.edu/start-folding/
 v10 Release (4/2/2017)
