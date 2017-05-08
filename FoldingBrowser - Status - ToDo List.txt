@@ -45,6 +45,8 @@ Ideas, Improvements, Tasks:
 -Show image of where to get the CURE wallet address, for message when it can't be found
 -Improve the CureCoin pool sign up process, search for: account created / captcha failed massages? Search for User/PW being blank and fill them in for Capcha retries (fill in initially, too). Stop/Exit the process? Better retries for captcha fail / retry. Reload the info periodically?
 -Make the other webpage wait loops use Javascript for detecting stuff is there (like the CureCoin webpage login)
+-Option to start the CureCoin wallet (if not running) for POS purposes?
+-Option to get Wallet info from blockchain website to display?
 
 -GitHub: An installer download link that doesn't change for FoldingCoin / CureCoin website links?
 
@@ -53,7 +55,7 @@ Ideas, Improvements, Tasks:
 -Linux & Mac executables & install packages (or a live image you can just run off a USB drive?)
 
 -CureCoin 2.0 changes? (May-June?)
-
+-Other CureCoin websites: https://curecoin.info   https://curecoin.io/  in addition to http://curecoin.net/ ?
 
 
 ---------------
@@ -64,7 +66,7 @@ Immediate Need:
 -Add notify icon (system tray icon) for folding with NaCl Chrome Plug-in
 
 
-
+?? -change to the new username format 
 
 
 ======================================================================================================
