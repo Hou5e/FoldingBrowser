@@ -133,9 +133,6 @@
   <data name="FLDC_48" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\FLDC_48.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="FoldingCoin_16_32_48" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\FoldingCoin-16_32_48.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="FoldingCoin_top_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\FoldingCoin-top-32.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -144,6 +141,9 @@
   </data>
   <data name="Go_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Go-16.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="L_cysteine_16_24_32_48_256" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\L-cysteine-16_24_32_48_256.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="L_cysteine_3D_vdW2_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\L-cysteine-3D-vdW2-32.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

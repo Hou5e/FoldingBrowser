@@ -58,13 +58,13 @@
 
                 'Default homepage / portal set to the FoldingCoin webpage
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
-                OpenURL(URL_FoldingCoin, False)
+                OpenURL(URL_PortalPage, False)
                 'OpenURL("http://folding.stanford.edu/nacl/", False)
 #Enable Warning BC42358
             End If
 
             'Setup the rest of the window
-            Me.Icon = My.Resources.FoldingCoin_16_32_48
+            Me.Icon = My.Resources.L_cysteine_16_24_32_48_256
             Me.Text = Prog_Name & " v" & My.Application.Info.Version.Major.ToString
 
             'Global reference to this form
@@ -127,8 +127,8 @@
         sbMsg.Append(vbNewLine & DividerLine & vbNewLine & "Chromium Version: " & CefSharp.Cef.ChromiumVersion.ToString & vbNewLine &
             "Cef Version: " & CefSharp.Cef.CefVersion.ToString & vbNewLine &
             "CefSharp Version: " & CefSharp.Cef.CefSharpVersion.ToString)
-        Dim plugins As List(Of CefSharp.Plugin) = Await CefSharp.Cef.GetPlugins
-        For Each plugin As CefSharp.Plugin In plugins
+        Dim plugins As List(Of CefSharp.WebPluginInfo) = Await CefSharp.Cef.GetPlugins
+        For Each plugin As CefSharp.WebPluginInfo In plugins
             sbMsg.Append(vbNewLine & DividerLine & vbNewLine &
                 "Plugin: " & plugin.Name & If(plugin.Version.Length > 0, " v" & plugin.Version, "") &
                 If(plugin.Description.Length > 0, vbNewLine & "Plugin Description: " & plugin.Description, "") &

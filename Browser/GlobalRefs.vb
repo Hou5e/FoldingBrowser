@@ -6,6 +6,7 @@ Public Module GlobalRefs
 
     'Common URLs
     Public Const URL_BLANK As String = "about:blank"
+    Public URL_PortalPage As String = New System.Uri(System.IO.Path.Combine(Application.StartupPath(), Prog_Name & ".html")).AbsoluteUri
     Public Const URL_Counterwallet As String = "https://wallet.counterwallet.io/"
     Public Const URL_CoinDaddyCounterwallet As String = "https://counterwallet.coindaddy.io/"
     Public Const CounterwalletAPI As String = "_api/"
@@ -18,7 +19,7 @@ Public Module GlobalRefs
     Public Const URL_BTC_Blockchain As String = "https://blockchain.info/"
     Public Const URL_FLDC_Distro As String = "http://foldingcoin.xyz/?token=FLDC&total=250000&start="
     Public Const URL_FLDC_Stats As String = "https://fldc.tech/daily-reports-daily-points/?rdate="
-    Public Const URL_CureCoin As String = "https://www.curecoin.net/"
+    Public Const URL_CureCoin As String = "https://curecoin.io/"
     Public Const URL_CureCoinTwitter As String = "https://twitter.com/CureCoin_Team/"
     Public Const URL_CureCoinSlack As String = "https://curecoin.slack.com/"
     Public Const URL_CureCoinJoinSlackSignup As String = "http://slack.curecoin.net:30000/"

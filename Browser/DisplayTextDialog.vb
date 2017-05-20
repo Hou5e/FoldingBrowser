@@ -3,7 +3,7 @@
         Try
             InitializeComponent()
 
-            Me.Icon = My.Resources.FoldingCoin_16_32_48
+            Me.Icon = My.Resources.L_cysteine_16_24_32_48_256
             Me.SplitContainer1.SplitterWidth = 2
             Me.SplitContainer1.Panel1Collapsed = True
 

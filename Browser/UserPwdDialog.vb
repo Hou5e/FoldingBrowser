@@ -3,7 +3,7 @@
     Public bGetSlackPressed As Boolean = False
 
     Private Sub UserPwdDialog_Load(sender As Object, e As EventArgs) Handles Me.Load
-        Me.Icon = My.Resources.FoldingCoin_16_32_48
+        Me.Icon = My.Resources.L_cysteine_16_24_32_48_256
 
         Me.btnGetAccount.Text = "Get " & If(bSetupForFoldingCoin = True, "FoldingCoin", "CureCoin") & " Slack Account"
         Me.lblMsgText.Text = "Please Enter Your Existing " & If(bSetupForFoldingCoin = True, "FoldingCoin", "CureCoin") & " Slack Info:"

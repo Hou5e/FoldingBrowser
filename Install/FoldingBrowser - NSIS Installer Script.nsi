@@ -191,6 +191,7 @@ Section "!${PRODUCT_NAME} v${PRODUCT_VERSION}" SEC01
   File "..\Browser\bin\Release\natives_blob.bin"
   File "..\Browser\bin\Release\snapshot_blob.bin"
   File "..\Browser\bin\Release\widevinecdmadapter.dll"
+  File "..\Browser\FoldingBrowser.html"
 
   SetOutPath "$INSTDIR\Licenses"  ;Destination
   File "..\Browser\bin\Release\Licenses\*"

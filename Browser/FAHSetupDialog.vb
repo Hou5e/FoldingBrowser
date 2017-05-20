@@ -16,7 +16,7 @@
     Private Sub FAHSetupDialog_Load(sender As Object, e As EventArgs) Handles Me.Load
         Dim strTeam As String = ""
 
-        Me.Icon = My.Resources.FoldingCoin_16_32_48
+        Me.Icon = My.Resources.L_cysteine_16_24_32_48_256
 
         'Hide the form while it's being adjusted
         Me.WindowState = FormWindowState.Minimized
