@@ -19,5 +19,5 @@
 ## Contact
 
 - Just jump on the Slack for: [FoldingCoin Slack](https://foldingcoin.slack.com/messages/general/), or [CureCoin Slack](https://curecoin.slack.com/messages), and I'm user Hou5e.
--- For New Slack accounts, use: [FoldingCoin Slack Signup](http://slack.foldingcoin.net/), [CureCoin Slack Signup](http://slack.curecoin.net:30000/)
-- Or, the BitcoinTalk forum for: [FoldingCoin ANN](https://bitcointalk.org/index.php?topic=781352), or [CureCoin ANN](https://bitcointalk.org/index.php?topic=603757)
+- For New Slack accounts, use: [FoldingCoin Slack Signup](http://slack.foldingcoin.net/), [CureCoin Slack Signup](http://slack.curecoin.net:30000/)
+- Or, the BitcoinTalk forum for: [FoldingCoin](https://bitcointalk.org/index.php?topic=781352), or [CureCoin](https://bitcointalk.org/index.php?topic=603757)
