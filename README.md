@@ -2,13 +2,15 @@
 
 [![FoldingBrowser Logo](FoldingBrowserTitle.png)](http://foldingcoin.net/ "FoldingCoin")
 
-[FoldingCoin](http://foldingcoin.net/) & [CureCoin](https://www.curecoin.net/) All-In-One Installer, [FoldingCoin](http://foldingcoin.net/) Web Wallet interface
+[FoldingCoin](http://foldingcoin.net/) & [CureCoin](http://curecoin.net/) All-In-One Installer, [FoldingCoin](http://foldingcoin.net/) Web Wallet interface
 
 ## Releases
 
 - See [FoldingBrowser Releases](https://github.com/Hou5e/FoldingBrowser/releases) for the Windows installer
+- FoldingBrowser [Screenshot](Screenshot.jpg), and [Setup Video](https://www.youtube.com/watch?v=fZ5PXznqdvI). Please ask questions on the Slack Contact links below.
 - FoldingBrowser is written in VB.NET, compiled with VS2015, targeting the .NET Framework v4.5.2
-- Currently based on [cefsharp/55](https://github.com/cefsharp/CefSharp/tree/cefsharp/55) Chrome / Chromium Embedded Framework (CEF). Requires: VC++ 2013 x86 Redist & .NET v4.5.2
+- Currently based on [cefsharp/57](https://github.com/cefsharp/CefSharp/tree/cefsharp/57) Chrome / Chromium Embedded Framework (CEF). Requires: VC++ 2013 x86 Redist & .NET v4.5.2
+- [Status, Release notes, & Ideas for future development](FoldingBrowser - Status - ToDo List.txt)
 
 ## License
 
@@ -16,4 +18,4 @@ FoldingBrowser is [licensed](Browser/bin/Release/LICENSE.txt) under a [BSD](http
 
 ## Contact
 
-Jump on the [FoldingCoin Slack](https://foldingcoin.slack.com/messages/general/), and I'm user hou5e, or [BitcoinTalk forum](https://bitcointalk.org/index.php?topic=781352), user Hou5e
+Just jump on the [FoldingCoin Slack](https://foldingcoin.slack.com/messages/general/),  [CureCoin Slack](https://curecoin.slack.com/messages),  [FoldingCoin BitcoinTalk forum](https://bitcointalk.org/index.php?topic=781352),  [CureCoin BitcoinTalk forum](https://bitcointalk.org/index.php?topic=603757),  and I'm user Hou5e.

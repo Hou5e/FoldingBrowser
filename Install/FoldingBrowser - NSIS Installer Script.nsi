@@ -16,7 +16,7 @@
 !define PRODUCT_UNINST_EXE_NAME "Uninstall_${PRODUCT_EXE_NAME}"  ;Executable name without extension
 
 ;This constant must match the CureCoin installer version
-!define CURECOIN_VERSION "0.1.3.4"
+!define CURECOIN_VERSION "1.9.2.1"
 
 !define REQUIRED_MS_DOT_NET_VERSION "4.0*"
 

@@ -335,7 +335,7 @@ Partial Class FAHSetupDialog
         'cbxSeparator
         '
         Me.cbxSeparator.FormattingEnabled = True
-        Me.cbxSeparator.Items.AddRange(New Object() {"_", "_ALL_", "_FLDC_"})
+        Me.cbxSeparator.Items.AddRange(New Object() {"_ALL_", "_FLDC_"})
         Me.cbxSeparator.Location = New System.Drawing.Point(116, 78)
         Me.cbxSeparator.Name = "cbxSeparator"
         Me.cbxSeparator.Size = New System.Drawing.Size(72, 26)
