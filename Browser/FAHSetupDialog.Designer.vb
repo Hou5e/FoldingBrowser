@@ -346,10 +346,11 @@ Partial Class FAHSetupDialog
         '
         Me.lblErrorNote.AutoSize = True
         Me.lblErrorNote.BackColor = System.Drawing.Color.Tomato
+        Me.lblErrorNote.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblErrorNote.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblErrorNote.Location = New System.Drawing.Point(201, 12)
+        Me.lblErrorNote.Location = New System.Drawing.Point(197, 12)
         Me.lblErrorNote.Name = "lblErrorNote"
-        Me.lblErrorNote.Size = New System.Drawing.Size(33, 13)
+        Me.lblErrorNote.Size = New System.Drawing.Size(35, 15)
         Me.lblErrorNote.TabIndex = 7
         Me.lblErrorNote.Text = "Note:"
         Me.lblErrorNote.Visible = False
@@ -383,10 +384,11 @@ Partial Class FAHSetupDialog
         '
         Me.lblPasskeyError.AutoSize = True
         Me.lblPasskeyError.BackColor = System.Drawing.Color.Tomato
+        Me.lblPasskeyError.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblPasskeyError.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblPasskeyError.Location = New System.Drawing.Point(417, 73)
         Me.lblPasskeyError.Name = "lblPasskeyError"
-        Me.lblPasskeyError.Size = New System.Drawing.Size(52, 13)
+        Me.lblPasskeyError.Size = New System.Drawing.Size(54, 15)
         Me.lblPasskeyError.TabIndex = 1
         Me.lblPasskeyError.Text = "(32 digits)"
         Me.lblPasskeyError.Visible = False

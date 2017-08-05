@@ -130,12 +130,11 @@ Do let anyone see your wallet passphrase, or they can gain access to your wallet
 This information is saved in an encrypted format, which is more secure than a text file.
 
 Note: The default encryption password can be modified in the INI file:
-(Make a backup first)  Copy the text above to something, close the program,
-change the INI password, reopen the program, paste text into this window and 'Save Changes'.</value>
+(Make a backup first)  Click 'Show Raw Data', copy the text above to something,
+close the program, change the INI password, reopen the program,
+click 'Show Raw Data', paste text into this window, and click 'Save Changes'.
+(Make a new backup to finish)</value>
   </data>
-  <metadata name="ToolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>47</value>
   </metadata>

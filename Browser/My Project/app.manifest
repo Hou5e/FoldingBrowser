@@ -8,7 +8,7 @@
     xmlns:asmv3="urn:schemas-microsoft-com:asm.v3"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
-  <assemblyIdentity version="12.0.0.0" name="FoldingBrowser.app" />
+  <assemblyIdentity version="13.0.0.0" name="FoldingBrowser.app" />
 
   <!-- Enable themes for Windows common controls and dialogs (Windows XP and later) -->
   <dependency>

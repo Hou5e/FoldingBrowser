@@ -10,6 +10,7 @@ Public Module GlobalRefs
     Public Const URL_Counterwallet As String = "https://wallet.counterwallet.io/"
     Public Const URL_CoinDaddyCounterwallet As String = "https://counterwallet.coindaddy.io/"
     Public Const CounterwalletAPI As String = "_api/"
+
     Public Const URL_FoldingCoin As String = "http://foldingcoin.net/"
     Public Const URL_FoldingCoinTwitter As String = "https://twitter.com/FoldingCoin/"
     Public Const URL_FoldingCoinSlack As String = "https://foldingcoin.slack.com/"
@@ -18,17 +19,20 @@ Public Module GlobalRefs
     Public Const URL_FLDC_AddressBlockchain As String = "https://xchain.io/address/"
     Public Const URL_BTC_Blockchain As String = "https://blockchain.info/"
     Public Const URL_FLDC_Distro As String = "http://foldingcoin.xyz/?token=FLDC&total=250000&start="
-    Public Const URL_FLDC_Stats As String = "https://fldc.tech/daily-reports-daily-points/?rdate="
+
     Public Const URL_CureCoin As String = "https://curecoin.net/"
     Public Const URL_CureCoinTwitter As String = "https://twitter.com/CureCoin_Team/"
     Public Const URL_CureCoinSlack As String = "https://curecoin.slack.com/"
     Public Const URL_CureCoinJoinSlackSignup As String = "http://slack.curecoin.net:30000/"
     Public Const URL_CureCoinBlockchain As String = "https://chainz.cryptoid.info/cure/"
+    Public Const URL_CureCoinFoldingPoolPage As String = "https://www.cryptobullionpools.com/"
+
     Public Const URL_EOC As String = "http://folding.extremeoverclocking.com/user_summary.php?s=&u="
     Public Const URL_CureCoin_EOC As String = "http://folding.extremeoverclocking.com/team_summary.php?s=&t=224497"
+
     Public Const URL_FAH As String = "https://folding.stanford.edu/start-folding/"
     Public Const URL_FAH_Client As String = "http://folding.stanford.edu/client/"
-    Public Const URL_CureCoinFoldingPoolPage As String = "https://www.cryptobullionpools.com/"
+
 
     'Encrypted DAT file password
     Public Const Default_DAT_PW As String = "(Default Password) If you change this line, remember to make backups. I can't restore it for you."

@@ -119,7 +119,6 @@ Unicode true   ;For all languages to display properly (Installer won't run on Wi
 !insertmacro MUI_LANGUAGE "Asturian"
 !insertmacro MUI_LANGUAGE "Basque"
 !insertmacro MUI_LANGUAGE "Pashto"
-!insertmacro MUI_LANGUAGE "ScotsGaelic"
 !insertmacro MUI_LANGUAGE "Georgian"
 !insertmacro MUI_LANGUAGE "Vietnamese"
 !insertmacro MUI_LANGUAGE "Welsh"

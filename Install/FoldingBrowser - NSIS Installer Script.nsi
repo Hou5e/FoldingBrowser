@@ -4,8 +4,8 @@
 
 
 ;---- Helper defines / constants ----
-!define PRODUCT_VERSION "12"  ;Match the displayed version in the program title. Example: 1.2.3
-!define PRODUCT_4_VALUE_VERSION "12.0.0.0"  ;Match the executable version: Right-click the program executable file | Properties | Version. Example: 1.2.3.4
+!define PRODUCT_VERSION "13"  ;Match the displayed version in the program title. Example: 1.2.3
+!define PRODUCT_4_VALUE_VERSION "13.0.0.0"  ;Match the executable version: Right-click the program executable file | Properties | Version. Example: 1.2.3.4
 !define PRODUCT_YEAR "2017"
 !define PRODUCT_NAME "FoldingBrowser"
 !define PRODUCT_EXE_NAME "FoldingBrowser"  ;Executable name without extension
@@ -37,13 +37,24 @@ Unicode true   ;For all languages to display properly (Installer won't run on Wi
 
 ;MUI Settings
 !define MUI_ABORTWARNING
+;Language page settings
+!define MUI_LANGDLL_ALLLANGUAGES   ;Show all languages (Don't filter based on codepage)
+!define MUI_LANGDLL_REGISTRY_ROOT "HKLM"
+!define MUI_LANGDLL_REGISTRY_KEY "${PRODUCT_DIR_REGKEY}"
+!define MUI_LANGDLL_REGISTRY_VALUENAME "Installer Language"
+;Installer settings
 !define MUI_WELCOMEFINISHPAGE_BITMAP "Resources\Side-164x314.bmp"
 !define MUI_ICON "Resources\L-cysteine-3D-16_32_48.ico"
-!define MUI_UNICON "Resources\Uninstaller-16_32_48.ico"
 !define MUI_HEADERIMAGE
 !define MUI_HEADERIMAGE_RIGHT
 !define MUI_HEADERIMAGE_BITMAP "Resources\Header-150x57.bmp"
 !define MUI_COMPONENTSPAGE_SMALLDESC   ;properties for the Components page. Without this, the description field is larger.
+;Uninstaller settings
+!define MUI_UNWELCOMEFINISHPAGE_BITMAP "Resources\Side-164x314.bmp"
+!define MUI_UNICON "Resources\Uninstaller-16_32_48.ico"
+!define MUI_UNHEADERIMAGE
+!define MUI_UNHEADERIMAGE_RIGHT
+!define MUI_UNHEADERIMAGE_BITMAP "Resources\Header-150x57.bmp"
 
 ;Welcome page
 !insertmacro MUI_PAGE_WELCOME
@@ -68,7 +79,10 @@ Unicode true   ;For all languages to display properly (Installer won't run on Wi
 ;!insertmacro MUI_PAGE_FINISH
 
 ;Uninstaller pages
+!insertmacro MUI_UNPAGE_WELCOME
+!insertmacro MUI_UNPAGE_CONFIRM
 !insertmacro MUI_UNPAGE_INSTFILES
+!insertmacro MUI_UNPAGE_FINISH
 
 ;Language files
 !insertmacro MUI_LANGUAGE "English"  ;(default language is listed first)
@@ -130,7 +144,6 @@ Unicode true   ;For all languages to display properly (Installer won't run on Wi
 !insertmacro MUI_LANGUAGE "Asturian"
 !insertmacro MUI_LANGUAGE "Basque"
 !insertmacro MUI_LANGUAGE "Pashto"
-!insertmacro MUI_LANGUAGE "ScotsGaelic"
 !insertmacro MUI_LANGUAGE "Georgian"
 !insertmacro MUI_LANGUAGE "Vietnamese"
 !insertmacro MUI_LANGUAGE "Welsh"
@@ -239,10 +252,13 @@ SectionEnd
 Function .onInit
   !insertmacro MULTIUSER_INIT  ;On install startup, ensure Admin user privilege level
 
+  ;Language selection page
+  !insertmacro MUI_LANGDLL_DISPLAY
+
   ;On startup, force uninstall of previous installation before installing this version
   ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" "UninstallString"
   StrCmp $R0 "" UninstallFinished
-  MessageBox MB_YESNO|MB_ICONEXCLAMATION "Uninstall current copy of ${PRODUCT_NAME} and continue?" /SD IDYES IDYES UninstallPrevious
+  MessageBox MB_YESNO|MB_ICONEXCLAMATION "Uninstall current copy of ${PRODUCT_NAME} and continue?$\r$\n(User settings will be left in your user profile)" /SD IDYES IDYES UninstallPrevious
   Abort
 UninstallPrevious:
   ClearErrors  ;Clear any errors and start the uninstaller of the previous program.
@@ -439,21 +455,17 @@ Section Uninstall
 
   DeleteRegKey HKLM "${PRODUCT_UNINST_KEY}"
   DeleteRegKey HKLM "${PRODUCT_DIR_REGKEY}"
+  DeleteRegKey HKLM "Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
+  DeleteRegKey HKLM "Software\Wow6432Node\Microsoft\Windows\CurrentVersion\App Paths\${PRODUCT_EXE_NAME}.exe"
   ${un.RefreshShellIcons}   ;Make sure the desktop is refreshed to cleanup any deleted desktop icons
-  SetAutoClose true
 SectionEnd
 
 ;---- Uninstaller functions ----
 Function un.onInit
   !insertmacro MULTIUSER_UNINIT  ;On uninstall startup, ensure Admin user privilege level
 
-  MessageBox MB_ICONQUESTION|MB_YESNO "Are you sure you want to remove $(^Name)?$\r$\n(User settings will be left in your user profile)" /SD IDYES IDYES +2
-  Abort
-FunctionEnd
-
-Function un.onUninstSuccess
-  HideWindow
-  MessageBox MB_ICONINFORMATION|MB_OK "$(^Name) was successfully removed from your computer." /SD IDOK
+  ;Use same language as installer
+  !insertmacro MUI_UNGETLANGUAGE
 FunctionEnd
 
 Function un.CloseFoldingBrowser

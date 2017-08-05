@@ -479,8 +479,8 @@
                             "-Please use: Tools | Saved Data | 'Make Backup' button to backup your settings" & vbNewLine & vbNewLine &
                             "-Note Distribution Intervals: " & vbNewLine &
                             "     FoldingCoin: On the 1st Saturday of each month" & vbNewLine &
-                            "         CureCoin: Daily.     Also, Proof of Stake (PoS) when coins are" & vbNewLine &
-                            "            30-90 days old, with wallet unlocked and left running." & vbNewLine & vbNewLine &
+                            "         CureCoin: Daily.     Also, Proof of Stake (POS) when coins are" & vbNewLine &
+                            "            over 30 days old, with wallet unlocked and left running." & vbNewLine & vbNewLine &
                             "-Please contact us on Slack for questions or comments" & vbNewLine &
                             "    (Use FoldingBrowser buttons, or see the FoldingCoin webpage to join Slack)"
                         FinMsg.Width = (FinMsg.MsgText.Left * 2) + FinMsg.MsgText.Width + 10
@@ -664,22 +664,26 @@
         If Await LoginToCounterwallet() = False Then MessageBox.Show("Task 'Log Into Wallet' did not complete. Please try again.")
     End Sub
 
+
     Private Sub btnFAHControl_Click(sender As System.Object, e As System.EventArgs) Handles btnFAHControl.Click
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
         OpenURL(URL_FAH_Client, False)
 #Enable Warning BC42358
     End Sub
 
+
     Private Sub btnFoldingCoinWebsite_Click(sender As System.Object, e As System.EventArgs) Handles btnFoldingCoinWebsite.Click
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
         OpenURL(URL_FoldingCoin, False)
 #Enable Warning BC42358
     End Sub
+
     Private Sub btnFoldingCoinTwitter_Click(sender As System.Object, e As System.EventArgs) Handles btnFoldingCoinTwitter.Click
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
         OpenURL(URL_FoldingCoinTwitter, False)
 #Enable Warning BC42358
     End Sub
+
     Private Sub btnFoldingCoinBlockchain_Click(sender As Object, e As EventArgs) Handles btnFoldingCoinBlockchain.Click
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
         'Make sure the INI key/value exists
@@ -712,6 +716,7 @@
         End If
 #Enable Warning BC42358
     End Sub
+
     Private Sub btnBTCBlockchain_Click(sender As Object, e As EventArgs) Handles btnBTCBlockchain.Click
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
         'Make sure the INI key/value exists
@@ -744,6 +749,7 @@
         End If
 #Enable Warning BC42358
     End Sub
+
     Private Async Sub btnFoldingCoinSlack_Click(sender As Object, e As EventArgs) Handles btnFoldingCoinSlack.Click
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
         Dim bSkip As Boolean = False
@@ -853,26 +859,26 @@
         End If
 #Enable Warning BC42358
     End Sub
-    Private Sub btnFLDC_Stats_Click(sender As System.Object, e As System.EventArgs) Handles btnFLDC_Stats.Click
-#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
-        OpenURL(URL_FLDC_Stats & Now.ToString("yyyy-MM-dd"), False)
-#Enable Warning BC42358
-    End Sub
+
     Private Sub btnFLDC_Distribution_Click(sender As System.Object, e As System.EventArgs) Handles btnFLDC_Distribution.Click
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
         OpenURL(URL_FLDC_Distro & Now.AddDays(-1.0).ToString("yyyy-MM-dd") & "&end=" & Now.ToString("yyyy-MM-dd"), False)
 #Enable Warning BC42358
     End Sub
+
+
     Private Sub btnCureCoin_Click(sender As System.Object, e As System.EventArgs) Handles btnCureCoin.Click
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
         OpenURL(URL_CureCoin, False)
 #Enable Warning BC42358
     End Sub
+
     Private Sub btnCureCoinTwitter_Click(sender As System.Object, e As System.EventArgs) Handles btnCureCoinTwitter.Click
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
         OpenURL(URL_CureCoinTwitter, False)
 #Enable Warning BC42358
     End Sub
+
     Private Sub btnCureCoinBlockchain_Click(sender As Object, e As EventArgs) Handles btnCureCoinBlockchain.Click
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
         'Make sure the INI key/value exists
@@ -905,6 +911,7 @@
         End If
 #Enable Warning BC42358
     End Sub
+
     Private Async Sub btnCureCoinSlack_Click(sender As Object, e As EventArgs) Handles btnCureCoinSlack.Click
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
         Dim bSkip As Boolean = False
@@ -1013,6 +1020,7 @@
         End If
 #Enable Warning BC42358
     End Sub
+
 
     'Extreme Overclocking's User Stats page: Needs to know user ID # ...  Once known, store the info in the INI file
     Private Async Sub btnEOC_Click(sender As System.Object, e As System.EventArgs) Handles btnEOC.Click

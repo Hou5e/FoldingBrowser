@@ -9,6 +9,8 @@
 
     'BTC public address regular expression matching pattern. Base58 encoding (excludes: 0, O, I, l characters that look similar)
     Private m_regexBTC As System.Text.RegularExpressions.Regex = New System.Text.RegularExpressions.Regex("^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$")
+    Private m_regexFAH_Warning As System.Text.RegularExpressions.Regex = New System.Text.RegularExpressions.Regex("[^a-zA-Z0-9_]")
+    Private m_regexFAH_Forbidden As System.Text.RegularExpressions.Regex = New System.Text.RegularExpressions.Regex("[\s#~|@^]")
 
     Private m_xmlCfg As New System.Xml.XmlDocument
 
@@ -195,8 +197,14 @@
 
     Private Sub CreateFAHUserName()
         If m_bSkipUpdating = False Then
-
+            'Reset errors, and colors to be good
+            Me.rbnFoldingCoin.BackColor = Color.FromKnownColor(KnownColor.Control)
             Me.lblErrorNote.Visible = False
+            Me.lblUsernamePreview.BackColor = Color.White
+            Me.txtUsername.BackColor = Color.White
+            Me.cbxSeparator.BackColor = Color.White
+            Me.txtBitcoinAddress.BackColor = Color.White
+            Me.txtTelnetFAHCfg.BackColor = Color.White
 
             'Allow existing Username entry in first dialog. Then parse it out in to the other fields? Look for 1 or 2 underscores
             If Me.txtUsername.Text.Contains("_") = True Then
@@ -218,41 +226,32 @@
                 End If
             End If
 
+            'Try to clear out any spaces someone might type
+            If Me.txtUsername.Text.Contains(" ") = True Then
+                Me.txtUsername.Text = Me.txtUsername.Text.Trim()
+                Me.txtUsername.ScrollToCaret()
+                Me.txtUsername.Refresh()
+            End If
+            If Me.cbxSeparator.Text.Contains(" ") = True Then
+                Me.cbxSeparator.Text = Me.cbxSeparator.Text.Trim()
+            End If
+            If Me.txtBitcoinAddress.Text.Contains(" ") = True Then
+                Me.txtBitcoinAddress.Text = Me.txtBitcoinAddress.Text.Trim()
+                Me.txtBitcoinAddress.ScrollToCaret()
+                Me.txtBitcoinAddress.Refresh()
+            End If
+
             'Create the preview
-            Me.lblUsernamePreview.Text = Me.txtUsername.Text.Trim & Me.cbxSeparator.Text.Trim & Me.txtBitcoinAddress.Text.Trim
+            Me.lblUsernamePreview.Text = Me.txtUsername.Text & Me.cbxSeparator.Text & Me.txtBitcoinAddress.Text
 
             'If team CureCoin, then make sure the Username is 50 characters or less
             If Me.rbnCureCoin.Checked = True Then
-                If Me.lblUsernamePreview.Text.Length <= 50 Then
-                    Me.lblUsernamePreview.BackColor = Color.White
-                Else
+                If Me.lblUsernamePreview.Text.Length > 50 Then
                     Me.txtUsername.BackColor = Color.Yellow
                     Me.lblUsernamePreview.BackColor = Color.Yellow
-                    Me.lblErrorNote.Text = "NOTE: 50 character Username limit to earn CURE"
+                    Me.lblErrorNote.Text = "NOTE: Over 50 character Username limit to earn CURE"
                     Me.lblErrorNote.Visible = True
                 End If
-            End If
-
-            'Check for characters not allowed in a FAH Username. See: https://folding.stanford.edu/home/faq/#ntoc36  NOTE: Should only be letters, numbers, and underscore. Cannot be: # ^ ~ |
-            If Me.txtUsername.Text.Length > 0 AndAlso Me.lblUsernamePreview.Text.Contains(" ") = False AndAlso Me.txtUsername.Text.Contains("#") = False AndAlso Me.txtUsername.Text.Contains("^") = False AndAlso Me.txtUsername.Text.Contains("~") = False AndAlso Me.txtUsername.Text.Contains("|") = False Then
-                Me.txtUsername.BackColor = Color.White
-            Else
-                Me.txtUsername.BackColor = Color.Tomato
-                If Me.txtUsername.Text.Length = 0 Then
-                    Me.lblErrorNote.Text = "Please enter a Username"
-                Else
-                    Me.lblErrorNote.Text = "Cannot contain: <space> # ^ ~ |"
-                End If
-                Me.lblErrorNote.Visible = True
-            End If
-
-            'Check the text entered to ensure it's valid, highlight red otherwise
-            If Me.cbxSeparator.Text = "_ALL_" OrElse Me.cbxSeparator.Text = "_FLDC_" OrElse Me.cbxSeparator.Text = "_" Then
-                Me.cbxSeparator.BackColor = Color.White
-            Else
-                Me.cbxSeparator.BackColor = Color.Tomato
-                Me.lblErrorNote.Text = "Use: _ALL_, or _FLDC_, or <underscore>"
-                Me.lblErrorNote.Visible = True
             End If
 
             'Bitcoin address info, see: https://en.bitcoin.it/wiki/Address
@@ -262,22 +261,99 @@
                 If Me.txtBitcoinAddress.Text.StartsWith("1") = True OrElse Me.txtBitcoinAddress.Text.StartsWith("3") = True Then
                     'CounterParty Bitcoin Address: Check for invalid characters
                     If m_regexBTC.IsMatch(Me.txtBitcoinAddress.Text) = True Then
-                        Me.txtBitcoinAddress.BackColor = Color.White
+                        'CounterParty Bitcoin Address: Not all uppercase (very unlikely. Set as warning for now)
+                        If Me.txtBitcoinAddress.Text = Me.txtBitcoinAddress.Text.ToUpper Then
+                            Me.txtBitcoinAddress.BackColor = Color.Yellow
+                            Me.lblErrorNote.Text = "Counterparty Bitcoin Address: Typically not all uppercase"
+                            Me.lblErrorNote.Visible = True
+                        End If
                     Else
                         Me.txtBitcoinAddress.BackColor = Color.Tomato
-                        Me.lblErrorNote.Text = "Counterparty Bitcoin Address: Contains invalid characters."
+                        Me.lblErrorNote.Text = "Counterparty Bitcoin Address: Contains invalid characters"
                         Me.lblErrorNote.Visible = True
                     End If
                 Else
                     Me.txtBitcoinAddress.BackColor = Color.Tomato
-                    Me.lblErrorNote.Text = "Counterparty Bitcoin Address: Must start with '1' (or '3')."
+                    Me.lblErrorNote.Text = "Counterparty Bitcoin Address: Must start with '1' (or '3')"
                     Me.lblErrorNote.Visible = True
                 End If
             Else
                 Me.txtBitcoinAddress.BackColor = Color.Tomato
-                Me.lblErrorNote.Text = "Counterparty Bitcoin Address: Typically 34 characters (26-35)."
+                Me.lblErrorNote.Text = "Counterparty Bitcoin Address: Typically 34 characters (26-35)"
                 Me.lblErrorNote.Visible = True
             End If
+
+            'Check for characters not allowed in a FAH Username. See: http://folding.stanford.edu/support/faq/stats-teams-usernames/#are-there-any-characters-i-should-avoid-in-a-username  NOTE: Should only be letters, numbers, and underscore. Cannot be: # ^ ~ |  Also, Email addresses are truncated / not handled well, so block '@'. See: http://folding.stanford.edu/support/faq/stats-teams-usernames/#how-do-i-choose-a-username
+            Select Case True
+                Case Me.txtUsername.Text.Length = 0
+                    'Allow old Bitcoin address only format
+                    If Me.cbxSeparator.Text.Length > 0 Then
+                        Me.txtUsername.BackColor = Color.Tomato
+                        Me.lblErrorNote.Text = "Please enter a Username"
+                        Me.lblErrorNote.Visible = True
+                    End If
+
+                Case m_regexFAH_Forbidden.IsMatch(Me.lblUsernamePreview.Text) = True
+                    Me.txtUsername.BackColor = Color.Tomato
+                    Me.lblErrorNote.Text = "Cannot contain: <space> # ^ ~ | @"
+                    Me.lblErrorNote.Visible = True
+
+                Case m_regexFAH_Warning.IsMatch(Me.lblUsernamePreview.Text) = True
+                    'This could be a warning, but it's safer to constrain the usernames to safe values, especially so the username might work in web link URLs, searches, databases, etc
+                    Me.txtUsername.BackColor = Color.Tomato
+                    Me.lblErrorNote.Text = "Avoid special characters that may not work"
+                    Me.lblErrorNote.Visible = True
+            End Select
+
+            'Check the text entered to ensure it's valid, highlight red otherwise
+            If Me.cbxSeparator.Text <> "_ALL_" AndAlso Me.cbxSeparator.Text <> "_FLDC_" AndAlso Me.cbxSeparator.Text <> "_" AndAlso (Me.cbxSeparator.Text.Length > 0 OrElse Me.txtUsername.Text.Length > 0) Then
+                Me.cbxSeparator.BackColor = Color.Tomato
+                Me.lblErrorNote.Text = "Use: _ALL_, or _FLDC_, or <underscore>"
+                Me.lblErrorNote.Visible = True
+            End If
+
+            'Check for number of underscores: 0 = Old format, and must be on the FoldingCoin team. 1 = New format, not ready yet. 3+ = Makes a username not work with the current parsing engine (may be able to remove this in the future)
+            Select Case Me.lblUsernamePreview.Text.Count(Function(c) c = "_"c)
+                Case 0
+                    '0 underscores = Old format, and must be on the FoldingCoin team. Warn about not being able to earn CURE with this format
+                    If Me.txtUsername.Text.Length > 0 Then
+                        Me.txtUsername.BackColor = Color.Tomato
+                        Me.lblErrorNote.Text = "No username for Bitcoin Address only username. Can't earn CURE"
+                        Me.lblErrorNote.Visible = True
+
+                    ElseIf Me.rbnFoldingCoin.Checked = False Then
+                        Me.rbnFoldingCoin.BackColor = Color.Tomato
+                        Me.lblErrorNote.Text = "Need FoldingCoin Team for Bitcoin only username. Can't earn CURE"
+                        Me.lblErrorNote.Visible = True
+
+                    ElseIf Me.txtUsername.Text.Length = 0 Then
+                        Me.lblUsernamePreview.BackColor = Color.Yellow
+                        Me.lblErrorNote.Text = "NOTE: This username format can't earn CURE"
+                        Me.lblErrorNote.Visible = True
+                    End If
+
+                Case 1
+                    '1 underscore = New format, not ready yet
+                    Me.cbxSeparator.BackColor = Color.Tomato
+                    Me.lblErrorNote.Text = "New username format not enabled yet"
+                    Me.lblErrorNote.Visible = True
+
+                Case 2
+                    'Typical for _ALL_ or _FLDC_ = good
+                    'TODO: Aditional underscore and new format = bad?
+                    If Me.cbxSeparator.Text <> "_ALL_" AndAlso Me.cbxSeparator.Text <> "_FLDC_" Then
+                        Me.cbxSeparator.BackColor = Color.Tomato
+                        Me.txtUsername.BackColor = Color.Tomato
+                        Me.lblErrorNote.Text = "Avoid new username format, or additional underscores"
+                        Me.lblErrorNote.Visible = True
+                    End If
+
+                Case Else
+                    '3+ underscores = Makes a username not work with the current parsing engine (may be able to remove this in the future)
+                    Me.txtUsername.BackColor = Color.Tomato
+                    Me.lblErrorNote.Text = "Cannot contain: additional underscores"
+                    Me.lblErrorNote.Visible = True
+            End Select
 
             'Passkey check: Must be 32 hexadecimal characters
             If Me.txtPasskey.Text.Length = 32 OrElse Me.txtPasskey.Text.Length = 0 Then
@@ -285,7 +361,7 @@
                 Me.lblPasskeyError.Visible = False
             Else
                 Me.txtPasskey.BackColor = Color.Tomato
-                Me.lblErrorNote.Text = "Passkey check: Must be 32 hexadecimal characters."
+                Me.lblErrorNote.Text = "Passkey check: Must be 32 hexadecimal characters"
                 Me.lblErrorNote.Visible = True
                 Me.lblPasskeyError.Visible = True
             End If
@@ -294,14 +370,12 @@
             Me.txtTelnetFAHCfg.Text = "options" & If(Me.txtPasskey.Text.Length = 0, "", " passkey=" & Me.txtPasskey.Text) & " team=" & Me.lblTeamNumber.Text & " user=" & Me.lblUsernamePreview.Text
 
             'Check for a good text length
-            If Me.txtTelnetFAHCfg.Text.Length > 10 Then
-                Me.txtTelnetFAHCfg.BackColor = Color.White
-            Else
+            If Me.txtTelnetFAHCfg.Text.Length <= 10 Then
                 Me.txtTelnetFAHCfg.BackColor = Color.Tomato
             End If
 
-            If Me.txtUsername.BackColor = Color.Tomato OrElse Me.cbxSeparator.BackColor = Color.Tomato OrElse Me.txtBitcoinAddress.BackColor = Color.Tomato OrElse Me.lblTeamNumber.BackColor = Color.Tomato OrElse Me.txtTelnetFAHCfg.Text.Length < 10 Then
-                'Need to fix info
+            If Me.txtUsername.BackColor = Color.Tomato OrElse Me.cbxSeparator.BackColor = Color.Tomato OrElse Me.txtBitcoinAddress.BackColor = Color.Tomato OrElse Me.lblTeamNumber.BackColor = Color.Tomato OrElse Me.rbnFoldingCoin.BackColor = Color.Tomato OrElse Me.txtTelnetFAHCfg.Text.Length < 10 Then
+                'Errors: Need to fix info. Disable Save button
                 Me.btnTelnetSave.Enabled = False
             Else
                 'Good
@@ -364,6 +438,11 @@
 #End Region
 
 #Region "Passkey Auto-Update"
+    Private Sub txtEmail_TextChanged(sender As Object, e As EventArgs) Handles txtEmail.TextChanged
+        'Reset the background color
+        Me.txtEmail.BackColor = Color.White
+    End Sub
+
     'Run the script to send the Passkey. Web page: http://fah-web.stanford.edu/cgi-bin/getpasskey.py
     Private Async Sub btnGetPasskey_Click(sender As Object, e As EventArgs) Handles btnGetPasskey.Click
         'Check to see if email looks valid, and indicate if it isn't
