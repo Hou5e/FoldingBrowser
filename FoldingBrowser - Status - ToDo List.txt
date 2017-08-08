@@ -2,84 +2,74 @@
 All-in-One Installer:
 =====================
 
----------------------------
-Ideas, Improvements, Tasks:
----------------------------
 
--Simplicity: Ideally, you only want to enter username and email, and you are up and Folding.
+-----------------------------------
+Immediate Need /  Short-Term Goals:
+-----------------------------------
 
+-Allow CureCoin username format for earning CureCoin only (no FLDC username rules, just warnings)
+-INI: option to set initial page to any URL, with radio buttons for: local portal page, FLDC homepage, CURE homepage, CounterWallet?, blank?, any?
+-Stop or Pause folding on initial install, then start it again at the end of the process?  -Or, set FAH option for 'Only When Idle' during install? (to avoid the system being sluggish during install)
+-Support other wallets?  like:  https://freewallet.io/     (Using:)https://counterwallet.io/    wallet.indiesquare.me    also: rarepepewallet.com would work
+-Use built-in multi-language uninstaller strings for uninstaller dialog on upgrading?
+-Look into enabling Google Translate in Chrome/CefSharp for automatic web page translations
+-Enable Multi-language support in the FoldingBrowser App
+
+-CTRL+F5: to dump the cache like Chrome? Or a button to manually (unload the browser component), dump the cache, (and reload the browser)?
+-CTRL+F: Find text in a page functionality? (searching for BTC address on distribution page, etc)
+
+-Improve the portal web page (eliminate some buttons in the browser?)
+-Add FLDC & CURE Ticker info from Coin Market Cap API (or pull from exchanges?). Update hourly? Do as notify icon? Might not be worth it, if the FLDC homepage gets it. See:  https://coinmarketcap.com/api/    https://api.coinmarketcap.com/v1/ticker/CureCoin/
+-Add option to get Wallet info from blockchain explorer APIs to display value? FLDC- counterpartychain.io     CURE-  https://chainz.cryptoid.info/cure
+-Save some stats from API data, and show difference from last time, or from a past time interval?
+-Add notify icon (system tray icon) for folding with NaCl Chrome Plug-in (add option to enable / disable exiting on program close) and other coin ticker info
+
+----------------------------------------------------
+Other Ideas, Improvements, Tasks, Longer-Term Goals:
+----------------------------------------------------
+
+-Add images to improve other dialog prompts (It will help non-English speaking users)
+
+-Simplicity: Ideally, you only want to enter username and email, and you are up and Folding (as other users have described).
 -Simple version of the FoldingBrowser: mostly to only run the FAH NaCl Chrome Plugin client
--Simple user install: Tokenly Pockets wallet chrome plugin (like the new setup FoldingCoin website instructions say) -Build our own version of the plugin for FLDC?
--Plugin: Ad Blocker?
--Plugin: Rare Pepe Wallet?
+-Create a separate Electron framework App for Mac and Linux of the simple version that only runs the FAH NaCl Chrome Plugin client?  -Test out the FLDC Bar Electron app.  -Try '.NET Core' simple sample project for Linux and Mac?(probably not if CefSharp isn't compatible)
+-Plugin: Add an Ad Blocker?
 
 -Add button titles and links to a separate INI file, that can be replaced to update
 -Display the FAH advanced config options from --help (Show Commands button?: Show in a separate window from the FAH username dialog) The text is probably copyrighted, so maybe run the EXE and grab the output to display. Might be better to leave out.
 -Create backup copies of the settings in a 'Backup' folder periodically?
 -Reminder on a time interval to make backups of settings on to a USB drive?
 
--INI: when encryption PW is blank, use last PW and prompt for it (for extra security for not keeping the PW in a text file in your user account)? -Or, have a flag in INI to prompt for PW or use the one in the INI?
-
--Set FAH option for 'Only When Idle' during install? (to avoid the system being sluggish during install)
 -Option to monitor FAH clients and restart them if they hang?
 
--Encryption: use constant internally, Prompt for PW if encryption fails. Option to Store PW in INI file to not be prompted for it, or Don't store PW an be prompted often for it (if it's not the default).
+-INI: when encryption PW is blank, Prompt for PW, if encryption fails (for extra security for not keeping the PW in a text file in your user account). Option to be prompted for it: once per session, or prompted every time when needed.
 -Make a better way to determine if the DAT file loads. This won't work: DAT.ToString.Length = 0, it really needs to be .SaveToString(), but all you want to know is there data loaded or not. You don't need a full text string output...
 -For showing Wallet info, have option to 7-zip the INI/DAT file to add a password or not to it?
 -Button to delete all saved info for a Wallet Id?
 -Restore from backup button (or separate app)? Make something to make setting up multiple computers easier (rename existing files, and copy new one) (and telnet FAH settings from Config file)
-
 -Add pauses? (timer / do events) to the automated process to break it up and allow error to work themselves out. Might not be needed...
 -Add stop button to cancel the automated process?
 
--Get Wallet with CounterPart API instead of current methods? (or use Tokenly Pockets Plugin for this)
+-Get Wallet with CounterPart API instead of current methods from web page clicks? (probably more work than it's worth)
 -Support other block explorers?  like: (Using:)https://xchain.io/     (depreciated) https://counterpartychain.io/      https://chain.so/      https://walletapp.indiesquare.me/explorer/      https://www.blocktrail.com/BTC/address/<addy>      https://xcpdex.com/
--Mempool Transaction Count: https://blockchain.info/charts/mempool-count?timespan=1week     Use: https://bitcoinfees.21.co/ and https://jochen-hoenicke.de/queue/#24h to help determine sufficient miners fees to keep your TX from getting stuck in the mempool
 
 -Improve the CureCoin HTTP JSON-RPC to use the JSON parser, and find the wallet if there is more than one entry or (blank and a name)
 -Show image of where to get the CURE wallet address, for message when it can't be found
 -Improve the CureCoin pool sign up process, search for: account created / captcha failed massages? Search for User/PW being blank and fill them in for Capcha retries (fill in initially, too). Stop/Exit the process? Better retries for captcha fail / retry. Reload the info periodically?
 -Make the other webpage wait loops use Javascript for detecting stuff is there (like the CureCoin webpage login)
 -Option to start the CureCoin wallet (if not running) for POS purposes?
-
--GitHub: An installer download link that doesn't change for FoldingCoin / CureCoin website links?
-
--Test out the FLDC Bar Electron app
--Try '.NET Core' simple sample project, to get a feel for it, especially for Linux and MacOS.
--Linux & Mac executables & install packages (or a live image you can just run off a USB drive?)
-
 -Any updates needed for CureCoin 2.0 changes?
--Other CureCoin websites: https://curecoin.info     https://curecoin.io/      (Using:) http://curecoin.net/
 
--Change to the new username format (Nope, not yet, as of June)
+-Change to the new FLDC username format (Nope, not yet, as of Aug)
 
-
----------------
-Immediate Need:
----------------
--Enable Multi-language support in the FoldingBrowser app
--Simple version of the FoldingBrowser: mostly to only run the FAH NaCl Chrome Plugin client. -Would switching to the Electron framework be better?
--Add notify icon (system tray icon) for folding with NaCl Chrome Plug-in (add option to enable / disable exiting on program close)
-
-
--INI: option to set initial page to any URL, with radio buttons for: local portal page, FLDC homepage, CURE homepage, CounterWallet?, blank?
-
--Support other wallets?  like:  https://freewallet.io/     (Using:)https://counterwallet.io/    wallet.indiesquare.me    also: rarepepewallet.com would work
--Use built-in multi-language uninstaller strings for uninstaller dialog on upgrading?
-
--Improve the portal web page (eliminate some buttons in the browser?)
--Add FLDC & CURE Ticker info from Coin Market Cap API (or pull from exchanges?). Update hourly? Do as notify icon? Might not be worth it, if the FLDC homepage gets it. See:  https://coinmarketcap.com/api/    https://api.coinmarketcap.com/v1/ticker/CureCoin/
--Add option to get Wallet info from blockchain explorer APIs to display value? FLDC- counterpartychain.io     CURE-  https://chainz.cryptoid.info/cure
--Save some stats from API data, and show difference from last time, or from a past time interval?
-
--CTRL+F5: to dump the cache like Chrome? Or a button to manually (unload the browser component), dump the cache, (and reload the browser)?
--CTRL+F: Find text in a page functionality? (searching for BTC address on distribution page, etc)
 
 ======================================================================================================
-Release Notes - Tasks completed:
+Change Log - Release Notes - Tasks completed:
 ======================================================================================================
 
-
+(Skip) -Other CureCoin websites: https://curecoin.info     https://curecoin.io/      (Using:) http://curecoin.net/      (No, other websites are being consolidated into the one)
+(Skip) -Mempool Transaction Count: https://blockchain.info/charts/mempool-count?timespan=1week     Use: https://bitcoinfees.21.co/ and https://jochen-hoenicke.de/queue/#24h to help determine sufficient miners fees to keep your TX from getting stuck in the mempool
+[DONE] -Adjust timing to fix rare BTC wallet address page scrape freeze
 v13 Release (8/4/2017)
 [DONE] -Fixing the portal homepage, to open either page full screen
 [DONE] -Allow old username format of BTC address only, and must be on the FoldingCoin Team with a warning about not being able to earn CURE
