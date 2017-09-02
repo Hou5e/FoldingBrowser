@@ -7,10 +7,14 @@ All-in-One Installer:
 Immediate Need /  Short-Term Goals:
 -----------------------------------
 
+
+-Fix the URL bar alignment to the text & buttons (it got shifted to the right in v13)
+-Update setting the CryptoBullions auto-payout threshold from 1 to 0.01, for smaller folders.
 -Allow CureCoin username format for earning CureCoin only (no FLDC username rules, just warnings)
 -INI: option to set initial page to any URL, with radio buttons for: local portal page, FLDC homepage, CURE homepage, CounterWallet?, blank?, any?
 -Stop or Pause folding on initial install, then start it again at the end of the process?  -Or, set FAH option for 'Only When Idle' during install? (to avoid the system being sluggish during install)
 -Support other wallets?  like:  https://freewallet.io/     (Using:)https://counterwallet.io/    wallet.indiesquare.me    also: rarepepewallet.com would work
+-Ability to select alternate from: http://foldingcoin.xyz/?token=FLDC&total=250000&start=2017-08-21&end=2017-08-22 to using: http://fldc-stats.tokenly.com/?token=FLDC&total=250000&start=2017-08-21&end=2017-08-22
 -Use built-in multi-language uninstaller strings for uninstaller dialog on upgrading?
 -Look into enabling Google Translate in Chrome/CefSharp for automatic web page translations
 -Enable Multi-language support in the FoldingBrowser App
@@ -67,9 +71,11 @@ Other Ideas, Improvements, Tasks, Longer-Term Goals:
 Change Log - Release Notes - Tasks completed:
 ======================================================================================================
 
+
+
 (Skip) -Other CureCoin websites: https://curecoin.info     https://curecoin.io/      (Using:) http://curecoin.net/      (No, other websites are being consolidated into the one)
 (Skip) -Mempool Transaction Count: https://blockchain.info/charts/mempool-count?timespan=1week     Use: https://bitcoinfees.21.co/ and https://jochen-hoenicke.de/queue/#24h to help determine sufficient miners fees to keep your TX from getting stuck in the mempool
-[DONE] -Adjust timing to fix rare BTC wallet address page scrape freeze
+[DONE] -Adjust timing to help avoid a rare BTC wallet address web page scrape freeze
 v13 Release (8/4/2017)
 [DONE] -Fixing the portal homepage, to open either page full screen
 [DONE] -Allow old username format of BTC address only, and must be on the FoldingCoin Team with a warning about not being able to earn CURE
