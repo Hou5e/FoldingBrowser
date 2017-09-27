@@ -11,7 +11,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("FoldingBrowser All-In-One Installer for FoldingCoin (FLDC) Web Wallet interface and CureCoin (CURE)")>
 <Assembly: AssemblyCompany("")>
 <Assembly: AssemblyProduct("FoldingBrowser")>
-<Assembly: AssemblyCopyright("Copyright © 2017 FoldingCoin")>
+<Assembly: AssemblyCopyright("Copyright © 2017 FoldingCoin, CureCoin")>
 <Assembly: AssemblyTrademark("")>
 
 <Assembly: ComVisible(False)>
@@ -30,5 +30,5 @@ Imports System.Runtime.InteropServices
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")>
 
-<Assembly: AssemblyVersion("13.0.0.0")>
-<Assembly: AssemblyFileVersion("13.0.0.0")>
+<Assembly: AssemblyVersion("14.0.0.0")>
+<Assembly: AssemblyFileVersion("14.0.0.0")>

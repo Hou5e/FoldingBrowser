@@ -220,9 +220,7 @@
     <None Include="Resources\L-cysteine-16_24_32_48_256.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="FoldingBrowser.html">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <None Include="FoldingBrowser.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <Import Project="packages\cef.redist.x64.3.2987.1601\build\cef.redist.x64.targets" Condition="Exists('packages\cef.redist.x64.3.2987.1601\build\cef.redist.x64.targets')" />

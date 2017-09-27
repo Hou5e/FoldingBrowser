@@ -4,8 +4,8 @@
 
 
 ;---- Helper defines / constants ----
-!define PRODUCT_VERSION "13"  ;Match the displayed version in the program title. Example: 1.2.3
-!define PRODUCT_4_VALUE_VERSION "13.0.0.0"  ;Match the executable version: Right-click the program executable file | Properties | Version. Example: 1.2.3.4
+!define PRODUCT_VERSION "14"  ;Match the displayed version in the program title. Example: 1.2.3
+!define PRODUCT_4_VALUE_VERSION "14.0.0.0"  ;Match the executable version: Right-click the program executable file | Properties | Version. Example: 1.2.3.4
 !define PRODUCT_YEAR "2017"
 !define PRODUCT_NAME "FoldingBrowser"
 !define PRODUCT_EXE_NAME "FoldingBrowser"  ;Executable name without extension
@@ -16,7 +16,7 @@
 !define PRODUCT_UNINST_EXE_NAME "Uninstall_${PRODUCT_EXE_NAME}"  ;Executable name without extension
 
 ;This constant must match the CureCoin installer version
-!define CURECOIN_VERSION "1.9.2.1"
+!define CURECOIN_VERSION "1.9.4.1"
 
 !define REQUIRED_MS_DOT_NET_VERSION "4.0*"
 
@@ -204,7 +204,6 @@ Section "!${PRODUCT_NAME} v${PRODUCT_VERSION}" SEC01
   File "..\Browser\bin\Release\natives_blob.bin"
   File "..\Browser\bin\Release\snapshot_blob.bin"
   File "..\Browser\bin\Release\widevinecdmadapter.dll"
-  File "..\Browser\FoldingBrowser.html"
 
   SetOutPath "$INSTDIR\Licenses"  ;Destination
   File "..\Browser\bin\Release\Licenses\*"

@@ -26,6 +26,15 @@
         Me.Show()
         m_bSkipUpdating = True
 
+        'Try pausing FAH during the initial FAH setup. This keeps things from slowing down too much when CPU folding starts up during the setup process.
+        'NOTE: the option "paused=true" didn't work on v7.4.16. Using "idle=true" instead. "power=light" starts running the CPU at ~50%, and has the GPU paused for idle
+        If g_bInitialInstall = True Then
+            Me.txtTelnetFAHCfg.Text = "options idle=true"
+            btnTelnetSave_Click(Nothing, Nothing)
+            Delay(500)
+        End If
+
+
         Try
             'Find the FAH Config file location
             If System.IO.File.Exists(PATH_FAH_ALL_USER_CFG) = True Then
@@ -199,6 +208,7 @@
         If m_bSkipUpdating = False Then
             'Reset errors, and colors to be good
             Me.rbnFoldingCoin.BackColor = Color.FromKnownColor(KnownColor.Control)
+            Me.rbnCureCoin.BackColor = Color.FromKnownColor(KnownColor.Control)
             Me.lblErrorNote.Visible = False
             Me.lblUsernamePreview.BackColor = Color.White
             Me.txtUsername.BackColor = Color.White
@@ -206,7 +216,7 @@
             Me.txtBitcoinAddress.BackColor = Color.White
             Me.txtTelnetFAHCfg.BackColor = Color.White
 
-            'Allow existing Username entry in first dialog. Then parse it out in to the other fields? Look for 1 or 2 underscores
+            'Allow existing Username entry in first dialog. Then parse it out in to the other fields. Look for 1 or 2 underscores
             If Me.txtUsername.Text.Contains("_") = True Then
                 'Split the entered text at the underscores '_'
                 Dim strDim As String() = Me.txtUsername.Text.Split("_"c)
@@ -315,21 +325,39 @@
             'Check for number of underscores: 0 = Old format, and must be on the FoldingCoin team. 1 = New format, not ready yet. 3+ = Makes a username not work with the current parsing engine (may be able to remove this in the future)
             Select Case Me.lblUsernamePreview.Text.Count(Function(c) c = "_"c)
                 Case 0
-                    '0 underscores = Old format, and must be on the FoldingCoin team. Warn about not being able to earn CURE with this format
-                    If Me.txtUsername.Text.Length > 0 Then
-                        Me.txtUsername.BackColor = Color.Tomato
-                        Me.lblErrorNote.Text = "No username for Bitcoin Address only username. Can't earn CURE"
-                        Me.lblErrorNote.Visible = True
+                    If Me.txtBitcoinAddress.Text.Length = 0 AndAlso Me.cbxSeparator.Text.Length = 0 Then
+                        '0 underscores = Old format: Allow CureCoin only (no FLDC) username with: no separator, and no Bitcoin address. Must be on the CureCoin team
+                        If Me.rbnCureCoin.Checked = True Then
+                            Me.lblUsernamePreview.BackColor = Color.Yellow
+                            'Reset these error messages to allow this case, for CureCoin setup only
+                            Me.txtUsername.BackColor = Color.White
+                            Me.cbxSeparator.BackColor = Color.White
+                            Me.txtBitcoinAddress.BackColor = Color.White
+                            Me.lblErrorNote.Text = "NOTE: This username format can't earn FLDC"
+                            Me.lblErrorNote.Visible = True
+                        Else
+                            Me.rbnCureCoin.BackColor = Color.Tomato
+                            Me.lblErrorNote.Text = "Need CureCoin Team for CureCoin only username. Can't earn FLDC"
+                            Me.lblErrorNote.Visible = True
+                        End If
 
-                    ElseIf Me.rbnFoldingCoin.Checked = False Then
-                        Me.rbnFoldingCoin.BackColor = Color.Tomato
-                        Me.lblErrorNote.Text = "Need FoldingCoin Team for Bitcoin only username. Can't earn CURE"
-                        Me.lblErrorNote.Visible = True
+                    Else
+                        '0 underscores = Old format, and must be on the FoldingCoin team. Warn about not being able to earn CURE with this format
+                        If Me.txtUsername.Text.Length > 0 Then
+                            Me.txtUsername.BackColor = Color.Tomato
+                            Me.lblErrorNote.Text = "No username for Bitcoin Address only username. Can't earn CURE"
+                            Me.lblErrorNote.Visible = True
 
-                    ElseIf Me.txtUsername.Text.Length = 0 Then
-                        Me.lblUsernamePreview.BackColor = Color.Yellow
-                        Me.lblErrorNote.Text = "NOTE: This username format can't earn CURE"
-                        Me.lblErrorNote.Visible = True
+                        ElseIf Me.rbnFoldingCoin.Checked = False Then
+                            Me.rbnFoldingCoin.BackColor = Color.Tomato
+                            Me.lblErrorNote.Text = "Need FoldingCoin Team for Bitcoin only username. Can't earn CURE"
+                            Me.lblErrorNote.Visible = True
+
+                        ElseIf Me.txtUsername.Text.Length = 0 Then
+                            Me.lblUsernamePreview.BackColor = Color.Yellow
+                            Me.lblErrorNote.Text = "NOTE: This username format can't earn CURE"
+                            Me.lblErrorNote.Visible = True
+                        End If
                     End If
 
                 Case 1
@@ -340,7 +368,6 @@
 
                 Case 2
                     'Typical for _ALL_ or _FLDC_ = good
-                    'TODO: Aditional underscore and new format = bad?
                     If Me.cbxSeparator.Text <> "_ALL_" AndAlso Me.cbxSeparator.Text <> "_FLDC_" Then
                         Me.cbxSeparator.BackColor = Color.Tomato
                         Me.txtUsername.BackColor = Color.Tomato
@@ -374,7 +401,7 @@
                 Me.txtTelnetFAHCfg.BackColor = Color.Tomato
             End If
 
-            If Me.txtUsername.BackColor = Color.Tomato OrElse Me.cbxSeparator.BackColor = Color.Tomato OrElse Me.txtBitcoinAddress.BackColor = Color.Tomato OrElse Me.lblTeamNumber.BackColor = Color.Tomato OrElse Me.rbnFoldingCoin.BackColor = Color.Tomato OrElse Me.txtTelnetFAHCfg.Text.Length < 10 Then
+            If Me.txtUsername.BackColor = Color.Tomato OrElse Me.cbxSeparator.BackColor = Color.Tomato OrElse Me.txtBitcoinAddress.BackColor = Color.Tomato OrElse Me.lblTeamNumber.BackColor = Color.Tomato OrElse Me.rbnFoldingCoin.BackColor = Color.Tomato OrElse Me.rbnCureCoin.BackColor = Color.Tomato OrElse Me.txtTelnetFAHCfg.Text.Length < 10 Then
                 'Errors: Need to fix info. Disable Save button
                 Me.btnTelnetSave.Enabled = False
             Else

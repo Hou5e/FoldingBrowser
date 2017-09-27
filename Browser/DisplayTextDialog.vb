@@ -21,7 +21,7 @@
 
             'Reset the Save button to be disabled until some changes to the text are made
             Me.btnSaveChanges.Enabled = False
-            Me.BtnOK.Focus()
+            Me.btnOK.Focus()
             'Don't put Me.Show() here because it will be shown as a dialog box.
 
         Catch ex As Exception
@@ -180,7 +180,7 @@
 
             'Disable the save button again
             Me.btnSaveChanges.Enabled = False
-            Me.BtnOK.Focus()
+            Me.btnOK.Focus()
         Else
             g_Main.Msg("No displayed text to save.")
             MessageBox.Show("No displayed text to save.")
@@ -285,14 +285,14 @@
             End If
             SaveDlg.Dispose()
 
-            Me.BtnOK.Focus()
+            Me.btnOK.Focus()
 
         Catch ex As Exception
             MessageBox.Show("Error creating backup: " & ex.ToString)
         End Try
     End Sub
 
-    Private Sub BtnOK_Click(sender As Object, e As EventArgs) Handles BtnOK.Click
+    Private Sub btnOK_Click(sender As Object, e As EventArgs) Handles btnOK.Click
         'The Closing event clears out the displayed text
         Me.Close()
     End Sub

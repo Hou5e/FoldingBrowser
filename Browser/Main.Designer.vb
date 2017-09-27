@@ -90,7 +90,7 @@ Partial Class Main
         '
         Me.txtURL.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtURL.Location = New System.Drawing.Point(138, 48)
+        Me.txtURL.Location = New System.Drawing.Point(111, 48)
         Me.txtURL.Name = "txtURL"
         Me.txtURL.Size = New System.Drawing.Size(982, 20)
         Me.txtURL.TabIndex = 0

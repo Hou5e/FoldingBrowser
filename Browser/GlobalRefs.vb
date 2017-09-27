@@ -6,7 +6,6 @@ Public Module GlobalRefs
 
     'Common URLs
     Public Const URL_BLANK As String = "about:blank"
-    Public URL_PortalPage As String = New System.Uri(System.IO.Path.Combine(Application.StartupPath(), Prog_Name & ".html")).AbsoluteUri
     Public Const URL_Counterwallet As String = "https://wallet.counterwallet.io/"
     Public Const URL_CoinDaddyCounterwallet As String = "https://counterwallet.coindaddy.io/"
     Public Const CounterwalletAPI As String = "_api/"
@@ -33,6 +32,12 @@ Public Module GlobalRefs
     Public Const URL_FAH As String = "https://folding.stanford.edu/start-folding/"
     Public Const URL_FAH_Client As String = "http://folding.stanford.edu/client/"
 
+    'This HTML is easier to view in source code file: FoldingBrowser.html
+    Public Const HTML_PortalPage As String = "<html><head><title>FoldingBrowser - Earn Digital Assets with FoldingCoin and CureCoin</title></head>
+        <body style='background-color:#000000;'><a href='http://foldingcoin.net/' style='float:left;width:49%;height:98%;border-style:solid;border-width:1px;border-color:white;z-index:1;'>
+        <span><object type='text/html' data='http://foldingcoin.net/' style='width:100%;height:100%;z-index:-1;pointer-events:none;'>FoldingCoin Homepage</object></span></a>
+        <a href='https://curecoin.net/' style='float:right;width:49%;height:98%;border-style:solid;border-width:1px;border-color:white;z-index:1;'>
+        <span><object type='text/html' data='https://curecoin.net/' style='width:100%;height:100%;z-index:-1;pointer-events:none;'>CureCoin Homepage</object></span></a></body></html>"
 
     'Encrypted DAT file password
     Public Const Default_DAT_PW As String = "(Default Password) If you change this line, remember to make backups. I can't restore it for you."
@@ -86,6 +91,7 @@ Public Module GlobalRefs
     Public g_bAskDownloadLocation As Boolean = True
     'Holds on to the last downloaded file path, when the download completes
     Public g_strDownloadedFilePath As String = ""
+    Public g_bInitialInstall As Boolean = False
 
     Public Function SaveLogFile(ByRef strMsg As String) As Boolean
         SaveLogFile = False

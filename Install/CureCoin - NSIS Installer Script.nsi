@@ -2,8 +2,8 @@
 ; Requires that NSIS (Nullsoft Scriptable Install System) compiler be installed.
 
 ;---- Helper defines / constants ----
-!define PRODUCT_VERSION "1.9.2.1"  ;Match the displayed version in the program title. Example: 1.2.3
-!define PRODUCT_4_VALUE_VERSION "1.9.2.1"  ;Match the executable version: Right-click the program executable file | Properties | Version. Example: 1.2.3.4
+!define PRODUCT_VERSION "1.9.4.1"  ;Match the displayed version in the program title. Example: 1.2.3
+!define PRODUCT_4_VALUE_VERSION "1.9.4.1"  ;Match the executable version: Right-click the program executable file | Properties | Version. Example: 1.2.3.4
 !define PRODUCT_YEAR "2017"
 !define PRODUCT_NAME "CureCoin"
 !define PRODUCT_EXE_NAME "curecoin-qt"  ;Executable name without extension

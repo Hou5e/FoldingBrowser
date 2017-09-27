@@ -25,7 +25,7 @@ Partial Class UserPwdDialog
         Me.txtEmail = New System.Windows.Forms.TextBox()
         Me.lblMsgGetAccount = New System.Windows.Forms.Label()
         Me.btnCancel = New System.Windows.Forms.Button()
-        Me.BtnOK = New System.Windows.Forms.Button()
+        Me.btnOK = New System.Windows.Forms.Button()
         Me.lblMsgText = New System.Windows.Forms.Label()
         Me.txtPassword = New System.Windows.Forms.TextBox()
         Me.btnGetAccount = New System.Windows.Forms.Button()
@@ -64,17 +64,17 @@ Partial Class UserPwdDialog
         Me.btnCancel.Text = "Cancel"
         Me.btnCancel.UseVisualStyleBackColor = True
         '
-        'BtnOK
+        'btnOK
         '
-        Me.BtnOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.BtnOK.DialogResult = System.Windows.Forms.DialogResult.OK
-        Me.BtnOK.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.BtnOK.Location = New System.Drawing.Point(311, 171)
-        Me.BtnOK.Name = "BtnOK"
-        Me.BtnOK.Size = New System.Drawing.Size(90, 28)
-        Me.BtnOK.TabIndex = 2
-        Me.BtnOK.Text = "OK"
-        Me.BtnOK.UseVisualStyleBackColor = True
+        Me.btnOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK
+        Me.btnOK.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnOK.Location = New System.Drawing.Point(311, 171)
+        Me.btnOK.Name = "btnOK"
+        Me.btnOK.Size = New System.Drawing.Size(90, 28)
+        Me.btnOK.TabIndex = 2
+        Me.btnOK.Text = "OK"
+        Me.btnOK.UseVisualStyleBackColor = True
         '
         'lblMsgText
         '
@@ -136,7 +136,7 @@ Partial Class UserPwdDialog
         Me.Controls.Add(Me.lblPassword)
         Me.Controls.Add(Me.lblEmail)
         Me.Controls.Add(Me.btnGetAccount)
-        Me.Controls.Add(Me.BtnOK)
+        Me.Controls.Add(Me.btnOK)
         Me.Controls.Add(Me.btnCancel)
         Me.Controls.Add(Me.lblMsgText)
         Me.Controls.Add(Me.lblMsgGetAccount)
@@ -153,7 +153,7 @@ Partial Class UserPwdDialog
     Friend WithEvents txtEmail As System.Windows.Forms.TextBox
     Friend WithEvents lblMsgGetAccount As System.Windows.Forms.Label
     Friend WithEvents btnCancel As System.Windows.Forms.Button
-    Friend WithEvents BtnOK As System.Windows.Forms.Button
+    Friend WithEvents btnOK As System.Windows.Forms.Button
     Friend WithEvents lblMsgText As System.Windows.Forms.Label
     Friend WithEvents txtPassword As System.Windows.Forms.TextBox
     Friend WithEvents btnGetAccount As Button

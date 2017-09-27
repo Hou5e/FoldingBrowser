@@ -22,21 +22,21 @@ Partial Class MsgBoxDialog
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Me.BtnOK = New System.Windows.Forms.Button()
+        Me.btnOK = New System.Windows.Forms.Button()
         Me.MsgText = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
-        'BtnOK
+        'btnOK
         '
-        Me.BtnOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.BtnOK.DialogResult = System.Windows.Forms.DialogResult.OK
-        Me.BtnOK.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.BtnOK.Location = New System.Drawing.Point(221, 74)
-        Me.BtnOK.Name = "BtnOK"
-        Me.BtnOK.Size = New System.Drawing.Size(92, 28)
-        Me.BtnOK.TabIndex = 0
-        Me.BtnOK.Text = "OK"
-        Me.BtnOK.UseVisualStyleBackColor = True
+        Me.btnOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK
+        Me.btnOK.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnOK.Location = New System.Drawing.Point(221, 74)
+        Me.btnOK.Name = "btnOK"
+        Me.btnOK.Size = New System.Drawing.Size(92, 28)
+        Me.btnOK.TabIndex = 0
+        Me.btnOK.Text = "OK"
+        Me.btnOK.UseVisualStyleBackColor = True
         '
         'MsgText
         '
@@ -53,7 +53,7 @@ Partial Class MsgBoxDialog
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(335, 114)
-        Me.Controls.Add(Me.BtnOK)
+        Me.Controls.Add(Me.btnOK)
         Me.Controls.Add(Me.MsgText)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
         Me.Name = "MsgBoxDialog"
@@ -62,6 +62,6 @@ Partial Class MsgBoxDialog
         Me.PerformLayout()
 
     End Sub
-    Friend WithEvents BtnOK As System.Windows.Forms.Button
+    Friend WithEvents btnOK As System.Windows.Forms.Button
     Friend WithEvents MsgText As System.Windows.Forms.Label
 End Class

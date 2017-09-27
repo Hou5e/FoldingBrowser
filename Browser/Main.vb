@@ -58,7 +58,7 @@
 
                 'Default homepage / portal set to the FoldingCoin webpage
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
-                OpenURL(URL_PortalPage, False)
+                CefSharp.WebBrowserExtensions.LoadHtml(Me.browser, HTML_PortalPage, "data:local")
                 'OpenURL("http://folding.stanford.edu/nacl/", False)
 #Enable Warning BC42358
             End If
@@ -365,19 +365,6 @@
                 Select Case args(1)
                         'This command line option represents the FoldingBrowser was just installed
                     Case "-Instl", "-InstWithCure"
-
-                        'If installing the CureCoin wallet, Instruct the user to leave the CureCoin Wallet open
-                        If args(1) = "-InstWithCure" Then
-                            'Canceled - Process completed - Make a backup reminder
-                            Dim OkMsg As New MsgBoxDialog
-                            OkMsg.Text = "Instructions"
-                            OkMsg.MsgText.Text = "Please leave the CureCoin wallet software open for the installation process"
-                            OkMsg.Width = (OkMsg.MsgText.Left * 2) + OkMsg.MsgText.Width + 10
-                            OkMsg.StartPosition = FormStartPosition.CenterScreen
-                            OkMsg.ShowDialog(Me)
-                            OkMsg.Dispose()
-                        End If
-
                         'Create a dialog that sets the default checkbox selections based on stored wallet and F@H info.
                         Dim Setup As New SetupDialog
 
@@ -446,19 +433,13 @@
 
                             'FAH Username / Teamname settings setup
                             If Setup.chkGetFAHSoftware.Checked = True OrElse Setup.chkGetWalletForFLDC.Checked = True Then
+                                g_bInitialInstall = True
                                 btnFAHConfig_Click(Nothing, Nothing)
                             End If
 
                             'Only do this step if the CureCoin wallet.dat file wasn't found on the PC during the initial installation, or if the user chooses this option
                             If Setup.chkSetupCURE.Checked = True Then
                                 Await SetupCureCoin()
-
-                                'Logout of the CureCoin folding pool (CryptoBullionPools) website
-                                Await OpenURL(URL_CureCoinFoldingPoolPage & "logout", False)
-                                'Wait for the page to load
-                                Await PageLoadWait()
-                                Await PageTitleWait(NameCryptoBullions)
-                                Await Wait(200)
                             End If
 
                             'Show DAT file saved info. Ask to make backups / store data in a safe place
@@ -481,10 +462,9 @@
                             "     FoldingCoin: On the 1st Saturday of each month" & vbNewLine &
                             "         CureCoin: Daily.     Also, Proof of Stake (POS) when coins are" & vbNewLine &
                             "            over 30 days old, with wallet unlocked and left running." & vbNewLine & vbNewLine &
-                            "-Please contact us on Slack for questions or comments" & vbNewLine &
-                            "    (Use FoldingBrowser buttons, or see the FoldingCoin webpage to join Slack)"
+                            "-Please contact us on Slack for questions (Use FoldingBrowser Slack buttons)"
                         FinMsg.Width = (FinMsg.MsgText.Left * 2) + FinMsg.MsgText.Width + 10
-                        FinMsg.Height = (FinMsg.MsgText.Top * 2) + FinMsg.MsgText.Height + FinMsg.BtnOK.Height + System.Windows.Forms.SystemInformation.CaptionHeight + System.Windows.Forms.SystemInformation.BorderSize.Height + 30
+                        FinMsg.Height = (FinMsg.MsgText.Top * 2) + FinMsg.MsgText.Height + FinMsg.btnOK.Height + System.Windows.Forms.SystemInformation.CaptionHeight + System.Windows.Forms.SystemInformation.BorderSize.Height + 30
                         FinMsg.StartPosition = FormStartPosition.CenterScreen
                         FinMsg.ShowDialog(Me)
                         FinMsg.Dispose()
@@ -1084,7 +1064,7 @@
                 Await Wait(100)
 
                 'Get link, and parse Id. The line with the Username has the EOC User ID number
-                If FindTextInDoc("/user_summary.php?s=&amp;u=*"">" & strUsername & "</a></td>", strUserId, "") = True AndAlso strUserId.Length > 1 AndAlso IsNumeric(strUserId) Then
+                If FindTextInDoc("/user_summary.php?s=&amp;u=*"">" & strUsername & "</a></td>", "", strUserId, "", False, "") = True AndAlso strUserId.Length > 1 AndAlso IsNumeric(strUserId) Then
                     'Save the ExtremeOverclocking.com Username Id
                     INI.AddSection(Id & Me.cbxWalletId.Text).AddKey(INI_EOC_ID).Value = strUserId
                     INI.Save(IniFilePath)
@@ -1178,8 +1158,9 @@
                 'Good
                 Dim OkMsg As New MsgBoxDialog
                 OkMsg.Text = "CureCoin Folding Pool Setup Complete"
-                OkMsg.MsgText.Text = "CureCoin Folding Pool Setup Complete" & vbNewLine & "Please review settings, but they should be OK"
+                OkMsg.MsgText.Text = "CureCoin Folding Pool Setup Complete" & vbNewLine & "Please review settings in the 'Saved Data' button," & vbNewLine & "       but they should be OK"
                 OkMsg.Width = (OkMsg.MsgText.Left * 2) + OkMsg.MsgText.Width + 10
+                OkMsg.Height = (OkMsg.MsgText.Top * 2) + OkMsg.MsgText.Height + OkMsg.btnOK.Height + System.Windows.Forms.SystemInformation.CaptionHeight + System.Windows.Forms.SystemInformation.BorderSize.Height + 30
                 OkMsg.ShowDialog(Me)
                 OkMsg.Dispose()
             End If
@@ -1224,7 +1205,8 @@
     Private Async Function IsCounterwalletUp() As Threading.Tasks.Task
         Try
             'Get CounterWallet server status to make sure it is up
-            Dim strResponse As String = ""
+            Dim strResponse1 As String = ""
+            Dim strResponse2 As String = ""
             Msg("Getting CounterWallet server status from: " & URL_Counterwallet & CounterwalletAPI)
             'Display status
             Dim OkMsg As New MsgBoxDialog
@@ -1235,7 +1217,7 @@
             OkMsg.Width = (OkMsg.MsgText.Left * 2) + OkMsg.MsgText.Width + 20
             OkMsg.Height = (OkMsg.MsgText.Top * 2) + OkMsg.MsgText.Height + System.Windows.Forms.SystemInformation.CaptionHeight + System.Windows.Forms.SystemInformation.BorderSize.Height + 20
             OkMsg.StartPosition = FormStartPosition.CenterScreen
-            OkMsg.BtnOK.Visible = False
+            OkMsg.btnOK.Visible = False
             OkMsg.BackColor = Color.Gold
             OkMsg.Show(Me)
 
@@ -1246,9 +1228,10 @@
 
             'Find status data in web page
             For i As Integer = 0 To 1
-                If FindTextInDoc("""counterparty-server"": ""*K""", strResponse, "") = True AndAlso strResponse.Length > 0 Then
-                    'Search for 'OK' or 'NOT OK'. If OK, then set the flag for OK
-                    If strResponse = "O" Then m_iCounterWalletServerUp = 1
+                'Example text: ...3927775, "counterparty-server": "OK", "counterblock_last_message_index": 757169, "counterblock": "NOT OK", "cou...
+                If FindTextInDoc("""counterparty-server"": ""*K""", """counterblock"": ""*K""", strResponse1, strResponse2, True, "") = True AndAlso strResponse1.Length > 0 AndAlso strResponse2.Length > 0 Then
+                    'Search for: "O"K, or "NOT O"K. If OK, then set the flag for OK.
+                    If strResponse1 = "O" AndAlso strResponse2 = "O" Then m_iCounterWalletServerUp = 1
                     Exit For
                 End If
                 Await Wait(700)
@@ -1267,9 +1250,9 @@
 
                 'Find status data in web page
                 For i As Integer = 0 To 1
-                    If FindTextInDoc("""counterparty-server"": ""*K""", strResponse, "") = True AndAlso strResponse.Length > 0 Then
-                        'Search for 'OK' or 'NOT OK'. If OK, then set the flag for OK
-                        If strResponse = "O" Then m_iCounterWalletServerUp = 2
+                    If FindTextInDoc("""counterparty-server"": ""*K""", """counterblock"": ""*K""", strResponse1, strResponse2, True, "") = True AndAlso strResponse1.Length > 0 AndAlso strResponse2.Length > 0 Then
+                        'Search for: "O"K, or "NOT O"K. If OK, then set the flag for OK
+                        If strResponse1 = "O" AndAlso strResponse2 = "O" Then m_iCounterWalletServerUp = 2
                         Exit For
                     End If
                     Await Wait(700)
@@ -1401,16 +1384,17 @@
 
             'Click Create New CounterWallet
             Await ClickById("newWalletButton", False)
+            Await Wait(300)
 
             'Save 12-word Passphrase and BTC address
             Dim str12W As String = ""
             Dim strBTCAddr As String = ""
 
-            For i As Integer = 0 To 20
-                If FindTextInDoc("generatedPassphrase"">*</span>", str12W, "") = True AndAlso str12W.Length > 24 Then
+            For i As Integer = 0 To 10
+                If FindTextInDoc("generatedPassphrase"">*</span>", "", str12W, "", False, "") = True AndAlso str12W.Length > 24 Then
                     Exit For
                 End If
-                Await Wait(200)
+                Await Wait(400)
             Next
 
             If str12W.Length > 24 Then
@@ -1443,7 +1427,7 @@
                 Await PageNoTitleWait()
 
                 For i As Integer = 1 To 40
-                    If FindTextInDoc("selectAddressText, text: dispAddress"">*</span>", strBTCAddr, "") = True Then
+                    If FindTextInDoc("selectAddressText, text: dispAddress"">*</span>", "", strBTCAddr, "", False, "") = True Then
                         If strBTCAddr.Length >= 26 AndAlso strBTCAddr.Length <= 35 AndAlso (strBTCAddr.StartsWith("1") = True OrElse strBTCAddr.StartsWith("3") = True) Then
                             Exit For
                         End If
@@ -1763,19 +1747,19 @@
 
                             'Get the wallet version, mostly for debugging issues later
                             strWalletVersion = Await SendHTTP_JSON_RPC("{""jsonrpc"": ""1.0"", ""id"":""GetVers"", ""method"": ""getinfo"", ""params"": [] }")
-                            If strWalletVersion.Contains("GetVers") AndAlso FindTextInDoc(""":""*"",""", strWalletVersion, strWalletVersion) = True AndAlso strWalletVersion.Length > 5 Then
+                            If strWalletVersion.Contains("GetVers") AndAlso FindTextInDoc(""":""*"",""", "", strWalletVersion, "", False, strWalletVersion) = True AndAlso strWalletVersion.Length > 5 Then
                                 'Setup a loop for a few retries
                                 For i = 0 To 2
                                     Await Wait(700)
                                     'Get the wallet name to get the wallet address
                                     strWalletName = Await SendHTTP_JSON_RPC("{""jsonrpc"": ""1.0"", ""id"":""GetMyWalletName"", ""method"": ""listaccounts""}")
 
-                                    If strWalletName.Contains("GetMyWalletName") AndAlso FindTextInDoc(":{""*"":", strWalletName, strWalletName) = True Then
+                                    If strWalletName.Contains("GetMyWalletName") AndAlso FindTextInDoc(":{""*"":", "", strWalletName, "", False, strWalletName) = True Then
                                         Await Wait(700)
                                         'Get the Wallet Address using the wallet name from the first request
                                         strWalletAddress = Await SendHTTP_JSON_RPC("{""jsonrpc"": ""1.0"", ""id"":""GetMyCureCoinAddress"", ""method"": ""getaddressesbyaccount"", ""params"":[""" & strWalletName & """]}")
 
-                                        If strWalletAddress.Contains("GetMyCureCoinAddress") AndAlso FindTextInDoc("{""result"":[""*""],", strWalletAddress, strWalletAddress) = True AndAlso strWalletAddress.Length > 24 Then
+                                        If strWalletAddress.Contains("GetMyCureCoinAddress") AndAlso FindTextInDoc("{""result"":[""*""],", "", strWalletAddress, "", False, strWalletAddress) = True AndAlso strWalletAddress.Length > 24 Then
                                             Exit For
                                         End If
                                     End If
@@ -1923,6 +1907,7 @@
                 Await PageLoadWait()
                 Await PageTitleWait(NameCryptoBullions)
                 System.Windows.Forms.Application.DoEvents()
+                Await Wait(100)
 
                 'Ensure the Pool page loaded before proceeding (and it's not still loading CloudFlare...)
                 Dim jsResp As CefSharp.JavascriptResponse
@@ -1936,6 +1921,8 @@
                 'Fill in form info from the data
                 'Enter FAH Username
                 EnterTextByName("user", strFAHUser)
+                'Fill in CureCoin address
+                EnterTextByName("cure", strWalletAddress)
                 'Password
                 EnterTextByName("pass", strPoolPW)
                 EnterTextByName("pass2", strPoolPW)
@@ -1974,45 +1961,13 @@
                     'Wait for the page to load
                     Await PageLoadWait()
                     Await PageTitleWait(NameCryptoBullions)
-
-                    'TODO: Set an INI file flag that the account was created? (This can be undesirable if you want to redo a failed first attempt?)
-                    'TODO: Find account created text? or Error account already created, to show the correct dialog box below
-
-
-                    'Fill in form info from the data again, so the user can try again if the captcha fails here...
-                    'Enter FAH Username
-                    EnterTextByName("user", strFAHUser)
-                    'Password
-                    EnterTextByName("pass", strPoolPW)
-                    EnterTextByName("pass2", strPoolPW)
-                    'Email
-                    EnterTextByName("email", strEmail)
-                    EnterTextByName("email2", strEmail)
-                    'Pin
-                    EnterTextByName("authPin", strPoolPin)
-                    Await Wait(100)
-
-
-                    'Login: Enter FAH Username
-                    EnterTextByName("username", strFAHUser)
-                    'Password
-                    EnterTextByName("password", strPoolPW)
-                    Await Wait(100)
-
-                    'Ask user to solve the captcha
-                    Dim OkMsg As New MsgBoxDialog
-                    OkMsg.Text = "Please Login"
-                    OkMsg.MsgText.Text = "If your account was created:" & vbNewLine & "<-- Please click 'I'm not a robot', solve the captcha, and 'Login'" & vbNewLine & "Otherwise, try the account creation captcha again"
-                    OkMsg.Width = (OkMsg.MsgText.Left * 2) + OkMsg.MsgText.Width + 10
-                    OkMsg.ShowDialog(Me)
-                    OkMsg.Dispose()
-
-                    'Wait to be logged into the 'My Account' page: look for text on that page to know when logged in...
+                    Await Wait(300)
+                    'Find: account created text, or Errors for: account exists already, or Wrong Captcha text
                     Dim strTemp As String = ""
-                    For k As Integer = 1 To 90
+                    For l As Integer = 1 To 5
                         If g_bCancelNav = True Then Exit Try
 
-                        If FindTextInDoc("<h1>News*>", strTemp, "") = True Then
+                        If FindTextInDoc("ccount *. Please", "Wrong Captcha", strTemp, "", False, "") = True Then
                             If strTemp.Length > 0 Then
                                 Exit For
                             End If
@@ -2020,41 +1975,23 @@
                         Await Wait(3000)
                     Next
 
-                    'Go to the CureCoin folding pool (CryptoBullionPools) website, and go to the 'My Account' settings page
-                    Await OpenURL(URL_CureCoinFoldingPoolPage & "accountdetails", False)
-                    'Wait for the page to load
-                    Await PageLoadWait()
-                    Await PageTitleWait(NameCryptoBullions)
-                    Await Wait(700)
-                    'Wait to be logged into the 'My Account' page: look for text on that page to know when logged in...
-                    strTemp = ""
-                    For l As Integer = 1 To 60
-                        If g_bCancelNav = True Then Exit Try
+                    Msg("CryptoBullions Registration response: '" & strTemp & "'.")
+                    'Look for a 'successfully created' or 'exists' message
+                    If strTemp.Contains("successfully created") Then
+                        'Return true, if you get here
+                        Return True
 
-                        If FindTextInDoc("<h2>Account De*ils", strTemp, "") = True Then
-                            If strTemp.Length > 0 Then
-                                Exit For
-                            End If
-                        End If
-                        Await Wait(3000)
-                    Next
+                    ElseIf strTemp.Contains("exists") Then
+                        'Indicate account exists already
+                        MessageBox.Show("Account exists. Please try to login instead of creating a new account." & vbNewLine & vbNewLine & "If you don't have the password or pin to this account," & vbNewLine & "then you will probably need to change your username.")
 
-                    'Fill in CureCoin address
-                    EnterTextByName("paymentAddress", strWalletAddress)
-                    'Fill-in payout threshold
-                    EnterTextByName("payoutThreshold", "1")
-                    'Pin
-                    EnterTextByName("authPin", strPoolPin)
-                    Await Wait(100)
-
-                    'Click "Update Settings"
-                    Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementsByClassName('submit long')[0].click();")
-                    Await Wait(700)
-
-                    'Return true, if you get here
-                    Return True
+                        'Return true, if you get here
+                        Return True
+                    End If
                 Else
+                    'Canceled dialog
                     TxtEntry.Dispose()
+                    Return False
                 End If
             Next
 
@@ -2332,14 +2269,14 @@
 
     'Specify text to find in HTML document, or supplied text
     Private m_bRunningFind As Boolean = False
-    Private Function FindTextInDoc(strFind As String, ByRef strReturnText As String, strSearchThisTextInstead As String) As Boolean
+    Private Function FindTextInDoc(strFind As String, str2ndFind As String, ByRef strReturnText1 As String, ByRef strReturnText2 As String, bFindBoth As Boolean, strSearchThisSuppliedTextInstead As String) As Boolean
         FindTextInDoc = False
         Dim sText As String() = Nothing
         Dim sMask As String() = Nothing
 
         Try
             If strFind.Length > 0 Then
-                If strSearchThisTextInstead = "" Then
+                If strSearchThisSuppliedTextInstead.Length = 0 Then
                     If m_bRunningFind = True Then Exit Try
                     m_bRunningFind = True
                     'Try to avoid running this multiple times at once. CefSharp v49 hangs when that happens. Probably from the Wait using: Threading.Thread.Sleep
@@ -2347,40 +2284,76 @@
                     m_bRunningFind = False
                     sText = sTempStr.Split(vbNewLine.ToCharArray)
                 Else
-                    sText = strSearchThisTextInstead.Split(vbNewLine.ToCharArray)
+                    sText = strSearchThisSuppliedTextInstead.Split(vbNewLine.ToCharArray)
                 End If
 
                 If sText IsNot Nothing Then
-                    'Search for wild-card (*) data or not
-                    If strFind.Contains("*") = False Then
-                        'No wild-card, just return the line of text that contains the search text
-                        For Each sLineOfText As String In sText
-                            If sLineOfText.Contains(strFind) = True Then
-                                'Return the line of text that contains the search text
-                                strReturnText = Trim(sLineOfText)
-                                sText = Nothing
-                                Return True
-                            End If
-                        Next
-                    Else
-                        'Create the mask to find the wild-card (*) data
-                        sMask = strFind.Split("*".ToCharArray, 2)
-                        For Each sLineOfText As String In sText
-                            'Search through the HTML to find the first part
-                            If sLineOfText.Contains(sMask(0)) = True Then
-                                'Find the second part in the same line
-                                If sLineOfText.Contains(sMask(1)) = True Then
-                                    Dim iPos1 As Integer = sMask(0).Length + sLineOfText.IndexOf(sMask(0))
-                                    Dim iPos2 As Integer = sLineOfText.IndexOf(sMask(1), iPos1)
-                                    If iPos1 <= iPos2 Then
-                                        strReturnText = Trim(sLineOfText.Substring(iPos1, iPos2 - iPos1))
+                    For l As Integer = 1 To 2
+                        'Search for wild-card (*) data or not
+                        If strFind.Contains("*") = False Then
+                            'No wild-card, just return the line of text that contains the search text
+                            For Each sLineOfText As String In sText
+                                If sLineOfText.Contains(strFind) = True Then
+                                    'Return the line of text that contains the search text
+                                    If bFindBoth = True Then
+                                        If l = 1 Then
+                                            strReturnText1 = Trim(sLineOfText)
+                                            'Update the return value
+                                            FindTextInDoc = True
+                                            Exit For
+                                        Else
+                                            strReturnText2 = Trim(sLineOfText)
+                                            sText = Nothing
+                                            Return True
+                                        End If
+                                    Else
+                                        strReturnText1 = Trim(sLineOfText)
                                         sText = Nothing
                                         Return True
                                     End If
                                 End If
-                            End If
-                        Next
-                    End If
+                            Next
+                        Else
+                            'Create the mask to find the wild-card (*) data
+                            sMask = strFind.Split("*".ToCharArray, 2)
+                            For Each sLineOfText As String In sText
+                                'Search through the HTML to find the first part
+                                If sLineOfText.Contains(sMask(0)) = True Then
+                                    'Find the second part in the same line
+                                    If sLineOfText.Contains(sMask(1)) = True Then
+                                        Dim iPos1 As Integer = sMask(0).Length + sLineOfText.IndexOf(sMask(0))
+                                        Dim iPos2 As Integer = sLineOfText.IndexOf(sMask(1), iPos1)
+                                        If iPos1 <= iPos2 Then
+                                            If bFindBoth = True Then
+                                                If l = 1 Then
+                                                    strReturnText1 = Trim(sLineOfText.Substring(iPos1, iPos2 - iPos1))
+                                                    'Update the return value
+                                                    FindTextInDoc = True
+                                                    Exit For
+                                                Else
+                                                    strReturnText2 = Trim(sLineOfText.Substring(iPos1, iPos2 - iPos1))
+                                                    sText = Nothing
+                                                    Return True
+                                                End If
+                                            Else
+                                                strReturnText1 = Trim(sLineOfText.Substring(iPos1, iPos2 - iPos1))
+                                                sText = Nothing
+                                                Return True
+                                            End If
+                                        End If
+                                    End If
+                                End If
+                            Next
+                        End If
+
+                        If str2ndFind.Length = 0 Then
+                            Exit For
+                        Else
+                            'Update the text to search for with the Alternate 2nd text to find, and repeat the process once more (done to minimize reloading the web page to search for multiple texts)
+                            strFind = str2ndFind
+                            str2ndFind = ""
+                        End If
+                    Next
                 End If
             End If
 

@@ -7,17 +7,13 @@ All-in-One Installer:
 Immediate Need /  Short-Term Goals:
 -----------------------------------
 
-
--Fix the URL bar alignment to the text & buttons (it got shifted to the right in v13)
--Update setting the CryptoBullions auto-payout threshold from 1 to 0.01, for smaller folders.
--Allow CureCoin username format for earning CureCoin only (no FLDC username rules, just warnings)
--INI: option to set initial page to any URL, with radio buttons for: local portal page, FLDC homepage, CURE homepage, CounterWallet?, blank?, any?
--Stop or Pause folding on initial install, then start it again at the end of the process?  -Or, set FAH option for 'Only When Idle' during install? (to avoid the system being sluggish during install)
+-INI: option to set initial page to any URL, with radio buttons for: local portal page, FLDC homepage, CURE homepage, CounterWallet?, blank?
 -Support other wallets?  like:  https://freewallet.io/     (Using:)https://counterwallet.io/    wallet.indiesquare.me    also: rarepepewallet.com would work
 -Ability to select alternate from: http://foldingcoin.xyz/?token=FLDC&total=250000&start=2017-08-21&end=2017-08-22 to using: http://fldc-stats.tokenly.com/?token=FLDC&total=250000&start=2017-08-21&end=2017-08-22
 -Use built-in multi-language uninstaller strings for uninstaller dialog on upgrading?
 -Look into enabling Google Translate in Chrome/CefSharp for automatic web page translations
--Enable Multi-language support in the FoldingBrowser App
+-Enable Multi-language support in the FoldingBrowser App to view pages that are available in other languages (Allow users to change the locale & supported languages)?
+-Add Multi-language support in the FoldingBrowser App for buttons and tooltips?
 
 -CTRL+F5: to dump the cache like Chrome? Or a button to manually (unload the browser component), dump the cache, (and reload the browser)?
 -CTRL+F: Find text in a page functionality? (searching for BTC address on distribution page, etc)
@@ -33,48 +29,44 @@ Other Ideas, Improvements, Tasks, Longer-Term Goals:
 ----------------------------------------------------
 
 -Add images to improve other dialog prompts (It will help non-English speaking users)
-
 -Simplicity: Ideally, you only want to enter username and email, and you are up and Folding (as other users have described).
 -Simple version of the FoldingBrowser: mostly to only run the FAH NaCl Chrome Plugin client
--Create a separate Electron framework App for Mac and Linux of the simple version that only runs the FAH NaCl Chrome Plugin client?  -Test out the FLDC Bar Electron app.  -Try '.NET Core' simple sample project for Linux and Mac?(probably not if CefSharp isn't compatible)
 -Plugin: Add an Ad Blocker?
-
--Add button titles and links to a separate INI file, that can be replaced to update
--Display the FAH advanced config options from --help (Show Commands button?: Show in a separate window from the FAH username dialog) The text is probably copyrighted, so maybe run the EXE and grab the output to display. Might be better to leave out.
--Create backup copies of the settings in a 'Backup' folder periodically?
--Reminder on a time interval to make backups of settings on to a USB drive?
-
+-Cross-compile for Linux and Mac version ideas:
+  -Try '.NET Core' simple project for Linux and Mac? (probably not if CefSharp isn't compatible)
+  -Create a separate Electron framework App for Mac and Linux of the simple version that only runs the FAH NaCl Chrome Plugin client? -Try the FLDC Bar Electron app as a possible starting point?
+  -Can the FoldingBrowser run on Wine in Linux? And, then update the FoldingBrowser to use the appropriate files and paths for Linux?
 -Option to monitor FAH clients and restart them if they hang?
 
--INI: when encryption PW is blank, Prompt for PW, if encryption fails (for extra security for not keeping the PW in a text file in your user account). Option to be prompted for it: once per session, or prompted every time when needed.
+-Add 'bookmark' link button titles and links to a separate INI file, that can be replaced to update
+-Option to create backup copies of the settings in a 'Backup' folder periodically, or get a pop-up reminder on a time interval?
+-Change the Default password: INI file: when encryption PW is blank, prompt for PW, if encryption fails (for extra security for not keeping the PW in a text file in your user account). Option to be prompted for it: once per session, or prompted every time when needed.
 -Make a better way to determine if the DAT file loads. This won't work: DAT.ToString.Length = 0, it really needs to be .SaveToString(), but all you want to know is there data loaded or not. You don't need a full text string output...
--For showing Wallet info, have option to 7-zip the INI/DAT file to add a password or not to it?
--Button to delete all saved info for a Wallet Id?
 -Restore from backup button (or separate app)? Make something to make setting up multiple computers easier (rename existing files, and copy new one) (and telnet FAH settings from Config file)
--Add pauses? (timer / do events) to the automated process to break it up and allow error to work themselves out. Might not be needed...
 -Add stop button to cancel the automated process?
-
 -Get Wallet with CounterPart API instead of current methods from web page clicks? (probably more work than it's worth)
 -Support other block explorers?  like: (Using:)https://xchain.io/     (depreciated) https://counterpartychain.io/      https://chain.so/      https://walletapp.indiesquare.me/explorer/      https://www.blocktrail.com/BTC/address/<addy>      https://xcpdex.com/
+-Change to the new FLDC username format (Nope, not yet, as of Sep 2017)
 
 -Improve the CureCoin HTTP JSON-RPC to use the JSON parser, and find the wallet if there is more than one entry or (blank and a name)
 -Show image of where to get the CURE wallet address, for message when it can't be found
--Improve the CureCoin pool sign up process, search for: account created / captcha failed massages? Search for User/PW being blank and fill them in for Capcha retries (fill in initially, too). Stop/Exit the process? Better retries for captcha fail / retry. Reload the info periodically?
 -Make the other webpage wait loops use Javascript for detecting stuff is there (like the CureCoin webpage login)
--Option to start the CureCoin wallet (if not running) for POS purposes?
--Any updates needed for CureCoin 2.0 changes?
-
--Change to the new FLDC username format (Nope, not yet, as of Aug)
-
 
 ======================================================================================================
 Change Log - Release Notes - Tasks completed:
 ======================================================================================================
 
-
-
-(Skip) -Other CureCoin websites: https://curecoin.info     https://curecoin.io/      (Using:) http://curecoin.net/      (No, other websites are being consolidated into the one)
-(Skip) -Mempool Transaction Count: https://blockchain.info/charts/mempool-count?timespan=1week     Use: https://bitcoinfees.21.co/ and https://jochen-hoenicke.de/queue/#24h to help determine sufficient miners fees to keep your TX from getting stuck in the mempool
+v14 Release (9/??/2017)
+[DONE] -Pause folding on initial install: set FAH option for pause=true(didn't work in FAH v7.4.16), idle=true (used), or power=light (CPU folds and GPU on idle) to avoid the system being sluggish during install
+[DONE] -Add additional detection for the CounterWallet server being down for syncing to the blockchain, for using the alternate server
+[DONE] -Make the portal homepage internal within the app
+[DONE] -Allow CureCoin username format for earning CureCoin only (no FLDC username rules, just warnings). This is now allowed but not obvious on purpose.
+[DONE] -Improve the CureCoin pool sign up process, search for: account created / captcha failed massages.
+[DONE] -After inputting the captcha text in the dialog for a CryptoBullions initial registration, pressing <Enter> should press the dialog's OK button.
+[DONE] -The CryptoBullions auto-payout threshold is defaulted to 0.01, for new users now. Logging-in is not needed anymore. Adjust the account creation sequence for this huge time savings for not having to solve captchas to login.
+[DONE] -Update CureCoin installer to v1.9.4.1
+[DONE] -Set the CureCoin address on the new Registration page. It will be required for new users signing up soon.
+[DONE] -Fix the URL bar alignment to the text & buttons (it got shifted to the right in v13)
 [DONE] -Adjust timing to help avoid a rare BTC wallet address web page scrape freeze
 v13 Release (8/4/2017)
 [DONE] -Fixing the portal homepage, to open either page full screen
@@ -108,7 +100,6 @@ v9 Release (3/4/2017)
 [DONE] -Slack buttons: save Slack login info in saved settings
 [DONE] -'Install complete' message for no options checked
 [DONE] -Update to CefSharp v55, when released (to see if it is better for the shutdown hang issue -Yes, fixes many issues)
-(Skip) -The CefSharp black pop-up console window from the FoldingCoin website says "NOT SANDBOXED" for less than a second. Looking into this: it's marked as a 'Won't Fix' issue, so just keep ignoring it...
 v8 Release (2/4/2017)
 [DONE] -Install complete message: also add for questions or feedback please contact us on Slack
 [DONE] -Improve last message for Install complete, to say the Distribution intervals (FLDC = Monthly, CURE = Daily).
@@ -131,12 +122,10 @@ v7 Release (1/7/2017)
 [DONE] -Initial (3) checkbox options window came up in upper right(center parent off screen), change to center screen?
 [DONE] -Get wallet from button, should say complete at the end
 [DONE] -Fix hang when you exit the wallet (& click yes) and then close the Browser (CefSharp.Cef.Shutdown() happens when it is disposed, and hangs it)
-(Skip) -Login to CureCoin Pool: Display text for the Pool Pin once you've logged in (so you could copy and make changes later)? -Probably better as is, to lookup in saved data when needed.
 [DONE] -Press ESC anywhere in main window to cancel navigation / automated process. Add F5 for refresh, too.
 [DONE] -Press forward / Back, then set focus/activate the address bar(when they get disabled, focus goes to the My Wallet button)
 [DONE] -Try to find elements in the webpages with execute Javascript to see when the CureCoin pool page is loaded. Try to set textboxes, and they haven't loaded yet, you'll get this: Uncaught TypeError: Cannot set property 'value' of undefined
 [DONE] -Browser needs a try/catch block around writing the sticky settings to the INI file when the program is exiting...
-(Skip) -Make all the entries for each Wallet slot in the DAT, and just leave unused blank?
 [DONE] -Use the newer Await Wait(ms) function throughout the FoldingBrowser
 [DONE] -Update CefSharp to v53 (use NuGet)[DONE]. Update to a .NET v4.5.2 target[DONE]
 [DONE] -MsgBx doesn't stay on top of main window / not acting like modal. -Changed border style from Resizeable, to FixedDialog
@@ -213,12 +202,21 @@ v3 (8/21/2016) & v4 Release (10/1/2016)
 [DONE] -Browser: Prompt for FAH info: Email, to get Passkey. Ask for: (existing) username, [Merged Folding Coin Selection(Not needed anymore)], team #, passkey, and how many CPU / GPU.  !!Curecoin username limit: 50 characters total
 [DONE] -Browser: Find the location of the FAH Config file, save a backup copy, and re-write a new cfg file. -Show FAH INI file changes (new vs old), and allow editing. Button w/ direct access to file for changes later?
 [DONE] -Browser: Launch FAH (restarting the PC is not required). Show control web page (in the FoldingBrowser, because it won't be the default browser)?
+
+(Skip) -Other CureCoin websites: https://curecoin.info     https://curecoin.io/      (Using:) http://curecoin.net/      (No, other websites are being consolidated into the one)
+(Skip) -Mempool Transaction Count: https://blockchain.info/charts/mempool-count?timespan=1week     Use: https://bitcoinfees.21.co/ and https://jochen-hoenicke.de/queue/#24h to help determine sufficient miners fees to keep your TX from getting stuck in the mempool
+(Skip) -Button to delete all saved info for a Wallet Id?
+(Skip) -For showing Wallet info, have option to 7-zip the INI/DAT file to add a password or not to it?
+(Skip) -Display the FAH advanced config options from --help (Show Commands button?: Show in a separate window from the FAH username dialog) Run the EXE and grab the output to display.
+(Skip) -The CefSharp black pop-up console window from the FoldingCoin website says "NOT SANDBOXED" for less than a second. Looking into this: it's marked as a 'Won't Fix' issue, so just keep ignoring it...
+(Skip) -Make all the entries for each Wallet slot in the DAT, and just leave unused blank?
+(Skip) -Login to CureCoin Pool: Display text for the Pool Pin once you've logged in (so you could copy and make changes later)? -Probably better as is, to lookup in saved data when needed.
 (No) -FAH shortcut: Open the Properties of the FAH shortcut in the Startup folder. There should be "--open-web-control" at the end of the target; remove it and Apply. -Probably considered modifying the FAH software... can't do it.
 
 Browser buttons for:
 --------------------
 [DONE] -Viewing FAH status
-[DONE] -Checking CP Wallet
+[DONE] -Checking CounterParty Wallet
 [DONE] -FLDC, CureCoin websites
 [DONE] -FLDC, CureCoin Twitter pages
 (Needs update for new stats site) [DONE] -FLDC website daily distributions. [DONE] Change to FoldingCoin.xyz for daily distributions

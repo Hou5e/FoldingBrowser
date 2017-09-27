@@ -25,7 +25,7 @@ Partial Class DisplayTextDialog
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(DisplayTextDialog))
         Me.txtDisplayText = New System.Windows.Forms.TextBox()
-        Me.BtnOK = New System.Windows.Forms.Button()
+        Me.btnOK = New System.Windows.Forms.Button()
         Me.MsgTextTop = New System.Windows.Forms.Label()
         Me.btnSaveChanges = New System.Windows.Forms.Button()
         Me.lblWarningInfo = New System.Windows.Forms.Label()
@@ -85,17 +85,17 @@ Partial Class DisplayTextDialog
         Me.txtDisplayText.TabIndex = 0
         Me.txtDisplayText.WordWrap = False
         '
-        'BtnOK
+        'btnOK
         '
-        Me.BtnOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.BtnOK.DialogResult = System.Windows.Forms.DialogResult.OK
-        Me.BtnOK.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.BtnOK.Location = New System.Drawing.Point(668, 524)
-        Me.BtnOK.Name = "BtnOK"
-        Me.BtnOK.Size = New System.Drawing.Size(90, 28)
-        Me.BtnOK.TabIndex = 0
-        Me.BtnOK.Text = "Close"
-        Me.BtnOK.UseVisualStyleBackColor = True
+        Me.btnOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK
+        Me.btnOK.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnOK.Location = New System.Drawing.Point(668, 524)
+        Me.btnOK.Name = "btnOK"
+        Me.btnOK.Size = New System.Drawing.Size(90, 28)
+        Me.btnOK.TabIndex = 0
+        Me.btnOK.Text = "Close"
+        Me.btnOK.UseVisualStyleBackColor = True
         '
         'MsgTextTop
         '
@@ -508,7 +508,7 @@ Partial Class DisplayTextDialog
         Me.Controls.Add(Me.txtWarningMessage)
         Me.Controls.Add(Me.lblWarningInfo)
         Me.Controls.Add(Me.btnSaveChanges)
-        Me.Controls.Add(Me.BtnOK)
+        Me.Controls.Add(Me.btnOK)
         Me.Controls.Add(Me.MsgTextTop)
         Me.KeyPreview = True
         Me.Name = "DisplayTextDialog"
@@ -526,7 +526,7 @@ Partial Class DisplayTextDialog
 
     End Sub
     Friend WithEvents txtDisplayText As System.Windows.Forms.TextBox
-    Friend WithEvents BtnOK As System.Windows.Forms.Button
+    Friend WithEvents btnOK As System.Windows.Forms.Button
     Friend WithEvents MsgTextTop As System.Windows.Forms.Label
     Friend WithEvents btnSaveChanges As Button
     Friend WithEvents lblWarningInfo As Label
