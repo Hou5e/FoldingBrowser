@@ -7,7 +7,7 @@
 ## Releases
 
 - **See [FoldingBrowser Releases](https://github.com/Hou5e/FoldingBrowser/releases) for the Windows installer**
-- **FoldingBrowser [Screenshot](Screenshot.jpg), and [Setup Video](https://www.youtube.com/watch?v=37W_7x7Jj_8). Please ask questions on the Slack Contact links below**
+- **FoldingBrowser [Screenshot](Screenshot.jpg), and [Setup Video](https://www.youtube.com/watch?v=P9qwONSZnCk). Please ask questions on the Slack Contact links below**
 - FoldingBrowser is written in VB.NET, compiled with VS2015, targeting the .NET Framework v4.5.2
 - Currently based on [cefsharp/57](https://github.com/cefsharp/CefSharp/tree/cefsharp/57) Chrome / Chromium Embedded Framework (CEF)
   - Requires: VC++ 2013 x86 Redist & .NET v4.5.2
