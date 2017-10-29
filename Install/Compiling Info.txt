@@ -4,9 +4,10 @@ Compiling the FoldingBrowser Installer Info
 
 One-time Setup Info:
 ---------------------------------------------------------------------
-I'm currently using NSIS v3.01, but the latest version will work fine: http://nsis.sourceforge.net/Main_Page
+I'm currently using NSIS v3.02.1, but the latest version will work fine from: http://nsis.sourceforge.net/Main_Page
+** Make sure to get the normal 32-bit NSIS download (right-hand side of the web page), and not the 3rd party NSIS projects from the bottom of the web page. **
 
-There are a couple plugin files you will manually need to add:
+There are a couple plugin files you will need to manually add:
 http://nsis.sourceforge.net/NsProcess_plugin   (Get the version with Unicode)
 
 Copy include file (nsProcess.nsh) to:   C:\Program Files (x86)\NSIS\Include
@@ -17,7 +18,11 @@ Rename that file to: nsProcess.dll   (Remove the  'W')
 
 I use the front-end 'HM NIS Edit', from:   http://hmne.sourceforge.net/
 
-I typically associate *.nsi files with the HM NIS Edit executable so they can be opened and accessed easily.
+I typically associate *.nsi files with the 'HM NIS Edit' executable so they can be opened and accessed easily.
+    -If you go to the ..\Install folder, and right-click one of the .nsi files
+    -Select 'Open With...'
+    -Then 'Choose default program'
+    -And browse to the 'HM NIS Edit' executable file at: C:\Program Files (x86)\HMSoft\NIS Edit\nisedit.exe
 ---------------------------------------------------------------------
 
 
@@ -34,4 +39,10 @@ and copy it to:  ..\Install\CureCoin
 2. Compile the CureCoin installer script first. The output goes to: ..\Install\CureInst
 (this was done mostly for an easy separate uninstaller for the CureCoin Wallet)
 
-3. Compile the FoldingBrowser script last. This assumes that you have built the 'Release' version of the FoldingBrowser executable (with Visual Studio).
+3. Compile the FoldingBrowser script last. This uses the 'Release' version of the FoldingBrowser executable compiled with Visual Studio.
+
+
+------------------------------
+Visual Studio Compiling Notes:
+------------------------------
+-Any time the CefSharp DLLs are upgraded to the next version, any previous versions of those DLLs need to be manually deleted from the Debug/Release folders before Visually Studio will compile the new executable without errors.
