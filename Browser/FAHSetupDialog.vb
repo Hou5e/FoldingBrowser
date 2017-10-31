@@ -479,6 +479,8 @@
             'Reset the background color
             Me.txtEmail.BackColor = Color.White
 
+            'Remove any white space at the beginning or end of the email address
+            Me.txtEmail.Text = Me.txtEmail.Text.Trim
             'Run the script to send the Passkey. Like: http://fah-web.stanford.edu/cgi-bin/getpasskey.py?name=[user]&email=[email]
             If Await g_Main.GetFAHpasskey("http://fah-web.stanford.edu/cgi-bin/getpasskey.py?name=" & Me.lblUsernamePreview.Text & "&email=" & Me.txtEmail.Text) = True Then
                 'Good - Check your email

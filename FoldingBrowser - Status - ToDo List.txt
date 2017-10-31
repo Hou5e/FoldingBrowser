@@ -7,7 +7,8 @@ All-in-One Installer:
 Immediate Need /  Short-Term Goals:
 -----------------------------------
 
--INI: option to set initial page to any URL, with radio buttons for: local portal page, FLDC homepage, CURE homepage, CounterWallet?, blank?
+-Split the installation video into initial install and features to keep it shorter.
+-Option to change the initial portal homepage URL, with radio buttons for: local portal page, FLDC homepage, CURE homepage, CounterWallet?, blank?
 -Support other wallets?  like:  https://freewallet.io/     (Using:)https://counterwallet.io/    wallet.indiesquare.me    also: rarepepewallet.com would work
 -Ability to select alternate from: http://foldingcoin.xyz/?token=FLDC&total=250000&start=2017-08-21&end=2017-08-22 to using: http://fldc-stats.tokenly.com/?token=FLDC&total=250000&start=2017-08-21&end=2017-08-22
 -Use built-in multi-language uninstaller strings for uninstaller dialog on upgrading?
@@ -56,16 +57,18 @@ Other Ideas, Improvements, Tasks, Longer-Term Goals:
 Change Log - Release Notes - Tasks completed:
 ======================================================================================================
 
-v14 Release (9/??/2017)
+[DONE] -Add instructions for compiling the NSIS installation kit
+[DONE] -Trim the input Email text for getting a passkey
+v14 Release (10/31/2017)
 [DONE] -Pause folding on initial install: set FAH option for pause=true(didn't work in FAH v7.4.16), idle=true (used), or power=light (CPU folds and GPU on idle) to avoid the system being sluggish during install
 [DONE] -Add additional detection for the CounterWallet server being down for syncing to the blockchain, for using the alternate server
 [DONE] -Make the portal homepage internal within the app
-[DONE] -Allow CureCoin username format for earning CureCoin only (no FLDC username rules, just warnings). This is now allowed but not obvious on purpose.
+[DONE] -In the FAH Username selection, allow the CureCoin username format for earning CureCoin only (no FLDC username rules, just warnings). This is now allowed but not obvious on purpose.
 [DONE] -Improve the CureCoin pool sign up process, search for: account created / captcha failed massages.
 [DONE] -After inputting the captcha text in the dialog for a CryptoBullions initial registration, pressing <Enter> should press the dialog's OK button.
 [DONE] -The CryptoBullions auto-payout threshold is defaulted to 0.01, for new users now. Logging-in is not needed anymore. Adjust the account creation sequence for this huge time savings for not having to solve captchas to login.
 [DONE] -Update CureCoin installer to v1.9.4.1
-[DONE] -Set the CureCoin address on the new Registration page. It will be required for new users signing up soon.
+[DONE] -Set the CureCoin wallet address on the new Registration page. It will be required for new users signing up soon.
 [DONE] -Fix the URL bar alignment to the text & buttons (it got shifted to the right in v13)
 [DONE] -Adjust timing to help avoid a rare BTC wallet address web page scrape freeze
 v13 Release (8/4/2017)
