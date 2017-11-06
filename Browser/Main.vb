@@ -1949,6 +1949,11 @@
                 TxtEntry.MsgTextLower.Text = "Please enter the captcha text:"
                 TxtEntry.Width = (TxtEntry.MsgTextUpper.Left * 2) + TxtEntry.MsgTextUpper.Width + 10
                 TxtEntry.TextEnteredLower.Visible = False
+                'Hide the Cancel button in favor of showing: Attempt 1 of 3
+                TxtEntry.btnCancel.Visible = False
+                'Move the OK button in the place of the hidden Cancel button
+                TxtEntry.btnOK.Left = TxtEntry.btnCancel.Left
+                TxtEntry.MsgTextExtraBottomNote.Text = "(Attempt: " & (m + 1).ToString & " of 3)"
                 'Show modal dialog box
                 If TxtEntry.ShowDialog(Me) = DialogResult.OK Then
                     EnterTextByName("captcha_code", TxtEntry.TextEnteredUpper.Text)

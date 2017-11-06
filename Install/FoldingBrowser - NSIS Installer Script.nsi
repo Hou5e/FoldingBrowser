@@ -4,8 +4,8 @@
 
 
 ;---- Helper defines / constants ----
-!define PRODUCT_VERSION "14"  ;Match the displayed version in the program title. Example: 1.2.3
-!define PRODUCT_4_VALUE_VERSION "14.0.0.0"  ;Match the executable version: Right-click the program executable file | Properties | Version. Example: 1.2.3.4
+!define PRODUCT_VERSION "15"  ;Match the displayed version in the program title. Example: 1.2.3
+!define PRODUCT_4_VALUE_VERSION "15.0.0.0"  ;Match the executable version: Right-click the program executable file | Properties | Version. Example: 1.2.3.4
 !define PRODUCT_YEAR "2017"
 !define PRODUCT_NAME "FoldingBrowser"
 !define PRODUCT_EXE_NAME "FoldingBrowser"  ;Executable name without extension

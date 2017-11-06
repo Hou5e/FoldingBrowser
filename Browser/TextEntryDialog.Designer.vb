@@ -28,6 +28,7 @@ Partial Class TextEntryDialog
         Me.btnOK = New System.Windows.Forms.Button()
         Me.MsgTextUpper = New System.Windows.Forms.Label()
         Me.TextEnteredLower = New System.Windows.Forms.TextBox()
+        Me.MsgTextExtraBottomNote = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'TextEnteredUpper
@@ -92,11 +93,22 @@ Partial Class TextEntryDialog
         Me.TextEnteredLower.Size = New System.Drawing.Size(361, 20)
         Me.TextEnteredLower.TabIndex = 1
         '
+        'MsgTextExtraBottomNote
+        '
+        Me.MsgTextExtraBottomNote.AutoSize = True
+        Me.MsgTextExtraBottomNote.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.MsgTextExtraBottomNote.Location = New System.Drawing.Point(40, 108)
+        Me.MsgTextExtraBottomNote.Name = "MsgTextExtraBottomNote"
+        Me.MsgTextExtraBottomNote.Size = New System.Drawing.Size(113, 18)
+        Me.MsgTextExtraBottomNote.TabIndex = 6
+        Me.MsgTextExtraBottomNote.Text = "(Attempt: 1 of 3)"
+        '
         'TextEntryDialog
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(407, 143)
+        Me.Controls.Add(Me.MsgTextExtraBottomNote)
         Me.Controls.Add(Me.btnOK)
         Me.Controls.Add(Me.btnCancel)
         Me.Controls.Add(Me.MsgTextUpper)
@@ -116,4 +128,5 @@ Partial Class TextEntryDialog
     Friend WithEvents btnOK As System.Windows.Forms.Button
     Friend WithEvents MsgTextUpper As System.Windows.Forms.Label
     Friend WithEvents TextEnteredLower As System.Windows.Forms.TextBox
+    Friend WithEvents MsgTextExtraBottomNote As Label
 End Class
