@@ -1,9 +1,9 @@
 ﻿Public Class FAHSetupDialog
     'Leave this at the top to turn off auto-updating during initialization
     Private m_bSkipUpdating As Boolean = True
-    Private m_bTelnetSavePressed As Boolean = False
 
     Private Const PATH_FAH_ALL_USER_CFG As String = "C:\ProgramData\FAHClient\config.xml"
+    Private Const PAUSE_FAH As String = "options idle=true"
     Private Path_FAH_CurrentUserCfg As String = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "FAHClient\config.xml")
     Private m_strFAHCfgPath As String = ""
 
@@ -29,7 +29,8 @@
         'Try pausing FAH during the initial FAH setup. This keeps things from slowing down too much when CPU folding starts up during the setup process.
         'NOTE: the option "paused=true" didn't work on v7.4.16. Using "idle=true" instead. "power=light" starts running the CPU at ~50%, and has the GPU paused for idle
         If g_bInitialInstall = True Then
-            Me.txtTelnetFAHCfg.Text = "options idle=true"
+            Me.txtTelnetFAHCfg.Text = PAUSE_FAH
+            'NOTE: the Telnet settings change is not Awaited, and this sets the OK button state
             btnTelnetSave_Click(Nothing, Nothing)
             Delay(500)
         End If
@@ -183,9 +184,8 @@
         CreateFAHUserName()
         Me.chkShowFAHCfg.Checked = False
 
-        'Disable the OK button until settings are saved
+        'Disable the OK button until settings are saved. NOTE: Pausing FAH with Telent is not Awaited above, and was undoing this on an initial install
         Me.btnOK.Enabled = False
-        m_bTelnetSavePressed = False
 
         'Make the main form visible
         Me.WindowState = FormWindowState.Normal
@@ -402,15 +402,11 @@
             End If
 
             If Me.txtUsername.BackColor = Color.Tomato OrElse Me.cbxSeparator.BackColor = Color.Tomato OrElse Me.txtBitcoinAddress.BackColor = Color.Tomato OrElse Me.lblTeamNumber.BackColor = Color.Tomato OrElse Me.rbnFoldingCoin.BackColor = Color.Tomato OrElse Me.rbnCureCoin.BackColor = Color.Tomato OrElse Me.txtTelnetFAHCfg.Text.Length < 10 Then
-                'Errors: Need to fix info. Disable Save button
+                'Errors: User needs to fix the entered info, so disable the Save button
                 Me.btnTelnetSave.Enabled = False
             Else
                 'Good
                 Me.btnTelnetSave.Enabled = True
-            End If
-
-            If m_bTelnetSavePressed = True Then
-                Me.btnOK.Enabled = True
             End If
         End If
     End Sub
@@ -676,9 +672,14 @@
             MessageBox.Show(strMsg)
         End Try
 
-        'Enable the OK button once the Save button has been pressed
-        Me.btnOK.Enabled = True
-        m_bTelnetSavePressed = True
+        'Set the OK button state
+        If Me.txtTelnetFAHCfg.Text = PAUSE_FAH Then
+            'Disable the OK button for pausing FAH with Telnet
+            Me.btnOK.Enabled = False
+        Else
+            'Enable the OK button once the Save button has been pressed (saving the FAH configuration settings to FAH)
+            Me.btnOK.Enabled = True
+        End If
 
         'Reload the new Config file to show changes
         Await Wait(500)
