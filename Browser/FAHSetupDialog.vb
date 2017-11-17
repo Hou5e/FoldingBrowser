@@ -3,7 +3,7 @@
     Private m_bSkipUpdating As Boolean = True
 
     Private Const PATH_FAH_ALL_USER_CFG As String = "C:\ProgramData\FAHClient\config.xml"
-    Private Const PAUSE_FAH As String = "options idle=true"
+    Private Const PAUSE_FAH As String = "options idle=true open-web-control=false"
     Private Path_FAH_CurrentUserCfg As String = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "FAHClient\config.xml")
     Private m_strFAHCfgPath As String = ""
 
@@ -627,58 +627,58 @@
             MessageBox.Show(strMsg)
         End Try
 
-        Try
-            'Save and encrypt Email, Passkey, FAH Username & Team info
-            Dim DAT As New IniFile
-            If System.IO.File.Exists(DatFilePath) = True Then
-                'Load DAT file, decrypt it
-                DAT.LoadText(Decrypt(LoadDat))
-                If DAT.ToString.Length = 0 Then
-                    'Decryption failed
-                    g_Main.Msg(DAT_ErrorMsg)
-                    MessageBox.Show(DAT_ErrorMsg)
-                End If
-            End If
-
-            'Write out data to INI info
-            If Me.lblUsernamePreview.Text.Length > 0 Then DAT.AddSection(Id & g_Main.cbxWalletId.Text).AddKey(DAT_FAH_Username).Value = Me.lblUsernamePreview.Text
-            If Me.lblTeamNumber.Text.Length > 0 Then DAT.AddSection(Id & g_Main.cbxWalletId.Text).AddKey(DAT_FAH_Team).Value = Me.lblTeamNumber.Text
-            If Me.txtEmail.Text.Length > 0 Then DAT.AddSection(Id & g_Main.cbxWalletId.Text).AddKey(DAT_Email).Value = Me.txtEmail.Text
-            If Me.txtPasskey.Text.Length > 0 Then DAT.AddSection(Id & g_Main.cbxWalletId.Text).AddKey(DAT_FAH_Passkey).Value = Me.txtPasskey.Text
-
-            'Create text from the INI, Encrypt, and Write/flush DAT text to file
-            SaveDat(Encrypt(DAT.SaveToString))
-            DAT = Nothing
-
-            'Make sure the INI key/value exists
-            If INI.GetSection(Id & g_Main.cbxWalletId.Text) Is Nothing OrElse INI.GetSection(Id & g_Main.cbxWalletId.Text).GetKey(INI_WalletName) Is Nothing Then
-                'Save a wallet name, if there is none
-                INI.AddSection(Id & g_Main.cbxWalletId.Text)
-                INI.AddSection(Id & g_Main.cbxWalletId.Text).AddKey(INI_WalletName).Value = DefaultWalletName & g_Main.cbxWalletId.Text
-            End If
-
-            'Store FAH Username
-            If Me.lblUsernamePreview.Text.Length > 0 Then
-                INI.AddSection(Id & g_Main.cbxWalletId.Text).AddKey(INI_FAH_Username).Value = Me.lblUsernamePreview.Text
-            End If
-            INI.Save(IniFilePath)
-            Await Wait(100)
-            'Refresh the Wallet Names
-            g_Main.cbxWalletId_SelectedIndexChanged(Nothing, Nothing)
-
-        Catch ex As Exception
-            Dim strMsg As String = "Error saving FAH settings to DAT file: " & ex.ToString
-            g_Main.Msg(strMsg)
-            MessageBox.Show(strMsg)
-        End Try
-
         'Set the OK button state
         If Me.txtTelnetFAHCfg.Text = PAUSE_FAH Then
-            'Disable the OK button for pausing FAH with Telnet
+            'Disable the OK button initially for pausing FAH with Telnet (initial install only, when the form is opened)
             Me.btnOK.Enabled = False
         Else
-            'Enable the OK button once the Save button has been pressed (saving the FAH configuration settings to FAH)
+            'Enable the OK button once the Save button has been pressed (Saving the FAH configuration settings to FAH at the end of the process)
             Me.btnOK.Enabled = True
+
+            Try
+                'Save and encrypt: Email, Passkey, FAH Username & Team info
+                Dim DAT As New IniFile
+                If System.IO.File.Exists(DatFilePath) = True Then
+                    'Load DAT file, decrypt it
+                    DAT.LoadText(Decrypt(LoadDat))
+                    If DAT.ToString.Length = 0 Then
+                        'Decryption failed
+                        g_Main.Msg(DAT_ErrorMsg)
+                        MessageBox.Show(DAT_ErrorMsg)
+                    End If
+                End If
+
+                'Write out data to INI info
+                If Me.lblUsernamePreview.Text.Length > 0 Then DAT.AddSection(Id & g_Main.cbxWalletId.Text).AddKey(DAT_FAH_Username).Value = Me.lblUsernamePreview.Text
+                If Me.lblTeamNumber.Text.Length > 0 Then DAT.AddSection(Id & g_Main.cbxWalletId.Text).AddKey(DAT_FAH_Team).Value = Me.lblTeamNumber.Text
+                If Me.txtEmail.Text.Length > 0 Then DAT.AddSection(Id & g_Main.cbxWalletId.Text).AddKey(DAT_Email).Value = Me.txtEmail.Text
+                If Me.txtPasskey.Text.Length > 0 Then DAT.AddSection(Id & g_Main.cbxWalletId.Text).AddKey(DAT_FAH_Passkey).Value = Me.txtPasskey.Text
+
+                'Create text from the INI, Encrypt, and Write/flush DAT text to file
+                SaveDat(Encrypt(DAT.SaveToString))
+                DAT = Nothing
+
+                'Make sure the INI key/value exists
+                If INI.GetSection(Id & g_Main.cbxWalletId.Text) Is Nothing OrElse INI.GetSection(Id & g_Main.cbxWalletId.Text).GetKey(INI_WalletName) Is Nothing Then
+                    'Save a wallet name, if there is none
+                    INI.AddSection(Id & g_Main.cbxWalletId.Text)
+                    INI.AddSection(Id & g_Main.cbxWalletId.Text).AddKey(INI_WalletName).Value = DefaultWalletName & g_Main.cbxWalletId.Text
+                End If
+
+                'Store FAH Username
+                If Me.lblUsernamePreview.Text.Length > 0 Then
+                    INI.AddSection(Id & g_Main.cbxWalletId.Text).AddKey(INI_FAH_Username).Value = Me.lblUsernamePreview.Text
+                End If
+                INI.Save(IniFilePath)
+                Await Wait(100)
+                'Refresh the Wallet Names
+                g_Main.cbxWalletId_SelectedIndexChanged(Nothing, Nothing)
+
+            Catch ex As Exception
+                Dim strMsg As String = "Error saving FAH settings to DAT file: " & ex.ToString
+                g_Main.Msg(strMsg)
+                MessageBox.Show(strMsg)
+            End Try
         End If
 
         'Reload the new Config file to show changes
