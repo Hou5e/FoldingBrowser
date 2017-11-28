@@ -82,6 +82,12 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DisplayOptionsDialog.Designer.vb">
+      <DependentUpon>DisplayOptionsDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="DisplayOptionsDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="FAHSetupDialog.Designer.vb">
       <DependentUpon>FAHSetupDialog.vb</DependentUpon>
     </Compile>
@@ -145,6 +151,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="DisplayOptionsDialog.resx">
+      <DependentUpon>DisplayOptionsDialog.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FAHSetupDialog.resx">
       <DependentUpon>FAHSetupDialog.vb</DependentUpon>
     </EmbeddedResource>
@@ -221,6 +230,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="FoldingBrowser.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Home-16.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <Import Project="packages\cef.redist.x64.3.2987.1601\build\cef.redist.x64.targets" Condition="Exists('packages\cef.redist.x64.3.2987.1601\build\cef.redist.x64.targets')" />

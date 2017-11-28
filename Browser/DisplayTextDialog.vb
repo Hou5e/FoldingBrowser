@@ -58,15 +58,13 @@
             Me.txtCounterParty12WordPassphrase.PasswordChar = ControlChars.NullChar
             Me.txtCureCoinPoolPassword.PasswordChar = ControlChars.NullChar
             Me.txtCureCoinPoolPin.PasswordChar = ControlChars.NullChar
-            Me.txtCureCoinSlackPassword.PasswordChar = ControlChars.NullChar
-            Me.txtFoldingCoinSlackPassword.PasswordChar = ControlChars.NullChar
+            Me.txtDiscordPassword.PasswordChar = ControlChars.NullChar
         Else
             Me.txtFAHPasskey.PasswordChar = "*"c
             Me.txtCounterParty12WordPassphrase.PasswordChar = "*"c
             Me.txtCureCoinPoolPassword.PasswordChar = "*"c
             Me.txtCureCoinPoolPin.PasswordChar = "*"c
-            Me.txtCureCoinSlackPassword.PasswordChar = "*"c
-            Me.txtFoldingCoinSlackPassword.PasswordChar = "*"c
+            Me.txtDiscordPassword.PasswordChar = "*"c
         End If
     End Sub
 
@@ -92,11 +90,8 @@
             Me.txtCureCoinPoolPassword.Text = Me.txtCureCoinPoolPassword.Text.Trim
             Me.txtCureCoinPoolPin.Text = Me.txtCureCoinPoolPin.Text.Trim
 
-            Me.txtCureCoinSlackEmail.Text = Me.txtCureCoinSlackEmail.Text.Trim
-            Me.txtCureCoinSlackPassword.Text = Me.txtCureCoinSlackPassword.Text.Trim
-
-            Me.txtFoldingCoinSlackEmail.Text = Me.txtFoldingCoinSlackEmail.Text.Trim
-            Me.txtFoldingCoinSlackPassword.Text = Me.txtFoldingCoinSlackPassword.Text.Trim
+            Me.txtDiscordEmail.Text = Me.txtDiscordEmail.Text.Trim
+            Me.txtDiscordPassword.Text = Me.txtDiscordPassword.Text.Trim
 
             Me.txtExtremeOverclockingId.Text = Me.txtExtremeOverclockingId.Text.Trim
 
@@ -138,19 +133,11 @@
             End If
 
 
-            If Me.txtCureCoinSlackEmail.Text.Length <> 0 Then
-                DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_CureCoinSlackEmail).Value = Me.txtCureCoinSlackEmail.Text
+            If Me.txtDiscordEmail.Text.Length <> 0 Then
+                DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_DiscordEmail).Value = Me.txtDiscordEmail.Text
             End If
-            If Me.txtCureCoinSlackPassword.Text.Length <> 0 Then
-                DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_CureCoinSlackPassword).Value = Me.txtCureCoinSlackPassword.Text
-            End If
-
-
-            If Me.txtFoldingCoinSlackEmail.Text.Length <> 0 Then
-                DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_FoldingCoinSlackEmail).Value = Me.txtFoldingCoinSlackEmail.Text
-            End If
-            If Me.txtFoldingCoinSlackPassword.Text.Length <> 0 Then
-                DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_FoldingCoinSlackPassword).Value = Me.txtFoldingCoinSlackPassword.Text
+            If Me.txtDiscordPassword.Text.Length <> 0 Then
+                DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_DiscordPassword).Value = Me.txtDiscordPassword.Text
             End If
 
 
@@ -166,7 +153,7 @@
             End If
             INI.Save(IniFilePath)
 
-            'Show all data (Main textbox) / Display the new DAT file to be saved
+            'Display the DAT data in the main raw data textbox
             Me.txtDisplayText.Text = DAT.SaveToString
             Me.txtDisplayText.Select(Me.txtDisplayText.Text.Length, 0)
 
@@ -310,11 +297,8 @@
         Me.txtCureCoinPoolPassword.Text = ""
         Me.txtCureCoinPoolPin.Text = ""
 
-        Me.txtCureCoinSlackEmail.Text = ""
-        Me.txtCureCoinSlackPassword.Text = ""
-
-        Me.txtFoldingCoinSlackEmail.Text = ""
-        Me.txtFoldingCoinSlackPassword.Text = ""
+        Me.txtDiscordEmail.Text = ""
+        Me.txtDiscordPassword.Text = ""
 
         Me.txtExtremeOverclockingId.Text = ""
 
@@ -373,19 +357,11 @@
                 End If
 
 
-                If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CureCoinSlackEmail) IsNot Nothing Then
-                    Me.txtCureCoinSlackEmail.Text = DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CureCoinSlackEmail).GetValue()
+                If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_DiscordEmail) IsNot Nothing Then
+                    Me.txtDiscordEmail.Text = DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_DiscordEmail).GetValue()
                 End If
-                If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CureCoinSlackPassword) IsNot Nothing Then
-                    Me.txtCureCoinSlackPassword.Text = DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CureCoinSlackPassword).GetValue()
-                End If
-
-
-                If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FoldingCoinSlackEmail) IsNot Nothing Then
-                    Me.txtFoldingCoinSlackEmail.Text = DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FoldingCoinSlackEmail).GetValue()
-                End If
-                If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FoldingCoinSlackPassword) IsNot Nothing Then
-                    Me.txtFoldingCoinSlackPassword.Text = DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FoldingCoinSlackPassword).GetValue()
+                If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_DiscordPassword) IsNot Nothing Then
+                    Me.txtDiscordPassword.Text = DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_DiscordPassword).GetValue()
                 End If
 
 
@@ -438,17 +414,10 @@
         Me.btnSaveChanges.Enabled = True
     End Sub
 
-    Private Sub txtCureCoinSlackEmail_TextChanged(sender As Object, e As EventArgs) Handles txtCureCoinSlackEmail.TextChanged
+    Private Sub txtDiscordEmail_TextChanged(sender As Object, e As EventArgs) Handles txtDiscordEmail.TextChanged
         Me.btnSaveChanges.Enabled = True
     End Sub
-    Private Sub txtCureCoinSlackPassword_TextChanged(sender As Object, e As EventArgs) Handles txtCureCoinSlackPassword.TextChanged
-        Me.btnSaveChanges.Enabled = True
-    End Sub
-
-    Private Sub txtFoldingCoinSlackEmail_TextChanged(sender As Object, e As EventArgs) Handles txtFoldingCoinSlackEmail.TextChanged
-        Me.btnSaveChanges.Enabled = True
-    End Sub
-    Private Sub txtFoldingCoinSlackPassword_TextChanged(sender As Object, e As EventArgs) Handles txtFoldingCoinSlackPassword.TextChanged
+    Private Sub txtDiscordPassword_TextChanged(sender As Object, e As EventArgs) Handles txtDiscordPassword.TextChanged
         Me.btnSaveChanges.Enabled = True
     End Sub
 

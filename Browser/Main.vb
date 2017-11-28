@@ -3,6 +3,7 @@
 
     'Page loaded indicator
     Private m_bPageLoaded As Boolean = False
+    Private m_bDefaultHomepageLoaded As Boolean = False
     'URL to help determine the page loaded indicator
     Private m_strPageURL As String = ""
 
@@ -30,7 +31,7 @@
             settings.LogSeverity = CefSharp.LogSeverity.Info
 #End If
             Try
-                'The log file gets appended to each time, so delete it or else it can get large over time
+                'The log file gets appended to each time, so delete it (or else it can get large over time)
                 If System.IO.File.Exists(settings.LogFile) = True Then
                     System.IO.File.Delete(settings.LogFile)
                     Threading.Thread.Sleep(50)
@@ -38,6 +39,9 @@
             Catch ex As Exception
                 Msg("Error: deleting temp file " & settings.LogFile & ": " & ex.ToString)
             End Try
+
+            'Load the INI data before loading the Homepage (which is based on the user's options in the INI file). Fix the INI file, if needed
+            LoadINISettings()
 
             CefSharp.Cef.EnableHighDPISupport()
             If CefSharp.Cef.Initialize(settings) = True Then
@@ -58,8 +62,8 @@
 
                 'Default homepage / portal set to the FoldingCoin webpage
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
-                CefSharp.WebBrowserExtensions.LoadHtml(Me.browser, HTML_PortalPage, "data:local")
-                'OpenURL("http://folding.stanford.edu/nacl/", False)
+                'Load the Homepage based on the user's options in the INI file (call after loading the INI settings)
+                LoadHomepage()
 #Enable Warning BC42358
             End If
 
@@ -71,16 +75,18 @@
             g_Main = Me
 
             'Setup Browser buttons
-            Me.btnGo.Text = ""
-            Me.btnGo.Image = My.Resources.Go_16.ToBitmap
-            Me.btnStopNav.Text = ""
-            Me.btnStopNav.Image = My.Resources.Stop_16.ToBitmap
             Me.btnBack.Text = ""
             Me.btnBack.Image = My.Resources.Back_24.ToBitmap
             Me.btnFwd.Text = ""
             Me.btnFwd.Image = My.Resources.Fwd_24.ToBitmap
+            Me.btnGo.Text = ""
+            Me.btnGo.Image = My.Resources.Go_16.ToBitmap
+            Me.btnStopNav.Text = ""
+            Me.btnStopNav.Image = My.Resources.Stop_16.ToBitmap
             Me.btnReload.Text = ""
             Me.btnReload.Image = My.Resources.Reload_16.ToBitmap
+            Me.btnHome.Text = ""
+            Me.btnHome.Image = My.Resources.Home_16.ToBitmap
 
             'Button Images
             Me.btnMyWallet.BackgroundImage = My.Resources.Coins_4_top_24.ToBitmap
@@ -104,42 +110,10 @@
 
             'Hide the form while it's being adjusted
             Me.WindowState = FormWindowState.Minimized
-            'Create the main form (needs to come before the window size restore)
+            'Create the main form (Needs to come before restoring the window size and window state)
             Me.Show()
 
-            'Force the URL text to scroll all the way to the left
-            Me.txtURL.Select(0, 0)
-
-            'Fix INI file, if needed. Process command line values (Only for initial installations). NOTE: Async and can't be awaited here
-            RunSetup()
-
-        Catch ex As Exception
-            Msg("Error: initialization failed: " & ex.ToString)
-            MessageBox.Show("Error: initialization failed: " & ex.ToString)
-        End Try
-    End Sub
-
-#Region "Extra Setup"
-    'This was done because the New() constructor can't be run as Async. So, this was moved out to here
-    Private Async Sub RunSetup()
-        'For debugging issues: Log version info
-        Dim sbMsg As New System.Text.StringBuilder
-        sbMsg.Append(vbNewLine & DividerLine & vbNewLine & "Chromium Version: " & CefSharp.Cef.ChromiumVersion.ToString & vbNewLine &
-            "Cef Version: " & CefSharp.Cef.CefVersion.ToString & vbNewLine &
-            "CefSharp Version: " & CefSharp.Cef.CefSharpVersion.ToString)
-        Dim plugins As List(Of CefSharp.WebPluginInfo) = Await CefSharp.Cef.GetPlugins
-        For Each plugin As CefSharp.WebPluginInfo In plugins
-            sbMsg.Append(vbNewLine & DividerLine & vbNewLine &
-                "Plugin: " & plugin.Name & If(plugin.Version.Length > 0, " v" & plugin.Version, "") &
-                If(plugin.Description.Length > 0, vbNewLine & "Plugin Description: " & plugin.Description, "") &
-                If(plugin.Path.Length > 0, vbNewLine & "Plugin Path: " & plugin.Path, ""))
-        Next
-        Msg(sbMsg.ToString & vbNewLine & DividerLine)
-
-        'Load, fix, or update the INI and DAT files for the stored settings. Look to see if there is an INI file first
-        If System.IO.File.Exists(IniFilePath) = True Then
-            INI.Load(IniFilePath)
-            'Make sure the INI key/value exists
+            'Restore window size
             If INI.GetSection(INI_Settings).GetKey(INI_Size) IsNot Nothing Then
                 'Restore dimensions from string: {Left};{Top};{Width};{Height}
                 Dim strDim As String() = INI.GetSection(INI_Settings).GetKey(INI_Size).GetValue().Split(";"c)
@@ -149,13 +123,7 @@
                 Me.Height = CInt(strDim(3))
             End If
 
-            'Make sure the INI key/value exists
-            If INI.GetSection(INI_Settings).GetKey(INI_LastWalletId) IsNot Nothing Then
-                'Restore last Wallet Id used
-                Me.cbxWalletId.Text = INI.GetSection(INI_Settings).GetKey(INI_LastWalletId).GetValue()
-            End If
-
-            'Make sure the INI key/value exists
+            'Restore window state
             If INI.GetSection(INI_Settings).GetKey(INI_WindowState) IsNot Nothing Then
                 'Restore last window state: Normal or Maximized
                 If INI.GetSection(INI_Settings).GetKey(INI_WindowState).GetValue() = "Maximized" Then
@@ -165,6 +133,30 @@
                 End If
             Else
                 Me.WindowState = FormWindowState.Normal
+            End If
+
+            'Force the URL text to scroll all the way to the left
+            Me.txtURL.Select(0, 0)
+
+            'Process command line values (Only for initial installations). Log browser debug info. NOTE: Async and can't be awaited here.
+            RunSetup()
+
+        Catch ex As Exception
+            Msg("Error: initialization failed: " & ex.ToString)
+            MessageBox.Show("Error: initialization failed: " & ex.ToString)
+        End Try
+    End Sub
+
+#Region "Extra Setup"
+    Private Async Sub LoadINISettings()
+        'Load, fix, or update the INI and DAT files for the stored settings. Look to see if there is an INI file first
+        If System.IO.File.Exists(IniFilePath) = True Then
+            INI.Load(IniFilePath)
+
+            'Make sure the INI key/value exists
+            If INI.GetSection(INI_Settings).GetKey(INI_LastWalletId) IsNot Nothing Then
+                'Restore last Wallet Id used
+                Me.cbxWalletId.Text = INI.GetSection(INI_Settings).GetKey(INI_LastWalletId).GetValue()
             End If
 
             'Make sure the INI key/value exists
@@ -355,6 +347,23 @@
         End If
         'Refresh the Wallet Names
         cbxWalletId_SelectedIndexChanged(Nothing, Nothing)
+    End Sub
+
+    'This was done because the New() constructor can't be run as Async. So, this was moved out to here
+    Private Async Sub RunSetup()
+        'For debugging issues: Log version info
+        Dim sbMsg As New System.Text.StringBuilder
+        sbMsg.Append(vbNewLine & DividerLine & vbNewLine & "Chromium Version: " & CefSharp.Cef.ChromiumVersion.ToString & vbNewLine &
+            "Cef Version: " & CefSharp.Cef.CefVersion.ToString & vbNewLine &
+            "CefSharp Version: " & CefSharp.Cef.CefSharpVersion.ToString)
+        Dim plugins As List(Of CefSharp.WebPluginInfo) = Await CefSharp.Cef.GetPlugins
+        For Each plugin As CefSharp.WebPluginInfo In plugins
+            sbMsg.Append(vbNewLine & DividerLine & vbNewLine &
+                "Plugin: " & plugin.Name & If(plugin.Version.Length > 0, " v" & plugin.Version, "") &
+                If(plugin.Description.Length > 0, vbNewLine & "Plugin Description: " & plugin.Description, "") &
+                If(plugin.Path.Length > 0, vbNewLine & "Plugin Path: " & plugin.Path, ""))
+        Next
+        Msg(sbMsg.ToString & vbNewLine & DividerLine)
 
         '''''''''''''''''''''
         'Process command line values (Only for initial installations).
@@ -462,7 +471,7 @@
                             "     FoldingCoin: On the 1st Saturday of each month" & vbNewLine &
                             "         CureCoin: Daily.     Also, Proof of Stake (POS) when coins are" & vbNewLine &
                             "            over 30 days old, with wallet unlocked and left running." & vbNewLine & vbNewLine &
-                            "-Please contact us on Slack for questions (Use FoldingBrowser Slack buttons)"
+                            "-Please contact us on Discord for questions (Use FoldingBrowser Discord buttons)"
                         FinMsg.Width = (FinMsg.MsgText.Left * 2) + FinMsg.MsgText.Width + 10
                         FinMsg.Height = (FinMsg.MsgText.Top * 2) + FinMsg.MsgText.Height + FinMsg.btnOK.Height + System.Windows.Forms.SystemInformation.CaptionHeight + System.Windows.Forms.SystemInformation.BorderSize.Height + 30
                         FinMsg.StartPosition = FormStartPosition.CenterScreen
@@ -730,113 +739,9 @@
 #Enable Warning BC42358
     End Sub
 
-    Private Async Sub btnFoldingCoinSlack_Click(sender As Object, e As EventArgs) Handles btnFoldingCoinSlack.Click
+    Private Sub btnFoldingCoinDiscord_Click(sender As Object, e As EventArgs) Handles btnFoldingCoinDiscord.Click
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
-        Dim bSkip As Boolean = False
-        'Make sure the INI key/value exists
-        If INI.GetSection(Id & Me.cbxWalletId.Text) IsNot Nothing AndAlso INI.GetSection(Id & Me.cbxWalletId.Text).GetKey(INI_WalletName) IsNot Nothing Then
-            'Load the Wallet name from the INI file based on the Wallet Id#
-            Me.txtWalletName.Text = INI.GetSection(Id & Me.cbxWalletId.Text).GetKey(INI_WalletName).GetValue()
-
-            If System.IO.File.Exists(DatFilePath) = True Then
-                'Open the Slack Sign-in page
-                Await OpenURL(URL_FoldingCoinSlack, False)
-                Await PageTitleWait("Slack")
-                Await Wait(200)
-
-                Dim DAT As New IniFile
-                'Load DAT file, decrypt it
-                DAT.LoadText(Decrypt(LoadDat))
-
-                If DAT.GetSection(Id & Me.cbxWalletId.Text) Is Nothing OrElse DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FoldingCoinSlackEmail) Is Nothing Then
-                    'Fix missing value. Ask for FAH Username
-                    Dim SlackDlg As New UserPwdDialog
-                    SlackDlg.bSetupForFoldingCoin = True
-
-                    'Suggest the Email from the saved settings, if available
-                    If DAT.GetSection(Id & Me.cbxWalletId.Text) IsNot Nothing AndAlso DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_Email) IsNot Nothing Then
-                        SlackDlg.txtEmail.Text = DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_Email).GetValue()
-                    End If
-
-                    'Show modal dialog box
-                    If SlackDlg.ShowDialog(Me) = DialogResult.OK Then
-                        'Store Slack Email
-                        If SlackDlg.txtEmail.Text.Length <> 0 Then
-                            DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_FoldingCoinSlackEmail).Value = SlackDlg.txtEmail.Text
-                        Else
-                            'Don't save info, if user doesn't enter it, or cancels
-                            DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_FoldingCoinSlackEmail).Value = SkipSavingDataFlag
-                        End If
-
-                        'Store Slack Password
-                        If SlackDlg.txtPassword.Text.Length <> 0 Then
-                            DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_FoldingCoinSlackPassword).Value = SlackDlg.txtPassword.Text
-                        Else
-                            'Don't save info, if user doesn't enter it, or cancels
-                            DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_FoldingCoinSlackPassword).Value = SkipSavingDataFlag
-                        End If
-
-                    ElseIf SlackDlg.bGetSlackPressed = True Then
-                        'Allow the sign-up process to run instead of signing-in
-                        bSkip = True
-
-                        'FoldingCoin Slack Join Link
-                        Await OpenURL(URL_FoldingCoinJoinSlackSignup, False)
-                        Await PageTitleWait("Slack")
-                        Await Wait(200)
-
-                        'Suggest the Email from the saved settings, if available
-                        If DAT.GetSection(Id & Me.cbxWalletId.Text) IsNot Nothing AndAlso DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_Email) IsNot Nothing Then
-                            EnterTextByClass("form-item", DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_Email).GetValue())
-                        End If
-
-                    Else
-                        'Don't save info, if user doesn't enter it, or cancels
-                        DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_FoldingCoinSlackEmail).Value = SkipSavingDataFlag
-                        DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_FoldingCoinSlackPassword).Value = SkipSavingDataFlag
-                    End If
-
-                    'Create text from the INI, Encrypt, and Write/Flush DAT text to file
-                    SaveDat(Encrypt(DAT.SaveToString))
-                    'Allow time for the file to be written out
-                    Await Wait(100)
-                    SlackDlg.Dispose()
-                End If
-
-                'Load Email and Password for the login web page
-                If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FoldingCoinSlackEmail) IsNot Nothing Then
-                    'Skip asking for this in the future, if originally cancelled - Don't store info
-                    If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FoldingCoinSlackEmail).GetValue() <> SkipSavingDataFlag Then
-                        'If available, then fill-in the username
-                        EnterTextById("email", DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FoldingCoinSlackEmail).GetValue())
-
-                        If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FoldingCoinSlackPassword) IsNot Nothing Then
-                            'Skip asking for this in the future, if originally cancelled - Don't store info
-                            If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FoldingCoinSlackPassword).GetValue() <> SkipSavingDataFlag Then
-                                'If available, then fill-in the password
-                                EnterTextById("password", DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FoldingCoinSlackPassword).GetValue())
-                                Await Wait(100)
-
-                                'Click Sign-in button
-                                ClickById("signin_btn", True)
-                            End If
-                        End If
-                    End If
-                Else
-                    If bSkip = False Then
-                        'Just open the main URL instead
-                        OpenURL(URL_FoldingCoinSlack, False)
-                    End If
-                End If
-                DAT = Nothing
-            Else
-                'Just open the main URL instead
-                OpenURL(URL_FoldingCoinSlack, False)
-            End If
-        Else
-            'Just open the main URL instead
-            OpenURL(URL_FoldingCoinSlack, False)
-        End If
+        LoginToDiscord(True)
 #Enable Warning BC42358
     End Sub
 
@@ -892,112 +797,9 @@
 #Enable Warning BC42358
     End Sub
 
-    Private Async Sub btnCureCoinSlack_Click(sender As Object, e As EventArgs) Handles btnCureCoinSlack.Click
+    Private Sub btnCureCoinDiscord_Click(sender As Object, e As EventArgs) Handles btnCureCoinDiscord.Click
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
-        Dim bSkip As Boolean = False
-        'Make sure the INI key/value exists
-        If INI.GetSection(Id & Me.cbxWalletId.Text) IsNot Nothing AndAlso INI.GetSection(Id & Me.cbxWalletId.Text).GetKey(INI_WalletName) IsNot Nothing Then
-            'Load the Wallet name from the INI file based on the Wallet Id#
-            Me.txtWalletName.Text = INI.GetSection(Id & Me.cbxWalletId.Text).GetKey(INI_WalletName).GetValue()
-
-            If System.IO.File.Exists(DatFilePath) = True Then
-                'Open the Slack Sign-in page
-                Await OpenURL(URL_CureCoinSlack, False)
-                Await PageTitleWait("Slack")
-                Await Wait(100)
-
-                Dim DAT As New IniFile
-                'Load DAT file, decrypt it
-                DAT.LoadText(Decrypt(LoadDat))
-
-                If DAT.GetSection(Id & Me.cbxWalletId.Text) Is Nothing OrElse DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CureCoinSlackEmail) Is Nothing Then
-                    'Fix missing value. Ask for FAH Username
-                    Dim SlackDlg As New UserPwdDialog
-                    SlackDlg.bSetupForFoldingCoin = False
-
-                    'Suggest the Email from the saved settings, if available
-                    If DAT.GetSection(Id & Me.cbxWalletId.Text) IsNot Nothing AndAlso DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_Email) IsNot Nothing Then
-                        SlackDlg.txtEmail.Text = DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_Email).GetValue()
-                    End If
-
-                    'Show modal dialog box
-                    If SlackDlg.ShowDialog(Me) = DialogResult.OK Then
-                        'Store Slack Email
-                        If SlackDlg.txtEmail.Text.Length <> 0 Then
-                            DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_CureCoinSlackEmail).Value = SlackDlg.txtEmail.Text
-                        Else
-                            'Don't save info, if user doesn't enter it, or cancels
-                            DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_CureCoinSlackEmail).Value = SkipSavingDataFlag
-                        End If
-
-                        'Store Slack Password
-                        If SlackDlg.txtPassword.Text.Length <> 0 Then
-                            DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_CureCoinSlackPassword).Value = SlackDlg.txtPassword.Text
-                        Else
-                            'Don't save info, if user doesn't enter it, or cancels
-                            DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_CureCoinSlackPassword).Value = SkipSavingDataFlag
-                        End If
-
-                    ElseIf SlackDlg.bGetSlackPressed = True Then
-                        'Allow the sign-up process to run instead of signing-in
-                        bSkip = True
-
-                        'CureCoin Slack Join Link
-                        Await OpenURL(URL_CureCoinJoinSlackSignup, False)
-                        Await PageTitleWait("Slack")
-                        Await Wait(100)
-
-                        'Suggest the Email from the saved settings, if available
-                        If DAT.GetSection(Id & Me.cbxWalletId.Text) IsNot Nothing AndAlso DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_Email) IsNot Nothing Then
-                            EnterTextById("slack-email", DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_Email).GetValue())
-                        End If
-                    Else
-                        'Don't save info, if user doesn't enter it, or cancels
-                        DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_CureCoinSlackEmail).Value = SkipSavingDataFlag
-                        DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_CureCoinSlackPassword).Value = SkipSavingDataFlag
-                    End If
-
-                    'Create text from the INI, Encrypt, and Write/Flush DAT text to file
-                    SaveDat(Encrypt(DAT.SaveToString))
-                    'Allow time for the file to be written out
-                    Await Wait(100)
-                    SlackDlg.Dispose()
-                End If
-
-                'Load Email and Password for the login web page
-                If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CureCoinSlackEmail) IsNot Nothing Then
-                    'Skip asking for this in the future, if originally cancelled - Don't store info
-                    If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CureCoinSlackEmail).GetValue() <> SkipSavingDataFlag Then
-                        'If available, then fill-in the username
-                        EnterTextById("email", DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CureCoinSlackEmail).GetValue())
-
-                        If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CureCoinSlackPassword) IsNot Nothing Then
-                            'Skip asking for this in the future, if originally cancelled - Don't store info
-                            If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CureCoinSlackPassword).GetValue() <> SkipSavingDataFlag Then
-                                'If available, then fill-in the password
-                                EnterTextById("password", DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CureCoinSlackPassword).GetValue())
-                                Await Wait(100)
-
-                                'Click Sign-in button
-                                ClickById("signin_btn", True)
-                            End If
-                        End If
-                    End If
-                Else
-                    If bSkip = False Then
-                        'Just open the main URL instead
-                        OpenURL(URL_CureCoinSlack, False)
-                    End If
-                End If
-                DAT = Nothing
-            Else
-                'Just open the main URL instead
-                OpenURL(URL_CureCoinSlack, False)
-            End If
-        Else
-            'Just open the main URL instead
-            OpenURL(URL_CureCoinSlack, False)
-        End If
+        LoginToDiscord(False)
 #Enable Warning BC42358
     End Sub
 
@@ -1116,9 +918,6 @@
     End Sub
 
     Private Sub btnGetFAH_Click(sender As System.Object, e As System.EventArgs) Handles btnGetFAH.Click
-        'TODO: only ask if FAH is not installed?
-
-
         If MessageBox.Show("Get Folding@Home Software: Are you sure?", "", MessageBoxButtons.OKCancel) = MsgBoxResult.Ok Then
             g_bAskDownloadLocation = True
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
@@ -1128,9 +927,6 @@
     End Sub
 
     Private Async Sub btnGetWallet_Click(sender As System.Object, e As System.EventArgs) Handles btnGetWallet.Click
-        'TODO: only ask if no wallet info exists for this Wallet Id slot?
-
-
         If MessageBox.Show("Get Wallet: Are you sure?", "", MessageBoxButtons.OKCancel) = MsgBoxResult.Ok Then
             If Await GetWallet() = False Then
                 MessageBox.Show("Task 'Get Wallet' did not complete.")
@@ -1190,6 +986,12 @@
                 INI.Save(IniFilePath)
             End If
         End If
+    End Sub
+
+    Private Sub btnOptions_Click(sender As Object, e As EventArgs) Handles btnOptions.Click
+        Dim DlgDisplayOptions As New DisplayOptionsDialog
+        DlgDisplayOptions.StartPosition = FormStartPosition.CenterScreen
+        DlgDisplayOptions.Show(Me)
     End Sub
 
     Private Sub btnSavedData_Click(sender As Object, e As EventArgs) Handles btnSavedData.Click
@@ -1351,6 +1153,253 @@
 
         Catch ex As Exception
             Msg("Auto-Wallet Login error:" & ex.ToString)
+            If DAT IsNot Nothing Then DAT = Nothing
+        End Try
+
+        Return False
+    End Function
+#End Region
+
+#Region "Auto-Discord Login"
+    Private Async Function LoginToDiscord(bForFoldingCoin As Boolean) As Threading.Tasks.Task(Of Boolean)
+        Dim DAT As New IniFile
+        Dim bNewUser As Boolean = True
+        Dim iDiscordInvite As Integer = 0
+
+        Try
+            'Make sure the INI key/value exists
+            If INI.GetSection(Id & Me.cbxWalletId.Text) IsNot Nothing AndAlso INI.GetSection(Id & Me.cbxWalletId.Text).GetKey(INI_DiscordInvites) IsNot Nothing Then
+                iDiscordInvite = CInt(INI.GetSection(Id & Me.cbxWalletId.Text).GetKey(INI_DiscordInvites).Value)
+            Else
+                'Fix missing value. Add temp Discord invite status
+                INI.AddSection(Id & Me.cbxWalletId.Text).AddKey(INI_DiscordInvites).Value = "0"
+                INI.Save(IniFilePath)
+            End If
+
+            'Make sure DAT file exists
+            If System.IO.File.Exists(DatFilePath) = True Then
+                'Load DAT file, decrypt it
+                DAT.LoadText(Decrypt(LoadDat))
+                If DAT.ToString.Length = 0 Then
+                    'Decryption failed
+                    Msg(DAT_ErrorMsg)
+                    MessageBox.Show(DAT_ErrorMsg)
+                End If
+
+                'Look for the Discord Login Email to determine if this is a first-time setup or not
+                If DAT.GetSection(Id & Me.cbxWalletId.Text) Is Nothing OrElse DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_DiscordEmail) Is Nothing Then
+                    'Fix missing values. Ask for email and passowrd to sign in
+                    Dim DiscordDlg As New UserPwdDialog
+                    'Suggest the Email from the saved settings, if available
+                    If DAT.GetSection(Id & Me.cbxWalletId.Text) IsNot Nothing AndAlso DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_Email) IsNot Nothing Then
+                        DiscordDlg.txtEmail.Text = DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_Email).GetValue()
+                    End If
+
+                    'Suggest a strong Password (Skip characters that conflict with the INI format: =;#[]\)
+                    Dim s As String = "*$-+?_&!%{}/abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+                    Dim randNum As New Random()
+                    Dim iPwLen As Integer = randNum.Next(25, 50)
+                    Dim chrPW() As Char = New Char(iPwLen - 1) {}
+                    For i As Integer = 0 To iPwLen - 1
+                        chrPW(i) = s(randNum.Next(s.Length))
+                    Next
+                    DiscordDlg.txtPassword.Text = chrPW   'Don't use .ToString here
+
+                    'Suggest the Username from the saved settings, if available
+                    If DAT.GetSection(Id & Me.cbxWalletId.Text) IsNot Nothing AndAlso DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FAH_Username) IsNot Nothing Then
+                        DiscordDlg.txtUsername.Text = DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FAH_Username).GetValue()
+
+                        'Remove the: _ALL_<BTC> from the FAH username
+                        If DiscordDlg.txtUsername.Text.Contains("_") = True Then
+                            'Split the entered text at the underscores '_'
+                            Dim strDim As String() = DiscordDlg.txtUsername.Text.Split("_"c)
+                            If strDim(0).Length > 0 Then
+                                DiscordDlg.txtUsername.Text = strDim(0)
+                            End If
+                        End If
+                    End If
+
+                    'Discord Registration link for FoldingCoin / CureCoin
+                    If bForFoldingCoin = True Then
+                        Await OpenURL(URL_FoldingCoinDiscordRegister, False)
+                    Else
+                        Await OpenURL(URL_CureCoinDiscordRegister, False)
+                    End If
+                    System.Windows.Forms.Application.DoEvents()
+                    Await Wait(700)
+
+                    'Show modal dialog box, then save email and password, if entered
+                    If DiscordDlg.ShowDialog(Me) = DialogResult.OK Then
+                        'Store Discord Email
+                        If DiscordDlg.txtEmail.Text.Length > 0 Then
+                            DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_DiscordEmail).Value = DiscordDlg.txtEmail.Text
+                        Else
+                            'Don't save info, if user doesn't enter it, or cancels
+                            DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_DiscordEmail).Value = SkipSavingDataFlag
+                        End If
+
+                        'Store Discord Password
+                        If DiscordDlg.txtPassword.Text.Length > 0 Then
+                            DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_DiscordPassword).Value = DiscordDlg.txtPassword.Text
+                        Else
+                            'Don't save info, if user doesn't enter it, or cancels
+                            DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_DiscordPassword).Value = SkipSavingDataFlag
+                        End If
+
+                        'Allow the sign-up process to run instead of signing-in
+                        bNewUser = DiscordDlg.chkNewUser.Checked
+                        If bNewUser = True Then
+                            'If available, then fill-in the Email, Password, and Username
+                            EnterTextById("register-email", DiscordDlg.txtEmail.Text)
+                            EnterTextById("register-username", DiscordDlg.txtUsername.Text)
+                            EnterTextById("register-password", DiscordDlg.txtPassword.Text)
+                            Await Wait(100)
+
+                            'If the Email and Password were entered
+                            If DiscordDlg.txtEmail.Text.Length > 0 AndAlso DiscordDlg.txtPassword.Text.Length > 0 Then
+                                'Click Registration Continue button
+#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
+                                ClickByClass("btn btn-primary", True)
+#Enable Warning BC42358
+                                'Save status flag for which Discord server you've been invited to: 0 = None, 1 = FoldingCoin, 2 = CureCoin, 3 = Both invites have been completed
+                                If bForFoldingCoin = True Then
+                                    INI.AddSection(Id & Me.cbxWalletId.Text).AddKey(INI_DiscordInvites).Value = "1"
+                                    iDiscordInvite = 1
+                                Else
+                                    INI.AddSection(Id & Me.cbxWalletId.Text).AddKey(INI_DiscordInvites).Value = "2"
+                                    iDiscordInvite = 2
+                                End If
+                                INI.Save(IniFilePath)
+                            End If
+                        End If
+                    Else
+                        'Don't save info, if user doesn't enter it, or cancels
+                        DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_DiscordEmail).Value = SkipSavingDataFlag
+                        DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_DiscordPassword).Value = SkipSavingDataFlag
+
+                        'Suggest the Email from the saved settings, if available
+                        If DiscordDlg.txtEmail.Text.Length > 0 Then
+                            EnterTextById("register-email", DiscordDlg.txtEmail.Text)
+                        End If
+                    End If
+
+                    'Create text from the INI, Encrypt, and Write/Flush DAT text to file
+                    SaveDat(Encrypt(DAT.SaveToString))
+                    'Allow time for the file to be written out
+                    Await Wait(100)
+                    DiscordDlg.Dispose()
+
+                    'Return true, if you get here for new user registrations. There is a captcha after this anyway
+                    If bNewUser = True Then
+                        If DAT IsNot Nothing Then DAT = Nothing
+                        Return True
+                    End If
+                End If
+
+                'Normal Discord login: Load Email and Password for the login web page
+                If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_DiscordEmail) IsNot Nothing Then
+                    'Open the Discord Sign-in page for the FoldingCoin / CureCoin button pressed
+                    If bForFoldingCoin = True Then
+                        Await OpenURL(URL_FoldingCoinDiscord, False)
+                    Else
+                        Await OpenURL(URL_CureCoinDiscord, False)
+                    End If
+                    'Let the page load. The title isn't always 'Discord', sometimes it's the channel name
+                    System.Windows.Forms.Application.DoEvents()
+                    Await Wait(2000)
+
+                    'Skip asking for this in the future, if originally cancelled - Don't store info
+                    Dim strEmail As String = DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_DiscordEmail).GetValue()
+                    If strEmail <> SkipSavingDataFlag Then
+                        'Don't try to login again if you're already logged in (pressing the button again or switching between FoldingCoin and CureCoin)
+                        Dim strReturn As String = ""
+                        If FindTextInDoc("btn btn-primary", "", strReturn, "", False, "") = True Then
+                            'If available, then fill-in the Email
+                            EnterTextById("register-email", strEmail)
+
+                            If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_DiscordPassword) IsNot Nothing Then
+                                'Skip asking for this in the future, if originally cancelled - Don't store info
+                                Dim strPw As String = DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_DiscordPassword).GetValue()
+                                If strPw <> SkipSavingDataFlag Then
+                                    'If available, then fill-in the password
+                                    EnterTextById("register-password", strPw)
+                                    strPw = Nothing
+                                    Await Wait(100)
+
+                                    'Click Login button
+                                    Await ClickByClass("btn btn-primary", True)
+                                    System.Windows.Forms.Application.DoEvents()
+                                End If
+                            End If
+                        End If
+
+                        'Go to Discord Invite pages, if needed. Use status flag for which Discord server you've been invited to: 0 = None, 1 = FoldingCoin, 2 = CureCoin, 3 = Both invites have been completed
+#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
+                        Select Case iDiscordInvite
+                            Case 0
+                                'Existing User. First time use. Setup to invite to first Discord server of the two
+                                If bForFoldingCoin = True Then
+                                    Await Wait(2000)
+                                    OpenURL(URL_FoldingCoinDiscordInvite, False)
+                                    INI.AddSection(Id & Me.cbxWalletId.Text).AddKey(INI_DiscordInvites).Value = "1"
+                                    INI.Save(IniFilePath)
+                                Else
+                                    Await Wait(2000)
+                                    OpenURL(URL_CureCoinDiscordInvite, False)
+                                    INI.AddSection(Id & Me.cbxWalletId.Text).AddKey(INI_DiscordInvites).Value = "2"
+                                    INI.Save(IniFilePath)
+                                End If
+
+                            Case 1
+                                'Has been invited to FoldingCoin already. Only invite to CureCoin Discord server
+                                If bForFoldingCoin = False Then
+                                    Await Wait(2000)
+                                    OpenURL(URL_CureCoinDiscordInvite, False)
+                                    INI.AddSection(Id & Me.cbxWalletId.Text).AddKey(INI_DiscordInvites).Value = "3"
+                                    INI.Save(IniFilePath)
+                                End If
+
+                            Case 2
+                                'Has been invited to CureCoin already. Only invite to FoldingCoin Discord server
+                                If bForFoldingCoin = True Then
+                                    Await Wait(2000)
+                                    OpenURL(URL_FoldingCoinDiscordInvite, False)
+                                    INI.AddSection(Id & Me.cbxWalletId.Text).AddKey(INI_DiscordInvites).Value = "3"
+                                    INI.Save(IniFilePath)
+                                End If
+
+                            Case 3
+                                'Do nothing here. User has been invited to both FoldingCoin and CureCoin Discord invites
+                        End Select
+#Enable Warning BC42358
+                    End If
+                Else
+                    'Just open the main URL instead
+#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
+                    If bForFoldingCoin = True Then
+                        OpenURL(URL_FoldingCoinDiscord, False)
+                    Else
+                        OpenURL(URL_CureCoinDiscord, False)
+                    End If
+#Enable Warning BC42358
+                End If
+            Else
+                'Just open the main URL instead
+#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
+                If bForFoldingCoin = True Then
+                    OpenURL(URL_FoldingCoinDiscord, False)
+                Else
+                    OpenURL(URL_CureCoinDiscord, False)
+                End If
+#Enable Warning BC42358
+            End If
+
+            If DAT IsNot Nothing Then DAT = Nothing
+            'Return true, if you get here
+            Return True
+
+        Catch ex As Exception
+            Msg("Auto-Discord Login error:" & ex.ToString)
             If DAT IsNot Nothing Then DAT = Nothing
         End Try
 
@@ -1858,13 +1907,14 @@
                 strPoolPW = DAT.GetSection(Id & g_Main.cbxWalletId.Text).GetKey(DAT_CureCoin_Pwd).GetValue()
             End If
             If strPoolPW.Length < 5 Then
-                'Makeup a new 50 char Password
-                If DAT.GetSection(Id & g_Main.cbxWalletId.Text).GetKey(DAT_FAH_Passkey) IsNot Nothing Then
-                    'The passkey is 32 digits. Only use the first 30 digits
-                    strPasskey = DAT.GetSection(Id & g_Main.cbxWalletId.Text).GetKey(DAT_FAH_Passkey).GetValue().Substring(0, 30).Trim
-                End If
-                'Create the unique 50 char Password
-                strPoolPW = (System.Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(Hex(randNum.Next()) & Now.ToLongDateString & Now.ToLongTimeString & Hex(randNum.Next()) & strPasskey)) & System.Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(Hex(randNum.Next()) & Now.ToString & Hex(randNum.Next())))).Substring(0, 50)
+                'Makeup a new 35-50 char Password (Skip characters that conflict with the INI format: =;#[]\)
+                Dim s As String = "*$-+?_&!%{}/abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+                Dim iPwLen As Integer = randNum.Next(35, 50)
+                Dim chrPW() As Char = New Char(iPwLen - 1) {}
+                For i = 0 To iPwLen - 1
+                    chrPW(i) = s(randNum.Next(s.Length))
+                Next
+                strPoolPW = chrPW   'Don't use .ToString here
 
                 'Save the new Password
                 If strPoolPW.Length > 24 Then DAT.AddSection(Id & g_Main.cbxWalletId.Text).AddKey(DAT_CureCoin_Pwd).Value = strPoolPW
@@ -1891,7 +1941,6 @@
             SaveDat(Encrypt(DAT.SaveToString))
             DAT = Nothing
 
-            Await PageLoadWait()
             Await PageTitleWait(NameCryptoBullions)
             System.Windows.Forms.Application.DoEvents()
             'Wait for the registration page to load, if not already (needs to wait for CloudFlare to reload the page)
@@ -1904,7 +1953,6 @@
             For m As Integer = 0 To 2
                 'Go to the CureCoin folding pool (CryptoBullionPools) website
                 Await OpenURL(URL_CureCoinFoldingPoolPage & "register", False)
-                Await PageLoadWait()
                 Await PageTitleWait(NameCryptoBullions)
                 System.Windows.Forms.Application.DoEvents()
                 Await Wait(100)
@@ -1964,7 +2012,6 @@
                     Await Wait(1000)
 
                     'Wait for the page to load
-                    Await PageLoadWait()
                     Await PageTitleWait(NameCryptoBullions)
                     Await Wait(300)
                     'Find: account created text, or Errors for: account exists already, or Wrong Captcha text
@@ -2057,7 +2104,6 @@
             Await OpenURL(URL_CureCoinFoldingPoolPage, False)
 
             'Wait for the registration page to load, if not already (needs to wait for CloudFlare to reload the page)
-            Await PageLoadWait()
             Await PageTitleWait(NameCryptoBullions)
             System.Windows.Forms.Application.DoEvents()
 
@@ -2065,7 +2111,6 @@
                 If Me.Text.Contains("Just") = False Then Exit For
                 Await Wait(300)
             Next
-            Await PageLoadWait()
             Await PageTitleWait(NameCryptoBullions)
             System.Windows.Forms.Application.DoEvents()
 
@@ -2371,10 +2416,6 @@
 #End Region
 
 #Region "Browser Controls"
-    Private Sub btnReload_Click(sender As System.Object, e As System.EventArgs) Handles btnReload.Click
-        Me.browser.GetBrowser.Reload(True)
-    End Sub
-
     Private Sub btnBack_Click(sender As System.Object, e As System.EventArgs) Handles btnBack.Click
         Me.browser.GetBrowser.GoBack()
     End Sub
@@ -2405,6 +2446,12 @@
         End Select
     End Sub
 
+    Private Sub btnGo_Click(sender As System.Object, e As System.EventArgs) Handles btnGo.Click
+#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
+        OpenURL(Me.txtURL.Text, True)
+#Enable Warning BC42358
+    End Sub
+
     Private Sub btnStopNavigation_Click(sender As System.Object, e As System.EventArgs) Handles btnStopNav.Click
         StopNavigaion()
     End Sub
@@ -2416,11 +2463,66 @@
         End If
     End Sub
 
-    Private Sub btnConnect_Click(sender As System.Object, e As System.EventArgs) Handles btnGo.Click
+    Private Sub btnReload_Click(sender As System.Object, e As System.EventArgs) Handles btnReload.Click
+        Me.browser.GetBrowser.Reload(True)
+    End Sub
+
+    Private Sub btnHome_Click(sender As System.Object, e As System.EventArgs) Handles btnHome.Click
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
-        OpenURL(Me.txtURL.Text, True)
+        LoadHomepage()
 #Enable Warning BC42358
     End Sub
+
+    Private Async Function LoadHomepage() As Threading.Tasks.Task(Of Boolean)
+        Try
+            'Make sure the INI key/value exists
+            If INI.GetSection(INI_Settings).GetKey(INI_Homepage) Is Nothing Then
+                'Add if it doesn't exist
+                INI.AddSection(INI_Settings).AddKey(INI_Homepage).Value = HpgDefault
+            End If
+
+            'Load homepage / portal based on the user's options
+            Select Case INI.GetSection(INI_Settings).GetKey(INI_Homepage).GetValue()
+                Case HpgDefault
+                    If m_bDefaultHomepageLoaded = False Then
+                        CefSharp.WebBrowserExtensions.LoadHtml(Me.browser, HTML_PortalPage, URL_Portal)
+                        m_bDefaultHomepageLoaded = True
+                    Else
+                        Await OpenURL(URL_Portal, False)
+                    End If
+
+                Case HpgFoldingCoin
+                    Await OpenURL(URL_FoldingCoin, False)
+
+                Case HpgCureCoin
+                    Await OpenURL(URL_CureCoin, False)
+
+                Case HpgEOC
+                    btnEOC_Click(Nothing, Nothing)
+
+                Case HpgFAH
+                    Await OpenURL(URL_FAH_Client, False)
+
+                Case HpgNaClFAH
+                    'TODO: Running the FAH NaCl plugin is not working yet
+                    Await OpenURL(URL_NaCl_FAH, False)
+
+                Case HpgBlank
+                    Await OpenURL(URL_BLANK, False)
+
+                Case Else
+                    'Add if it doesn't exist
+                    INI.AddSection(INI_Settings).AddKey(INI_Homepage).Value = HpgDefault
+            End Select
+            Return True
+
+        Catch ex As Exception
+            Dim sRtnErrMsg As String = "Opening URL error: " & Err.Description
+            Msg(sRtnErrMsg)
+        End Try
+
+        Return False
+    End Function
 
     'Open URL with the specified settings
     Public Async Function OpenURL(sURL As String, Optional bShowErrorDialogBoxes As Boolean = False) As Threading.Tasks.Task(Of Boolean)
@@ -2440,7 +2542,7 @@
                 m_bPageLoaded = False
                 m_strPageURL = Me.txtURL.Text
                 Me.browser.Load(Me.txtURL.Text)
-                'Wait for the web page or 1 minute
+                'Wait for the web page or 30 seconds
                 Await PageLoadWait()
 
                 Return True

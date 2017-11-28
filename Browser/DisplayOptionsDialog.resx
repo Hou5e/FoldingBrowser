@@ -117,47 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="Back_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Back-24.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Coins_4_top_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Coins-4-top-24.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="CureCoinLogo_top_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\CureCoinLogo-top-32.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="EOC_48" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\EOC_48.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="FLDC_48" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\FLDC_48.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="FoldingCoin_top_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\FoldingCoin-top-32.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Fwd_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Fwd-24.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Go_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Go-16.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Home_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Home-16.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="L_cysteine_16_24_32_48_256" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\L-cysteine-16_24_32_48_256.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="L_cysteine_3D_vdW2_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\L-cysteine-3D-vdW2-32.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="L_methionine_B_top_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\L-methionine-B-top-32.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Reload_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Reload-16.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Stop_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Stop-16.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
+  <metadata name="ToolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <metadata name="ToolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>47</value>
+  </metadata>
 </root>

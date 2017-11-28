@@ -6,31 +6,35 @@ Public Module GlobalRefs
 
     'Common URLs
     Public Const URL_BLANK As String = "about:blank"
+    Public Const URL_Portal As String = "data:local"
     Public Const URL_Counterwallet As String = "https://wallet.counterwallet.io/"
     Public Const URL_CoinDaddyCounterwallet As String = "https://counterwallet.coindaddy.io/"
     Public Const CounterwalletAPI As String = "_api/"
 
     Public Const URL_FoldingCoin As String = "http://foldingcoin.net/"
     Public Const URL_FoldingCoinTwitter As String = "https://twitter.com/FoldingCoin/"
-    Public Const URL_FoldingCoinSlack As String = "https://foldingcoin.slack.com/"
-    Public Const URL_FoldingCoinJoinSlackSignup As String = "http://slack.foldingcoin.net/"
     Public Const URL_FLDC_DefaultBlockchain As String = "https://xchain.io/asset/FLDC"
     Public Const URL_FLDC_AddressBlockchain As String = "https://xchain.io/address/"
     Public Const URL_BTC_Blockchain As String = "https://blockchain.info/"
     Public Const URL_FLDC_Distro As String = "http://foldingcoin.xyz/?token=FLDC&total=250000&start="
+    Public Const URL_FoldingCoinDiscordInvite As String = "https://discord.gg/CvZ7gAs"
+    Public Const URL_FoldingCoinDiscordRegister As String = "https://discordapp.com/register?redirect_to=%2Finvite%2FCvZ7gAs"
+    Public Const URL_FoldingCoinDiscord As String = "https://discordapp.com/channels/379168590626029568/379168590626029571"
 
     Public Const URL_CureCoin As String = "https://curecoin.net/"
     Public Const URL_CureCoinTwitter As String = "https://twitter.com/CureCoin_Team/"
-    Public Const URL_CureCoinSlack As String = "https://curecoin.slack.com/"
-    Public Const URL_CureCoinJoinSlackSignup As String = "http://slack.curecoin.net:30000/"
     Public Const URL_CureCoinBlockchain As String = "https://chainz.cryptoid.info/cure/"
     Public Const URL_CureCoinFoldingPoolPage As String = "https://www.cryptobullionpools.com/"
+    Public Const URL_CureCoinDiscordInvite As String = "https://discord.gg/jtztkFZ"
+    Public Const URL_CureCoinDiscordRegister As String = "https://discordapp.com/register?redirect_to=%2Finvite%2FjtztkFZ"
+    Public Const URL_CureCoinDiscord As String = "https://discordapp.com/channels/376037868826525707/376037869728563201"
 
     Public Const URL_EOC As String = "http://folding.extremeoverclocking.com/user_summary.php?s=&u="
     Public Const URL_CureCoin_EOC As String = "http://folding.extremeoverclocking.com/team_summary.php?s=&t=224497"
 
     Public Const URL_FAH As String = "https://folding.stanford.edu/start-folding/"
     Public Const URL_FAH_Client As String = "http://folding.stanford.edu/client/"
+    Public Const URL_NaCl_FAH As String = "http://folding.stanford.edu/nacl/"
 
     'This HTML is easier to view in source code file: FoldingBrowser.html
     Public Const HTML_PortalPage As String = "<html><head><title>FoldingBrowser - Earn Digital Assets with FoldingCoin and CureCoin</title></head>
@@ -46,18 +50,19 @@ Public Module GlobalRefs
     'Wallet Id specific
     Public Const DAT_BTC_Addr As String = "BTCAddress"
     Public Const DAT_CP12Words As String = "CounterParty12WordPassphrase"
+
     Public Const DAT_FAH_Username As String = "FAHUsername"
     Public Const DAT_FAH_Team As String = "FAHTeam"
     Public Const DAT_FAH_Passkey As String = "FAHPasskey"
     Public Const DAT_Email As String = "Email"
+
     Public Const DAT_CureCoin_Pwd As String = "CureCoinPoolPassword"
     Public Const DAT_CureCoin_Pin As String = "CureCoinPoolPin"
     Public Const DAT_CureCoin_Wallet_Version As String = "CureCoinWalletVersion"
     Public Const DAT_CureCoin_Addr As String = "CureCoinAddress"
-    Public Const DAT_CureCoinSlackEmail As String = "CureCoinSlackEmail"
-    Public Const DAT_CureCoinSlackPassword As String = "CureCoinSlackPassword"
-    Public Const DAT_FoldingCoinSlackEmail As String = "FoldingCoinSlackEmail"
-    Public Const DAT_FoldingCoinSlackPassword As String = "FoldingCoinSlackPassword"
+
+    Public Const DAT_DiscordEmail As String = "DiscordEmail"
+    Public Const DAT_DiscordPassword As String = "DiscordPassword"
 
     Public Const DividerLine As String = "=============="
     Public Const SkipSavingDataFlag As String = "<Skip>"
@@ -72,11 +77,22 @@ Public Module GlobalRefs
     Public Const INI_LastWalletId As String = "LastWalletId"
     Public Const INI_LastBrowserVersion As String = "LastBrowserVersion"
     Public Const INI_HideSavedDataButton As String = "HideSavedDataButton"
+    Public Const INI_Homepage As String = "Homepage"
 
     'Wallet Id specific
     Public Const INI_FAH_Username As String = "FAHUsername"
     Public Const INI_EOC_ID As String = "ExtremeOverclockingUserId"
     Public Const INI_WalletName As String = "WalletName"
+    Public Const INI_DiscordInvites As String = "DiscordInvites"
+
+    'Homepage Options List
+    Public Const HpgDefault As String = "Default"
+    Public Const HpgFoldingCoin As String = "FoldingCoin"
+    Public Const HpgCureCoin As String = "CureCoin"
+    Public Const HpgEOC As String = "EOC"
+    Public Const HpgFAH As String = "Folding@Home Web Control"
+    Public Const HpgNaClFAH As String = "Folding@Home NaCl"
+    Public Const HpgBlank As String = "Blank"
 
     'Website title to search for
     Public Const NameCryptoBullions As String = "CryptoBullions"
