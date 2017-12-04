@@ -107,7 +107,6 @@ Public Module GlobalRefs
     Public g_bAskDownloadLocation As Boolean = True
     'Holds on to the last downloaded file path, when the download completes
     Public g_strDownloadedFilePath As String = ""
-    Public g_bInitialInstall As Boolean = False
 
     Public Function SaveLogFile(ByRef strMsg As String) As Boolean
         SaveLogFile = False

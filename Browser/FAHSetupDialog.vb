@@ -1,9 +1,10 @@
 ﻿Public Class FAHSetupDialog
     'Leave this at the top to turn off auto-updating during initialization
     Private m_bSkipUpdating As Boolean = True
+    Public m_bInitialInstall As Boolean = False
 
     Private Const PATH_FAH_ALL_USER_CFG As String = "C:\ProgramData\FAHClient\config.xml"
-    Private Const PAUSE_FAH As String = "options idle=true open-web-control=false"
+    Private Const PAUSE_FAH As String = "options idle=true open-web-control=false"  'Disabling the web control popup doesn't happen soon enough to stop it
     Private Path_FAH_CurrentUserCfg As String = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "FAHClient\config.xml")
     Private m_strFAHCfgPath As String = ""
 
@@ -17,7 +18,6 @@
 #Region "Initialize Form"
     Private Sub FAHSetupDialog_Load(sender As Object, e As EventArgs) Handles Me.Load
         Dim strTeam As String = ""
-
         Me.Icon = My.Resources.L_cysteine_16_24_32_48_256
 
         'Hide the form while it's being adjusted
@@ -28,13 +28,12 @@
 
         'Try pausing FAH during the initial FAH setup. This keeps things from slowing down too much when CPU folding starts up during the setup process.
         'NOTE: the option "paused=true" didn't work on v7.4.16. Using "idle=true" instead. "power=light" starts running the CPU at ~50%, and has the GPU paused for idle
-        If g_bInitialInstall = True Then
+        If m_bInitialInstall = True Then
             Me.txtTelnetFAHCfg.Text = PAUSE_FAH
             'NOTE: the Telnet settings change is not Awaited, and this sets the OK button state
             btnTelnetSave_Click(Nothing, Nothing)
             Delay(500)
         End If
-
 
         Try
             'Find the FAH Config file location
@@ -50,7 +49,6 @@
         Catch ex As Exception
             MessageBox.Show("Could not find the FAH Config file: " & vbNewLine & m_strFAHCfgPath & vbNewLine & vbNewLine & ex.ToString)
         End Try
-
 
         'Load Username (if exists), CounterWallet Bitcoin (BTC) address from saved CounterWallet info. Fill-in Email Address / Passkey from saved settings, if exists
         If System.IO.File.Exists(DatFilePath) = True Then
@@ -628,9 +626,11 @@
         End Try
 
         'Set the OK button state
-        If Me.txtTelnetFAHCfg.Text = PAUSE_FAH Then
+        If m_bInitialInstall = True Then
             'Disable the OK button initially for pausing FAH with Telnet (initial install only, when the form is opened)
             Me.btnOK.Enabled = False
+            'Reset this flag, so the normal Telnet process can happen later, which enables the OK button
+            m_bInitialInstall = False
         Else
             'Enable the OK button once the Save button has been pressed (Saving the FAH configuration settings to FAH at the end of the process)
             Me.btnOK.Enabled = True

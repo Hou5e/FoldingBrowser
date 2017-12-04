@@ -153,7 +153,7 @@ Unicode true   ;For all languages to display properly (Installer won't run on Wi
 
 ;---- Installer Info ----
 Name "${PRODUCT_NAME} v${PRODUCT_VERSION}"
-OutFile "Installer\Install ${PRODUCT_NAME} v${PRODUCT_VERSION}.exe"
+OutFile "Installer\Install_${PRODUCT_NAME}_v${PRODUCT_VERSION}.exe"
 BrandingText "${PRODUCT_PUBLISHER}"
 InstallDir "$PROGRAMFILES\${PRODUCT_NAME}"  ;Default installation folder (Set to: $INSTDIR during MUI_PAGE_DIRECTORY)
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
@@ -299,13 +299,13 @@ CureWalletDatExists:
 
   ;Destination: $PLUGINSDIR is a temporary folder that is automatically deleted when the installer exits
   SetOutPath "$PLUGINSDIR"
-  File "CureInst\Install CureCoin v${CURECOIN_VERSION}.exe"
+  File "CureInst\Install_CureCoin_v${CURECOIN_VERSION}.exe"
 
   ;Initializes the plugins directory ($PLUGINSDIR) if it's not already initialized.
   InitPluginsDir
 
   ;The CureCoin installer was made with NSIS, so it can be run silently with /S
-  ExecWait '"$PLUGINSDIR\Install CureCoin v${CURECOIN_VERSION}.exe" /S' $1
+  ExecWait '"$PLUGINSDIR\Install_CureCoin_v${CURECOIN_VERSION}.exe" /S' $1
   IntCmp $1 0 CureCoinInstEnd  ;Skip error message if the installation was OK
   StrCpy $2 "CureCoin install error: $1 (undefined = error running exe, 0 = no error, 1 = cancel button, 2 = aborted by script)"
   MessageBox MB_OK "$2" /SD IDOK

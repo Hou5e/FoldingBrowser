@@ -442,8 +442,17 @@
 
                             'FAH Username / Teamname settings setup
                             If Setup.chkGetFAHSoftware.Checked = True OrElse Setup.chkGetWalletForFLDC.Checked = True Then
-                                g_bInitialInstall = True
-                                btnFAHConfig_Click(Nothing, Nothing)
+                                Dim DialogFAH As New FAHSetupDialog
+                                Try
+                                    'Prompt for FAH info: Ask for: (existing) Username, Merged Folding Coin Selection, FAH Team #. Show Username as typing and check it for errors. (Optional) Get Passkey by email. Show before and after of the FAH Config file changes 
+                                    DialogFAH.m_bInitialInstall = True
+                                    'Show modal dialog box
+                                    DialogFAH.ShowDialog(Me)
+
+                                Catch ex As Exception
+                                    Msg("Setup FAH User, Team, and Config error:" & ex.ToString)
+                                End Try
+                                DialogFAH.Dispose()
                             End If
 
                             'Only do this step if the CureCoin wallet.dat file wasn't found on the PC during the initial installation, or if the user chooses this option
@@ -807,6 +816,7 @@
     'Extreme Overclocking's User Stats page: Needs to know user ID # ...  Once known, store the info in the INI file
     Private Async Sub btnEOC_Click(sender As System.Object, e As System.EventArgs) Handles btnEOC.Click
         Dim strUserId As String = "0"
+        Dim iUserId As Integer = 0
         Dim strUsername As String = ""
 
         Try
@@ -815,6 +825,14 @@
                 strUserId = INI.GetSection(Id & Me.cbxWalletId.Text).GetKey(INI_EOC_ID).Value
             Else
                 'Fix missing value. Add temp ExtremeOverclocking.com Username Id
+                INI.AddSection(Id & Me.cbxWalletId.Text).AddKey(INI_EOC_ID).Value = "0"
+                INI.Save(IniFilePath)
+            End If
+
+            If strUserId.Length >= 1 AndAlso IsNumeric(strUserId) = True Then
+                iUserId = CInt(strUserId)
+            Else
+                'Fix bad values
                 INI.AddSection(Id & Me.cbxWalletId.Text).AddKey(INI_EOC_ID).Value = "0"
                 INI.Save(IniFilePath)
             End If
@@ -830,6 +848,7 @@
                 TxtEntry.MsgTextLower.Text = "Please enter your Folding@Home Username:"
                 TxtEntry.Width = (TxtEntry.MsgTextLower.Left * 2) + TxtEntry.MsgTextLower.Width + 10
                 TxtEntry.TextEnteredLower.Visible = False
+                TxtEntry.MsgTextExtraBottomNote.Visible = False
                 'Show modal dialog box
                 If TxtEntry.ShowDialog(Me) = DialogResult.OK Then
                     'Store FAH Username
@@ -850,48 +869,60 @@
         End Try
 
         Try
-            'No UserId, but if you have the FAH Username stored, then go look up the Id on EOC
-            If strUserId = "0" Then
+            'No UserId, but if you have the FAH Username stored, then go look up the Id on EOC (the 3 attempts is for new users who's username won't be searchable for the first ~24 hours: Hopefully this will let them retry some other day)
+            If iUserId < 4 Then
+                'Just load the CureCoin stats for something to look at
                 Await OpenURL(URL_CureCoin_EOC, False)
                 Await PageTitleWait("Curecoin")
                 Await Wait(100)
 
-                'Enter FAH Username in the Search TextBox
-                EnterTextByName("searchbox", strUsername)
-                Await Wait(100)
+                'Skip the address lookup after 3 attempts. The user will have to save the info in the saved settings to fix it.
+                If iUserId < 3 AndAlso strUsername.Length > 0 Then
+                    'Enter FAH Username in the Search TextBox
+                    EnterTextByName("searchbox", strUsername)
+                    Await Wait(100)
 
-                'Click the search button. Submit the form data since there are no real Ids, Names, or Tags for this button element, just use the 1st item in the array of forms
-                Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.forms[0].submit();")
-                Await PageTitleWait("Search")
-                Await Wait(100)
+                    'Click the search button. Submit the form data since there are no real Ids, Names, or Tags for this button element, just use the 1st item in the array of forms
+                    Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.forms[0].submit();")
+                    Await PageTitleWait("Search")
+                    Await Wait(100)
 
-                'Get link, and parse Id. The line with the Username has the EOC User ID number
-                If FindTextInDoc("/user_summary.php?s=&amp;u=*"">" & strUsername & "</a></td>", "", strUserId, "", False, "") = True AndAlso strUserId.Length > 1 AndAlso IsNumeric(strUserId) Then
-                    'Save the ExtremeOverclocking.com Username Id
-                    INI.AddSection(Id & Me.cbxWalletId.Text).AddKey(INI_EOC_ID).Value = strUserId
-                    INI.Save(IniFilePath)
-
-                    'Open the user's EOC stats page
-                    Await OpenURL(URL_EOC & strUserId, False)
-                Else
-                    'Fix missing value. Ask for EOC User ID
-                    Dim TxtEntry As New TextEntryDialog
-                    TxtEntry.Text = "Save ExtremeOverclocking.com Username Id"
-                    TxtEntry.MsgTextUpper.Text = "ExtremeOverclocking.com Username Id not found."
-                    TxtEntry.MsgTextLower.Text = "Please enter your ExtremeOverclocking.com Username Id number:"
-                    TxtEntry.Width = (TxtEntry.MsgTextLower.Left * 2) + TxtEntry.MsgTextLower.Width + 10
-                    TxtEntry.TextEnteredLower.Visible = False
-                    'Show modal dialog box
-                    If TxtEntry.ShowDialog(Me) = DialogResult.OK AndAlso IsNumeric(TxtEntry.TextEnteredUpper.Text) Then
-                        'Store ExtremeOverclocking.com Username Id
-                        INI.AddSection(Id & Me.cbxWalletId.Text).AddKey(INI_EOC_ID).Value = TxtEntry.TextEnteredUpper.Text
+                    'Get link, and parse Id. The line with the Username has the EOC User ID number
+                    If FindTextInDoc("/user_summary.php?s=&amp;u=*"">" & strUsername & "</a></td>", "", strUserId, "", False, "") = True AndAlso strUserId.Length > 1 AndAlso IsNumeric(strUserId) AndAlso CInt(strUserId) > 3 Then
+                        'Save the ExtremeOverclocking.com Username Id
+                        INI.AddSection(Id & Me.cbxWalletId.Text).AddKey(INI_EOC_ID).Value = strUserId
                         INI.Save(IniFilePath)
-                        strUsername = TxtEntry.TextEnteredUpper.Text
+
                         'Open the user's EOC stats page
                         Await OpenURL(URL_EOC & strUserId, False)
+                    Else
+                        'Fix missing value. Ask for EOC User ID
+                        Dim TxtEntry As New TextEntryDialog
+                        TxtEntry.Text = "Save ExtremeOverclocking.com Username Id"
+                        TxtEntry.MsgTextUpper.Text = "ExtremeOverclocking.com Username Id not found."
+                        TxtEntry.MsgTextLower.Text = "Please enter your ExtremeOverclocking.com Username Id number:"
+                        TxtEntry.Width = (TxtEntry.MsgTextLower.Left * 2) + TxtEntry.MsgTextLower.Width + 10
+                        TxtEntry.TextEnteredLower.Visible = False
+                        'Show: Attempt 1 of 3
+                        TxtEntry.MsgTextExtraBottomNote.Visible = True
+                        TxtEntry.MsgTextExtraBottomNote.Text = "(Attempt: " & (iUserId + 1).ToString & " of 3)"
+                        'Show modal dialog box
+                        If TxtEntry.ShowDialog(Me) = DialogResult.OK AndAlso IsNumeric(TxtEntry.TextEnteredUpper.Text) Then
+                            'Store ExtremeOverclocking.com Username Id
+                            INI.AddSection(Id & Me.cbxWalletId.Text).AddKey(INI_EOC_ID).Value = TxtEntry.TextEnteredUpper.Text
+                            INI.Save(IniFilePath)
+                            strUsername = TxtEntry.TextEnteredUpper.Text
+                            'Open the user's EOC stats page
+                            Await OpenURL(URL_EOC & strUserId, False)
+                        Else
+                            'Update the INI status for number of attempts (New users usually take a day to show up)
+                            INI.AddSection(Id & Me.cbxWalletId.Text).AddKey(INI_EOC_ID).Value = CStr(iUserId + 1)
+                            INI.Save(IniFilePath)
+                        End If
+                        TxtEntry.Dispose()
                     End If
-                    TxtEntry.Dispose()
                 End If
+
             Else
                 'Open the user's EOC stats page
                 Await OpenURL(URL_EOC & strUserId, False)
@@ -943,7 +974,17 @@
     End Sub
 
     Private Sub btnFAHConfig_Click(sender As System.Object, e As System.EventArgs) Handles btnFAHConfig.Click
-        SetupFAHUserTeamAndCfg()
+        Dim DialogFAH As New FAHSetupDialog
+        Try
+            'Prompt for FAH info: Ask for: (existing) Username, Merged Folding Coin Selection, FAH Team #. Show Username as typing and check it for errors. (Optional) Get Passkey by email. Show before and after of the FAH Config file changes 
+            DialogFAH.m_bInitialInstall = False
+            'Show modal dialog box
+            DialogFAH.ShowDialog(Me)
+
+        Catch ex As Exception
+            Msg("Setup FAH User, Team, and Config error:" & ex.ToString)
+        End Try
+        DialogFAH.Dispose()
     End Sub
 
     Private Async Sub btnCureCoinSetup_Click(sender As Object, e As EventArgs) Handles btnCureCoinSetup.Click
@@ -1108,6 +1149,7 @@
                 TxtEntry.MsgTextLower.Text = "Please enter your 12-word Passphrase:"
                 TxtEntry.Width = (TxtEntry.MsgTextLower.Left * 2) + TxtEntry.MsgTextLower.Width + 10
                 TxtEntry.TextEnteredLower.Visible = False
+                TxtEntry.MsgTextExtraBottomNote.Visible = False
                 'Show modal dialog box
                 If TxtEntry.ShowDialog(Me) = DialogResult.OK Then
                     'Save and encrypt 12-word Passphrase
@@ -1650,27 +1692,6 @@
         Return False
     End Function
 
-    Public Function SetupFAHUserTeamAndCfg() As Boolean
-        Try
-            'Prompt for FAH info: Ask for: (existing) Username, Merged Folding Coin Selection, FAH Team #. Show Username as typing and check it for errors. (Optional) Get Passkey by email. Show before and after of the FAH Config file changes 
-            Dim DialogFAH As New FAHSetupDialog
-            'Show modal dialog box
-            If DialogFAH.ShowDialog(Me) = DialogResult.OK Then
-                DialogFAH.Dispose()
-
-                'Return true, if you get here
-                Return True
-            Else
-                DialogFAH.Dispose()
-            End If
-
-        Catch ex As Exception
-            Msg("Setup FAH User, Team, and Config error:" & ex.ToString)
-        End Try
-
-        Return False
-    End Function
-
     'This is called by the 'FAHSetupDialog' window to get the Passkey email from Stanford
     Public Async Function GetFAHpasskey(URL As String) As Threading.Tasks.Task(Of Boolean)
         Try
@@ -1838,6 +1859,7 @@
                 TxtEntry.MsgTextLower.Text = "Please enter your CureCoin Wallet Address (right-click, Copy Address):"
                 TxtEntry.Width = (TxtEntry.MsgTextLower.Left * 2) + TxtEntry.MsgTextLower.Width + 10
                 TxtEntry.TextEnteredLower.Visible = False
+                TxtEntry.MsgTextExtraBottomNote.Visible = False
                 'Show modal dialog box
                 If TxtEntry.ShowDialog(Me) = DialogResult.OK Then
                     'Get the Wallet Address
@@ -1868,6 +1890,7 @@
                 TxtEntry.MsgTextLower.Text = "This is used as the CureCoin Pool Login:"
                 TxtEntry.Width = (TxtEntry.MsgTextLower.Left * 2) + TxtEntry.MsgTextLower.Width + 10
                 TxtEntry.TextEnteredLower.Visible = False
+                TxtEntry.MsgTextExtraBottomNote.Visible = False
                 'Show modal dialog box
                 If TxtEntry.ShowDialog(Me) = DialogResult.OK Then
                     'Get the Folding Username / CureCoin Pool Login
@@ -1891,6 +1914,7 @@
                 TxtEntry.MsgTextLower.Text = "This is used for the CureCoin Pool sign up:"
                 TxtEntry.Width = (TxtEntry.MsgTextLower.Left * 2) + TxtEntry.MsgTextLower.Width + 10
                 TxtEntry.TextEnteredLower.Visible = False
+                TxtEntry.MsgTextExtraBottomNote.Visible = False
                 'Show modal dialog box
                 If TxtEntry.ShowDialog(Me) = DialogResult.OK Then
                     'Get the Email Address
@@ -1997,6 +2021,8 @@
                 TxtEntry.MsgTextLower.Text = "Please enter the captcha text:"
                 TxtEntry.Width = (TxtEntry.MsgTextUpper.Left * 2) + TxtEntry.MsgTextUpper.Width + 10
                 TxtEntry.TextEnteredLower.Visible = False
+                'Show: Attempt 1 of 3
+                TxtEntry.MsgTextExtraBottomNote.Visible = True
                 'Hide the Cancel button in favor of showing: Attempt 1 of 3
                 TxtEntry.btnCancel.Visible = False
                 'Move the OK button in the place of the hidden Cancel button
@@ -2144,6 +2170,7 @@
                 TxtEntry.MsgTextLower.Text = "This is used as the CureCoin Pool Login:"
                 TxtEntry.Width = (TxtEntry.MsgTextLower.Left * 2) + TxtEntry.MsgTextLower.Width + 10
                 TxtEntry.TextEnteredLower.Visible = False
+                TxtEntry.MsgTextExtraBottomNote.Visible = False
                 'Show modal dialog box
                 If TxtEntry.ShowDialog(Me) = DialogResult.OK Then
                     'Get the Folding Username / CureCoin Pool Login
@@ -2168,6 +2195,7 @@
                 TxtEntry.MsgTextLower.Text = "(Optional) Enter your CureCoin Pool Pin (Bottom text box):"
                 TxtEntry.Width = (TxtEntry.MsgTextLower.Left * 2) + TxtEntry.MsgTextLower.Width + 10
                 TxtEntry.TextEnteredLower.Visible = True
+                TxtEntry.MsgTextExtraBottomNote.Visible = False
                 'Show modal dialog box
                 If TxtEntry.ShowDialog(Me) = DialogResult.OK Then
                     'Get the CureCoin Pool Password (Top text box)

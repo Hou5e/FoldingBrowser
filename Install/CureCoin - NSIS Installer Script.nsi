@@ -128,7 +128,7 @@ Unicode true   ;For all languages to display properly (Installer won't run on Wi
 
 ;---- Installer Info ----
 Name "${PRODUCT_NAME} v${PRODUCT_VERSION}"
-OutFile "CureInst\Install ${PRODUCT_NAME} v${PRODUCT_VERSION}.exe"
+OutFile "CureInst\Install_${PRODUCT_NAME}_v${PRODUCT_VERSION}.exe"
 BrandingText "${PRODUCT_PUBLISHER}"
 InstallDir "$PROGRAMFILES\${PRODUCT_NAME}"  ;Default installation folder (Set to: $INSTDIR during MUI_PAGE_DIRECTORY)
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
@@ -266,11 +266,6 @@ Section Uninstall
   ;Delete the main installation folder, if possible
   Delete "$INSTDIR\license.txt"
   Delete "$INSTDIR\curecoin-qt.exe"
-  Delete "$INSTDIR\libgcc_s_dw2-1.dll"
-  Delete "$INSTDIR\libstdc++-6.dll"
-  Delete "$INSTDIR\mingwm10.dll"
-  Delete "$INSTDIR\QtCore4.dll"
-  Delete "$INSTDIR\QtGui4.dll"
   Delete "$INSTDIR\CureCoin\Curecoin- cygnusxi - Source files on GitHub.url"
   Delete "$INSTDIR\*"
   RMDir "$INSTDIR"

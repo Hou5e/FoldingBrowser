@@ -7,8 +7,7 @@ All-in-One Installer:
 Immediate Need /  Short-Term Goals:
 -----------------------------------
 
--Split the installation video into initial install and features to keep it shorter.
--Option to change the initial portal homepage URL, with radio buttons for: local portal page, FLDC homepage, CURE homepage, CounterWallet?, blank?
+-Code signing improvement: Dual sign SHA1 & SHA256 for installers & executables
 -Support other wallets?  like:  https://freewallet.io/     (Using:)https://counterwallet.io/    wallet.indiesquare.me    also: rarepepewallet.com would work
 -Ability to select alternate from: http://foldingcoin.xyz/?token=FLDC&total=250000&start=2017-08-21&end=2017-08-22 to using: http://fldc-stats.tokenly.com/?token=FLDC&total=250000&start=2017-08-21&end=2017-08-22
 -Use built-in multi-language uninstaller strings for uninstaller dialog on upgrading?
@@ -21,7 +20,7 @@ Immediate Need /  Short-Term Goals:
 
 -Improve the portal web page (eliminate some buttons in the browser?)
 -Add FLDC & CURE Ticker info from Coin Market Cap API (or pull from exchanges?). Update hourly? Do as notify icon? Might not be worth it, if the FLDC homepage gets it. See:  https://coinmarketcap.com/api/    https://api.coinmarketcap.com/v1/ticker/CureCoin/
--Add option to get Wallet info from blockchain explorer APIs to display value? FLDC- counterpartychain.io     CURE-  https://chainz.cryptoid.info/cure
+-Add option to get Wallet info from blockchain explorer APIs to display value? FLDC- https://xchain.io/     CURE-  https://chainz.cryptoid.info/cure
 -Save some stats from API data, and show difference from last time, or from a past time interval?
 -Add notify icon (system tray icon) for folding with NaCl Chrome Plug-in (add option to enable / disable exiting on program close) and other coin ticker info
 
@@ -29,6 +28,7 @@ Immediate Need /  Short-Term Goals:
 Other Ideas, Improvements, Tasks, Longer-Term Goals:
 ----------------------------------------------------
 
+-Split the installation video into initial install and features to keep it shorter.
 -Add images to improve other dialog prompts (It will help non-English speaking users)
 -Simplicity: Ideally, you only want to enter username and email, and you are up and Folding (as other users have described).
 -Simple version of the FoldingBrowser: mostly to only run the FAH NaCl Chrome Plugin client
@@ -39,7 +39,6 @@ Other Ideas, Improvements, Tasks, Longer-Term Goals:
   -Can the FoldingBrowser run on Wine in Linux? And, then update the FoldingBrowser to use the appropriate files and paths for Linux?
 -Option to monitor FAH clients and restart them if they hang?
 
--Add 'bookmark' link button titles and links to a separate INI file, that can be replaced to update
 -Option to create backup copies of the settings in a 'Backup' folder periodically, or get a pop-up reminder on a time interval?
 -Change the Default password: INI file: when encryption PW is blank, prompt for PW, if encryption fails (for extra security for not keeping the PW in a text file in your user account). Option to be prompted for it: once per session, or prompted every time when needed.
 -Make a better way to determine if the DAT file loads. This won't work: DAT.ToString.Length = 0, it really needs to be .SaveToString(), but all you want to know is there data loaded or not. You don't need a full text string output...
@@ -47,7 +46,7 @@ Other Ideas, Improvements, Tasks, Longer-Term Goals:
 -Add stop button to cancel the automated process?
 -Get Wallet with CounterPart API instead of current methods from web page clicks? (probably more work than it's worth)
 -Support other block explorers?  like: (Using:)https://xchain.io/     (depreciated) https://counterpartychain.io/      https://chain.so/      https://walletapp.indiesquare.me/explorer/      https://www.blocktrail.com/BTC/address/<addy>      https://xcpdex.com/
--Change to the new FLDC username format (Nope, not yet, as of Sep 2017)
+-Change to the new FLDC username format (Nope, not yet, as of Nov 2017)
 
 -Improve the CureCoin HTTP JSON-RPC to use the JSON parser, and find the wallet if there is more than one entry or (blank and a name)
 -Show image of where to get the CURE wallet address, for message when it can't be found
@@ -57,6 +56,14 @@ Other Ideas, Improvements, Tasks, Longer-Term Goals:
 Change Log - Release Notes - Tasks completed:
 ======================================================================================================
 
+v15 Release (12/0?/2017)
+[DONE] -Adding attempts to pressing the EOC button to get the UserId from searching for their FAH Username (the 3 attempts is for new users who's username won't be searchable for the first ~24 hours: Hopefully this will let them retry some other day)
+[DONE] -Setup code signing certificate to sign installer & FoldingBrowser executable
+[DONE] -Replace Slack with Discord for both CureCoin and FoldingCoin button links
+[Known Issue] -Discord invites go to a blank page (Press the 'Discord' button again to reload/fix), and fail to load with error: WebSocket connection to 'ws://127.0.0.1:6465/?v=1' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED (https://discordapp.com/assets/7bb110c91ee0ded4782a.js, ln 17 )
+[DONE] -Option to change the initial portal homepage. Choices: Default (Both FoldingCoin and CureCoin), FoldingCoin, CureCoin, EOC, Folding@Home Web Control, Blank
+[DONE] -Fix to disable the OK button until the FAH settings are saved. Pausing FAH with Telnet was not awaited, and was undoing this on an initial install only
+[DONE] -Improvement to hide the Cancel button, in favor of showing: Attempt 1 of 3, for the Captcha text input at CryptoBullions
 [DONE] -Add instructions for compiling the NSIS installation kit
 [DONE] -Trim the input Email text for getting a passkey
 v14 Release (10/31/2017)
@@ -206,6 +213,7 @@ v3 (8/21/2016) & v4 Release (10/1/2016)
 [DONE] -Browser: Find the location of the FAH Config file, save a backup copy, and re-write a new cfg file. -Show FAH INI file changes (new vs old), and allow editing. Button w/ direct access to file for changes later?
 [DONE] -Browser: Launch FAH (restarting the PC is not required). Show control web page (in the FoldingBrowser, because it won't be the default browser)?
 
+(Skip) -Add 'bookmark' link button titles and links to a separate INI file, that can be replaced to update. (No, not secure)
 (Skip) -Other CureCoin websites: https://curecoin.info     https://curecoin.io/      (Using:) http://curecoin.net/      (No, other websites are being consolidated into the one)
 (Skip) -Mempool Transaction Count: https://blockchain.info/charts/mempool-count?timespan=1week     Use: https://bitcoinfees.21.co/ and https://jochen-hoenicke.de/queue/#24h to help determine sufficient miners fees to keep your TX from getting stuck in the mempool
 (Skip) -Button to delete all saved info for a Wallet Id?
