@@ -1,22 +1,23 @@
-=====================
-All-in-One Installer:
-=====================
+====================================
+FoldingBrowser All-in-One Installer:
+====================================
 
 
 -----------------------------------
 Immediate Need /  Short-Term Goals:
 -----------------------------------
 
--Code signing improvement: Dual sign SHA1 & SHA256 for installers & executables
 -Support other wallets?  like:  https://freewallet.io/     (Using:)https://counterwallet.io/    wallet.indiesquare.me    also: rarepepewallet.com would work
--Ability to select alternate from: http://foldingcoin.xyz/?token=FLDC&total=250000&start=2017-08-21&end=2017-08-22 to using: http://fldc-stats.tokenly.com/?token=FLDC&total=250000&start=2017-08-21&end=2017-08-22
+
+-CTRL+F5: to dump the cache like Chrome? Or a button to manually (unload the browser component), dump the cache, (and reload the browser)?
+-CTRL+F: Find text in a page functionality? (searching for BTC address on distribution page, etc)
+
+-Simple version of the FoldingBrowser: mostly to only run the FAH NaCl Chrome Plugin client -Simplicity: Ideally, you only want to enter username and email, and you are up and Folding (as other users have described).
+
 -Use built-in multi-language uninstaller strings for uninstaller dialog on upgrading?
 -Look into enabling Google Translate in Chrome/CefSharp for automatic web page translations
 -Enable Multi-language support in the FoldingBrowser App to view pages that are available in other languages (Allow users to change the locale & supported languages)?
 -Add Multi-language support in the FoldingBrowser App for buttons and tooltips?
-
--CTRL+F5: to dump the cache like Chrome? Or a button to manually (unload the browser component), dump the cache, (and reload the browser)?
--CTRL+F: Find text in a page functionality? (searching for BTC address on distribution page, etc)
 
 -Improve the portal web page (eliminate some buttons in the browser?)
 -Add FLDC & CURE Ticker info from Coin Market Cap API (or pull from exchanges?). Update hourly? Do as notify icon? Might not be worth it, if the FLDC homepage gets it. See:  https://coinmarketcap.com/api/    https://api.coinmarketcap.com/v1/ticker/CureCoin/
@@ -28,10 +29,7 @@ Immediate Need /  Short-Term Goals:
 Other Ideas, Improvements, Tasks, Longer-Term Goals:
 ----------------------------------------------------
 
--Split the installation video into initial install and features to keep it shorter.
 -Add images to improve other dialog prompts (It will help non-English speaking users)
--Simplicity: Ideally, you only want to enter username and email, and you are up and Folding (as other users have described).
--Simple version of the FoldingBrowser: mostly to only run the FAH NaCl Chrome Plugin client
 -Plugin: Add an Ad Blocker?
 -Cross-compile for Linux and Mac version ideas:
   -Try '.NET Core' simple project for Linux and Mac? (probably not if CefSharp isn't compatible)
@@ -48,6 +46,7 @@ Other Ideas, Improvements, Tasks, Longer-Term Goals:
 -Support other block explorers?  like: (Using:)https://xchain.io/     (depreciated) https://counterpartychain.io/      https://chain.so/      https://walletapp.indiesquare.me/explorer/      https://www.blocktrail.com/BTC/address/<addy>      https://xcpdex.com/
 -Change to the new FLDC username format (Nope, not yet, as of Nov 2017)
 
+-Ability to select alternate from: http://foldingcoin.xyz/?token=FLDC&total=250000&start=2017-08-21&end=2017-08-22 to using: http://fldc-stats.tokenly.com/?token=FLDC&total=250000&start=2017-08-21&end=2017-08-22
 -Improve the CureCoin HTTP JSON-RPC to use the JSON parser, and find the wallet if there is more than one entry or (blank and a name)
 -Show image of where to get the CURE wallet address, for message when it can't be found
 -Make the other webpage wait loops use Javascript for detecting stuff is there (like the CureCoin webpage login)
@@ -56,9 +55,11 @@ Other Ideas, Improvements, Tasks, Longer-Term Goals:
 Change Log - Release Notes - Tasks completed:
 ======================================================================================================
 
-v15 Release (12/0?/2017)
+v15 Release (12/07/2017)
+[DONE] -Add intro clips to tutorial videos to improve them
+[DONE] -Split the installation video into initial install and features to keep it shorter.
 [DONE] -Adding attempts to pressing the EOC button to get the UserId from searching for their FAH Username (the 3 attempts is for new users who's username won't be searchable for the first ~24 hours: Hopefully this will let them retry some other day)
-[DONE] -Setup code signing certificate to sign installer & FoldingBrowser executable
+[DONE] -Setup code signing certificate to sign installer & FoldingBrowser executable. Dual signed- SHA1 (for WinXP) and SHA-256 (for Win7-Win10)
 [DONE] -Replace Slack with Discord for both CureCoin and FoldingCoin button links
 [Known Issue] -Discord invites go to a blank page (Press the 'Discord' button again to reload/fix), and fail to load with error: WebSocket connection to 'ws://127.0.0.1:6465/?v=1' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED (https://discordapp.com/assets/7bb110c91ee0ded4782a.js, ln 17 )
 [DONE] -Option to change the initial portal homepage. Choices: Default (Both FoldingCoin and CureCoin), FoldingCoin, CureCoin, EOC, Folding@Home Web Control, Blank
