@@ -11,6 +11,7 @@ Immediate Need /  Short-Term Goals:
 
 -CTRL+F5: to dump the cache like Chrome? Or a button to manually (unload the browser component), dump the cache, (and reload the browser)?
 -CTRL+F: Find text in a page functionality? (searching for BTC address on distribution page, etc)
+-Forward and back navigation keystrokes or mouse clicks
 
 -Simple version of the FoldingBrowser: mostly to only run the FAH NaCl Chrome Plugin client -Simplicity: Ideally, you only want to enter username and email, and you are up and Folding (as other users have described).
 

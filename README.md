@@ -1,6 +1,6 @@
 # FoldingBrowser
 
-![FoldingBrowser Logo](FoldingBrowserTitle.png)
+![FoldingBrowser Logo](FoldingBrowserTitle.gif)
 
 [FoldingCoin](http://foldingcoin.net/) & [CureCoin](http://curecoin.net/) All-In-One Installer
 
