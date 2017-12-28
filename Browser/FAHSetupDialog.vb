@@ -604,7 +604,7 @@
                             g_Main.Msg("Telnet stopped on " & Me.txtAddress.Text & ":" & Me.txtPort.Text)
                         End If
                     Else
-                        Dim strMsg As String = "Telnet Error: Client didn't connect. Check your connection settings"
+                        Dim strMsg As String = "Telnet Error: Client didn't connect. Check your connection settings for Folding@Home." & vbNewLine & "Please verify the Folding@Home software is running, and try again."
                         g_Main.Msg(strMsg)
                         MessageBox.Show(strMsg)
                     End If
@@ -620,7 +620,7 @@
             End If
 
         Catch ex As Exception
-            Dim strMsg As String = "Telnet Error: " & ex.Message.ToString
+            Dim strMsg As String = "Telnet error while connecting to the Folding@Home software:" & vbNewLine & ex.Message.ToString & vbNewLine & vbNewLine & "-Please verify the Folding@Home software is running, and then try again."
             g_Main.Msg(strMsg)
             MessageBox.Show(strMsg)
         End Try

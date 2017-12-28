@@ -8,7 +8,7 @@ Imports System.Runtime.InteropServices
 ' Review the values of the assembly attributes
 
 <Assembly: AssemblyTitle("FoldingBrowser")>
-<Assembly: AssemblyDescription("FoldingBrowser All-In-One Installer for FoldingCoin (FLDC) Web Wallet interface and CureCoin (CURE)")>
+<Assembly: AssemblyDescription("FoldingBrowser All-In-One Installer for FoldingCoin (FLDC) and CureCoin (CURE)")>
 <Assembly: AssemblyCompany("")>
 <Assembly: AssemblyProduct("FoldingBrowser")>
 <Assembly: AssemblyCopyright("Copyright © 2017 FoldingCoin, CureCoin")>
@@ -25,10 +25,6 @@ Imports System.Runtime.InteropServices
 '      Minor Version
 '      Build Number
 '      Revision
-'
-' You can specify all the values or you can default the Build and Revision Numbers
-' by using the '*' as shown below:
-' <Assembly: AssemblyVersion("1.0.*")>
 
-<Assembly: AssemblyVersion("15.0.0.0")>
-<Assembly: AssemblyFileVersion("15.0.0.0")>
+<Assembly: AssemblyVersion("16.0.0.0")>
+<Assembly: AssemblyFileVersion("16.0.0.0")>

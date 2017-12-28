@@ -234,6 +234,12 @@
   <ItemGroup>
     <None Include="Resources\Home-16.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\FindDown-16.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\FindUp-16.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <Import Project="packages\cef.redist.x64.3.2987.1601\build\cef.redist.x64.targets" Condition="Exists('packages\cef.redist.x64.3.2987.1601\build\cef.redist.x64.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

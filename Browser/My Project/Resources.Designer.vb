@@ -103,6 +103,26 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         '''</summary>
+        Friend ReadOnly Property FindDown_16() As System.Drawing.Icon
+            Get
+                Dim obj As Object = ResourceManager.GetObject("FindDown_16", resourceCulture)
+                Return CType(obj,System.Drawing.Icon)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        '''</summary>
+        Friend ReadOnly Property FindUp_16() As System.Drawing.Icon
+            Get
+                Dim obj As Object = ResourceManager.GetObject("FindUp_16", resourceCulture)
+                Return CType(obj,System.Drawing.Icon)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        '''</summary>
         Friend ReadOnly Property FLDC_48() As System.Drawing.Icon
             Get
                 Dim obj As Object = ResourceManager.GetObject("FLDC_48", resourceCulture)

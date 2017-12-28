@@ -53,7 +53,7 @@
                 AddHandler Me.browser.LoadingStateChanged, AddressOf OnBrowserLoadingStateChanged
                 AddHandler Me.browser.TitleChanged, AddressOf OnBrowserTitleChanged
                 AddHandler Me.browser.AddressChanged, AddressOf OnBrowserAddressChanged
-                'Add keypress handler: Press ESC to cancel Navigation, Press F5 to Refresh
+                'Add keypress handler: ESC to cancel Navigation, F5 to Refresh, CTRL+F for Find, ...
                 Me.browser.KeyboardHandler = New KeyboardHandler()
                 'Add download handler
                 Me.browser.DownloadHandler = New DownloadHandler()
@@ -87,6 +87,13 @@
             Me.btnReload.Image = My.Resources.Reload_16.ToBitmap
             Me.btnHome.Text = ""
             Me.btnHome.Image = My.Resources.Home_16.ToBitmap
+            'Find/Search buttons
+            Me.btnFindPrevious.Text = ""
+            Me.btnFindPrevious.Image = My.Resources.FindUp_16.ToBitmap
+            Me.btnFindNext.Text = ""
+            Me.btnFindNext.Image = My.Resources.FindDown_16.ToBitmap
+            Me.btnFindClose.Text = ""
+            Me.btnFindClose.Image = My.Resources.Stop_16.ToBitmap
 
             'Button Images
             Me.btnMyWallet.BackgroundImage = My.Resources.Coins_4_top_24.ToBitmap
@@ -97,7 +104,7 @@
             Me.btnEOC.BackgroundImage = My.Resources.EOC_48.ToBitmap
 
             'Protein image on the right side of the browser
-            Me.PictureBox2.Image = My.Resources.L_cysteine_3D_vdW2_32.ToBitmap
+            Me.pbProgIcon.Image = My.Resources.L_cysteine_3D_vdW2_32.ToBitmap
 
 #If DEBUG Then
             'Debug: show Dev Tools
@@ -141,13 +148,98 @@
             'Process command line values (Only for initial installations). Log browser debug info. NOTE: Async and can't be awaited here.
             RunSetup()
 
+            'Me.Invoke(Sub()
+            CefSharp.Cef.UIThreadTaskFactory.StartNew(Function() As Boolean
+                                                          Dim preference As IDictionary(Of String, Object) = Nothing
+                                                          preference = Me.browser.GetBrowser.GetHost.RequestContext.GetAllPreferences(True)
+                                                          Debug.WriteLine("Preferences:")
+                                                          If preference IsNot Nothing Then
+                                                              For Each pref As String In preference.Keys
+                                                                  If TypeOf preference.Item(pref) Is Generic.Dictionary(Of String, Object) Then
+                                                                      Dim subpreferences As Generic.Dictionary(Of String, Object) = CType(preference.Item(pref), Generic.Dictionary(Of String, Object))
+                                                                      For Each subpref As String In subpreferences.Keys
+                                                                          If TypeOf subpreferences.Item(subpref) Is Generic.Dictionary(Of String, Object) Then
+                                                                              Dim sub2preferences As Generic.Dictionary(Of String, Object) = CType(subpreferences.Item(subpref), Generic.Dictionary(Of String, Object))
+                                                                              For Each sub2pref As String In sub2preferences.Keys
+                                                                                  If TypeOf sub2preferences.Item(sub2pref) Is Generic.Dictionary(Of String, Object) Then
+                                                                                      Dim sub3preferences As Generic.Dictionary(Of String, Object) = CType(sub2preferences.Item(sub2pref), Generic.Dictionary(Of String, Object))
+                                                                                      For Each sub3pref As String In sub3preferences.Keys
+                                                                                          If TypeOf sub3preferences.Item(sub3pref) Is Generic.Dictionary(Of String, Object) Then
+                                                                                              Dim sub4preferences As Generic.Dictionary(Of String, Object) = CType(sub3preferences.Item(sub3pref), Generic.Dictionary(Of String, Object))
+                                                                                              For Each sub4pref As String In sub4preferences.Keys
+                                                                                                  Debug.WriteLine(pref & "." & subpref & "." & sub2pref & "." & sub3pref & "." & sub4pref & " --> " & If(sub4preferences.Item(sub4pref) IsNot Nothing, sub4preferences.Item(sub4pref).ToString, ""))
+                                                                                              Next
+                                                                                          ElseIf TypeOf sub3preferences.Item(sub3pref) Is Generic.List(Of Object) Then
+                                                                                              Dim sub4preferences As Generic.List(Of Object) = CType(sub3preferences.Item(sub3pref), Generic.List(Of Object))
+                                                                                              If sub4preferences.Count > 0 Then
+                                                                                                  For Each sub4pref As Object In sub4preferences
+                                                                                                      Debug.WriteLine(pref & "." & subpref & "." & sub2pref & "." & sub3pref & " --> " & If(sub4pref IsNot Nothing, sub4pref.ToString, ""))
+                                                                                                  Next
+                                                                                              Else
+                                                                                                  Debug.WriteLine(pref & "." & subpref & "." & sub2pref & "." & sub3pref & " --> [No Items] " & If(sub3preferences.Item(sub3pref) IsNot Nothing, sub3preferences.Item(sub3pref).ToString, ""))
+                                                                                              End If
+                                                                                          Else
+                                                                                              Debug.WriteLine(pref & "." & subpref & "." & sub2pref & "." & sub3pref & " --> " & If(sub3preferences.Item(sub3pref) IsNot Nothing, sub3preferences.Item(sub3pref).ToString, ""))
+                                                                                          End If
+                                                                                      Next
+                                                                                  ElseIf TypeOf sub2preferences.Item(sub2pref) Is Generic.List(Of Object) Then
+                                                                                      Dim sub3preferences As Generic.List(Of Object) = CType(sub2preferences.Item(sub2pref), Generic.List(Of Object))
+                                                                                      If sub3preferences.Count > 0 Then
+                                                                                          For Each sub3pref As Object In sub3preferences
+                                                                                              Debug.WriteLine(pref & "." & subpref & "." & sub2pref & " --> " & If(sub3pref IsNot Nothing, sub3pref.ToString, ""))
+                                                                                          Next
+                                                                                      Else
+                                                                                          Debug.WriteLine(pref & "." & subpref & "." & sub2pref & " --> [No Items] " & If(sub2preferences.Item(sub2pref) IsNot Nothing, sub2preferences.Item(sub2pref).ToString, ""))
+                                                                                      End If
+                                                                                  Else
+                                                                                      Debug.WriteLine(pref & "." & subpref & "." & sub2pref & " --> " & If(sub2preferences.Item(sub2pref) IsNot Nothing, sub2preferences.Item(sub2pref).ToString, ""))
+                                                                                  End If
+                                                                              Next
+                                                                          ElseIf TypeOf subpreferences.Item(subpref) Is Generic.List(Of Object) Then
+                                                                              Dim sub2preferences As Generic.List(Of Object) = CType(subpreferences.Item(subpref), Generic.List(Of Object))
+                                                                              If sub2preferences.Count > 0 Then
+                                                                                  For Each sub2pref As Object In sub2preferences
+                                                                                      Debug.WriteLine(pref & "." & subpref & " --> " & If(sub2pref IsNot Nothing, sub2pref.ToString, ""))
+                                                                                  Next
+                                                                              Else
+                                                                                  Debug.WriteLine(pref & "." & subpref & " --> [No Items] " & If(subpreferences.Item(subpref) IsNot Nothing, subpreferences.Item(subpref).ToString, ""))
+                                                                              End If
+                                                                          Else
+                                                                              Debug.WriteLine(pref & "." & subpref & " --> " & If(subpreferences.Item(subpref) IsNot Nothing, subpreferences.Item(subpref).ToString, ""))
+                                                                          End If
+                                                                      Next
+                                                                  Else
+                                                                      Debug.WriteLine(pref & " --> " & If(preference.Item(pref) IsNot Nothing, preference.Item(pref).ToString, ""))
+                                                                  End If
+                                                              Next
+                                                          End If
+
+                                                          Return True
+                                                      End Function)
+
+            CefSharp.Cef.UIThreadTaskFactory.StartNew(Sub()
+                                                          Dim errorMessage As String = ""
+                                                          Dim requestContext = Me.browser.GetBrowser.GetHost.RequestContext
+
+                                                          'Dim response As Object = ""
+                                                          'response = requestContext.GetPreference("spellcheck.use_spelling_service") 'False by default
+                                                          'Debug.WriteLine("Preference: " & If(response IsNot Nothing, response.ToString, ""))
+                                                          requestContext.SetPreference("spellcheck.use_spelling_service", True, errorMessage)
+
+
+                                                          requestContext.SetPreference("plugins.allow_outdated", True, errorMessage)
+                                                          requestContext.SetPreference("plugins.always_authorize", True, errorMessage)
+                                                          requestContext.SetPreference("profile.managed_default_content_settings.plugins", 1, errorMessage)
+
+                                                          Debug.WriteLine("Set Preferences error message: " & errorMessage)
+                                                      End Sub)
+
         Catch ex As Exception
             Msg("Error: initialization failed: " & ex.ToString)
             MessageBox.Show("Error: initialization failed: " & ex.ToString)
         End Try
     End Sub
 
-#Region "Extra Setup"
     Private Async Sub LoadINISettings()
         'Load, fix, or update the INI and DAT files for the stored settings. Look to see if there is an INI file first
         If System.IO.File.Exists(IniFilePath) = True Then
@@ -491,100 +583,6 @@
                         Setup.Dispose()
                 End Select
             End If
-        End If
-    End Sub
-#End Region
-
-    Private Sub onBrowserFrameLoadEnd(sender As Object, e As CefSharp.FrameLoadEndEventArgs)
-        'Set a flag to indicate the web page has finished loading. This event is fired for each frame that loads, so compare URLs before setting the flag as loaded (NOTE: Me.browser.IsLoading = True, doesn't work)
-        If e.Url.Contains(m_strPageURL) Then
-            m_bPageLoaded = True
-        End If
-    End Sub
-
-    Private Sub onBrowserConsoleMessage(sender As Object, e As CefSharp.ConsoleMessageEventArgs)
-        If e.Line > 0 Then
-            addActivity(e.Message & " (" & e.Source & ", ln " & e.Line.ToString & " )")
-        Else
-            addActivity(e.Message)
-        End If
-    End Sub
-    Private Sub OnBrowserStatusMessage(sender As Object, args As CefSharp.StatusMessageEventArgs)
-        addActivity(args.Value)
-    End Sub
-
-    Private Sub OnBrowserLoadingStateChanged(sender As Object, args As CefSharp.LoadingStateChangedEventArgs)
-        enableButtons(args.CanGoForward, args.CanGoBack, Not args.CanReload)
-    End Sub
-    Private Sub enableButtons(bForward As Boolean, bBack As Boolean, bLoading As Boolean)
-        Me.Invoke(Sub()
-                      Me.btnBack.Enabled = bBack
-                      Me.btnFwd.Enabled = bForward
-                      Me.btnStopNav.Enabled = bLoading
-                      Me.btnGo.Enabled = Not bLoading
-                  End Sub)
-    End Sub
-
-    Private Sub OnBrowserTitleChanged(sender As Object, args As CefSharp.TitleChangedEventArgs)
-        updateTitle(args.Title)
-    End Sub
-    Private Sub updateTitle(strTitle As String)
-        Me.Invoke(Sub()
-                      Me.Text = If(strTitle.Length = 0, "", strTitle & " - ") & Prog_Name & " v" & My.Application.Info.Version.Major.ToString
-                  End Sub)
-    End Sub
-
-    Private Sub OnBrowserAddressChanged(sender As Object, args As CefSharp.AddressChangedEventArgs)
-        updateURL(args.Address)
-    End Sub
-    Private Sub updateURL(strURL As String)
-        Me.Invoke(Sub()
-                      Me.txtURL.Text = strURL
-                      m_strPageURL = strURL
-                      Me.txtURL.Focus()
-                      Me.txtURL.Select(Me.txtURL.Text.Length, 0)
-                  End Sub)
-    End Sub
-
-    Public Delegate Sub updateKP(iKeyCode As Integer)
-    Public Sub updateKeyPress(iKeyCode As Integer)
-        Me.Invoke(New updateKP(AddressOf upKeyPress), {iKeyCode})
-    End Sub
-
-    Public Sub upKeyPress(iKeyCode As Integer)
-        Select Case iKeyCode
-            Case Keys.Escape
-                StopNavigaion()
-
-            Case Keys.F5
-                Me.browser.GetBrowser.Reload(True)
-        End Select
-    End Sub
-
-    Public Delegate Sub updateDL(iPercent As Integer, bComplete As Boolean, bCancelled As Boolean)
-    Public Sub updateDownload(iPercent As Integer, bComplete As Boolean, bCancelled As Boolean)
-        Me.Invoke(New updateDL(AddressOf upDL), {iPercent, bComplete, bCancelled})
-    End Sub
-
-    Public Sub upDL(iPercent As Integer, bComplete As Boolean, bCancelled As Boolean)
-        'Show when download starts
-        If Me.gbxDownload.Visible = False Then
-            Me.gbxDownload.Visible = True
-        End If
-
-        'Update status
-        Me.ProgressBar1.Value = iPercent
-        Me.lblPercent.Text = iPercent.ToString & "%"
-        Me.btnStopNav.Enabled = True
-
-        'When complete, reset the status bar
-        If bComplete = True OrElse bCancelled = True Then
-            Me.gbxDownload.Visible = False
-            Me.ProgressBar1.Value = 0
-            Me.lblPercent.Text = ""
-            Me.btnStopNav.Enabled = False
-            g_bCancelNav = False
-            g_bAskDownloadLocation = True
         End If
     End Sub
 
@@ -2443,7 +2441,240 @@
     End Function
 #End Region
 
-#Region "Browser Controls"
+#Region "Browser Control Event Handlers"
+    Private Sub onBrowserFrameLoadEnd(sender As Object, e As CefSharp.FrameLoadEndEventArgs)
+        'Set a flag to indicate the web page has finished loading. This event is fired for each frame that loads, so compare URLs before setting the flag as loaded (NOTE: Me.browser.IsLoading = True, doesn't work)
+        If e.Url.Contains(m_strPageURL) Then
+            m_bPageLoaded = True
+        End If
+    End Sub
+
+    Private Sub onBrowserConsoleMessage(sender As Object, e As CefSharp.ConsoleMessageEventArgs)
+        If e.Line > 0 Then
+            addActivity(e.Message & " (" & e.Source & ", ln " & e.Line.ToString & " )")
+        Else
+            addActivity(e.Message)
+        End If
+    End Sub
+    Private Sub OnBrowserStatusMessage(sender As Object, args As CefSharp.StatusMessageEventArgs)
+        addActivity(args.Value)
+    End Sub
+
+    Private Sub OnBrowserLoadingStateChanged(sender As Object, args As CefSharp.LoadingStateChangedEventArgs)
+        enableButtons(args.CanGoForward, args.CanGoBack, Not args.CanReload)
+    End Sub
+    Private Sub enableButtons(bForward As Boolean, bBack As Boolean, bLoading As Boolean)
+        Me.Invoke(Sub()
+                      Me.btnBack.Enabled = bBack
+                      Me.btnFwd.Enabled = bForward
+                      Me.btnStopNav.Enabled = bLoading
+                      Me.btnGo.Enabled = Not bLoading
+                      'Set focus back to the browser control window instead of the buttons
+                      Me.browser.Select()
+                  End Sub)
+    End Sub
+
+    Private Sub OnBrowserTitleChanged(sender As Object, args As CefSharp.TitleChangedEventArgs)
+        updateTitle(args.Title)
+    End Sub
+    Private Sub updateTitle(strTitle As String)
+        Me.Invoke(Sub()
+                      Me.Text = If(strTitle.Length = 0, "", strTitle & " - ") & Prog_Name & " v" & My.Application.Info.Version.Major.ToString
+                  End Sub)
+    End Sub
+
+    Private Sub OnBrowserAddressChanged(sender As Object, args As CefSharp.AddressChangedEventArgs)
+        updateURL(args.Address)
+    End Sub
+    Private Sub updateURL(strURL As String)
+        Me.Invoke(Sub()
+                      Me.txtURL.Text = strURL
+                      m_strPageURL = strURL
+                      Me.txtURL.Focus()
+                      Me.txtURL.Select(Me.txtURL.Text.Length, 0)
+                  End Sub)
+    End Sub
+
+    Public Delegate Sub updateDL(iPercent As Integer, bComplete As Boolean, bCancelled As Boolean)
+    Public Sub updateDownload(iPercent As Integer, bComplete As Boolean, bCancelled As Boolean)
+        Me.Invoke(New updateDL(AddressOf upDL), {iPercent, bComplete, bCancelled})
+    End Sub
+
+    Public Sub upDL(iPercent As Integer, bComplete As Boolean, bCancelled As Boolean)
+        'Show when download starts
+        If Me.gbxDownload.Visible = False Then
+            Me.gbxDownload.Visible = True
+        End If
+
+        'Update status
+        Me.ProgressBar1.Value = iPercent
+        Me.lblPercent.Text = iPercent.ToString & "%"
+        Me.btnStopNav.Enabled = True
+
+        'When complete, reset the status bar
+        If bComplete = True OrElse bCancelled = True Then
+            Me.gbxDownload.Visible = False
+            Me.ProgressBar1.Value = 0
+            Me.lblPercent.Text = ""
+            Me.btnStopNav.Enabled = False
+            g_bCancelNav = False
+            g_bAskDownloadLocation = True
+        End If
+    End Sub
+
+    'NOTE: These control keypress events should match the equivalent events for the form events below (so they happen for whichever is active)
+    Public Delegate Sub updateKP(iKeyCode As Integer, efModifiers As CefSharp.CefEventFlags)
+    Public Sub updateKeyPress(iKeyCode As Integer, efModifiers As CefSharp.CefEventFlags)
+        Me.Invoke(New updateKP(AddressOf upKeyPress), {iKeyCode, efModifiers})
+    End Sub
+
+    Public Sub upKeyPress(iKeyCode As Integer, efModifiers As CefSharp.CefEventFlags)
+        Select Case iKeyCode
+            Case Keys.Escape
+                If Me.pnlFind.Visible = True Then
+                    'ESC: Close find panel
+                    btnFindClose_Click(Nothing, Nothing)
+                Else
+                    StopNavigaion()
+                End If
+
+            Case Keys.F5
+                If efModifiers = CefSharp.CefEventFlags.ControlDown Then
+                    'Refresh ignoring browser cache
+                    Me.browser.GetBrowser.Reload(True)
+                Else
+                    'Refresh
+                    Me.browser.GetBrowser.Reload(False)
+                End If
+
+            Case Keys.F
+                If efModifiers = CefSharp.CefEventFlags.ControlDown Then
+                    'Show the Find window
+                    Me.pnlFind.Visible = True
+                    FindTextInWebPage(True)
+                    Me.txtFind.SelectAll()
+                End If
+
+            Case Keys.Left
+                If efModifiers = CefSharp.CefEventFlags.AltDown Then
+                    'Back
+                    Me.browser.GetBrowser.GoBack()
+                    Me.browser.Select()
+                End If
+
+            Case Keys.Right
+                If efModifiers = CefSharp.CefEventFlags.AltDown Then
+                    'Forward
+                    Me.browser.GetBrowser.GoForward()
+                    Me.browser.Select()
+                End If
+
+            Case Keys.Prior
+                'Back
+                Me.browser.GetBrowser.GoBack()
+                'This probably doesn't do much. The buttons for Forward and Back are async set later that take focus back to the main form. This is probably best at this point, then the form's mouse events work for the 4th and 5th button's Forward and Back
+                Me.browser.Select()
+
+            Case Keys.Next
+                'Forward
+                Me.browser.GetBrowser.GoForward()
+                Me.browser.Select()
+
+            Case Keys.F12
+                'Web Tools
+                Me.browser.GetBrowser.GetHost.ShowDevTools()
+        End Select
+    End Sub
+#End Region
+
+#Region "Browser Window Controls"
+    'Form focused keystroke events: Press ESC to cancel Navigation, F5 to Refresh, CTRL+F5 Refresh ignoring cache, CTRL+F for Find, ALT+Left for Navigate Back, ALT+Right for Navigate Forward, F12 for Web Tools
+    Private Sub Main_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
+        FormKeyDownEvents(e)
+    End Sub
+
+    'NOTE: These form keypress events should match the equivalent events for the browser control events above (so they happen for whichever is active)
+    Private Sub FormKeyDownEvents(ByRef e As KeyEventArgs)
+        Select Case e.KeyCode
+            Case Keys.Escape
+                If Me.pnlFind.Visible = True Then
+                    'ESC: Close find panel
+                    btnFindClose_Click(Nothing, Nothing)
+                    e.SuppressKeyPress = True
+                Else
+                    StopNavigaion()
+                    e.SuppressKeyPress = True
+                End If
+
+            Case Keys.F5
+                If e.Modifiers = Keys.Control Then
+                    'Refresh ignoring browser cache
+                    Me.browser.GetBrowser.Reload(True)
+                    e.SuppressKeyPress = True
+                Else
+                    'Refresh
+                    Me.browser.GetBrowser.Reload(False)
+                    e.SuppressKeyPress = True
+                End If
+
+            Case Keys.F
+                If e.Modifiers = Keys.Control Then
+                    'Show the Find window
+                    Me.pnlFind.Visible = True
+                    FindTextInWebPage(True)
+                    Me.txtFind.SelectAll()
+                    e.SuppressKeyPress = True
+                End If
+
+            Case Keys.Left
+                If e.Modifiers = Keys.Alt Then
+                    'Back
+                    Me.browser.GetBrowser.GoBack()
+                    Me.browser.Select()
+                    e.SuppressKeyPress = True
+                End If
+
+            Case Keys.Right
+                If e.Modifiers = Keys.Alt Then
+                    'Forward
+                    Me.browser.GetBrowser.GoForward()
+                    Me.browser.Select()
+                    e.SuppressKeyPress = True
+                End If
+
+            Case Keys.Prior
+                'Back. Can't differentiate between PageDown and Next, or PageUp and Prior keystrokes. Just focus the browser for a user retry
+                Me.browser.Select()
+                'Me.browser.GetBrowser.GoBack()
+                'e.SuppressKeyPress = True
+
+            Case Keys.Next
+                'Forward. Can't differentiate between PageDown and Next, or PageUp and Prior keystrokes. Just focus the browser for a user retry
+                Me.browser.Select()
+                'Me.browser.GetBrowser.GoForward()
+                'e.SuppressKeyPress = True
+
+            Case Keys.F12
+                'Web Tools
+                Me.browser.GetBrowser.GetHost.ShowDevTools()
+                e.SuppressKeyPress = True
+        End Select
+    End Sub
+
+    'Mouse forward and Back: Works where mouse location is. Works for the main window (but not over the browser control area) when using the extra mouse programmable 4th and 5th buttons on the mouse
+    Private Sub Main_MouseDown(sender As Object, e As MouseEventArgs) Handles Me.MouseDown, btnBack.MouseDown, btnBTCBlockchain.MouseDown, btnCureCoin.MouseDown, btnCureCoinBlockchain.MouseDown, btnCureCoinDiscord.MouseDown, btnCureCoinTwitter.MouseDown, btnCurePool.MouseDown, btnEOC.MouseDown, btnFAHControl.MouseDown, btnFLDC_Distribution.MouseDown, btnFoldingCoinBlockchain.MouseDown, btnFoldingCoinDiscord.MouseDown, btnFoldingCoinTwitter.MouseDown, btnFoldingCoinWebsite.MouseDown, btnFwd.MouseDown, btnGo.MouseDown, btnHome.MouseDown, btnMyWallet.MouseDown, btnReload.MouseDown, btnStopNav.MouseDown, chkShowTools.MouseDown, gbxCheckboxForTools.MouseDown, lblURL.MouseDown, pbProgIcon.MouseDown, txtURL.MouseDown
+        Select Case e.Button
+            Case MouseButtons.XButton1
+                'Back
+                Me.browser.Select()
+                Me.browser.GetBrowser.GoBack()
+            Case MouseButtons.XButton2
+                'Forward
+                Me.browser.Select()
+                Me.browser.GetBrowser.GoForward()
+        End Select
+    End Sub
+
     Private Sub btnBack_Click(sender As System.Object, e As System.EventArgs) Handles btnBack.Click
         Me.browser.GetBrowser.GoBack()
     End Sub
@@ -2459,19 +2690,10 @@
             OpenURL(Me.txtURL.Text, True)
 #Enable Warning BC42358
             e.SuppressKeyPress = True
+        Else
+            'See if there are other keystroke events that need to be handled
+            FormKeyDownEvents(e)
         End If
-    End Sub
-
-    'Entire Window: Press ESC to cancel Navigation, Press F5 to Refresh
-    Private Sub Main_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
-        Select Case e.KeyCode
-            Case Keys.Escape
-                StopNavigaion()
-                e.SuppressKeyPress = True
-            Case Keys.F5
-                Me.browser.GetBrowser.Reload(True)
-                e.SuppressKeyPress = True
-        End Select
     End Sub
 
     Private Sub btnGo_Click(sender As System.Object, e As System.EventArgs) Handles btnGo.Click
@@ -2551,6 +2773,71 @@
 
         Return False
     End Function
+
+    Private Sub btnFindPrevious_Click(sender As Object, e As EventArgs) Handles btnFindPrevious.Click
+        FindTextInWebPage(False)
+    End Sub
+
+    Private Sub btnFindNext_Click(sender As Object, e As EventArgs) Handles btnFindNext.Click
+        FindTextInWebPage(True)
+    End Sub
+
+    Private Sub txtFind_TextChanged(sender As Object, e As EventArgs) Handles txtFind.TextChanged
+        FindTextInWebPage(True)
+    End Sub
+
+    Private Sub txtFind_KeyDown(sender As Object, e As KeyEventArgs) Handles txtFind.KeyDown
+        Select Case e.KeyCode
+            Case Keys.Enter
+                If e.Shift = True Then
+                    'Previous
+                    FindTextInWebPage(False)
+                Else
+                    'Next
+                    FindTextInWebPage(True)
+                End If
+
+            Case Keys.F3
+                If e.Shift = True Then
+                    'Previous
+                    FindTextInWebPage(False)
+                Else
+                    'Next
+                    FindTextInWebPage(True)
+                End If
+
+            Case Keys.Escape
+                'ESC: Close find panel
+                btnFindClose_Click(Nothing, Nothing)
+        End Select
+    End Sub
+
+    Private m_bFirstFind As Boolean = True
+    Private m_strFindText As String = ""
+    Private Sub FindTextInWebPage(bNext As Boolean)
+        If Me.txtFind.Text.Length > 0 Then
+            'Has the find string changed?
+            If m_strFindText = Me.txtFind.Text Then
+                m_bFirstFind = False
+            Else
+                m_strFindText = Me.txtFind.Text
+                m_bFirstFind = True
+            End If
+            'Find
+            CefSharp.WebBrowserExtensions.Find(Me.browser, 0, m_strFindText, bNext, False, Not m_bFirstFind)
+
+        Else
+            CefSharp.WebBrowserExtensions.StopFinding(Me.browser, True)
+            m_strFindText = ""
+        End If
+        Me.txtFind.Focus()
+    End Sub
+
+    Private Sub btnFindClose_Click(sender As Object, e As EventArgs) Handles btnFindClose.Click
+        CefSharp.WebBrowserExtensions.StopFinding(Me.browser, True)
+        m_strFindText = ""
+        Me.pnlFind.Visible = False
+    End Sub
 
     'Open URL with the specified settings
     Public Async Function OpenURL(sURL As String, Optional bShowErrorDialogBoxes As Boolean = False) As Threading.Tasks.Task(Of Boolean)
@@ -2688,5 +2975,7 @@
             Msg("Error: " & ex.Message & "." & vbNewLine & vbNewLine & ex.ToString)
         End Try
     End Sub
+
+
 #End Region
 End Class

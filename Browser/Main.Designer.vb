@@ -58,18 +58,25 @@ Partial Class Main
         Me.btnBTCBlockchain = New System.Windows.Forms.Button()
         Me.btnCureCoinDiscord = New System.Windows.Forms.Button()
         Me.btnHome = New System.Windows.Forms.Button()
+        Me.btnFindPrevious = New System.Windows.Forms.Button()
+        Me.btnFindNext = New System.Windows.Forms.Button()
+        Me.btnFindClose = New System.Windows.Forms.Button()
         Me.txtMsg = New System.Windows.Forms.TextBox()
         Me.gbxCheckboxForTools = New System.Windows.Forms.GroupBox()
         Me.ProgressBar1 = New System.Windows.Forms.ProgressBar()
         Me.lblPercent = New System.Windows.Forms.Label()
         Me.gbxDownload = New System.Windows.Forms.GroupBox()
-        Me.PictureBox2 = New System.Windows.Forms.PictureBox()
+        Me.pbProgIcon = New System.Windows.Forms.PictureBox()
         Me.btnFLDC_Distribution = New System.Windows.Forms.Button()
+        Me.pnlFind = New System.Windows.Forms.Panel()
+        Me.pnlDivider = New System.Windows.Forms.Panel()
+        Me.txtFind = New System.Windows.Forms.TextBox()
         Me.ToolStripContainer1.SuspendLayout()
         Me.gbxTools.SuspendLayout()
         Me.gbxCheckboxForTools.SuspendLayout()
         Me.gbxDownload.SuspendLayout()
-        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.pbProgIcon, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.pnlFind.SuspendLayout()
         Me.SuspendLayout()
         '
         'btnStopNav
@@ -85,7 +92,7 @@ Partial Class Main
         Me.btnStopNav.Size = New System.Drawing.Size(17, 17)
         Me.btnStopNav.TabIndex = 2
         Me.btnStopNav.Text = "X"
-        Me.ToolTip1.SetToolTip(Me.btnStopNav, "Cancel navigation / download, or press <Esc>")
+        Me.ToolTip1.SetToolTip(Me.btnStopNav, "Cancel navigation / download:   <ESC>")
         Me.btnStopNav.UseVisualStyleBackColor = False
         '
         'txtURL
@@ -110,7 +117,7 @@ Partial Class Main
         Me.btnGo.Size = New System.Drawing.Size(17, 17)
         Me.btnGo.TabIndex = 1
         Me.btnGo.Text = "Go"
-        Me.ToolTip1.SetToolTip(Me.btnGo, "Go to URL")
+        Me.ToolTip1.SetToolTip(Me.btnGo, "Go to URL:   <ENTER>")
         Me.btnGo.UseVisualStyleBackColor = False
         '
         'lblURL
@@ -119,7 +126,7 @@ Partial Class Main
         Me.lblURL.Location = New System.Drawing.Point(81, 52)
         Me.lblURL.Name = "lblURL"
         Me.lblURL.Size = New System.Drawing.Size(32, 13)
-        Me.lblURL.TabIndex = 28
+        Me.lblURL.TabIndex = 29
         Me.lblURL.Text = "URL:"
         '
         'ToolStripContainer1
@@ -197,7 +204,7 @@ Partial Class Main
         Me.btnBrowserTools.TabIndex = 23
         Me.btnBrowserTools.Text = "Web Tools"
         Me.btnBrowserTools.TextAlign = System.Drawing.ContentAlignment.BottomCenter
-        Me.ToolTip1.SetToolTip(Me.btnBrowserTools, "Web Browser Debug Tools")
+        Me.ToolTip1.SetToolTip(Me.btnBrowserTools, "Web Developer Tools:  <F12>")
         Me.btnBrowserTools.UseVisualStyleBackColor = True
         '
         'btnFoldingCoinWebsite
@@ -239,7 +246,7 @@ Partial Class Main
         Me.btnReload.Size = New System.Drawing.Size(17, 17)
         Me.btnReload.TabIndex = 3
         Me.btnReload.Text = "R"
-        Me.ToolTip1.SetToolTip(Me.btnReload, "Reload page")
+        Me.ToolTip1.SetToolTip(Me.btnReload, "Reload Page:   <F5>" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Or, reload ignoring cache:   CTRL+<F5>")
         Me.btnReload.UseVisualStyleBackColor = False
         '
         'btnBack
@@ -254,7 +261,7 @@ Partial Class Main
         Me.btnBack.Size = New System.Drawing.Size(25, 25)
         Me.btnBack.TabIndex = 6
         Me.btnBack.Text = "B"
-        Me.ToolTip1.SetToolTip(Me.btnBack, "Go back one page")
+        Me.ToolTip1.SetToolTip(Me.btnBack, "Go back one page:   ALT+<Left>")
         Me.btnBack.UseVisualStyleBackColor = False
         '
         'btnFwd
@@ -269,7 +276,7 @@ Partial Class Main
         Me.btnFwd.Size = New System.Drawing.Size(25, 25)
         Me.btnFwd.TabIndex = 7
         Me.btnFwd.Text = "F"
-        Me.ToolTip1.SetToolTip(Me.btnFwd, "Go forward one page")
+        Me.ToolTip1.SetToolTip(Me.btnFwd, "Go forward one page:   ALT+<Right>")
         Me.btnFwd.UseVisualStyleBackColor = False
         '
         'gbxTools
@@ -506,6 +513,54 @@ Partial Class Main
         Me.ToolTip1.SetToolTip(Me.btnHome, "Go to Homepage")
         Me.btnHome.UseVisualStyleBackColor = False
         '
+        'btnFindPrevious
+        '
+        Me.btnFindPrevious.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnFindPrevious.BackColor = System.Drawing.Color.White
+        Me.btnFindPrevious.FlatAppearance.BorderSize = 0
+        Me.btnFindPrevious.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.GradientActiveCaption
+        Me.btnFindPrevious.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.GradientInactiveCaption
+        Me.btnFindPrevious.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnFindPrevious.Location = New System.Drawing.Point(262, 2)
+        Me.btnFindPrevious.Name = "btnFindPrevious"
+        Me.btnFindPrevious.Size = New System.Drawing.Size(17, 17)
+        Me.btnFindPrevious.TabIndex = 2
+        Me.btnFindPrevious.Text = "U"
+        Me.ToolTip1.SetToolTip(Me.btnFindPrevious, "Find Previous:  SHIFT+<ENTER>   Or   SHIFT+<F3>")
+        Me.btnFindPrevious.UseVisualStyleBackColor = False
+        '
+        'btnFindNext
+        '
+        Me.btnFindNext.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnFindNext.BackColor = System.Drawing.Color.White
+        Me.btnFindNext.FlatAppearance.BorderSize = 0
+        Me.btnFindNext.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.GradientActiveCaption
+        Me.btnFindNext.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.GradientInactiveCaption
+        Me.btnFindNext.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnFindNext.Location = New System.Drawing.Point(286, 2)
+        Me.btnFindNext.Name = "btnFindNext"
+        Me.btnFindNext.Size = New System.Drawing.Size(17, 17)
+        Me.btnFindNext.TabIndex = 3
+        Me.btnFindNext.Text = "D"
+        Me.ToolTip1.SetToolTip(Me.btnFindNext, "Find Next:  <ENTER>   Or   <F3>")
+        Me.btnFindNext.UseVisualStyleBackColor = False
+        '
+        'btnFindClose
+        '
+        Me.btnFindClose.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnFindClose.BackColor = System.Drawing.Color.White
+        Me.btnFindClose.FlatAppearance.BorderSize = 0
+        Me.btnFindClose.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.GradientActiveCaption
+        Me.btnFindClose.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.GradientInactiveCaption
+        Me.btnFindClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnFindClose.Location = New System.Drawing.Point(310, 2)
+        Me.btnFindClose.Name = "btnFindClose"
+        Me.btnFindClose.Size = New System.Drawing.Size(17, 17)
+        Me.btnFindClose.TabIndex = 4
+        Me.btnFindClose.Text = "X"
+        Me.ToolTip1.SetToolTip(Me.btnFindClose, "Close Find:   <ESC>")
+        Me.btnFindClose.UseVisualStyleBackColor = False
+        '
         'txtMsg
         '
         Me.txtMsg.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
@@ -562,15 +617,15 @@ Partial Class Main
         Me.gbxDownload.Text = "Download:"
         Me.gbxDownload.Visible = False
         '
-        'PictureBox2
+        'pbProgIcon
         '
-        Me.PictureBox2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.PictureBox2.Location = New System.Drawing.Point(1154, 11)
-        Me.PictureBox2.Name = "PictureBox2"
-        Me.PictureBox2.Size = New System.Drawing.Size(50, 30)
-        Me.PictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
-        Me.PictureBox2.TabIndex = 140
-        Me.PictureBox2.TabStop = False
+        Me.pbProgIcon.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.pbProgIcon.Location = New System.Drawing.Point(1154, 11)
+        Me.pbProgIcon.Name = "pbProgIcon"
+        Me.pbProgIcon.Size = New System.Drawing.Size(50, 30)
+        Me.pbProgIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
+        Me.pbProgIcon.TabIndex = 140
+        Me.pbProgIcon.TabStop = False
         '
         'btnFLDC_Distribution
         '
@@ -584,11 +639,50 @@ Partial Class Main
         Me.btnFLDC_Distribution.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         Me.btnFLDC_Distribution.UseVisualStyleBackColor = True
         '
+        'pnlFind
+        '
+        Me.pnlFind.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.pnlFind.BackColor = System.Drawing.Color.White
+        Me.pnlFind.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pnlFind.Controls.Add(Me.pnlDivider)
+        Me.pnlFind.Controls.Add(Me.btnFindClose)
+        Me.pnlFind.Controls.Add(Me.btnFindNext)
+        Me.pnlFind.Controls.Add(Me.btnFindPrevious)
+        Me.pnlFind.Controls.Add(Me.txtFind)
+        Me.pnlFind.Location = New System.Drawing.Point(843, 71)
+        Me.pnlFind.Name = "pnlFind"
+        Me.pnlFind.Size = New System.Drawing.Size(333, 25)
+        Me.pnlFind.TabIndex = 28
+        Me.pnlFind.Visible = False
+        '
+        'pnlDivider
+        '
+        Me.pnlDivider.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.pnlDivider.BackColor = System.Drawing.SystemColors.GradientActiveCaption
+        Me.pnlDivider.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.pnlDivider.Location = New System.Drawing.Point(255, 3)
+        Me.pnlDivider.Name = "pnlDivider"
+        Me.pnlDivider.Size = New System.Drawing.Size(2, 16)
+        Me.pnlDivider.TabIndex = 1
+        '
+        'txtFind
+        '
+        Me.txtFind.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtFind.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.txtFind.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtFind.Location = New System.Drawing.Point(4, 4)
+        Me.txtFind.Margin = New System.Windows.Forms.Padding(3, 4, 3, 4)
+        Me.txtFind.Name = "txtFind"
+        Me.txtFind.Size = New System.Drawing.Size(248, 14)
+        Me.txtFind.TabIndex = 0
+        '
         'Main
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1214, 708)
+        Me.Controls.Add(Me.pnlFind)
         Me.Controls.Add(Me.gbxDownload)
         Me.Controls.Add(Me.btnBrowserTools)
         Me.Controls.Add(Me.txtMsg)
@@ -606,7 +700,7 @@ Partial Class Main
         Me.Controls.Add(Me.btnStopNav)
         Me.Controls.Add(Me.btnGo)
         Me.Controls.Add(Me.txtURL)
-        Me.Controls.Add(Me.PictureBox2)
+        Me.Controls.Add(Me.pbProgIcon)
         Me.Controls.Add(Me.btnFoldingCoinTwitter)
         Me.Controls.Add(Me.lblURL)
         Me.Controls.Add(Me.gbxCheckboxForTools)
@@ -630,7 +724,9 @@ Partial Class Main
         Me.gbxCheckboxForTools.PerformLayout()
         Me.gbxDownload.ResumeLayout(False)
         Me.gbxDownload.PerformLayout()
-        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbProgIcon, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.pnlFind.ResumeLayout(False)
+        Me.pnlFind.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -660,7 +756,7 @@ Partial Class Main
     Friend WithEvents gbxDownload As System.Windows.Forms.GroupBox
     Friend WithEvents btnFoldingCoinTwitter As Button
     Friend WithEvents btnCureCoinTwitter As Button
-    Friend WithEvents PictureBox2 As PictureBox
+    Friend WithEvents pbProgIcon As PictureBox
     Friend WithEvents btnFAHConfig As Button
     Friend WithEvents btnEOC As Button
     Friend WithEvents cbxWalletId As ComboBox
@@ -677,4 +773,10 @@ Partial Class Main
     Friend WithEvents btnFLDC_Distribution As Button
     Friend WithEvents btnHome As Button
     Friend WithEvents btnOptions As Button
+    Private WithEvents pnlFind As Panel
+    Private WithEvents txtFind As TextBox
+    Friend WithEvents btnFindClose As Button
+    Friend WithEvents btnFindNext As Button
+    Friend WithEvents btnFindPrevious As Button
+    Friend WithEvents pnlDivider As Panel
 End Class
