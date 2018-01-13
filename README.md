@@ -34,6 +34,5 @@ CTRL+F5 | Refresh, ignoring browser cache
 ESC | Cancel navigation
 ALT+Left, Prior | Navigate back
 ALT+Right, Next | Navigate forward
-CTRL+F | Open Find (Find Next: ENTER or F3,
- | Find Previous: SHIFT+ENTER or SHIFT+F3, Close Find: ESC)
+CTRL+F | Open Find (Find Next: ENTER or F3, Find Previous: SHIFT+ENTER or SHIFT+F3, Close Find: ESC)
 F12 | Open web developer tools
