@@ -656,6 +656,7 @@
 
                 'Create text from the INI, Encrypt, and Write/flush DAT text to file
                 SaveDat(Encrypt(DAT.SaveToString))
+                Await Wait(100)
                 DAT = Nothing
 
                 'Make sure the INI key/value exists
@@ -665,10 +666,6 @@
                     INI.AddSection(Id & g_Main.cbxWalletId.Text).AddKey(INI_WalletName).Value = DefaultWalletName & g_Main.cbxWalletId.Text
                 End If
 
-                'Store FAH Username
-                If Me.lblUsernamePreview.Text.Length > 0 Then
-                    INI.AddSection(Id & g_Main.cbxWalletId.Text).AddKey(INI_FAH_Username).Value = Me.lblUsernamePreview.Text
-                End If
                 INI.Save(IniFilePath)
                 Await Wait(100)
                 'Refresh the Wallet Names

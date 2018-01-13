@@ -11,7 +11,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("FoldingBrowser All-In-One Installer for FoldingCoin (FLDC) and CureCoin (CURE)")>
 <Assembly: AssemblyCompany("")>
 <Assembly: AssemblyProduct("FoldingBrowser")>
-<Assembly: AssemblyCopyright("Copyright © 2017 FoldingCoin, CureCoin")>
+<Assembly: AssemblyCopyright("Copyright © 2018 FoldingCoin, CureCoin")>
 <Assembly: AssemblyTrademark("")>
 
 <Assembly: ComVisible(False)>

@@ -7,9 +7,10 @@ FoldingBrowser All-in-One Installer:
 Immediate Need /  Short-Term Goals:
 -----------------------------------
 
--Support other wallets?  like:  https://freewallet.io/     (Using:)https://counterwallet.io/    https://wallet.indiesquare.me/     https://tokenpockets.com/ (???)     also: rarepepewallet.com (Not updated enough? security risks)
+-Support other wallets?  like:  https://freewallet.io/     (Using:)https://counterwallet.io/    https://wallet.indiesquare.me/     also: rarepepewallet.com (Not updated enough? security risks?)     (Not yet) https://tokenpockets.com/ (You cannot use tokenpockets currently. It is not compatible with existing passphrases from CounterWallet. If you want to use it, you will have to make a new address first)
+-Change the button text: 'My Wallet' to 'FLDC Wallet' for clarity?
 
--Evaluate upgrading to CefSharp/Chrome v62 when released here: https://github.com/cefsharp/CefSharp/releases  -Verify the FAH Web Control doesn't get stuck in an infinite refresh loop, needing the cache to be ignored (CTRL+F5) to fix it (like with Chrome v59)
+-Evaluate upgrading to CefSharp/Chrome v63 when released here: https://github.com/cefsharp/CefSharp/releases  -Verify the FAH Web Control doesn't get stuck in an infinite refresh loop, needing the cache to be ignored (CTRL+F5) to fix it (like with Chrome v59)
 
 -Simple version of the FoldingBrowser: mostly to only run the FAH NaCl Chrome Plugin client (Can it be run without the browser? Also, NaCl support will be removed soon) -Simplicity: Ideally, you only want to enter username and email, and you are up and Folding (as other users have described).
 
@@ -18,11 +19,6 @@ Immediate Need /  Short-Term Goals:
 -Enable Multi-language support in the FoldingBrowser App to view pages that are available in other languages (Allow users to change the locale & supported languages)?
 -Add Multi-language support in the FoldingBrowser App for buttons and tooltips?
 
--Improve the portal web page (eliminate some buttons in the browser?)
--Add FLDC & CURE Ticker info from Coin Market Cap API (or pull from exchanges?). Update hourly? Do as notify icon? Might not be worth it, if the FLDC homepage gets it. See:  https://coinmarketcap.com/api/    https://api.coinmarketcap.com/v1/ticker/CureCoin/
--Add option to get Wallet info from blockchain explorer APIs to display value? FLDC- https://xchain.io/     CURE-  https://chainz.cryptoid.info/cure
--Save some stats from API data, and show difference from last time, or from a past time interval?
--Add notify icon (system tray icon) for folding with NaCl Chrome Plug-in (add option to enable / disable exiting on program close) and other coin ticker info
 
 ----------------------------------------------------
 Other Ideas, Improvements, Tasks, Longer-Term Goals:
@@ -41,6 +37,12 @@ Other Ideas, Improvements, Tasks, Longer-Term Goals:
   -.NET Core simple project for Linux and Mac? (No, CefSharp isn't compatible)
 -Option to monitor FAH clients and restart them if they hang?
 
+-Improve the portal web page (eliminate some buttons in the browser?)
+-Add FLDC & CURE Ticker info from Coin Market Cap API (or pull from exchanges?). Update hourly? Do as notify icon? Might not be worth it, if the FLDC homepage gets it. See:  https://coinmarketcap.com/api/    https://api.coinmarketcap.com/v1/ticker/CureCoin/
+-Add option to get Wallet info from blockchain explorer APIs to display value? FLDC- https://xchain.io/     CURE-  https://chainz.cryptoid.info/cure
+-Save some stats from API data, and show difference from last time, or from a past time interval?
+-Add notify icon (system tray icon) for folding with NaCl Chrome Plug-in (add option to enable / disable exiting on program close) and other coin ticker info
+
 -Option to create backup copies of the settings in a 'Backup' folder periodically, or get a pop-up reminder on a time interval?
 -Make a better way to determine if the DAT file loads. This won't work: DAT.ToString.Length = 0, it really needs to be .SaveToString(), but all you want to know is there data loaded or not. You don't need a full text string output...
 -Restore from backup button (or separate app)? Make something to make setting up multiple computers easier (rename existing files, and copy new one) (and telnet FAH settings from Config file)
@@ -51,14 +53,18 @@ Other Ideas, Improvements, Tasks, Longer-Term Goals:
 
 -Ability to select alternate from: http://foldingcoin.xyz/?token=FLDC&total=250000&start=2017-08-21&end=2017-08-22 to using: http://fldc-stats.tokenly.com/?token=FLDC&total=250000&start=2017-08-21&end=2017-08-22
 -Improve the CureCoin HTTP JSON-RPC to use the JSON parser, and find the wallet if there is more than one entry or (blank and a name)
+-Make a CureCoin Wallet button, that focus a running CURE wallet executable, or launches it as a new process?
 -Show image of where to get the CURE wallet address, for message when it can't be found
-
 
 ======================================================================================================
 Change Log - Release Notes - Tasks completed:
 ======================================================================================================
 
 v16 Release (01/??/2018)
+[DONE] -The INI file and DAT file FAHUsername can get out of sync when modifying the raw data text for that duplicate item. Removed duplicate version of FAHUsername from the INI, and only use the DAT file version going forward.
+[DONE] -Saved Data window: Changes to the raw data view were not updating the individual text box view of the data
+[DONE] -Minor tweaks to try and avoid timing issues that might interfere with loading or saving the Dat file
+[DONE] -Update Copyright date for 2018
 [DONE] -CTRL+F: Find text in a page functionality (For searching for BTC address on distribution page, etc). Press CTRL+F: Open Find (Find Next: ENTER or F3, Find Previous: SHIFT+ENTER or SHIFT+F3, Close Find: ESC)
 [DONE] -Forward and back navigation keystrokes or mouse clicks: Forward (ALT+Right, or Next{mouse button}), Back (ALT+Left, or Prior{mouse button}), and Web Tools (F12). 4th and 5th mouse button clicks as Xbutton1 & Xbutton2 only work when hovering the upper part of the form (The browser control doesn't support it in this version).
 [DONE] -CTRL+F5: Refresh ignoring browser cache. F5: Refresh. (Previously, F5 did what only CTRL+F5 should do)

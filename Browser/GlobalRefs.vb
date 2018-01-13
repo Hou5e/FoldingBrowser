@@ -80,7 +80,6 @@ Public Module GlobalRefs
     Public Const INI_Homepage As String = "Homepage"
 
     'Wallet Id specific
-    Public Const INI_FAH_Username As String = "FAHUsername"
     Public Const INI_EOC_ID As String = "ExtremeOverclockingUserId"
     Public Const INI_WalletName As String = "WalletName"
     Public Const INI_DiscordInvites As String = "DiscordInvites"

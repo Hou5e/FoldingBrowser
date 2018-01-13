@@ -148,92 +148,6 @@
             'Process command line values (Only for initial installations). Log browser debug info. NOTE: Async and can't be awaited here.
             RunSetup()
 
-            'Me.Invoke(Sub()
-            CefSharp.Cef.UIThreadTaskFactory.StartNew(Function() As Boolean
-                                                          Dim preference As IDictionary(Of String, Object) = Nothing
-                                                          preference = Me.browser.GetBrowser.GetHost.RequestContext.GetAllPreferences(True)
-                                                          Debug.WriteLine("Preferences:")
-                                                          If preference IsNot Nothing Then
-                                                              For Each pref As String In preference.Keys
-                                                                  If TypeOf preference.Item(pref) Is Generic.Dictionary(Of String, Object) Then
-                                                                      Dim subpreferences As Generic.Dictionary(Of String, Object) = CType(preference.Item(pref), Generic.Dictionary(Of String, Object))
-                                                                      For Each subpref As String In subpreferences.Keys
-                                                                          If TypeOf subpreferences.Item(subpref) Is Generic.Dictionary(Of String, Object) Then
-                                                                              Dim sub2preferences As Generic.Dictionary(Of String, Object) = CType(subpreferences.Item(subpref), Generic.Dictionary(Of String, Object))
-                                                                              For Each sub2pref As String In sub2preferences.Keys
-                                                                                  If TypeOf sub2preferences.Item(sub2pref) Is Generic.Dictionary(Of String, Object) Then
-                                                                                      Dim sub3preferences As Generic.Dictionary(Of String, Object) = CType(sub2preferences.Item(sub2pref), Generic.Dictionary(Of String, Object))
-                                                                                      For Each sub3pref As String In sub3preferences.Keys
-                                                                                          If TypeOf sub3preferences.Item(sub3pref) Is Generic.Dictionary(Of String, Object) Then
-                                                                                              Dim sub4preferences As Generic.Dictionary(Of String, Object) = CType(sub3preferences.Item(sub3pref), Generic.Dictionary(Of String, Object))
-                                                                                              For Each sub4pref As String In sub4preferences.Keys
-                                                                                                  Debug.WriteLine(pref & "." & subpref & "." & sub2pref & "." & sub3pref & "." & sub4pref & " --> " & If(sub4preferences.Item(sub4pref) IsNot Nothing, sub4preferences.Item(sub4pref).ToString, ""))
-                                                                                              Next
-                                                                                          ElseIf TypeOf sub3preferences.Item(sub3pref) Is Generic.List(Of Object) Then
-                                                                                              Dim sub4preferences As Generic.List(Of Object) = CType(sub3preferences.Item(sub3pref), Generic.List(Of Object))
-                                                                                              If sub4preferences.Count > 0 Then
-                                                                                                  For Each sub4pref As Object In sub4preferences
-                                                                                                      Debug.WriteLine(pref & "." & subpref & "." & sub2pref & "." & sub3pref & " --> " & If(sub4pref IsNot Nothing, sub4pref.ToString, ""))
-                                                                                                  Next
-                                                                                              Else
-                                                                                                  Debug.WriteLine(pref & "." & subpref & "." & sub2pref & "." & sub3pref & " --> [No Items] " & If(sub3preferences.Item(sub3pref) IsNot Nothing, sub3preferences.Item(sub3pref).ToString, ""))
-                                                                                              End If
-                                                                                          Else
-                                                                                              Debug.WriteLine(pref & "." & subpref & "." & sub2pref & "." & sub3pref & " --> " & If(sub3preferences.Item(sub3pref) IsNot Nothing, sub3preferences.Item(sub3pref).ToString, ""))
-                                                                                          End If
-                                                                                      Next
-                                                                                  ElseIf TypeOf sub2preferences.Item(sub2pref) Is Generic.List(Of Object) Then
-                                                                                      Dim sub3preferences As Generic.List(Of Object) = CType(sub2preferences.Item(sub2pref), Generic.List(Of Object))
-                                                                                      If sub3preferences.Count > 0 Then
-                                                                                          For Each sub3pref As Object In sub3preferences
-                                                                                              Debug.WriteLine(pref & "." & subpref & "." & sub2pref & " --> " & If(sub3pref IsNot Nothing, sub3pref.ToString, ""))
-                                                                                          Next
-                                                                                      Else
-                                                                                          Debug.WriteLine(pref & "." & subpref & "." & sub2pref & " --> [No Items] " & If(sub2preferences.Item(sub2pref) IsNot Nothing, sub2preferences.Item(sub2pref).ToString, ""))
-                                                                                      End If
-                                                                                  Else
-                                                                                      Debug.WriteLine(pref & "." & subpref & "." & sub2pref & " --> " & If(sub2preferences.Item(sub2pref) IsNot Nothing, sub2preferences.Item(sub2pref).ToString, ""))
-                                                                                  End If
-                                                                              Next
-                                                                          ElseIf TypeOf subpreferences.Item(subpref) Is Generic.List(Of Object) Then
-                                                                              Dim sub2preferences As Generic.List(Of Object) = CType(subpreferences.Item(subpref), Generic.List(Of Object))
-                                                                              If sub2preferences.Count > 0 Then
-                                                                                  For Each sub2pref As Object In sub2preferences
-                                                                                      Debug.WriteLine(pref & "." & subpref & " --> " & If(sub2pref IsNot Nothing, sub2pref.ToString, ""))
-                                                                                  Next
-                                                                              Else
-                                                                                  Debug.WriteLine(pref & "." & subpref & " --> [No Items] " & If(subpreferences.Item(subpref) IsNot Nothing, subpreferences.Item(subpref).ToString, ""))
-                                                                              End If
-                                                                          Else
-                                                                              Debug.WriteLine(pref & "." & subpref & " --> " & If(subpreferences.Item(subpref) IsNot Nothing, subpreferences.Item(subpref).ToString, ""))
-                                                                          End If
-                                                                      Next
-                                                                  Else
-                                                                      Debug.WriteLine(pref & " --> " & If(preference.Item(pref) IsNot Nothing, preference.Item(pref).ToString, ""))
-                                                                  End If
-                                                              Next
-                                                          End If
-
-                                                          Return True
-                                                      End Function)
-
-            CefSharp.Cef.UIThreadTaskFactory.StartNew(Sub()
-                                                          Dim errorMessage As String = ""
-                                                          Dim requestContext = Me.browser.GetBrowser.GetHost.RequestContext
-
-                                                          'Dim response As Object = ""
-                                                          'response = requestContext.GetPreference("spellcheck.use_spelling_service") 'False by default
-                                                          'Debug.WriteLine("Preference: " & If(response IsNot Nothing, response.ToString, ""))
-                                                          requestContext.SetPreference("spellcheck.use_spelling_service", True, errorMessage)
-
-
-                                                          requestContext.SetPreference("plugins.allow_outdated", True, errorMessage)
-                                                          requestContext.SetPreference("plugins.always_authorize", True, errorMessage)
-                                                          requestContext.SetPreference("profile.managed_default_content_settings.plugins", 1, errorMessage)
-
-                                                          Debug.WriteLine("Set Preferences error message: " & errorMessage)
-                                                      End Sub)
-
         Catch ex As Exception
             Msg("Error: initialization failed: " & ex.ToString)
             MessageBox.Show("Error: initialization failed: " & ex.ToString)
@@ -311,9 +225,9 @@
 
             'Create text from the INI, Encrypt, and Write/flush DAT text to file
             SaveDat(Encrypt(DAT.SaveToString))
-            DAT = Nothing
             'Allow time for the file to be written out
             Await Wait(100)
+            DAT = Nothing
 
             'Make the main form visible
             Me.WindowState = FormWindowState.Normal
@@ -345,6 +259,8 @@
                     DAT.RemoveSection(OldSection)
                     'Create text from the INI, Encrypt, and Write/flush DAT text to file
                     SaveDat(Encrypt(DAT.SaveToString))
+                    'Allow time for the file to be written out
+                    Await Wait(100)
 
                     'Save a wallet name
                     INI.AddSection(Id & Me.cbxWalletId.Text)
@@ -352,6 +268,7 @@
                     'Last FoldingBrowser version, now upgraded to v5
                     INI.AddSection(INI_Settings).AddKey(INI_LastBrowserVersion).Value = "5"
                     INI.Save(IniFilePath)
+                    'Allow time for the file to be written out
                     Await Wait(100)
                 End If
 
@@ -398,6 +315,7 @@
 
                     'Create text from the INI, Encrypt, and Write/flush DAT text to file
                     SaveDat(Encrypt(DAT.SaveToString))
+                    'Allow time for the file to be written out
                     Await Wait(100)
                     DAT = Nothing
 
@@ -408,6 +326,7 @@
                     'Last FoldingBrowser version, now upgraded to v6
                     INI.AddSection(INI_Settings).AddKey(INI_LastBrowserVersion).Value = "6"
                     INI.Save(IniFilePath)
+                    'Allow time for the file to be written out
                     Await Wait(100)
                 End If
 
@@ -433,9 +352,9 @@
 
             'Create text from the INI, Encrypt, and Write/flush DAT text to file
             SaveDat(Encrypt(DAT.SaveToString))
-            DAT = Nothing
             'Allow time for the file to be written out
             Await Wait(100)
+            DAT = Nothing
         End If
         'Refresh the Wallet Names
         cbxWalletId_SelectedIndexChanged(Nothing, Nothing)
@@ -469,8 +388,17 @@
                         'Create a dialog that sets the default checkbox selections based on stored wallet and F@H info.
                         Dim Setup As New SetupDialog
 
+                        Dim DAT As New IniFile
+                        'Load DAT file, decrypt it
+                        DAT.LoadText(Decrypt(LoadDat))
+                        If DAT.ToString.Length = 0 Then
+                            'Decryption failed
+                            Msg(DAT_ErrorMsg)
+                            MessageBox.Show(DAT_ErrorMsg)
+                        End If
+
                         'Look for FAH username for FAH installation to un-check the dialog for existing users
-                        If INI.GetSection(Id & Me.cbxWalletId.Text) IsNot Nothing AndAlso INI.GetSection(Id & Me.cbxWalletId.Text).GetKey(INI_FAH_Username) IsNot Nothing Then
+                        If DAT.GetSection(Id & Me.cbxWalletId.Text) IsNot Nothing AndAlso DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FAH_Username) IsNot Nothing Then
                             'Has FAH setup already
                             Setup.chkGetFAHSoftware.Checked = False
                         Else
@@ -479,15 +407,6 @@
                             'TODO: Additionally look for FAH installation on PC?
 
                             Setup.chkGetFAHSoftware.Checked = True
-                        End If
-
-                        Dim DAT As New IniFile
-                        'Load DAT file, decrypt it
-                        DAT.LoadText(Decrypt(LoadDat))
-                        If DAT.ToString.Length = 0 Then
-                            'Decryption failed
-                            Msg(DAT_ErrorMsg)
-                            MessageBox.Show(DAT_ErrorMsg)
                         End If
 
                         'Look for 12-word Passphrase (or BTC address?) to un-check the dialog for existing users
@@ -691,6 +610,11 @@
                 Dim DAT As New IniFile
                 'Load DAT file, decrypt it
                 DAT.LoadText(Decrypt(LoadDat))
+                If DAT.ToString.Length = 0 Then
+                    'Decryption failed
+                    Msg(DAT_ErrorMsg)
+                    MessageBox.Show(DAT_ErrorMsg)
+                End If
 
                 If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_BTC_Addr) IsNot Nothing Then
                     'If the address is available, then open that URL for the users wallet
@@ -724,6 +648,11 @@
                 Dim DAT As New IniFile
                 'Load DAT file, decrypt it
                 DAT.LoadText(Decrypt(LoadDat))
+                If DAT.ToString.Length = 0 Then
+                    'Decryption failed
+                    Msg(DAT_ErrorMsg)
+                    MessageBox.Show(DAT_ErrorMsg)
+                End If
 
                 If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_BTC_Addr) IsNot Nothing Then
                     'If the address is available, then open that URL for the users wallet
@@ -782,6 +711,11 @@
                 Dim DAT As New IniFile
                 'Load DAT file, decrypt it
                 DAT.LoadText(Decrypt(LoadDat))
+                If DAT.ToString.Length = 0 Then
+                    'Decryption failed
+                    Msg(DAT_ErrorMsg)
+                    MessageBox.Show(DAT_ErrorMsg)
+                End If
 
                 If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CureCoin_Addr) IsNot Nothing Then
                     'If the address is available, then open that URL for the users wallet
@@ -835,33 +769,6 @@
                 INI.Save(IniFilePath)
             End If
 
-            'Get FAH Username from INI
-            If INI.GetSection(Id & Me.cbxWalletId.Text) IsNot Nothing AndAlso INI.GetSection(Id & Me.cbxWalletId.Text).GetKey(INI_FAH_Username) IsNot Nothing Then
-                strUsername = INI.GetSection(Id & Me.cbxWalletId.Text).GetKey(INI_FAH_Username).GetValue()
-            Else
-                'Fix missing value. Ask for FAH Username
-                Dim TxtEntry As New TextEntryDialog
-                TxtEntry.Text = "Save Folding@Home Username"
-                TxtEntry.MsgTextUpper.Text = "Folding@Home Username not found."
-                TxtEntry.MsgTextLower.Text = "Please enter your Folding@Home Username:"
-                TxtEntry.Width = (TxtEntry.MsgTextLower.Left * 2) + TxtEntry.MsgTextLower.Width + 10
-                TxtEntry.TextEnteredLower.Visible = False
-                TxtEntry.MsgTextExtraBottomNote.Visible = False
-                'Show modal dialog box
-                If TxtEntry.ShowDialog(Me) = DialogResult.OK Then
-                    'Store FAH Username
-                    INI.AddSection(Id & Me.cbxWalletId.Text).AddKey(INI_FAH_Username).Value = TxtEntry.TextEnteredUpper.Text
-                    INI.Save(IniFilePath)
-                    strUsername = TxtEntry.TextEnteredUpper.Text
-                    TxtEntry.Dispose()
-                Else
-                    TxtEntry.Dispose()
-                    Await OpenURL(URL_CureCoin_EOC, False)
-                    Await PageTitleWait("Curecoin")
-                    Await Wait(100)
-                    Exit Sub
-                End If
-            End If
         Catch ex As Exception
             Msg("Error: Loading Extreme Overclocking settings: " & ex.ToString)
         End Try
@@ -873,6 +780,43 @@
                 Await OpenURL(URL_CureCoin_EOC, False)
                 Await PageTitleWait("Curecoin")
                 Await Wait(100)
+
+                Dim DAT As New IniFile
+                'Load DAT file, decrypt it
+                DAT.LoadText(Decrypt(LoadDat))
+                If DAT.ToString.Length = 0 Then
+                    'Decryption failed
+                    Msg(DAT_ErrorMsg)
+                    MessageBox.Show(DAT_ErrorMsg)
+                End If
+
+                'Look for FAH username for FAH installation to un-check the dialog for existing users
+                If DAT.GetSection(Id & Me.cbxWalletId.Text) IsNot Nothing AndAlso DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FAH_Username) IsNot Nothing Then
+                    strUsername = DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FAH_Username).GetValue()
+                Else
+                    'Fix missing value. Ask for FAH Username
+                    Dim TxtEntry As New TextEntryDialog
+                    TxtEntry.Text = "Save Folding@Home Username"
+                    TxtEntry.MsgTextUpper.Text = "Folding@Home Username not found."
+                    TxtEntry.MsgTextLower.Text = "Please enter your Folding@Home Username:"
+                    TxtEntry.Width = (TxtEntry.MsgTextLower.Left * 2) + TxtEntry.MsgTextLower.Width + 10
+                    TxtEntry.TextEnteredLower.Visible = False
+                    TxtEntry.MsgTextExtraBottomNote.Visible = False
+                    'Show modal dialog box
+                    If TxtEntry.ShowDialog(Me) = DialogResult.OK Then
+                        'Store FAH Username
+                        DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_FAH_Username).Value = TxtEntry.TextEnteredUpper.Text
+                        'Create text from the INI, Encrypt, and Write/Flush DAT text to file
+                        SaveDat(Encrypt(DAT.SaveToString))
+                        'Allow time for the file to be written out
+                        Await Wait(100)
+                        strUsername = TxtEntry.TextEnteredUpper.Text
+                    End If
+                    TxtEntry.Dispose()
+                End If
+
+                'Done with the DAT file
+                DAT = Nothing
 
                 'Skip the address lookup after 3 attempts. The user will have to save the info in the saved settings to fix it.
                 If iUserId < 3 AndAlso strUsername.Length > 0 Then
@@ -1158,11 +1102,12 @@
 
                     'Create text from the INI, Encrypt, and Write/Flush DAT text to file
                     SaveDat(Encrypt(DAT.SaveToString))
+                    'Allow time for the file to be written out
+                    Await Wait(100)
 
                     'Save a wallet name
                     INI.AddSection(Id & Me.cbxWalletId.Text).AddKey(INI_WalletName).Value = DefaultWalletName & Me.cbxWalletId.Text
                     INI.Save(IniFilePath)
-
                     'Allow time for the file to be written out
                     Await Wait(100)
 
@@ -1549,10 +1494,9 @@
                 End If
                 'Create text from the INI, Encrypt, and Write/flush DAT text to file
                 SaveDat(Encrypt(DAT.SaveToString))
-                DAT = Nothing
-
                 'Allow time for the file to be written out
                 Await Wait(100)
+                DAT = Nothing
 
                 'Refresh the Wallet Names
                 cbxWalletId_SelectedIndexChanged(Nothing, Nothing)
@@ -1740,8 +1684,8 @@
             End If
 
             'Try to get the CureCoin Address from saved info first
-            If DAT.GetSection(Id & g_Main.cbxWalletId.Text).GetKey(DAT_CureCoin_Addr) IsNot Nothing Then
-                strWalletAddress = DAT.GetSection(Id & g_Main.cbxWalletId.Text).GetKey(DAT_CureCoin_Addr).GetValue()
+            If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CureCoin_Addr) IsNot Nothing Then
+                strWalletAddress = DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CureCoin_Addr).GetValue()
             End If
 
             'See if the CureCoin Address was found, if not then try to get it
@@ -1872,13 +1816,13 @@
             If strWalletAddress.Length < 24 Then Return False
 
             'Save the DAT info
-            If DAT.GetSection(Id & g_Main.cbxWalletId.Text) Is Nothing Then DAT.AddSection(Id & g_Main.cbxWalletId.Text)
-            If strWalletVersion.Length > 5 Then DAT.AddSection(Id & g_Main.cbxWalletId.Text).AddKey(DAT_CureCoin_Wallet_Version).Value = strWalletVersion
-            If strWalletAddress.Length > 24 Then DAT.AddSection(Id & g_Main.cbxWalletId.Text).AddKey(DAT_CureCoin_Addr).Value = strWalletAddress
+            If DAT.GetSection(Id & Me.cbxWalletId.Text) Is Nothing Then DAT.AddSection(Id & Me.cbxWalletId.Text)
+            If strWalletVersion.Length > 5 Then DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_CureCoin_Wallet_Version).Value = strWalletVersion
+            If strWalletAddress.Length > 24 Then DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_CureCoin_Addr).Value = strWalletAddress
 
             'Try to get the FAH Username from saved info first
-            If DAT.GetSection(Id & g_Main.cbxWalletId.Text).GetKey(DAT_FAH_Username) IsNot Nothing Then
-                strFAHUser = DAT.GetSection(Id & g_Main.cbxWalletId.Text).GetKey(DAT_FAH_Username).GetValue()
+            If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FAH_Username) IsNot Nothing Then
+                strFAHUser = DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FAH_Username).GetValue()
             End If
             If strFAHUser.Length < 2 Then
                 'Prompt for FAH username. Can be short for a CureCoin only username...
@@ -1894,15 +1838,15 @@
                     'Get the Folding Username / CureCoin Pool Login
                     If TxtEntry.TextEnteredUpper.Text.Length > 1 Then
                         strFAHUser = TxtEntry.TextEnteredUpper.Text
-                        DAT.AddSection(Id & g_Main.cbxWalletId.Text).AddKey(DAT_FAH_Username).Value = strFAHUser
+                        DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_FAH_Username).Value = strFAHUser
                     End If
                 End If
                 TxtEntry.Dispose()
             End If
 
             'Try to get the Email from saved info first
-            If DAT.GetSection(Id & g_Main.cbxWalletId.Text).GetKey(DAT_Email) IsNot Nothing Then
-                strEmail = DAT.GetSection(Id & g_Main.cbxWalletId.Text).GetKey(DAT_Email).GetValue()
+            If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_Email) IsNot Nothing Then
+                strEmail = DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_Email).GetValue()
             End If
             If strEmail.Length < 4 Then
                 'Prompt for Email Address
@@ -1918,15 +1862,15 @@
                     'Get the Email Address
                     If TxtEntry.TextEnteredUpper.Text.Length > 3 Then
                         strEmail = TxtEntry.TextEnteredUpper.Text
-                        DAT.AddSection(Id & g_Main.cbxWalletId.Text).AddKey(DAT_Email).Value = strEmail
+                        DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_Email).Value = strEmail
                     End If
                 End If
                 TxtEntry.Dispose()
             End If
 
             'Try to get the CureCoin pool password from saved info first
-            If DAT.GetSection(Id & g_Main.cbxWalletId.Text).GetKey(DAT_CureCoin_Pwd) IsNot Nothing Then
-                strPoolPW = DAT.GetSection(Id & g_Main.cbxWalletId.Text).GetKey(DAT_CureCoin_Pwd).GetValue()
+            If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CureCoin_Pwd) IsNot Nothing Then
+                strPoolPW = DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CureCoin_Pwd).GetValue()
             End If
             If strPoolPW.Length < 5 Then
                 'Makeup a new 35-50 char Password (Skip characters that conflict with the INI format: =;#[]\)
@@ -1939,12 +1883,12 @@
                 strPoolPW = chrPW   'Don't use .ToString here
 
                 'Save the new Password
-                If strPoolPW.Length > 24 Then DAT.AddSection(Id & g_Main.cbxWalletId.Text).AddKey(DAT_CureCoin_Pwd).Value = strPoolPW
+                If strPoolPW.Length > 24 Then DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_CureCoin_Pwd).Value = strPoolPW
             End If
 
             'Try to get the CureCoin pool pin from saved info first
-            If DAT.GetSection(Id & g_Main.cbxWalletId.Text).GetKey(DAT_CureCoin_Pin) IsNot Nothing Then
-                strPoolPin = DAT.GetSection(Id & g_Main.cbxWalletId.Text).GetKey(DAT_CureCoin_Pin).GetValue()
+            If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CureCoin_Pin) IsNot Nothing Then
+                strPoolPin = DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CureCoin_Pin).GetValue()
             End If
             If strPoolPin.Length < 6 Then
                 'Makeup a new Pin (6-20 char)
@@ -1956,11 +1900,13 @@
                     strPoolPin = strPoolPin.Substring(0, 20)
                 End If
                 'Save the new Pin
-                If strPoolPin.Length >= 6 Then DAT.AddSection(Id & g_Main.cbxWalletId.Text).AddKey(DAT_CureCoin_Pin).Value = strPoolPin
+                If strPoolPin.Length >= 6 Then DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_CureCoin_Pin).Value = strPoolPin
             End If
 
             'Create text from the INI, Encrypt, and Write/flush DAT text to file
             SaveDat(Encrypt(DAT.SaveToString))
+            'Allow time for the file to be written out
+            Await Wait(100)
             DAT = Nothing
 
             Await PageTitleWait(NameCryptoBullions)
@@ -2157,8 +2103,8 @@
                 End If
             End If
             'Try to get the FAH Username from saved info first
-            If DAT.GetSection(Id & g_Main.cbxWalletId.Text).GetKey(DAT_FAH_Username) IsNot Nothing Then
-                strFAHUser = DAT.GetSection(Id & g_Main.cbxWalletId.Text).GetKey(DAT_FAH_Username).GetValue()
+            If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FAH_Username) IsNot Nothing Then
+                strFAHUser = DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FAH_Username).GetValue()
             End If
             If strFAHUser.Length < 2 Then
                 'Prompt for FAH username (and all the other info?). Can be short for a CureCoin only username...
@@ -2174,7 +2120,7 @@
                     'Get the Folding Username / CureCoin Pool Login
                     If TxtEntry.TextEnteredUpper.Text.Length > 1 Then
                         strFAHUser = TxtEntry.TextEnteredUpper.Text
-                        DAT.AddSection(Id & g_Main.cbxWalletId.Text).AddKey(DAT_FAH_Username).Value = strFAHUser
+                        DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_FAH_Username).Value = strFAHUser
                         bSaveDat = True
                     End If
                 End If
@@ -2182,8 +2128,8 @@
             End If
 
             'Try to get the CureCoin pool password from saved info first
-            If DAT.GetSection(Id & g_Main.cbxWalletId.Text).GetKey(DAT_CureCoin_Pwd) IsNot Nothing Then
-                strPoolPW = DAT.GetSection(Id & g_Main.cbxWalletId.Text).GetKey(DAT_CureCoin_Pwd).GetValue()
+            If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CureCoin_Pwd) IsNot Nothing Then
+                strPoolPW = DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CureCoin_Pwd).GetValue()
             End If
             If strPoolPW.Length < 5 Then
                 'Ask for existing password
@@ -2199,13 +2145,13 @@
                     'Get the CureCoin Pool Password (Top text box)
                     If TxtEntry.TextEnteredUpper.Text.Length > 1 Then
                         strPoolPW = TxtEntry.TextEnteredUpper.Text
-                        DAT.AddSection(Id & g_Main.cbxWalletId.Text).AddKey(DAT_CureCoin_Pwd).Value = strPoolPW
+                        DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_CureCoin_Pwd).Value = strPoolPW
                         bSaveDat = True
                     End If
 
                     'Get the CureCoin Pool Pin (Bottom text box)
                     If TxtEntry.TextEnteredLower.Text.Length > 1 Then
-                        DAT.AddSection(Id & g_Main.cbxWalletId.Text).AddKey(DAT_CureCoin_Pin).Value = TxtEntry.TextEnteredLower.Text
+                        DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_CureCoin_Pin).Value = TxtEntry.TextEnteredLower.Text
                         bSaveDat = True
                     End If
                 End If
@@ -2215,6 +2161,8 @@
             If bSaveDat = True Then
                 'Create text from the INI, Encrypt, and Write/flush DAT text to file
                 SaveDat(Encrypt(DAT.SaveToString))
+                'Allow time for the file to be written out
+                Await Wait(100)
             End If
             DAT = Nothing
 

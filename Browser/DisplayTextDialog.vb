@@ -1,4 +1,6 @@
 ﻿Public Class DisplayTextDialog
+    Private m_bRawDataSaved As Boolean = False
+
     Public Sub New()
         Try
             InitializeComponent()
@@ -7,8 +9,9 @@
             Me.SplitContainer1.SplitterWidth = 2
             Me.SplitContainer1.Panel1Collapsed = True
 
+            'Update the displayed data
             If Me.cbxWalletId.Text = g_Main.cbxWalletId.Text Then
-                'Refresh the Wallet Names
+                'Update the displayed data
                 cbxWalletId_SelectedIndexChanged(Nothing, Nothing)
             Else
                 'Change to the same wallet as the main interface
@@ -48,6 +51,12 @@
             Me.chkShowPW.Visible = False
         End If
 
+        'Update the displayed data, if changes were saved during raw data viewing
+        If m_bRawDataSaved = True Then
+            cbxWalletId_SelectedIndexChanged(Nothing, Nothing)
+            m_bRawDataSaved = False
+        End If
+
         'Disable the save button again
         Me.btnSaveChanges.Enabled = False
     End Sub
@@ -76,6 +85,11 @@
             If System.IO.File.Exists(DatFilePath) = True Then
                 'Load DAT file, decrypt it
                 DAT.LoadText(Decrypt(LoadDat))
+                If DAT.ToString.Length = 0 Then
+                    'Decryption failed
+                    g_Main.Msg(DAT_ErrorMsg)
+                    MessageBox.Show(DAT_ErrorMsg)
+                End If
             End If
 
             Me.txtFAHUsername.Text = Me.txtFAHUsername.Text.Trim
@@ -97,10 +111,8 @@
 
 
             'Save textboxes with DAT data for the Wallet Id...
-            INI.AddSection(Id & Me.cbxWalletId.Text)
             DAT.AddSection(Id & Me.cbxWalletId.Text)
             If Me.txtFAHUsername.Text.Length <> 0 Then
-                INI.AddSection(Id & Me.cbxWalletId.Text).AddKey(INI_FAH_Username).Value = Me.txtFAHUsername.Text
                 DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_FAH_Username).Value = Me.txtFAHUsername.Text
             End If
             If Me.txtFAHTeam.Text.Length <> 0 Then
@@ -141,7 +153,7 @@
             End If
 
 
-
+            INI.AddSection(Id & Me.cbxWalletId.Text)
             'If saving settings to a new wallet slot, give it a name, so you can access it
             If INI.GetSection(Id & Me.cbxWalletId.Text) IsNot Nothing AndAlso INI.GetSection(Id & Me.cbxWalletId.Text).GetKey(INI_WalletName) Is Nothing Then
                 'Save a wallet name
@@ -158,6 +170,9 @@
             Me.txtDisplayText.Select(Me.txtDisplayText.Text.Length, 0)
 
             DAT = Nothing
+        Else
+            'Large single textbox with the Raw INI data: Set a flag to reload the textboxes so they don't get out of sync
+            m_bRawDataSaved = True
         End If
 
         'Use the large single textbox with the raw INI data
@@ -311,6 +326,11 @@
                 Dim DAT As New IniFile
                 'Load DAT file, decrypt it
                 DAT.LoadText(Decrypt(LoadDat))
+                If DAT.ToString.Length = 0 Then
+                    'Decryption failed
+                    g_Main.Msg(DAT_ErrorMsg)
+                    MessageBox.Show(DAT_ErrorMsg)
+                End If
 
                 'Show all data (Main textbox)
                 Me.txtDisplayText.Text = DAT.SaveToString
@@ -318,15 +338,9 @@
 
 
                 'Load textboxes with DAT data for the Wallet Id...
-                If INI.GetSection(Id & Me.cbxWalletId.Text).GetKey(INI_FAH_Username) IsNot Nothing Then
-                    Me.txtFAHUsername.Text = INI.GetSection(Id & Me.cbxWalletId.Text).GetKey(INI_FAH_Username).GetValue()
+                If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FAH_Username) IsNot Nothing Then
+                    Me.txtFAHUsername.Text = DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FAH_Username).GetValue()
                 End If
-                If Me.txtFAHUsername.Text.Length = 0 Then
-                    If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FAH_Username) IsNot Nothing Then
-                        Me.txtFAHUsername.Text = DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FAH_Username).GetValue()
-                    End If
-                End If
-
                 If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FAH_Team) IsNot Nothing Then
                     Me.txtFAHTeam.Text = DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FAH_Team).GetValue()
                 End If
