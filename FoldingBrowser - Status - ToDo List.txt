@@ -60,6 +60,7 @@ Change Log - Release Notes - Tasks completed:
 ======================================================================================================
 
 v16 Release (01/??/2018)
+[DONE] -Add Microsoft Visual C++ Redistributable 2013 - 32-bit (x86) installer to the FoldingBrowser installer (Not preloaded on new Win10 computers)
 [DONE] -Change the button text: 'My Wallet' to 'FLDC Wallet', for clarity
 [DONE] -The INI file and DAT file FAHUsername can get out of sync when modifying the raw data text for that duplicate item. Removed duplicate version of FAHUsername from the INI, and only use the DAT file version going forward.
 [DONE] -Saved Data window: Changes to the raw data view were not updating the individual text box view of the data

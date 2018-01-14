@@ -278,6 +278,28 @@ UninstallFinished:
   Abort
 NETFrameworkInstalled:
 
+  ;Test if the Microsoft Visual C++ 2013 (x86) Redistributable is installed, and try to install it if it's not. Required by the CefSharp component
+  ReadRegStr $3 HKLM "SOFTWARE\Wow6432Node\Microsoft\VisualStudio\12.0\VC\Runtimes\x86" "Installed"
+  StrCmp $3 1 VCRedistributableInstalled
+  ReadRegStr $3 HKLM "SOFTWARE\Microsoft\VisualStudio\12.0\VC\Runtimes\x86" "Installed"
+  StrCmp $3 1 VCRedistributableInstalled
+
+  MessageBox MB_OK "Installing the missing Microsoft Visual C++ 2013 (x86) Redistributable may take about 1 minute."
+  ;Destination: $PLUGINSDIR is a temporary folder that is automatically deleted when the installer exits
+  SetOutPath "$PLUGINSDIR"
+  File "VCx86Redist\vcredist_x86.exe"
+
+  ;Initializes the plugins directory ($PLUGINSDIR) if it's not already initialized.
+  InitPluginsDir
+
+  ;Run the VC++ 2013 (x86) Redist. installer. For silent install use: /install /quiet /norestart
+  ExecWait '"$PLUGINSDIR\vcredist_x86.exe" /install /quiet /norestart' $4
+  IntCmp $4 0 MsVCInstEnd  ;Skip error message if the installation was OK
+  StrCpy $5 "MS VC++ 2013 (x86) Redist install error: $4 (undefined = error running exe, 0 = no error, 1 = cancel button, 2 = aborted by script)"
+  MessageBox MB_OK "$5" /SD IDOK
+  DetailPrint $5
+MsVCInstEnd:
+
   ;Test if the Microsoft Visual C++ 2013 (x86) Redistributable is installed, and popup a message if it's not. Required by the CefSharp component
   ReadRegStr $3 HKLM "SOFTWARE\Wow6432Node\Microsoft\VisualStudio\12.0\VC\Runtimes\x86" "Installed"
   StrCmp $3 1 VCRedistributableInstalled

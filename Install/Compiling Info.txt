@@ -33,13 +33,16 @@ For compiling the FoldingBrowser Installer:
 -------------------------------------------
 The NSIS installer scripts are located at:   ..\Install
 
-1. You will need the latest CureCoin wallet (curecoin-qt.exe) from GitHub: https://github.com/cygnusxi/CurecoinSource/releases
+1. You will need the Microsoft Visual C++ Redistributable 2013 - 32-bit (x86) installer (vcredist_x86.exe) from: http://download.microsoft.com/download/2/E/6/2E61CFA4-993B-4DD4-91DA-3737CD5CD6E3/vcredist_x86.exe
+and copy it to:  ..\Install\VCx86Redist
+
+2. You will need the latest CureCoin wallet (curecoin-qt.exe) from GitHub: https://github.com/cygnusxi/CurecoinSource/releases
 and copy it to:  ..\Install\CureCoin
 
-2. Compile the CureCoin installer script first. The output goes to: ..\Install\CureInst
+3. Compile the CureCoin installer script first. The output goes to: ..\Install\CureInst
 (this was done mostly for an easy separate uninstaller for the CureCoin Wallet)
 
-3. Compile the FoldingBrowser script last. This uses the 'Release' version of the FoldingBrowser executable compiled with Visual Studio.
+4. Compile the FoldingBrowser script last. This uses the 'Release' version of the FoldingBrowser executable compiled with Visual Studio.
 
 
 ------------------------------

@@ -15,3 +15,4 @@
 /Browser/bin/Release/CefSharp.BrowserSubprocess.exe
 /Browser/bin/Release/locales
 /Browser/bin/Release/FoldingBrowser.html
+/Install/VCx86Redist/*.exe
