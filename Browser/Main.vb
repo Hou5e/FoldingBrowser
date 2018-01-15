@@ -398,27 +398,39 @@
                         End If
 
                         'Look for FAH username for FAH installation to un-check the dialog for existing users
-                        If DAT.GetSection(Id & Me.cbxWalletId.Text) IsNot Nothing AndAlso DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FAH_Username) IsNot Nothing Then
-                            'Has FAH setup already
-                            Setup.chkGetFAHSoftware.Checked = False
-                        Else
-                            'Needs FAH
+                        Try
+                            If DAT.GetSection(Id & Me.cbxWalletId.Text) IsNot Nothing AndAlso DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FAH_Username) IsNot Nothing Then
+                                'Has FAH setup already
+                                Setup.chkGetFAHSoftware.Checked = False
+                            Else
 
-                            'TODO: Additionally look for FAH installation on PC?
-
+                                'Additionally look for FAH installation on PC
+                                If System.IO.File.Exists("C:\Program Files (x86)\FAHClient\FAHClient.exe") = True OrElse System.IO.File.Exists("C:\Program Files\FAHClient\FAHClient.exe") = True Then
+                                    'Has FAH setup already
+                                    Setup.chkGetFAHSoftware.Checked = False
+                                Else
+                                    'Needs FAH
+                                    Setup.chkGetFAHSoftware.Checked = True
+                                End If
+                            End If
+                        Catch
                             Setup.chkGetFAHSoftware.Checked = True
-                        End If
+                        End Try
 
                         'Look for 12-word Passphrase (or BTC address?) to un-check the dialog for existing users
-                        If DAT.GetSection(Id & Me.cbxWalletId.Text) IsNot Nothing AndAlso DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CP12Words) IsNot Nothing Then
-                            'Wallet info exists
-                            Setup.chkGetWalletForFLDC.Checked = False
-                        Else
-                            'No saved Wallet info
-                            Setup.chkGetWalletForFLDC.Checked = True
+                        Try
+                            If DAT.GetSection(Id & Me.cbxWalletId.Text) IsNot Nothing AndAlso DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CP12Words) IsNot Nothing Then
+                                'Wallet info exists
+                                Setup.chkGetWalletForFLDC.Checked = False
+                            Else
+                                'No saved Wallet info
+                                Setup.chkGetWalletForFLDC.Checked = True
 
-                            'TODO: Ask for existing wallet info? (probably too confusing / too many options)
-                        End If
+                                'TODO: Ask for existing 12-word PW CounterParty wallet info? (probably too confusing / too many options)
+                            End If
+                        Catch
+                            Setup.chkGetWalletForFLDC.Checked = True
+                        End Try
 
                         'Done with the DAT file
                         DAT = Nothing

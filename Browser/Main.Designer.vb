@@ -163,10 +163,10 @@ Partial Class Main
         '
         Me.btnMyWallet.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
         Me.btnMyWallet.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnMyWallet.Location = New System.Drawing.Point(0, 0)
+        Me.btnMyWallet.Location = New System.Drawing.Point(170, 0)
         Me.btnMyWallet.Name = "btnMyWallet"
         Me.btnMyWallet.Size = New System.Drawing.Size(86, 41)
-        Me.btnMyWallet.TabIndex = 8
+        Me.btnMyWallet.TabIndex = 10
         Me.btnMyWallet.Text = "FLDC Wallet"
         Me.btnMyWallet.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         Me.ToolTip1.SetToolTip(Me.btnMyWallet, "View wallet at CounterWallet")
@@ -187,10 +187,10 @@ Partial Class Main
         '
         Me.btnFAHControl.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
         Me.btnFAHControl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnFAHControl.Location = New System.Drawing.Point(85, 0)
+        Me.btnFAHControl.Location = New System.Drawing.Point(1, 0)
         Me.btnFAHControl.Name = "btnFAHControl"
         Me.btnFAHControl.Size = New System.Drawing.Size(88, 41)
-        Me.btnFAHControl.TabIndex = 9
+        Me.btnFAHControl.TabIndex = 8
         Me.btnFAHControl.Text = "F@H Control"
         Me.btnFAHControl.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         Me.ToolTip1.SetToolTip(Me.btnFAHControl, "Folding@Home Web Control to View App Status")
@@ -198,7 +198,7 @@ Partial Class Main
         '
         'btnBrowserTools
         '
-        Me.btnBrowserTools.Location = New System.Drawing.Point(615, 40)
+        Me.btnBrowserTools.Location = New System.Drawing.Point(610, 40)
         Me.btnBrowserTools.Name = "btnBrowserTools"
         Me.btnBrowserTools.Size = New System.Drawing.Size(69, 20)
         Me.btnBrowserTools.TabIndex = 23
@@ -211,10 +211,10 @@ Partial Class Main
         '
         Me.btnFoldingCoinWebsite.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
         Me.btnFoldingCoinWebsite.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnFoldingCoinWebsite.Location = New System.Drawing.Point(179, 0)
+        Me.btnFoldingCoinWebsite.Location = New System.Drawing.Point(94, 0)
         Me.btnFoldingCoinWebsite.Name = "btnFoldingCoinWebsite"
         Me.btnFoldingCoinWebsite.Size = New System.Drawing.Size(82, 41)
-        Me.btnFoldingCoinWebsite.TabIndex = 10
+        Me.btnFoldingCoinWebsite.TabIndex = 9
         Me.btnFoldingCoinWebsite.Text = "FoldingCoin"
         Me.btnFoldingCoinWebsite.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         Me.ToolTip1.SetToolTip(Me.btnFoldingCoinWebsite, "FoldingCoin Website")
@@ -224,7 +224,7 @@ Partial Class Main
         '
         Me.btnCureCoin.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
         Me.btnCureCoin.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnCureCoin.Location = New System.Drawing.Point(415, 0)
+        Me.btnCureCoin.Location = New System.Drawing.Point(411, 0)
         Me.btnCureCoin.Name = "btnCureCoin"
         Me.btnCureCoin.Size = New System.Drawing.Size(66, 41)
         Me.btnCureCoin.TabIndex = 16
@@ -372,7 +372,7 @@ Partial Class Main
         'btnCurePool
         '
         Me.btnCurePool.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold)
-        Me.btnCurePool.Location = New System.Drawing.Point(530, 20)
+        Me.btnCurePool.Location = New System.Drawing.Point(526, 20)
         Me.btnCurePool.Name = "btnCurePool"
         Me.btnCurePool.Size = New System.Drawing.Size(75, 21)
         Me.btnCurePool.TabIndex = 18
@@ -397,7 +397,7 @@ Partial Class Main
         '
         Me.btnFoldingCoinTwitter.BackColor = System.Drawing.Color.LightSkyBlue
         Me.btnFoldingCoinTwitter.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnFoldingCoinTwitter.Location = New System.Drawing.Point(255, 20)
+        Me.btnFoldingCoinTwitter.Location = New System.Drawing.Point(250, 20)
         Me.btnFoldingCoinTwitter.Name = "btnFoldingCoinTwitter"
         Me.btnFoldingCoinTwitter.Size = New System.Drawing.Size(60, 21)
         Me.btnFoldingCoinTwitter.TabIndex = 13
@@ -410,7 +410,7 @@ Partial Class Main
         '
         Me.btnCureCoinTwitter.BackColor = System.Drawing.Color.LightSkyBlue
         Me.btnCureCoinTwitter.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnCureCoinTwitter.Location = New System.Drawing.Point(475, 20)
+        Me.btnCureCoinTwitter.Location = New System.Drawing.Point(471, 20)
         Me.btnCureCoinTwitter.Name = "btnCureCoinTwitter"
         Me.btnCureCoinTwitter.Size = New System.Drawing.Size(60, 21)
         Me.btnCureCoinTwitter.TabIndex = 19
@@ -422,7 +422,7 @@ Partial Class Main
         'btnFoldingCoinBlockchain
         '
         Me.btnFoldingCoinBlockchain.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnFoldingCoinBlockchain.Location = New System.Drawing.Point(254, 0)
+        Me.btnFoldingCoinBlockchain.Location = New System.Drawing.Point(249, 0)
         Me.btnFoldingCoinBlockchain.Name = "btnFoldingCoinBlockchain"
         Me.btnFoldingCoinBlockchain.Size = New System.Drawing.Size(78, 21)
         Me.btnFoldingCoinBlockchain.TabIndex = 11
@@ -436,7 +436,7 @@ Partial Class Main
         '
         Me.btnEOC.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
         Me.btnEOC.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnEOC.Location = New System.Drawing.Point(611, 0)
+        Me.btnEOC.Location = New System.Drawing.Point(606, 0)
         Me.btnEOC.Name = "btnEOC"
         Me.btnEOC.Size = New System.Drawing.Size(77, 41)
         Me.btnEOC.TabIndex = 22
@@ -448,7 +448,7 @@ Partial Class Main
         'btnCureCoinBlockchain
         '
         Me.btnCureCoinBlockchain.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnCureCoinBlockchain.Location = New System.Drawing.Point(476, 0)
+        Me.btnCureCoinBlockchain.Location = New System.Drawing.Point(472, 0)
         Me.btnCureCoinBlockchain.Name = "btnCureCoinBlockchain"
         Me.btnCureCoinBlockchain.Size = New System.Drawing.Size(78, 21)
         Me.btnCureCoinBlockchain.TabIndex = 17
@@ -462,7 +462,7 @@ Partial Class Main
         Me.btnFoldingCoinDiscord.BackColor = System.Drawing.Color.Black
         Me.btnFoldingCoinDiscord.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnFoldingCoinDiscord.ForeColor = System.Drawing.Color.White
-        Me.btnFoldingCoinDiscord.Location = New System.Drawing.Point(359, 0)
+        Me.btnFoldingCoinDiscord.Location = New System.Drawing.Point(354, 0)
         Me.btnFoldingCoinDiscord.Name = "btnFoldingCoinDiscord"
         Me.btnFoldingCoinDiscord.Size = New System.Drawing.Size(52, 21)
         Me.btnFoldingCoinDiscord.TabIndex = 14
@@ -474,7 +474,7 @@ Partial Class Main
         'btnBTCBlockchain
         '
         Me.btnBTCBlockchain.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnBTCBlockchain.Location = New System.Drawing.Point(326, 0)
+        Me.btnBTCBlockchain.Location = New System.Drawing.Point(321, 0)
         Me.btnBTCBlockchain.Name = "btnBTCBlockchain"
         Me.btnBTCBlockchain.Size = New System.Drawing.Size(39, 21)
         Me.btnBTCBlockchain.TabIndex = 12
@@ -488,7 +488,7 @@ Partial Class Main
         Me.btnCureCoinDiscord.BackColor = System.Drawing.Color.Black
         Me.btnCureCoinDiscord.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnCureCoinDiscord.ForeColor = System.Drawing.Color.White
-        Me.btnCureCoinDiscord.Location = New System.Drawing.Point(549, 0)
+        Me.btnCureCoinDiscord.Location = New System.Drawing.Point(545, 0)
         Me.btnCureCoinDiscord.Name = "btnCureCoinDiscord"
         Me.btnCureCoinDiscord.Size = New System.Drawing.Size(56, 21)
         Me.btnCureCoinDiscord.TabIndex = 20
@@ -565,11 +565,11 @@ Partial Class Main
         '
         Me.txtMsg.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtMsg.Location = New System.Drawing.Point(800, 0)
+        Me.txtMsg.Location = New System.Drawing.Point(795, 0)
         Me.txtMsg.Multiline = True
         Me.txtMsg.Name = "txtMsg"
         Me.txtMsg.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtMsg.Size = New System.Drawing.Size(37, 73)
+        Me.txtMsg.Size = New System.Drawing.Size(42, 73)
         Me.txtMsg.TabIndex = 25
         '
         'gbxCheckboxForTools
@@ -609,7 +609,7 @@ Partial Class Main
         Me.gbxDownload.Controls.Add(Me.lblPercent)
         Me.gbxDownload.Controls.Add(Me.ProgressBar1)
         Me.gbxDownload.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.gbxDownload.Location = New System.Drawing.Point(690, 4)
+        Me.gbxDownload.Location = New System.Drawing.Point(685, 4)
         Me.gbxDownload.Name = "gbxDownload"
         Me.gbxDownload.Size = New System.Drawing.Size(108, 42)
         Me.gbxDownload.TabIndex = 24
@@ -631,7 +631,7 @@ Partial Class Main
         '
         Me.btnFLDC_Distribution.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
         Me.btnFLDC_Distribution.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnFLDC_Distribution.Location = New System.Drawing.Point(312, 20)
+        Me.btnFLDC_Distribution.Location = New System.Drawing.Point(307, 20)
         Me.btnFLDC_Distribution.Name = "btnFLDC_Distribution"
         Me.btnFLDC_Distribution.Size = New System.Drawing.Size(80, 21)
         Me.btnFLDC_Distribution.TabIndex = 15
@@ -682,6 +682,8 @@ Partial Class Main
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1214, 708)
+        Me.Controls.Add(Me.btnFoldingCoinWebsite)
+        Me.Controls.Add(Me.btnMyWallet)
         Me.Controls.Add(Me.pnlFind)
         Me.Controls.Add(Me.gbxDownload)
         Me.Controls.Add(Me.btnBrowserTools)
@@ -693,9 +695,7 @@ Partial Class Main
         Me.Controls.Add(Me.btnReload)
         Me.Controls.Add(Me.btnEOC)
         Me.Controls.Add(Me.btnCureCoin)
-        Me.Controls.Add(Me.btnFoldingCoinWebsite)
         Me.Controls.Add(Me.btnFAHControl)
-        Me.Controls.Add(Me.btnMyWallet)
         Me.Controls.Add(Me.ToolStripContainer1)
         Me.Controls.Add(Me.btnStopNav)
         Me.Controls.Add(Me.btnGo)
