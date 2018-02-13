@@ -15,7 +15,7 @@
 
 ## License
 
-- FoldingBrowser is [licensed](Browser/bin/Release/LICENSE.txt) under a [BSD](http://opensource.org/licenses/BSD-3-Clause "BSD License") license.
+- FoldingBrowser is licensed under a [BSD 3-Clause License](Browser/bin/Release/LICENSE.txt "BSD 3-Clause License")
 
 ## Contact
 
@@ -23,7 +23,6 @@
   * [FoldingCoin New User Discord Invite](https://discord.gg/CvZ7gAs)
   * [CureCoin New User Discord Invite](https://discord.gg/jtztkFZ)
   * BitcoinTalk forum for: [FoldingCoin](https://bitcointalk.org/index.php?topic=781352), or [CureCoin](https://bitcointalk.org/index.php?topic=603757)
-
 
 ## Browser Hotkeys
 
