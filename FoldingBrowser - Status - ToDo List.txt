@@ -9,32 +9,32 @@ Immediate Need /  Short-Term Goals:
 
 -Support other wallets?  like:  https://freewallet.io/     (Using:)https://counterwallet.io/    https://wallet.indiesquare.me/     also: rarepepewallet.com (Not updated enough? security risks?)     (Not yet) https://tokenpockets.com/ (You cannot use tokenpockets currently. It is not compatible with existing passphrases from CounterWallet. If you want to use it, you will have to make a new address first)
 
--Evaluate upgrading to CefSharp/Chrome v63 when released here: https://github.com/cefsharp/CefSharp/releases  -Verify the FAH Web Control doesn't get stuck in an infinite refresh loop, needing the cache to be ignored (CTRL+F5) to fix it (like with Chrome v59)
+-Evaluate upgrading to CefSharp/Chrome v63 (VC++2013), or v64 (VC++2015) when released here: https://github.com/cefsharp/CefSharp/releases  -Verify the FAH Web Control doesn't get stuck in an infinite refresh loop, needing the cache to be ignored (CTRL+F5) to fix it (like with Chrome v59)
 
--Simple version of the FoldingBrowser: mostly to only run the FAH NaCl Chrome Plugin client (Can it be run without the browser? Also, NaCl support will be removed soon) -Simplicity: Ideally, you only want to enter username and email, and you are up and Folding (as other users have described).
-
--Use built-in multi-language uninstaller strings for uninstaller dialog on upgrading?
--Look into enabling Google Translate in Chrome/CefSharp for automatic web page translations
--Enable Multi-language support in the FoldingBrowser App to view pages that are available in other languages (Allow users to change the locale & supported languages)?
--Add Multi-language support in the FoldingBrowser App for buttons and tooltips?
+-Simple version of the FoldingBrowser: mostly to only run the FAH NaCl Chrome Plugin client (Can the FAH NaCl program be run without a Chrome browser? https://developer.chrome.com/native-client/sdk/download - Also, Chrome NaCl support will be depreciated soon: https://developer.chrome.com/native-client/migration) -Simplicity: Ideally, you only want to enter username and email, and you are up and Folding (as other users have described).
 
 
 ----------------------------------------------------
 Other Ideas, Improvements, Tasks, Longer-Term Goals:
 ----------------------------------------------------
 
+-Use built-in multi-language uninstaller strings for uninstaller dialog on upgrading?
+-Look into enabling Google Translate in Chrome/CefSharp for automatic web page translations
+-Enable Multi-language support in the FoldingBrowser App to view pages that are available in other languages (Allow users to change the locale & supported languages)?
+-Add Multi-language support in the FoldingBrowser App for buttons and tooltips?
 -Add images to improve other dialog prompts (It will help non-English speaking users)
+
 -Plugin: Add an Ad Blocker?
 -Improve the process to change the Default password: INI file: when encryption PW is blank, prompt for PW, if encryption fails (for extra security for not keeping the PW in a text file in your user account). Option to be prompted for it: once per session, or prompted every time when needed.
 -Make the other webpage wait loops use Javascript for detecting stuff is there (like the CureCoin webpage login)
 
 -Cross-compile for Linux and Mac version ideas:
-  -Start from a Chromium project?
-  -Port to a MonoDevelop project?
+  -Start over from a Chromium project that can already be compiled for Linux and Mac?
+  -Port to and start from an existing MonoDevelop project that can already be compiled for Linux and Mac?
   -Create a separate Electron framework App for Mac and Linux of the simple version that only runs the FAH NaCl Chrome Plugin client? -Try the FLDC Bar Electron app as a possible starting point?
   -Can the FoldingBrowser run on Wine in Linux? And, then update the FoldingBrowser to use the appropriate files and paths for Linux?
-  -.NET Core simple project for Linux and Mac? (No, CefSharp isn't compatible)
--Option to monitor FAH clients and restart them if they hang?
+  -.NET Core simple project for Linux and Mac? (No, CefSharp isn't compatible with other OS's)
+-Option to monitor FAH clients: indicate when they need attention, or restart them if they hang?
 
 -Improve the portal web page (eliminate some buttons in the browser?)
 -Add FLDC & CURE Ticker info from Coin Market Cap API (or pull from exchanges?). Update hourly? Do as notify icon? Might not be worth it, if the FLDC homepage gets it. See:  https://coinmarketcap.com/api/    https://api.coinmarketcap.com/v1/ticker/CureCoin/
@@ -59,7 +59,7 @@ Other Ideas, Improvements, Tasks, Longer-Term Goals:
 Change Log - Release Notes - Tasks completed:
 ======================================================================================================
 
-v16 Release (01/14/2018)
+v16 Release (02/12/2018)
 [DONE] -Add file exist searches to help determine if FAH is already installed on first-time use for setting the check box in the 3 check box dialog.
 [DONE] -Add Microsoft Visual C++ Redistributable 2013 - 32-bit (x86) installer to the FoldingBrowser installer (Not preloaded on new Win10 computers)
 [DONE] -Change the button text: 'My Wallet' to 'FLDC Wallet', for clarity
@@ -252,7 +252,7 @@ Browser buttons for:
 [DONE] -FAH user stats on http://folding.extremeoverclocking.com. Needs Id stored in INI from username lookup at EOC, or update bookmark links INI file (you would want this tied to wallet info?).
 [DONE] -Change/Set 12-word Passphrase / choose from the 10 save info slots
 (No) -Bookmarks, like a normal browser?
-(No) -Exchanges: Poloniex, Bittrex? (Polo link is on the FoldingCoin homepage)
+(No) -Exchanges: Poloniex, Bittrex, Livecoin?
 [DONE] -CureCoin Blockchain explorer
 [DONE] -FoldingCoin Blockchain explorer
 =====================
