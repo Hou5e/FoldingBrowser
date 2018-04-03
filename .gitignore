@@ -16,3 +16,4 @@
 /Browser/bin/Release/locales
 /Browser/bin/Release/FoldingBrowser.html
 /Install/VCx86Redist/*.exe
+/Browser/bin/Release/swiftshader

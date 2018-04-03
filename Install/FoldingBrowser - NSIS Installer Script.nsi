@@ -4,8 +4,8 @@
 
 
 ;---- Helper defines / constants ----
-!define PRODUCT_VERSION "16"  ;Match the displayed version in the program title. Example: 1.2.3
-!define PRODUCT_4_VALUE_VERSION "16.0.0.0"  ;Match the executable version: Right-click the program executable file | Properties | Version. Example: 1.2.3.4
+!define PRODUCT_VERSION "17"  ;Match the displayed version in the program title. Example: 1.2.3
+!define PRODUCT_4_VALUE_VERSION "17.0.0.0"  ;Match the executable version: Right-click the program executable file | Properties | Version. Example: 1.2.3.4
 !define PRODUCT_YEAR "2018"
 !define PRODUCT_NAME "FoldingBrowser"
 !define PRODUCT_EXE_NAME "FoldingBrowser"  ;Executable name without extension
@@ -201,8 +201,7 @@ Section "!${PRODUCT_NAME} v${PRODUCT_VERSION}" SEC01
   File "..\Browser\bin\Release\libEGL.dll"
   File "..\Browser\bin\Release\libGLESv2.dll"
   File "..\Browser\bin\Release\LICENSE.txt"
-  File "..\Browser\bin\Release\natives_blob.bin"
-  File "..\Browser\bin\Release\snapshot_blob.bin"
+  File "..\Browser\bin\Release\*.bin"
   File "..\Browser\bin\Release\widevinecdmadapter.dll"
 
   SetOutPath "$INSTDIR\Licenses"  ;Destination
@@ -210,6 +209,9 @@ Section "!${PRODUCT_NAME} v${PRODUCT_VERSION}" SEC01
   
   SetOutPath "$INSTDIR\locales"  ;Destination
   File "..\Browser\bin\Release\locales\*.pak"
+
+  SetOutPath "$INSTDIR\swiftshader"  ;Destination
+  File "..\Browser\bin\Release\swiftshader\*.dll"
 
   ;Create program shortcuts
   SetShellVarContext all  ;Uninstall shortcuts from the 'All Users' folder (WinXP only), otherwise uninstall shortcuts from the user's folder
@@ -442,6 +444,8 @@ Section Uninstall
   RMDir "$INSTDIR\Licenses"
   Delete "$INSTDIR\locales\*"
   RMDir "$INSTDIR\locales"
+  Delete "$INSTDIR\swiftshader\*"
+  RMDir "$INSTDIR\swiftshader"
   ;Delete the main installation folder if possible
   Delete "$INSTDIR\*"
   RMDir "$INSTDIR"

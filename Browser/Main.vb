@@ -7,9 +7,6 @@
     'URL to help determine the page loaded indicator
     Private m_strPageURL As String = ""
 
-    'Timer for resetting after errors
-    Private m_timerErr As New System.Timers.Timer
-
 #Region "Form and Browser Events - Initialization, Exiting"
     Public Sub New()
         Try
@@ -23,13 +20,11 @@
             settings.LocalesDirPath = System.IO.Path.Combine(My.Application.Info.DirectoryPath, "locales")
             settings.Locale = "en-US"
             settings.AcceptLanguageList = settings.Locale & "," & settings.Locale.Substring(0, 2)
-#If DEBUG Then
-            'Debug: Log everything - verbose
-            settings.LogSeverity = CefSharp.LogSeverity.Verbose
-#Else
-            'Release: Only log info, warnings, errors
+
+            'For Debugging, to log everything, use: Verbose. Can cause Cef.Shutdown() to hang.
+            'settings.LogSeverity = CefSharp.LogSeverity.Verbose
             settings.LogSeverity = CefSharp.LogSeverity.Info
-#End If
+
             Try
                 'The log file gets appended to each time, so delete it (or else it can get large over time)
                 If System.IO.File.Exists(settings.LogFile) = True Then
@@ -518,6 +513,7 @@
     End Sub
 
     Private Sub Main_FormClosing(sender As Object, e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
+        g_bCancelNav = True
         Try
             'Last Wallet Id used
             INI.AddSection(INI_Settings).AddKey(INI_LastWalletId).Value = Me.cbxWalletId.Text
@@ -558,7 +554,10 @@
         Try
             'Keep this before CefSharp.Cef.Shutdown() to avoid the browser hanging (CefSharp v53.0.1): when exiting the wallet & click yes, then close the Browser (like the javascript running causes the hang)
             'StopNavigaion()  'In v55, this appears to cause: Exception thrown: 'System.Exception' in CefSharp.dll
+            g_bCancelNav = True
             ClearWebpage()
+            'Added in v63.0.3. Exiting the FAH Web control was hanging the Cef.Shutdown(). On shutdown, the FAH Web control error was happening, and reloading w/o cache when closing. 'Verbose' debug logging was getting cutoff too, and changing logging to 'info' helped fix it
+            g_bCancelNav = True
             Delay(150)
 
             If Me.browser IsNot Nothing Then
@@ -573,11 +572,13 @@
 
                 'Shutdown the web browser control
                 If Me.browser.IsDisposed = False Then
+                    'This is prone to hanging the app when exiting:
                     CefSharp.Cef.Shutdown()
                     'Wait for CefSharp.Cef.Shutdown(): This 100ms delay seems to help prevent the messed up state for older (and current) CefSharp versions. Otherwise, the cache needs to be deleted for the FAH Control web page to work (at least with CEF1, v25)
                     Delay(100)
                 End If
             End If
+
         Catch ex As Exception
             Msg("Error: Exiting: " & ex.ToString)
         End Try
@@ -2415,6 +2416,12 @@
         Else
             addActivity(e.Message)
         End If
+
+        'WORKAROUND: FAH Web Control, where it gets stuck in an infinite refresh loop in Chrome v59+, and needs a refresh without cache to fix that condition.
+        If e.Message = "DEBUG: error: " AndAlso e.Source = "http://127.0.0.1:7396/js/main.js" AndAlso g_bCancelNav = False Then
+            'Refresh ignoring browser cache
+            Me.browser.GetBrowser.Reload(True)
+        End If
     End Sub
     Private Sub OnBrowserStatusMessage(sender As Object, args As CefSharp.StatusMessageEventArgs)
         addActivity(args.Value)
@@ -2935,7 +2942,5 @@
             Msg("Error: " & ex.Message & "." & vbNewLine & vbNewLine & ex.ToString)
         End Try
     End Sub
-
-
 #End Region
 End Class

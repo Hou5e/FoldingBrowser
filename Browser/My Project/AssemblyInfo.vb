@@ -26,5 +26,5 @@ Imports System.Runtime.InteropServices
 '      Build Number
 '      Revision
 
-<Assembly: AssemblyVersion("16.0.0.0")>
-<Assembly: AssemblyFileVersion("16.0.0.0")>
+<Assembly: AssemblyVersion("17.0.0.0")>
+<Assembly: AssemblyFileVersion("17.0.0.0")>
