@@ -48,6 +48,9 @@ Other Ideas, Improvements, Tasks, Longer-Term Goals:
 #477: Add a CureCoin Wallet button, that focus a running CURE wallet executable, or launches it as a new process?
 #478: Show image of where to get the CureCoin wallet address, for the message box when it can't be found
 -Try to fix/automate this known issue: -Discord invites go to a blank page (Press the 'Discord' button again to reload/fix)
+-Add Fwd/Back to the web control window, which should now be available in CefSharp v63+
+-Improve the get .NET v4.0 (4.7?) from Microsoft message in the installer to: use Windows Update, or manually install from Microsoft's website?
+
 
 ======================================================================================================
 Change Log - Release Notes - Tasks completed:
@@ -155,7 +158,7 @@ v7 Release (1/7/2017)
 [DONE] -Add Dialog.Dispose() to modal dialog boxes
 v6 Release (12/21/2016)
 [DONE] -Upgrade the 'check your email for passkey' dialog to look like the others
--For Backups, write out a text file that says what to do to restore the files? (mostly for the CureCoin wallet file)
+[DONE] -For Backups, write out a text file that says what to do to restore the files? (mostly for the CureCoin wallet file)
 [DONE] -Backup the FAH Config.xml file, too. This would be useful for setting up multiple PCs with the same settings.
 [DONE] -Logout after CureCoin Pool registration (reduce being logged in issues, later from loaded info from cache)
 [DONE] -Use the newer Await Wait(ms) function to avoid issues with: Threading.Thread.Sleep(ms)

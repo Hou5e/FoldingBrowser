@@ -4,6 +4,7 @@
     'Page loaded indicator
     Private m_bPageLoaded As Boolean = False
     Private m_bDefaultHomepageLoaded As Boolean = False
+    Private m_bLoadingFAHWebControl As Boolean = False
     'URL to help determine the page loaded indicator
     Private m_strPageURL As String = ""
 
@@ -588,17 +589,16 @@
 #End Region
 
 #Region "Button, Checkbox, Combobox - Form Control Events"
-    Private Async Sub btnMyWallet_Click(sender As System.Object, e As System.EventArgs) Handles btnMyWallet.Click
-        If Await LoginToCounterwallet() = False Then MessageBox.Show("Task 'Log Into Wallet' did not complete. Please try again.")
-    End Sub
-
-
     Private Sub btnFAHControl_Click(sender As System.Object, e As System.EventArgs) Handles btnFAHControl.Click
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
         OpenURL(URL_FAH_Client, False)
 #Enable Warning BC42358
     End Sub
 
+
+    Private Async Sub btnMyWallet_Click(sender As System.Object, e As System.EventArgs) Handles btnMyWallet.Click
+        If Await LoginToCounterwallet() = False Then MessageBox.Show("Task 'Log Into Wallet' did not complete. Please try again.")
+    End Sub
 
     Private Sub btnFoldingCoinWebsite_Click(sender As System.Object, e As System.EventArgs) Handles btnFoldingCoinWebsite.Click
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
@@ -2417,10 +2417,12 @@
             addActivity(e.Message)
         End If
 
-        'WORKAROUND: FAH Web Control, where it gets stuck in an infinite refresh loop in Chrome v59+, and needs a refresh without cache to fix that condition.
-        If e.Message = "DEBUG: error: " AndAlso e.Source = "http://127.0.0.1:7396/js/main.js" AndAlso g_bCancelNav = False Then
+        'WORKAROUND: FAH Web Control, where it gets stuck in an infinite refresh loop in Chrome v59+, and needs a refresh without cache to fix that condition. This error also occurs almost every time you leave the FAH web control page, so avoid reloading when clicking other web link buttons or exiting.
+        If m_bLoadingFAHWebControl = True AndAlso g_bCancelNav = False AndAlso e.Message = "DEBUG: error: " AndAlso e.Source = "http://127.0.0.1:7396/js/main.js" Then
             'Refresh ignoring browser cache
             Me.browser.GetBrowser.Reload(True)
+            'Reset flag
+            m_bLoadingFAHWebControl = False
         End If
     End Sub
     Private Sub OnBrowserStatusMessage(sender As Object, args As CefSharp.StatusMessageEventArgs)
@@ -2812,6 +2814,13 @@
             'Load the web page
             If sURL.Length > 0 And Uri.IsWellFormedUriString(sURL, UriKind.RelativeOrAbsolute) = True Then
                 Me.txtURL.Text = sURL
+
+                'WORKAROUND: FAH Web Control, where it gets stuck in an infinite refresh loop in Chrome v59+, and needs a refresh without cache to fix that condition. This error also occurs almost every time you leave the FAH web control page, so avoid reloading when clicking other web link buttons or exiting.
+                If Me.txtURL.Text = URL_FAH_Client Then
+                    m_bLoadingFAHWebControl = True
+                Else
+                    m_bLoadingFAHWebControl = False
+                End If
 
                 'Accept Certs to avoid annoying prompts
                 System.Net.ServicePointManager.ServerCertificateValidationCallback = New Net.Security.RemoteCertificateValidationCallback(AddressOf ValidateCertificate)

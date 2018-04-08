@@ -138,7 +138,7 @@ Partial Class DisplayOptionsDialog
         Me.cbxHomepage.Items.AddRange(New Object() {"Default", "FoldingCoin", "CureCoin", "EOC", "Folding@Home Web Control", "Blank"})
         Me.cbxHomepage.Location = New System.Drawing.Point(234, 25)
         Me.cbxHomepage.Name = "cbxHomepage"
-        Me.cbxHomepage.Size = New System.Drawing.Size(153, 21)
+        Me.cbxHomepage.Size = New System.Drawing.Size(166, 21)
         Me.cbxHomepage.TabIndex = 1
         Me.cbxHomepage.Text = "Default"
         '
