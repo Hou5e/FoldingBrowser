@@ -32,9 +32,9 @@ Public Module GlobalRefs
     Public Const URL_EOC As String = "http://folding.extremeoverclocking.com/user_summary.php?s=&u="
     Public Const URL_CureCoin_EOC As String = "http://folding.extremeoverclocking.com/team_summary.php?s=&t=224497"
 
-    Public Const URL_FAH As String = "https://folding.stanford.edu/start-folding/"
-    Public Const URL_FAH_Client As String = "http://folding.stanford.edu/client/"
-    Public Const URL_NaCl_FAH As String = "http://folding.stanford.edu/nacl/"
+    Public Const URL_FAH As String = "https://foldingathome.org/start-folding/"
+    Public Const URL_FAH_Client As String = "http://client.foldingathome.org/"
+    Public Const URL_NaCl_FAH As String = "http://nacl.foldingathome.org/"
 
     'This HTML is easier to view in source code file: FoldingBrowser.html
     Public Const HTML_PortalPage As String = "<html><head><title>FoldingBrowser - Earn Digital Assets with FoldingCoin and CureCoin</title></head>

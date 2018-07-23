@@ -33,7 +33,7 @@ For compiling the FoldingBrowser Installer:
 -------------------------------------------
 The NSIS installer scripts are located at:   ..\Install
 
-1. You will need the Microsoft Visual C++ Redistributable 2013 - 32-bit (x86) installer (vcredist_x86.exe) from: http://download.microsoft.com/download/2/E/6/2E61CFA4-993B-4DD4-91DA-3737CD5CD6E3/vcredist_x86.exe
+1. You will need the Microsoft Visual C++ Redistributable 2015 - 32-bit (x86) installer (vc_redist.x86.exe) from: https://download.microsoft.com/download/9/3/F/93FCF1E7-E6A4-478B-96E7-D4B285925B00/vc_redist.x86.exe      Link from: https://www.itechtics.com/microsoft-visual-c-redistributable-versions-direct-download-links/
 and copy it to:  ..\Install\VCx86Redist
 
 2. You will need the latest CureCoin wallet (curecoin-qt.exe) from GitHub: https://github.com/cygnusxi/CurecoinSource/releases
@@ -48,4 +48,6 @@ and copy it to:  ..\Install\CureCoin
 ------------------------------
 Visual Studio Compiling Notes:
 ------------------------------
--Any time the CefSharp DLLs are upgraded to the next version, any previous versions of those DLLs need to be manually deleted from the Debug/Release folders before Visually Studio will compile the new executable without errors.
+-Any time the CefSharp DLLs are upgraded to the next version (Use NuGet Package Manager, command: update-package):
+   -Any previous versions of those DLLs need to be manually deleted from the Debug & Release folders before Visually Studio will compile the new executable without errors.
+   -The project reference folder path to the previous DLLs will need to be manually updated in the project settings to the new package folder

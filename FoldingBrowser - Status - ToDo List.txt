@@ -7,23 +7,25 @@ FoldingBrowser All-in-One Installer:
 Immediate Need /  Short-Term Goals:
 -----------------------------------
 
-#451: Support other wallets, for pressing the 'FLDC Wallet' button, with option for:  https://freewallet.io/   And, reverse the CounterWallet website search order to use the 2nd one first?  (Currently only using: https://counterwallet.io/).    Other alternatives (ignore for now): https://wallet.indiesquare.me/     also: rarepepewallet.com (Not updated enough? security risks?)     (Not yet) https://tokenpockets.com/ (You cannot use tokenpockets currently. It is not compatible with existing passphrases from CounterWallet. If you want to use it, you will have to make a new address first)
-#479: Evaluate upgrading to CefSharp/Chrome v65 (VC++2015) when released here: github.com/cefsharp/CefSharp/releases
-#453: Simple version of the FoldingBrowser: mostly to only run the FAH NaCl Chrome Plugin client (Can the FAH NaCl program be run without a Chrome browser? https://developer.chrome.com/native-client/sdk/download - Also, Chrome NaCl support will be depreciated soon: https://developer.chrome.com/native-client/migration) -Simplicity: Ideally, you only want to enter username and email, and you are up and Folding (as other users have described).
+-Add Fwd/Back to the web control window, which should now be available in CefSharp v63+
+-Strip out all not allowed characters that can be pasted in to the username textbox --> TextboxEx? -Automatic character removal with no warning that the pasted text was modified was originally (less desirable, but probably better. Make warning message).
+-Support other wallets, for pressing the 'FLDC Wallet' button, with option for:  https://freewallet.io/   And, reverse the CounterWallet website search order to use the 2nd one first?  (Currently only using: https://counterwallet.io/).    Other alternatives (ignore for now): https://wallet.indiesquare.me/     also: rarepepewallet.com (Not updated enough? security risks?)     (Not yet) https://tokenpockets.com/ (You cannot use tokenpockets currently. It is not compatible with existing passphrases from CounterWallet. If you want to use it, you will have to make a new address first)
+-Evaluate upgrading to CefSharp/Chrome v67 (VC++2015) when released here: github.com/cefsharp/CefSharp/releases
 
 ----------------------------------------------------
 Other Ideas, Improvements, Tasks, Longer-Term Goals:
 ----------------------------------------------------
 
-#454: Use built-in multi-language uninstaller strings for the one non-built-in uninstaller dialog on upgrading? (Ignoring for now)
-#455: Enable Google Translate in Chrome/CefSharp for automatic web page translations?
-#456: Enable Multi-language support in the browser component to view pages that are available in other languages (Allow users to change the locale & supported languages)?
-#457: Add Multi-language support in the FoldingBrowser for button text (and tooltips)?
-#458: Add images to improve dialog prompt errors, instructions, or questions (It will help non-English speaking users)
-#459: Add an Ad Blocker Plugin, if possible?
-#460: Improve the process to change the default encryption password on the FoldingBrowser Saved settings: INI file: when encryption password is blank, prompt for password, if encryption fails (for extra security for not keeping the PW in a text file in your user account). Option to be prompted for it: once per session, or prompted every time when needed.
-#461: Make the other web page wait loops use JavaScript for detecting pages are fully loaded (like the CureCoin web page login), to make detection even less open loop
-#462: Linux and Mac version of the AIO setup:
+-Simple version of the FoldingBrowser: mostly to only run the FAH NaCl Chrome Plugin client (Can the FAH NaCl program be run without a Chrome browser? https://developer.chrome.com/native-client/sdk/download - Also, Chrome NaCl support will be depreciated soon: https://developer.chrome.com/native-client/migration) -Simplicity: Ideally, you only want to enter username and email, and you are up and Folding (as other users have described).
+-Use built-in multi-language uninstaller strings for the one non-built-in uninstaller dialog on upgrading? (Ignoring for now)
+-Enable Google Translate in Chrome/CefSharp for automatic web page translations?
+-Enable Multi-language support in the browser component to view pages that are available in other languages (Allow users to change the locale & supported languages)?
+-Add Multi-language support in the FoldingBrowser for button text (and tooltips)?
+-Add images to improve dialog prompt errors, instructions, or questions (It will help non-English speaking users)
+-Add an Ad Blocker Plugin, if possible?
+-Improve the process to change the default encryption password on the FoldingBrowser Saved settings: INI file: when encryption password is blank, prompt for password, if encryption fails (for extra security for not keeping the PW in a text file in your user account). Option to be prompted for it: once per session, or prompted every time when needed.
+-Make the other web page wait loops use JavaScript for detecting pages are fully loaded (like the CureCoin web page login), to make detection even less open loop
+-Linux and Mac version of the AIO setup:
   -Create an install script. Possibly use Docker to keep the installation simplified
   -Start over from a Chromium web browser project that can already be compiled for Linux and Mac?
   -Port to and start from an existing MonoDevelop project that can already be compiled for Linux and Mac?
@@ -31,33 +33,36 @@ Other Ideas, Improvements, Tasks, Longer-Term Goals:
   -Can the FoldingBrowser run on Wine in Linux? And, then update the FoldingBrowser to use the appropriate files and paths for Linux?
   -.NET Core simple project for Linux and Mac? (No, CefSharp isn't compatible with other OS's)
   -Create a simple encrypted dat file viewer for Linux and Mac (and include those files with making a backup, for going from Windows to Linux)?
-#463: Improve the portal web page (eliminate some buttons in the browser UI, and replace with web page buttons? probably not since they would be more difficult to get back to without having a menu frame)
-#464: Add FLDC & CURE Ticker info (from Coin Market Cap API?) (or pull from exchanges?). Update hourly? Do as notify icon? Might not be worth it, if the FLDC homepage gets it. See:  https://coinmarketcap.com/api/    https://api.coinmarketcap.com/v1/ticker/CureCoin/
-#465: Add option to get Wallet info from blockchain explorer APIs to display value? FLDC- https://xchain.io/     CURE-  https://chainz.cryptoid.info/cure
-#466: Save some stats from API data, and show difference from last time, or from a past time interval?
-#467: Add notify icon (system tray icon) for folding with NaCl Chrome Plug-in (add option to enable / disable exiting on program close) and other coin ticker info
-#468: Option to create backup copies of the settings in a 'Backup' folder periodically, or get a pop-up reminder on a time interval?
-#469: Make a better way to determine if the settings (.dat) file loads. This won't work: DAT.ToString.Length = 0, it really needs to be .SaveToString(), but all you want to know is there data loaded or not. You don't need a full text string output...
-#470: Restore from backup button (or separate app)? Make something to make setting up multiple computers easier (rename existing files, and copy new one) (and telnet FAH settings from Config file)
-#471: Add stop button to cancel the automated process?
-#472: Get CounterWallet with CounterParty API instead of current methods from web page clicks? (probably more work than it's worth)
-#473: Support other blockchain explorers?  like: (Using:)https://xchain.io/     (depreciated) https://counterpartychain.io/      https://chain.so/      https://walletapp.indiesquare.me/explorer/      https://www.blocktrail.com/BTC/address/<addy>      https://xcpdex.com/
-#474: Change to the new FLDC username format (Nope, not yet, as of Feb 2018)
-#475: Option to select alternate distribution stats server from: http://foldingcoin.xyz/?token=FLDC&total=250000&start=2017-08-21&end=2017-08-22 to using: http://fldc-stats.tokenly.com/?token=FLDC&total=250000&start=2017-08-21&end=2017-08-22
-#476: Improve the CureCoin HTTP JSON-RPC to use a JSON parser. And, find the wallet if there is more than one entry or (blank and a name)
-#477: Add a CureCoin Wallet button, that focus a running CURE wallet executable, or launches it as a new process?
-#478: Show image of where to get the CureCoin wallet address, for the message box when it can't be found
+-Improve the portal web page (eliminate some buttons in the browser UI, and replace with web page buttons? probably not since they would be more difficult to get back to without having a menu frame)
+-Add FLDC & CURE Ticker info (from Coin Market Cap API?) (or pull from exchanges?). Update hourly? Do as notify icon? Might not be worth it, if the FLDC homepage gets it. See:  https://coinmarketcap.com/api/    https://api.coinmarketcap.com/v1/ticker/CureCoin/
+-Add option to get Wallet info from blockchain explorer APIs to display value? FLDC- https://xchain.io/     CURE-  https://chainz.cryptoid.info/cure
+-Save some stats from API data, and show difference from last time, or from a past time interval?
+-Add notify icon (system tray icon) for folding with NaCl Chrome Plug-in (add option to enable / disable exiting on program close) and other coin ticker info
+-Option to create backup copies of the settings in a 'Backup' folder periodically, or get a pop-up reminder on a time interval?
+-Make a better way to determine if the settings (.dat) file loads. This won't work: DAT.ToString.Length = 0, it really needs to be .SaveToString(), but all you want to know is there data loaded or not. You don't need a full text string output...
+-Restore from backup button (or separate app)? Make something to make setting up multiple computers easier (rename existing files, and copy new one) (and telnet FAH settings from Config file)
+-Add stop button to cancel the automated process?
+-Get CounterWallet with CounterParty API instead of current methods from web page clicks? (probably more work than it's worth)
+-Support other blockchain explorers?  like: (Using:)https://xchain.io/     (depreciated) https://counterpartychain.io/      https://chain.so/      https://walletapp.indiesquare.me/explorer/      https://www.blocktrail.com/BTC/address/<addy>      https://xcpdex.com/
+-Change to the new FLDC username format (Nope, not yet, as of July 2018)
+-Option to select alternate distribution stats server from: http://foldingcoin.xyz/?token=FLDC&total=250000&start=2017-08-21&end=2017-08-22 to using: http://fldc-stats.tokenly.com/?token=FLDC&total=250000&start=2017-08-21&end=2017-08-22
+-Improve the CureCoin HTTP JSON-RPC to use a JSON parser. And, find the wallet if there is more than one entry or (blank and a name)
+-Add a CureCoin Wallet button, that focus a running CURE wallet executable, or launches it as a new process?
+-Show image of where to get the CureCoin wallet address, for the message box when it can't be found
 -Try to fix/automate this known issue: -Discord invites go to a blank page (Press the 'Discord' button again to reload/fix)
--Add Fwd/Back to the web control window, which should now be available in CefSharp v63+
 -Improve the get .NET v4.0 (4.7?) from Microsoft message in the installer to: use Windows Update, or manually install from Microsoft's website?
+-Integration with HFM.NET, or something similar
 
 
 ======================================================================================================
 Change Log - Release Notes - Tasks completed:
 ======================================================================================================
 
+v17 Release (07/??/2018)
+[DONE] -Upgrade to CefSharp/Chrome v65 (VC++2015), and updated the VC++ dependency in the installer
+[DONE] -Update the FoldingBrowser FAH download links. The FAH website domain links changed.
 [DONE] -Add workaround for: FAH Web Control, where it gets stuck in an infinite refresh loop in Chrome v59+, and needs a refresh without cache to fix that condition.
-[DONE] -Upgrade to CefSharp/Chrome v63 (VC++2013) [#452]
+[DONE] -Upgrade to CefSharp/Chrome v63 (VC++2013)
 v16 Release (02/12/2018)
 [DONE] -Add file exist searches to help determine if FAH is already installed on first-time use for setting the check box in the 3 check box dialog.
 [DONE] -Add Microsoft Visual C++ Redistributable 2013 - 32-bit (x86) installer to the FoldingBrowser installer (Not preloaded on new Win10 computers)

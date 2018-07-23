@@ -291,7 +291,7 @@
                 Me.lblErrorNote.Visible = True
             End If
 
-            'Check for characters not allowed in a FAH Username. See: http://folding.stanford.edu/support/faq/stats-teams-usernames/#are-there-any-characters-i-should-avoid-in-a-username  NOTE: Should only be letters, numbers, and underscore. Cannot be: # ^ ~ |  Also, Email addresses are truncated / not handled well, so block '@'. See: http://folding.stanford.edu/support/faq/stats-teams-usernames/#how-do-i-choose-a-username
+            'Check for characters not allowed in a FAH Username. See: https://foldingathome.org/support/faq/stats-teams-usernames/#are-there-any-characters-i-should-avoid-in-a-username  NOTE: Should only be letters, numbers, and underscore. Cannot be: # ^ ~ |  Also, Email addresses are truncated / not handled well, so block '@'. See: https://foldingathome.org/support/faq/stats-teams-usernames/#how-do-i-choose-a-username
             Select Case True
                 Case Me.txtUsername.Text.Length = 0
                     'Allow old Bitcoin address only format
