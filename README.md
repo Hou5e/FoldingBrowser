@@ -13,17 +13,6 @@
   - Requires: [VC++ 2015 x86 Redist](https://download.microsoft.com/download/9/3/F/93FCF1E7-E6A4-478B-96E7-D4B285925B00/vc_redist.x86.exe) & [.NET v4.5.2](https://www.microsoft.com/en-us/download/details.aspx?id=42643)
 - [Status, release notes, & ideas for future development](FoldingBrowser%20-%20Status%20-%20ToDo%20List.txt)
 
-## License
-
-- FoldingBrowser is licensed under a [BSD 3-Clause License](Browser/bin/Release/LICENSE.txt "BSD 3-Clause License")
-
-## Contact
-
-**Please ask questions on Discord (I'm user Hou5e):**
-  * [FoldingCoin New User Discord Invite](https://discord.gg/CvZ7gAs)
-  * [CureCoin New User Discord Invite](https://discord.gg/jtztkFZ)
-  * BitcoinTalk forum for: [FoldingCoin](https://bitcointalk.org/index.php?topic=781352), or [CureCoin](https://bitcointalk.org/index.php?topic=603757)
-
 ## Browser Hotkeys
 
 Hotkeys | Function
@@ -35,3 +24,14 @@ ALT+Left, Prior | Navigate back
 ALT+Right, Next | Navigate forward
 CTRL+F | Open Find (Find Next: ENTER or F3, Find Previous: SHIFT+ENTER or SHIFT+F3, Close Find: ESC)
 F12 | Open web developer tools
+
+## License
+
+- FoldingBrowser is licensed under a [BSD 3-Clause License](Browser/bin/Release/LICENSE.txt "BSD 3-Clause License")
+
+## Contact
+
+**Please ask questions on Discord (I'm user Hou5e):**
+  * [FoldingCoin Discord Invite](https://discord.gg/CvZ7gAs)
+  * [CureCoin Discord Invite](https://discord.gg/jtztkFZ)
+  * BitcoinTalk forum for: [FoldingCoin](https://bitcointalk.org/index.php?topic=781352), or [CureCoin](https://bitcointalk.org/index.php?topic=603757)

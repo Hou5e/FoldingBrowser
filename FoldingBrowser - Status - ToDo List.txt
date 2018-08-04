@@ -7,7 +7,6 @@ FoldingBrowser All-in-One Installer:
 Immediate Need /  Short-Term Goals:
 -----------------------------------
 
--Add Fwd/Back to the web control window, which should now be available in CefSharp v63+
 -Strip out all not allowed characters that can be pasted in to the username textbox --> TextboxEx? -Automatic character removal with no warning that the pasted text was modified was originally (less desirable, but probably better. Make warning message).
 -Support other wallets, for pressing the 'FLDC Wallet' button, with option for:  https://freewallet.io/   And, reverse the CounterWallet website search order to use the 2nd one first?  (Currently only using: https://counterwallet.io/).    Other alternatives (ignore for now): https://wallet.indiesquare.me/     also: rarepepewallet.com (Not updated enough? security risks?)     (Not yet) https://tokenpockets.com/ (You cannot use tokenpockets currently. It is not compatible with existing passphrases from CounterWallet. If you want to use it, you will have to make a new address first)
 -Evaluate upgrading to CefSharp/Chrome v67 (VC++2015) when released here: github.com/cefsharp/CefSharp/releases
@@ -21,6 +20,7 @@ Other Ideas, Improvements, Tasks, Longer-Term Goals:
 -Enable Google Translate in Chrome/CefSharp for automatic web page translations?
 -Enable Multi-language support in the browser component to view pages that are available in other languages (Allow users to change the locale & supported languages)?
 -Add Multi-language support in the FoldingBrowser for button text (and tooltips)?
+-Add Fwd/Back navigation with 4th/5th mouse button clicks to the web control window
 -Add images to improve dialog prompt errors, instructions, or questions (It will help non-English speaking users)
 -Add an Ad Blocker Plugin, if possible?
 -Improve the process to change the default encryption password on the FoldingBrowser Saved settings: INI file: when encryption password is blank, prompt for password, if encryption fails (for extra security for not keeping the PW in a text file in your user account). Option to be prompted for it: once per session, or prompted every time when needed.
@@ -50,7 +50,7 @@ Other Ideas, Improvements, Tasks, Longer-Term Goals:
 -Add a CureCoin Wallet button, that focus a running CURE wallet executable, or launches it as a new process?
 -Show image of where to get the CureCoin wallet address, for the message box when it can't be found
 -Try to fix/automate this known issue: -Discord invites go to a blank page (Press the 'Discord' button again to reload/fix)
--Improve the get .NET v4.0 (4.7?) from Microsoft message in the installer to: use Windows Update, or manually install from Microsoft's website?
+-Improve the get .NET v4.0 from Microsoft message in the installer to: use Windows Update, or manually install from Microsoft's website?
 -Integration with HFM.NET, or something similar
 
 
@@ -58,9 +58,9 @@ Other Ideas, Improvements, Tasks, Longer-Term Goals:
 Change Log - Release Notes - Tasks completed:
 ======================================================================================================
 
-v17 Release (07/??/2018)
+v17 Release (08/??/2018)
 [DONE] -Upgrade to CefSharp/Chrome v65 (VC++2015), and updated the VC++ dependency in the installer
-[DONE] -Update the FoldingBrowser FAH download links. The FAH website domain links changed.
+[DONE] -Update the FoldingBrowser FAH download links for the FAH website domain change
 [DONE] -Add workaround for: FAH Web Control, where it gets stuck in an infinite refresh loop in Chrome v59+, and needs a refresh without cache to fix that condition.
 [DONE] -Upgrade to CefSharp/Chrome v63 (VC++2013)
 v16 Release (02/12/2018)

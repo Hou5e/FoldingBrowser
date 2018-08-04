@@ -43,8 +43,8 @@
             If CefSharp.Cef.Initialize(settings) = True Then
                 Me.browser = New CefSharp.WinForms.ChromiumWebBrowser(URL_BLANK)
                 'Add browser event handlers to pass events back to the main UI
-                AddHandler Me.browser.FrameLoadEnd, AddressOf onBrowserFrameLoadEnd
-                AddHandler Me.browser.ConsoleMessage, AddressOf onBrowserConsoleMessage
+                AddHandler Me.browser.FrameLoadEnd, AddressOf OnBrowserFrameLoadEnd
+                AddHandler Me.browser.ConsoleMessage, AddressOf OnBrowserConsoleMessage
                 AddHandler Me.browser.StatusMessage, AddressOf OnBrowserStatusMessage
                 AddHandler Me.browser.LoadingStateChanged, AddressOf OnBrowserLoadingStateChanged
                 AddHandler Me.browser.TitleChanged, AddressOf OnBrowserTitleChanged
@@ -562,8 +562,8 @@
             Delay(150)
 
             If Me.browser IsNot Nothing Then
-                RemoveHandler Me.browser.FrameLoadEnd, AddressOf onBrowserFrameLoadEnd
-                RemoveHandler Me.browser.ConsoleMessage, AddressOf onBrowserConsoleMessage
+                RemoveHandler Me.browser.FrameLoadEnd, AddressOf OnBrowserFrameLoadEnd
+                RemoveHandler Me.browser.ConsoleMessage, AddressOf OnBrowserConsoleMessage
                 RemoveHandler Me.browser.StatusMessage, AddressOf OnBrowserStatusMessage
                 RemoveHandler Me.browser.LoadingStateChanged, AddressOf OnBrowserLoadingStateChanged
                 RemoveHandler Me.browser.TitleChanged, AddressOf OnBrowserTitleChanged
@@ -2403,14 +2403,14 @@
 #End Region
 
 #Region "Browser Control Event Handlers"
-    Private Sub onBrowserFrameLoadEnd(sender As Object, e As CefSharp.FrameLoadEndEventArgs)
+    Private Sub OnBrowserFrameLoadEnd(sender As Object, e As CefSharp.FrameLoadEndEventArgs)
         'Set a flag to indicate the web page has finished loading. This event is fired for each frame that loads, so compare URLs before setting the flag as loaded (NOTE: Me.browser.IsLoading = True, doesn't work)
         If e.Url.Contains(m_strPageURL) Then
             m_bPageLoaded = True
         End If
     End Sub
 
-    Private Sub onBrowserConsoleMessage(sender As Object, e As CefSharp.ConsoleMessageEventArgs)
+    Private Sub OnBrowserConsoleMessage(sender As Object, e As CefSharp.ConsoleMessageEventArgs)
         If e.Line > 0 Then
             addActivity(e.Message & " (" & e.Source & ", ln " & e.Line.ToString & " )")
         Else
@@ -2630,7 +2630,7 @@
         End Select
     End Sub
 
-    'Mouse forward and Back: Works where mouse location is. Works for the main window (but not over the browser control area) when using the extra mouse programmable 4th and 5th buttons on the mouse
+    'Mouse Forward and Back: Works where mouse location is. Works for the main form window (but not over the browser control area) when using the extra mouse programmable 4th and 5th buttons on the mouse
     Private Sub Main_MouseDown(sender As Object, e As MouseEventArgs) Handles Me.MouseDown, btnBack.MouseDown, btnBTCBlockchain.MouseDown, btnCureCoin.MouseDown, btnCureCoinBlockchain.MouseDown, btnCureCoinDiscord.MouseDown, btnCureCoinTwitter.MouseDown, btnCurePool.MouseDown, btnEOC.MouseDown, btnFAHControl.MouseDown, btnFLDC_Distribution.MouseDown, btnFoldingCoinBlockchain.MouseDown, btnFoldingCoinDiscord.MouseDown, btnFoldingCoinTwitter.MouseDown, btnFoldingCoinWebsite.MouseDown, btnFwd.MouseDown, btnGo.MouseDown, btnHome.MouseDown, btnMyWallet.MouseDown, btnReload.MouseDown, btnStopNav.MouseDown, chkShowTools.MouseDown, gbxCheckboxForTools.MouseDown, lblURL.MouseDown, pbProgIcon.MouseDown, txtURL.MouseDown
         Select Case e.Button
             Case MouseButtons.XButton1

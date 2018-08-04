@@ -192,7 +192,7 @@ Public Class KeyboardHandler
     Public Function OnPreKeyEvent(browserControl As CefSharp.IWebBrowser, browser As CefSharp.IBrowser, type As CefSharp.KeyType, windowsKeyCode As Integer, nativeKeyCode As Integer, modifiers As CefSharp.CefEventFlags, isSystemKey As Boolean, ByRef isKeyboardShortcut As Boolean) As Boolean Implements CefSharp.IKeyboardHandler.OnPreKeyEvent
         If type = CefSharp.KeyType.RawKeyDown Then
             Select Case windowsKeyCode
-            'Browser active control event: Press ESC to cancel Navigation, F5 to Refresh, CTRL+F5 to Clear Cache, ALT+Left for Navigate Back, ALT+Right for Navigate Forward, F12 for Web Tools
+                'Browser active control event: Press ESC to cancel Navigation, F5 to Refresh, CTRL+F5 to Clear Cache, ALT+Left for Navigate Back, ALT+Right for Navigate Forward, F12 for Web Tools
                 Case Keys.Right, Keys.Left
                     If modifiers = CefSharp.CefEventFlags.AltDown Then
                         g_Main.updateKeyPress(windowsKeyCode, modifiers)
