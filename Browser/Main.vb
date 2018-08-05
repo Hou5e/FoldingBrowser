@@ -700,6 +700,12 @@
 #Enable Warning BC42358
     End Sub
 
+    Private Sub btnFoldingCoinShop_Click(sender As Object, e As EventArgs) Handles btnFoldingCoinShop.Click
+#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
+        OpenURL(URL_FoldingCoinShop, False)
+#Enable Warning BC42358
+    End Sub
+
 
     Private Sub btnCureCoin_Click(sender As System.Object, e As System.EventArgs) Handles btnCureCoin.Click
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
@@ -2631,7 +2637,7 @@
     End Sub
 
     'Mouse Forward and Back: Works where mouse location is. Works for the main form window (but not over the browser control area) when using the extra mouse programmable 4th and 5th buttons on the mouse
-    Private Sub Main_MouseDown(sender As Object, e As MouseEventArgs) Handles Me.MouseDown, btnBack.MouseDown, btnBTCBlockchain.MouseDown, btnCureCoin.MouseDown, btnCureCoinBlockchain.MouseDown, btnCureCoinDiscord.MouseDown, btnCureCoinTwitter.MouseDown, btnCurePool.MouseDown, btnEOC.MouseDown, btnFAHControl.MouseDown, btnFLDC_Distribution.MouseDown, btnFoldingCoinBlockchain.MouseDown, btnFoldingCoinDiscord.MouseDown, btnFoldingCoinTwitter.MouseDown, btnFoldingCoinWebsite.MouseDown, btnFwd.MouseDown, btnGo.MouseDown, btnHome.MouseDown, btnMyWallet.MouseDown, btnReload.MouseDown, btnStopNav.MouseDown, chkShowTools.MouseDown, gbxCheckboxForTools.MouseDown, lblURL.MouseDown, pbProgIcon.MouseDown, txtURL.MouseDown
+    Private Sub Main_MouseDown(sender As Object, e As MouseEventArgs) Handles Me.MouseDown, btnBack.MouseDown, btnBTCBlockchain.MouseDown, btnCureCoin.MouseDown, btnCureCoinBlockchain.MouseDown, btnCureCoinDiscord.MouseDown, btnCureCoinTwitter.MouseDown, btnCurePool.MouseDown, btnEOC.MouseDown, btnFAHControl.MouseDown, btnFLDC_Distribution.MouseDown, btnFoldingCoinBlockchain.MouseDown, btnFoldingCoinDiscord.MouseDown, btnFoldingCoinShop.MouseDown, btnFoldingCoinTwitter.MouseDown, btnFoldingCoinWebsite.MouseDown, btnFwd.MouseDown, btnGo.MouseDown, btnHome.MouseDown, btnMyWallet.MouseDown, btnReload.MouseDown, btnStopNav.MouseDown, chkShowTools.MouseDown, gbxCheckboxForTools.MouseDown, lblURL.MouseDown, pbProgIcon.MouseDown, txtURL.MouseDown
         Select Case e.Button
             Case MouseButtons.XButton1
                 'Back

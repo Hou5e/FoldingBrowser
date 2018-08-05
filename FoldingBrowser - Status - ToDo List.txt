@@ -7,8 +7,9 @@ FoldingBrowser All-in-One Installer:
 Immediate Need /  Short-Term Goals:
 -----------------------------------
 
--Strip out all not allowed characters that can be pasted in to the username textbox --> TextboxEx? -Automatic character removal with no warning that the pasted text was modified was originally (less desirable, but probably better. Make warning message).
+-Add other related website link buttons?    http://www.scienceblockchains.com/      https://mergedfolding.net/  (Skip)
 -Support other wallets, for pressing the 'FLDC Wallet' button, with option for:  https://freewallet.io/   And, reverse the CounterWallet website search order to use the 2nd one first?  (Currently only using: https://counterwallet.io/).    Other alternatives (ignore for now): https://wallet.indiesquare.me/     also: rarepepewallet.com (Not updated enough? security risks?)     (Not yet) https://tokenpockets.com/ (You cannot use tokenpockets currently. It is not compatible with existing passphrases from CounterWallet. If you want to use it, you will have to make a new address first)
+-Strip out all not allowed characters that can be pasted in to the username textbox --> TextboxEx? -Automatic character removal with no warning that the pasted text was modified was originally (less desirable, but probably better. Make warning message).
 -Evaluate upgrading to CefSharp/Chrome v67 (VC++2015) when released here: github.com/cefsharp/CefSharp/releases
 
 ----------------------------------------------------
@@ -58,7 +59,9 @@ Other Ideas, Improvements, Tasks, Longer-Term Goals:
 Change Log - Release Notes - Tasks completed:
 ======================================================================================================
 
-v17 Release (08/??/2018)
+v17 Release (08/05/2018)
+[DONE] -Add other related website link buttons:    https://tokenmarkets.com/catalog/foldingcoin
+[DONE-08/05/2018] -Fix tabbing order of form items to be correct.
 [DONE] -Upgrade to CefSharp/Chrome v65 (VC++2015), and updated the VC++ dependency in the installer
 [DONE] -Update the FoldingBrowser FAH download links for the FAH website domain change
 [DONE] -Add workaround for: FAH Web Control, where it gets stuck in an infinite refresh loop in Chrome v59+, and needs a refresh without cache to fix that condition.

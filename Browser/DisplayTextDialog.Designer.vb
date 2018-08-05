@@ -100,7 +100,7 @@ Partial Class DisplayTextDialog
         Me.MsgTextTop.Location = New System.Drawing.Point(21, 9)
         Me.MsgTextTop.Name = "MsgTextTop"
         Me.MsgTextTop.Size = New System.Drawing.Size(233, 18)
-        Me.MsgTextTop.TabIndex = 1
+        Me.MsgTextTop.TabIndex = 6
         Me.MsgTextTop.Text = "Encrypted Data File Contents:"
         '
         'btnSaveChanges
@@ -110,7 +110,7 @@ Partial Class DisplayTextDialog
         Me.btnSaveChanges.Location = New System.Drawing.Point(399, 495)
         Me.btnSaveChanges.Name = "btnSaveChanges"
         Me.btnSaveChanges.Size = New System.Drawing.Size(124, 28)
-        Me.btnSaveChanges.TabIndex = 5
+        Me.btnSaveChanges.TabIndex = 3
         Me.btnSaveChanges.Text = "Save Changes"
         Me.ToolTip1.SetToolTip(Me.btnSaveChanges, "If modified, this button allows saving any of those changes" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "to the encrypted Dat" &
         " file. Be careful when doing this.")
@@ -125,7 +125,7 @@ Partial Class DisplayTextDialog
         Me.lblWarningInfo.Location = New System.Drawing.Point(13, 394)
         Me.lblWarningInfo.Name = "lblWarningInfo"
         Me.lblWarningInfo.Size = New System.Drawing.Size(756, 96)
-        Me.lblWarningInfo.TabIndex = 3
+        Me.lblWarningInfo.TabIndex = 7
         '
         'txtWarningMessage
         '
@@ -139,7 +139,7 @@ Partial Class DisplayTextDialog
         Me.txtWarningMessage.ReadOnly = True
         Me.txtWarningMessage.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.txtWarningMessage.Size = New System.Drawing.Size(734, 82)
-        Me.txtWarningMessage.TabIndex = 4
+        Me.txtWarningMessage.TabIndex = 8
         Me.txtWarningMessage.Text = resources.GetString("txtWarningMessage.Text")
         Me.txtWarningMessage.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
@@ -151,7 +151,7 @@ Partial Class DisplayTextDialog
         Me.btnMakeBackup.Location = New System.Drawing.Point(533, 495)
         Me.btnMakeBackup.Name = "btnMakeBackup"
         Me.btnMakeBackup.Size = New System.Drawing.Size(124, 28)
-        Me.btnMakeBackup.TabIndex = 7
+        Me.btnMakeBackup.TabIndex = 4
         Me.btnMakeBackup.Text = "Make Backup"
         Me.ToolTip1.SetToolTip(Me.btnMakeBackup, "Saves a unique folder to a location you selected." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Save a copy of: FoldingBrowser" &
         " INI and DAT, CureCoin wallet.dat")
@@ -162,7 +162,7 @@ Partial Class DisplayTextDialog
         Me.txtWalletName.Location = New System.Drawing.Point(130, 6)
         Me.txtWalletName.Name = "txtWalletName"
         Me.txtWalletName.Size = New System.Drawing.Size(128, 20)
-        Me.txtWalletName.TabIndex = 3
+        Me.txtWalletName.TabIndex = 1
         Me.ToolTip1.SetToolTip(Me.txtWalletName, "Change wallet name, press <Enter> to save it")
         '
         'cbxWalletId
@@ -172,7 +172,7 @@ Partial Class DisplayTextDialog
         Me.cbxWalletId.Location = New System.Drawing.Point(99, 6)
         Me.cbxWalletId.Name = "cbxWalletId"
         Me.cbxWalletId.Size = New System.Drawing.Size(30, 21)
-        Me.cbxWalletId.TabIndex = 2
+        Me.cbxWalletId.TabIndex = 0
         Me.cbxWalletId.Text = "0"
         Me.ToolTip1.SetToolTip(Me.cbxWalletId, "Wallet Id (0-9) to use. Default: 0.")
         '
@@ -181,7 +181,7 @@ Partial Class DisplayTextDialog
         Me.txtCureCoinPoolPin.Location = New System.Drawing.Point(167, 228)
         Me.txtCureCoinPoolPin.Name = "txtCureCoinPoolPin"
         Me.txtCureCoinPoolPin.Size = New System.Drawing.Size(296, 20)
-        Me.txtCureCoinPoolPin.TabIndex = 12
+        Me.txtCureCoinPoolPin.TabIndex = 10
         Me.ToolTip1.SetToolTip(Me.txtCureCoinPoolPin, "Pin number needed to make any changes to the pool information")
         '
         'txtExtremeOverclockingId
@@ -197,7 +197,7 @@ Partial Class DisplayTextDialog
         Me.txtDiscordPassword.Location = New System.Drawing.Point(167, 280)
         Me.txtDiscordPassword.Name = "txtDiscordPassword"
         Me.txtDiscordPassword.Size = New System.Drawing.Size(296, 20)
-        Me.txtDiscordPassword.TabIndex = 30
+        Me.txtDiscordPassword.TabIndex = 12
         Me.ToolTip1.SetToolTip(Me.txtDiscordPassword, "Password used for Discord Login")
         '
         'txtDiscordEmail
@@ -205,7 +205,7 @@ Partial Class DisplayTextDialog
         Me.txtDiscordEmail.Location = New System.Drawing.Point(167, 258)
         Me.txtDiscordEmail.Name = "txtDiscordEmail"
         Me.txtDiscordEmail.Size = New System.Drawing.Size(296, 20)
-        Me.txtDiscordEmail.TabIndex = 28
+        Me.txtDiscordEmail.TabIndex = 11
         Me.ToolTip1.SetToolTip(Me.txtDiscordEmail, "Email used for Discord Login")
         '
         'chkShowRawData
@@ -215,7 +215,7 @@ Partial Class DisplayTextDialog
         Me.chkShowRawData.Location = New System.Drawing.Point(13, 501)
         Me.chkShowRawData.Name = "chkShowRawData"
         Me.chkShowRawData.Size = New System.Drawing.Size(104, 17)
-        Me.chkShowRawData.TabIndex = 6
+        Me.chkShowRawData.TabIndex = 1
         Me.chkShowRawData.Text = "Show Raw Data"
         Me.chkShowRawData.UseVisualStyleBackColor = True
         '
@@ -268,7 +268,7 @@ Partial Class DisplayTextDialog
         Me.SplitContainer1.Size = New System.Drawing.Size(734, 359)
         Me.SplitContainer1.SplitterDistance = 640
         Me.SplitContainer1.SplitterWidth = 2
-        Me.SplitContainer1.TabIndex = 2
+        Me.SplitContainer1.TabIndex = 5
         '
         'lblDiscordPassword
         '
@@ -276,7 +276,7 @@ Partial Class DisplayTextDialog
         Me.lblDiscordPassword.Location = New System.Drawing.Point(73, 283)
         Me.lblDiscordPassword.Name = "lblDiscordPassword"
         Me.lblDiscordPassword.Size = New System.Drawing.Size(92, 13)
-        Me.lblDiscordPassword.TabIndex = 29
+        Me.lblDiscordPassword.TabIndex = 25
         Me.lblDiscordPassword.Text = "Discord Password"
         '
         'lblDiscordEmail
@@ -285,7 +285,7 @@ Partial Class DisplayTextDialog
         Me.lblDiscordEmail.Location = New System.Drawing.Point(94, 261)
         Me.lblDiscordEmail.Name = "lblDiscordEmail"
         Me.lblDiscordEmail.Size = New System.Drawing.Size(71, 13)
-        Me.lblDiscordEmail.TabIndex = 27
+        Me.lblDiscordEmail.TabIndex = 24
         Me.lblDiscordEmail.Text = "Discord Email"
         '
         'lblCureCoinPoolPin
@@ -294,7 +294,7 @@ Partial Class DisplayTextDialog
         Me.lblCureCoinPoolPin.Location = New System.Drawing.Point(74, 231)
         Me.lblCureCoinPoolPin.Name = "lblCureCoinPoolPin"
         Me.lblCureCoinPoolPin.Size = New System.Drawing.Size(92, 13)
-        Me.lblCureCoinPoolPin.TabIndex = 0
+        Me.lblCureCoinPoolPin.TabIndex = 23
         Me.lblCureCoinPoolPin.Text = "CureCoin Pool Pin"
         '
         'txtCureCoinPoolPassword
@@ -302,7 +302,7 @@ Partial Class DisplayTextDialog
         Me.txtCureCoinPoolPassword.Location = New System.Drawing.Point(167, 206)
         Me.txtCureCoinPoolPassword.Name = "txtCureCoinPoolPassword"
         Me.txtCureCoinPoolPassword.Size = New System.Drawing.Size(296, 20)
-        Me.txtCureCoinPoolPassword.TabIndex = 11
+        Me.txtCureCoinPoolPassword.TabIndex = 9
         '
         'lblCureCoinPoolPassword
         '
@@ -318,7 +318,7 @@ Partial Class DisplayTextDialog
         Me.txtCureCoinAddress.Location = New System.Drawing.Point(167, 184)
         Me.txtCureCoinAddress.Name = "txtCureCoinAddress"
         Me.txtCureCoinAddress.Size = New System.Drawing.Size(296, 20)
-        Me.txtCureCoinAddress.TabIndex = 10
+        Me.txtCureCoinAddress.TabIndex = 8
         '
         'lblCureCoinAddress
         '
@@ -334,7 +334,7 @@ Partial Class DisplayTextDialog
         Me.txtCounterParty12WordPassphrase.Location = New System.Drawing.Point(167, 154)
         Me.txtCounterParty12WordPassphrase.Name = "txtCounterParty12WordPassphrase"
         Me.txtCounterParty12WordPassphrase.Size = New System.Drawing.Size(296, 20)
-        Me.txtCounterParty12WordPassphrase.TabIndex = 9
+        Me.txtCounterParty12WordPassphrase.TabIndex = 7
         '
         'lblCounterParty12WordPassphrase
         '
@@ -350,7 +350,7 @@ Partial Class DisplayTextDialog
         Me.txtBTCAddress.Location = New System.Drawing.Point(167, 132)
         Me.txtBTCAddress.Name = "txtBTCAddress"
         Me.txtBTCAddress.Size = New System.Drawing.Size(296, 20)
-        Me.txtBTCAddress.TabIndex = 8
+        Me.txtBTCAddress.TabIndex = 6
         '
         'lblBTCAddress
         '
@@ -367,7 +367,7 @@ Partial Class DisplayTextDialog
         Me.lblExtremeOverclockingId.Location = New System.Drawing.Point(43, 313)
         Me.lblExtremeOverclockingId.Name = "lblExtremeOverclockingId"
         Me.lblExtremeOverclockingId.Size = New System.Drawing.Size(123, 13)
-        Me.lblExtremeOverclockingId.TabIndex = 1
+        Me.lblExtremeOverclockingId.TabIndex = 26
         Me.lblExtremeOverclockingId.Text = "Extreme Overclocking Id"
         '
         'txtEmail
@@ -375,7 +375,7 @@ Partial Class DisplayTextDialog
         Me.txtEmail.Location = New System.Drawing.Point(167, 102)
         Me.txtEmail.Name = "txtEmail"
         Me.txtEmail.Size = New System.Drawing.Size(296, 20)
-        Me.txtEmail.TabIndex = 7
+        Me.txtEmail.TabIndex = 5
         '
         'lblEmail
         '
@@ -391,7 +391,7 @@ Partial Class DisplayTextDialog
         Me.txtFAHPasskey.Location = New System.Drawing.Point(167, 80)
         Me.txtFAHPasskey.Name = "txtFAHPasskey"
         Me.txtFAHPasskey.Size = New System.Drawing.Size(296, 20)
-        Me.txtFAHPasskey.TabIndex = 6
+        Me.txtFAHPasskey.TabIndex = 4
         '
         'lblFAHPasskey
         '
@@ -407,7 +407,7 @@ Partial Class DisplayTextDialog
         Me.txtFAHTeam.Location = New System.Drawing.Point(167, 58)
         Me.txtFAHTeam.Name = "txtFAHTeam"
         Me.txtFAHTeam.Size = New System.Drawing.Size(296, 20)
-        Me.txtFAHTeam.TabIndex = 5
+        Me.txtFAHTeam.TabIndex = 3
         '
         'lblFAHTeam
         '
@@ -423,7 +423,7 @@ Partial Class DisplayTextDialog
         Me.txtFAHUsername.Location = New System.Drawing.Point(167, 36)
         Me.txtFAHUsername.Name = "txtFAHUsername"
         Me.txtFAHUsername.Size = New System.Drawing.Size(296, 20)
-        Me.txtFAHUsername.TabIndex = 4
+        Me.txtFAHUsername.TabIndex = 2
         '
         'lblFAHUsername
         '
@@ -450,7 +450,7 @@ Partial Class DisplayTextDialog
         Me.chkShowPW.Location = New System.Drawing.Point(123, 501)
         Me.chkShowPW.Name = "chkShowPW"
         Me.chkShowPW.Size = New System.Drawing.Size(107, 17)
-        Me.chkShowPW.TabIndex = 8
+        Me.chkShowPW.TabIndex = 2
         Me.chkShowPW.Text = "Show Passwords"
         Me.chkShowPW.UseVisualStyleBackColor = True
         '

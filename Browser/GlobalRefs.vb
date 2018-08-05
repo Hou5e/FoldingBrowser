@@ -20,6 +20,7 @@ Public Module GlobalRefs
     Public Const URL_FoldingCoinDiscordInvite As String = "https://discord.gg/CvZ7gAs"
     Public Const URL_FoldingCoinDiscordRegister As String = "https://discordapp.com/register?redirect_to=%2Finvite%2FCvZ7gAs"
     Public Const URL_FoldingCoinDiscord As String = "https://discordapp.com/channels/379168590626029568/379168590626029571"
+    Public Const URL_FoldingCoinShop As String = "https://tokenmarkets.com/catalog/foldingcoin"
 
     Public Const URL_CureCoin As String = "https://curecoin.net/"
     Public Const URL_CureCoinTwitter As String = "https://twitter.com/CureCoin_Team/"

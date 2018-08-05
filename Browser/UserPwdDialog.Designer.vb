@@ -53,7 +53,7 @@ Partial Class UserPwdDialog
         Me.btnCancel.Location = New System.Drawing.Point(395, 203)
         Me.btnCancel.Name = "btnCancel"
         Me.btnCancel.Size = New System.Drawing.Size(90, 28)
-        Me.btnCancel.TabIndex = 3
+        Me.btnCancel.TabIndex = 4
         Me.btnCancel.Text = "Cancel"
         Me.btnCancel.UseVisualStyleBackColor = True
         '
@@ -65,7 +65,7 @@ Partial Class UserPwdDialog
         Me.btnOK.Location = New System.Drawing.Point(299, 203)
         Me.btnOK.Name = "btnOK"
         Me.btnOK.Size = New System.Drawing.Size(90, 28)
-        Me.btnOK.TabIndex = 2
+        Me.btnOK.TabIndex = 3
         Me.btnOK.Text = "OK"
         Me.btnOK.UseVisualStyleBackColor = True
         '
@@ -76,7 +76,7 @@ Partial Class UserPwdDialog
         Me.lblMsgText.Location = New System.Drawing.Point(12, 14)
         Me.lblMsgText.Name = "lblMsgText"
         Me.lblMsgText.Size = New System.Drawing.Size(225, 24)
-        Me.lblMsgText.TabIndex = 6
+        Me.lblMsgText.TabIndex = 5
         Me.lblMsgText.Text = "Please Enter Your Info:"
         '
         'txtPassword
@@ -117,7 +117,7 @@ Partial Class UserPwdDialog
         Me.txtUsername.Location = New System.Drawing.Point(106, 139)
         Me.txtUsername.Name = "txtUsername"
         Me.txtUsername.Size = New System.Drawing.Size(397, 22)
-        Me.txtUsername.TabIndex = 1
+        Me.txtUsername.TabIndex = 2
         '
         'lblUsername
         '
@@ -126,7 +126,7 @@ Partial Class UserPwdDialog
         Me.lblUsername.Location = New System.Drawing.Point(14, 140)
         Me.lblUsername.Name = "lblUsername"
         Me.lblUsername.Size = New System.Drawing.Size(90, 18)
-        Me.lblUsername.TabIndex = 8
+        Me.lblUsername.TabIndex = 9
         Me.lblUsername.Text = "Username:"
         '
         'chkNewUser
@@ -136,7 +136,7 @@ Partial Class UserPwdDialog
         Me.chkNewUser.Location = New System.Drawing.Point(118, 54)
         Me.chkNewUser.Name = "chkNewUser"
         Me.chkNewUser.Size = New System.Drawing.Size(101, 22)
-        Me.chkNewUser.TabIndex = 9
+        Me.chkNewUser.TabIndex = 6
         Me.chkNewUser.Text = "New User"
         Me.chkNewUser.UseVisualStyleBackColor = True
         '

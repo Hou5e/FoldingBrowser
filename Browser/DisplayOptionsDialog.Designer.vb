@@ -70,7 +70,7 @@ Partial Class DisplayOptionsDialog
         Me.MsgTextTop.Location = New System.Drawing.Point(21, 9)
         Me.MsgTextTop.Name = "MsgTextTop"
         Me.MsgTextTop.Size = New System.Drawing.Size(72, 18)
-        Me.MsgTextTop.TabIndex = 1
+        Me.MsgTextTop.TabIndex = 4
         Me.MsgTextTop.Text = "Options:"
         '
         'btnSaveChanges
@@ -80,7 +80,7 @@ Partial Class DisplayOptionsDialog
         Me.btnSaveChanges.Location = New System.Drawing.Point(288, 229)
         Me.btnSaveChanges.Name = "btnSaveChanges"
         Me.btnSaveChanges.Size = New System.Drawing.Size(124, 28)
-        Me.btnSaveChanges.TabIndex = 5
+        Me.btnSaveChanges.TabIndex = 2
         Me.btnSaveChanges.Text = "Save Changes"
         Me.ToolTip1.SetToolTip(Me.btnSaveChanges, "If modified, this button allows saving any of those changes" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "to the encrypted Dat" &
         " file. Be careful when doing this.")
@@ -93,7 +93,7 @@ Partial Class DisplayOptionsDialog
         Me.chkShowRawData.Location = New System.Drawing.Point(13, 235)
         Me.chkShowRawData.Name = "chkShowRawData"
         Me.chkShowRawData.Size = New System.Drawing.Size(104, 17)
-        Me.chkShowRawData.TabIndex = 6
+        Me.chkShowRawData.TabIndex = 1
         Me.chkShowRawData.Text = "Show Raw Data"
         Me.chkShowRawData.UseVisualStyleBackColor = True
         '
@@ -121,7 +121,7 @@ Partial Class DisplayOptionsDialog
         Me.SplitContainer1.Size = New System.Drawing.Size(663, 180)
         Me.SplitContainer1.SplitterDistance = 578
         Me.SplitContainer1.SplitterWidth = 2
-        Me.SplitContainer1.TabIndex = 2
+        Me.SplitContainer1.TabIndex = 3
         '
         'lblHomepage
         '
