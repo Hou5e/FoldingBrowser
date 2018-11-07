@@ -64,8 +64,8 @@
             'Try loading a stored Username first, if it exists already
             If Me.txtUsername.Text.Length = 0 Then
                 Try
-                    If DAT.GetSection(Id & g_Main.cbxWalletId.Text).GetKey(DAT_FAH_Username) IsNot Nothing Then
-                        Me.txtUsername.Text = DAT.GetSection(Id & g_Main.cbxWalletId.Text).GetKey(DAT_FAH_Username).GetValue()
+                    If DAT.GetSection(Id & g_Main.cbxToolsWalletId.Text).GetKey(DAT_FAH_Username) IsNot Nothing Then
+                        Me.txtUsername.Text = DAT.GetSection(Id & g_Main.cbxToolsWalletId.Text).GetKey(DAT_FAH_Username).GetValue()
                     End If
                 Catch ex As Exception
                     g_Main.Msg("FAH Cfg: Error loading Username: " & ex.Message.ToString)
@@ -75,8 +75,8 @@
             'Try loading the CounterWallet Bitcoin (BTC) address
             If Me.txtBitcoinAddress.Text.Length = 0 Then
                 Try
-                    If DAT.GetSection(Id & g_Main.cbxWalletId.Text).GetKey(DAT_BTC_Addr) IsNot Nothing Then
-                        Me.txtBitcoinAddress.Text = DAT.GetSection(Id & g_Main.cbxWalletId.Text).GetKey(DAT_BTC_Addr).GetValue()
+                    If DAT.GetSection(Id & g_Main.cbxToolsWalletId.Text).GetKey(DAT_BTC_Addr) IsNot Nothing Then
+                        Me.txtBitcoinAddress.Text = DAT.GetSection(Id & g_Main.cbxToolsWalletId.Text).GetKey(DAT_BTC_Addr).GetValue()
                     End If
                 Catch ex As Exception
                     g_Main.Msg("FAH Cfg: Error loading BTC Address: " & ex.Message.ToString)
@@ -85,8 +85,8 @@
 
             'Try loading the FAH Team #
             Try
-                If DAT.GetSection(Id & g_Main.cbxWalletId.Text).GetKey(DAT_FAH_Team) IsNot Nothing Then
-                    strTeam = DAT.GetSection(Id & g_Main.cbxWalletId.Text).GetKey(DAT_FAH_Team).GetValue()
+                If DAT.GetSection(Id & g_Main.cbxToolsWalletId.Text).GetKey(DAT_FAH_Team) IsNot Nothing Then
+                    strTeam = DAT.GetSection(Id & g_Main.cbxToolsWalletId.Text).GetKey(DAT_FAH_Team).GetValue()
                     If strTeam = "224497" Then
                         Me.rbnCureCoin.Checked = True
                     ElseIf strTeam = "226728" Then
@@ -102,8 +102,8 @@
             'Try loading the Email Address, if it exists already
             If Me.txtEmail.Text.Length = 0 Then
                 Try
-                    If DAT.GetSection(Id & g_Main.cbxWalletId.Text).GetKey(DAT_Email) IsNot Nothing Then
-                        Me.txtEmail.Text = DAT.GetSection(Id & g_Main.cbxWalletId.Text).GetKey(DAT_Email).GetValue()
+                    If DAT.GetSection(Id & g_Main.cbxToolsWalletId.Text).GetKey(DAT_Email) IsNot Nothing Then
+                        Me.txtEmail.Text = DAT.GetSection(Id & g_Main.cbxToolsWalletId.Text).GetKey(DAT_Email).GetValue()
                     End If
                 Catch ex As Exception
                     g_Main.Msg("FAH Cfg: Error loading Email Address: " & ex.Message.ToString)
@@ -113,8 +113,8 @@
             'Try loading the Passkey, if it exists already
             If Me.txtPasskey.Text.Length = 0 Then
                 Try
-                    If DAT.GetSection(Id & g_Main.cbxWalletId.Text).GetKey(DAT_FAH_Passkey) IsNot Nothing Then
-                        Me.txtPasskey.Text = DAT.GetSection(Id & g_Main.cbxWalletId.Text).GetKey(DAT_FAH_Passkey).GetValue()
+                    If DAT.GetSection(Id & g_Main.cbxToolsWalletId.Text).GetKey(DAT_FAH_Passkey) IsNot Nothing Then
+                        Me.txtPasskey.Text = DAT.GetSection(Id & g_Main.cbxToolsWalletId.Text).GetKey(DAT_FAH_Passkey).GetValue()
                     End If
                 Catch ex As Exception
                     g_Main.Msg("FAH Cfg: Error loading Passkey: " & ex.Message.ToString)
@@ -205,14 +205,14 @@
     Private Sub CreateFAHUserName()
         If m_bSkipUpdating = False Then
             'Reset errors, and colors to be good
-            Me.rbnFoldingCoin.BackColor = Color.FromKnownColor(KnownColor.Control)
-            Me.rbnCureCoin.BackColor = Color.FromKnownColor(KnownColor.Control)
+            Me.rbnFoldingCoin.BackColor = Color.FromKnownColor(KnownColor.Window)
+            Me.rbnCureCoin.BackColor = Color.FromKnownColor(KnownColor.Window)
             Me.lblErrorNote.Visible = False
-            Me.lblUsernamePreview.BackColor = Color.White
-            Me.txtUsername.BackColor = Color.White
-            Me.cbxSeparator.BackColor = Color.White
-            Me.txtBitcoinAddress.BackColor = Color.White
-            Me.txtTelnetFAHCfg.BackColor = Color.White
+            Me.lblUsernamePreview.BackColor = Color.FromKnownColor(KnownColor.Window)
+            Me.txtUsername.BackColor = Color.FromKnownColor(KnownColor.Window)
+            Me.cbxSeparator.BackColor = Color.FromKnownColor(KnownColor.Window)
+            Me.txtBitcoinAddress.BackColor = Color.FromKnownColor(KnownColor.Window)
+            Me.txtTelnetFAHCfg.BackColor = Color.FromKnownColor(KnownColor.Window)
 
             'Allow existing Username entry in first dialog. Then parse it out in to the other fields. Look for 1 or 2 underscores
             If Me.txtUsername.Text.Contains("_") = True Then
@@ -328,9 +328,9 @@
                         If Me.rbnCureCoin.Checked = True Then
                             Me.lblUsernamePreview.BackColor = Color.Yellow
                             'Reset these error messages to allow this case, for CureCoin setup only
-                            Me.txtUsername.BackColor = Color.White
-                            Me.cbxSeparator.BackColor = Color.White
-                            Me.txtBitcoinAddress.BackColor = Color.White
+                            Me.txtUsername.BackColor = Color.FromKnownColor(KnownColor.Window)
+                            Me.cbxSeparator.BackColor = Color.FromKnownColor(KnownColor.Window)
+                            Me.txtBitcoinAddress.BackColor = Color.FromKnownColor(KnownColor.Window)
                             Me.lblErrorNote.Text = "NOTE: This username format can't earn FLDC"
                             Me.lblErrorNote.Visible = True
                         Else
@@ -359,17 +359,19 @@
                     End If
 
                 Case 1
-                    '1 underscore = New format, not ready yet
-                    Me.cbxSeparator.BackColor = Color.Tomato
-                    Me.lblErrorNote.Text = "New username format not enabled yet"
-                    Me.lblErrorNote.Visible = True
+                    '1 underscore = New format (User_Address) = good
+                    If Me.txtUsername.Text.Length = 0 Then
+                        Me.txtUsername.BackColor = Color.Tomato
+                        Me.lblErrorNote.Text = "Please select a username"
+                        Me.lblErrorNote.Visible = True
+                    End If
 
                 Case 2
                     'Typical for _ALL_ or _FLDC_ = good
                     If Me.cbxSeparator.Text <> "_ALL_" AndAlso Me.cbxSeparator.Text <> "_FLDC_" Then
                         Me.cbxSeparator.BackColor = Color.Tomato
                         Me.txtUsername.BackColor = Color.Tomato
-                        Me.lblErrorNote.Text = "Avoid new username format, or additional underscores"
+                        Me.lblErrorNote.Text = "Avoid additional underscores"
                         Me.lblErrorNote.Visible = True
                     End If
 
@@ -382,7 +384,7 @@
 
             'Passkey check: Must be 32 hexadecimal characters
             If Me.txtPasskey.Text.Length = 32 OrElse Me.txtPasskey.Text.Length = 0 Then
-                Me.txtPasskey.BackColor = Color.White
+                Me.txtPasskey.BackColor = Color.FromKnownColor(KnownColor.Window)
                 Me.lblPasskeyError.Visible = False
             Else
                 Me.txtPasskey.BackColor = Color.Tomato
@@ -430,15 +432,15 @@
             Select Case True
                 Case Me.rbnCureCoin.Checked
                     Me.lblTeamNumber.Text = "224497"
-                    Me.lblTeamNumber.BackColor = Color.White
+                    Me.lblTeamNumber.BackColor = Color.FromKnownColor(KnownColor.Window)
 
                 Case Me.rbnFoldingCoin.Checked
                     Me.lblTeamNumber.Text = "226728"
-                    Me.lblTeamNumber.BackColor = Color.White
+                    Me.lblTeamNumber.BackColor = Color.FromKnownColor(KnownColor.Window)
 
                 Case (Me.rbnOtherTeam.Checked = True AndAlso Me.txtOtherTeam.Text.Length > 0 AndAlso IsNumeric(Me.txtOtherTeam.Text) = True)
                     Me.lblTeamNumber.Text = Me.txtOtherTeam.Text.Trim
-                    Me.lblTeamNumber.BackColor = Color.White
+                    Me.lblTeamNumber.BackColor = Color.FromKnownColor(KnownColor.Window)
 
                 Case Else
                     Me.lblTeamNumber.BackColor = Color.Tomato
@@ -461,7 +463,7 @@
 #Region "Passkey Auto-Update"
     Private Sub txtEmail_TextChanged(sender As Object, e As EventArgs) Handles txtEmail.TextChanged
         'Reset the background color
-        Me.txtEmail.BackColor = Color.White
+        Me.txtEmail.BackColor = Color.FromKnownColor(KnownColor.Window)
     End Sub
 
     'Run the script to send the Passkey. Web page: http://fah-web.stanford.edu/cgi-bin/getpasskey.py
@@ -471,7 +473,7 @@
             'Temporarily disable the get passkey button
             Me.btnGetPasskey.Enabled = False
             'Reset the background color
-            Me.txtEmail.BackColor = Color.White
+            Me.txtEmail.BackColor = Color.FromKnownColor(KnownColor.Window)
 
             'Remove any white space at the beginning or end of the email address
             Me.txtEmail.Text = Me.txtEmail.Text.Trim
@@ -649,10 +651,10 @@
                 End If
 
                 'Write out data to INI info
-                If Me.lblUsernamePreview.Text.Length > 0 Then DAT.AddSection(Id & g_Main.cbxWalletId.Text).AddKey(DAT_FAH_Username).Value = Me.lblUsernamePreview.Text
-                If Me.lblTeamNumber.Text.Length > 0 Then DAT.AddSection(Id & g_Main.cbxWalletId.Text).AddKey(DAT_FAH_Team).Value = Me.lblTeamNumber.Text
-                If Me.txtEmail.Text.Length > 0 Then DAT.AddSection(Id & g_Main.cbxWalletId.Text).AddKey(DAT_Email).Value = Me.txtEmail.Text
-                If Me.txtPasskey.Text.Length > 0 Then DAT.AddSection(Id & g_Main.cbxWalletId.Text).AddKey(DAT_FAH_Passkey).Value = Me.txtPasskey.Text
+                If Me.lblUsernamePreview.Text.Length > 0 Then DAT.AddSection(Id & g_Main.cbxToolsWalletId.Text).AddKey(DAT_FAH_Username).Value = Me.lblUsernamePreview.Text
+                If Me.lblTeamNumber.Text.Length > 0 Then DAT.AddSection(Id & g_Main.cbxToolsWalletId.Text).AddKey(DAT_FAH_Team).Value = Me.lblTeamNumber.Text
+                If Me.txtEmail.Text.Length > 0 Then DAT.AddSection(Id & g_Main.cbxToolsWalletId.Text).AddKey(DAT_Email).Value = Me.txtEmail.Text
+                If Me.txtPasskey.Text.Length > 0 Then DAT.AddSection(Id & g_Main.cbxToolsWalletId.Text).AddKey(DAT_FAH_Passkey).Value = Me.txtPasskey.Text
 
                 'Create text from the INI, Encrypt, and Write/flush DAT text to file
                 SaveDat(Encrypt(DAT.SaveToString))
@@ -660,16 +662,16 @@
                 DAT = Nothing
 
                 'Make sure the INI key/value exists
-                If INI.GetSection(Id & g_Main.cbxWalletId.Text) Is Nothing OrElse INI.GetSection(Id & g_Main.cbxWalletId.Text).GetKey(INI_WalletName) Is Nothing Then
+                If INI.GetSection(Id & g_Main.cbxToolsWalletId.Text) Is Nothing OrElse INI.GetSection(Id & g_Main.cbxToolsWalletId.Text).GetKey(INI_WalletName) Is Nothing Then
                     'Save a wallet name, if there is none
-                    INI.AddSection(Id & g_Main.cbxWalletId.Text)
-                    INI.AddSection(Id & g_Main.cbxWalletId.Text).AddKey(INI_WalletName).Value = DefaultWalletName & g_Main.cbxWalletId.Text
+                    INI.AddSection(Id & g_Main.cbxToolsWalletId.Text)
+                    INI.AddSection(Id & g_Main.cbxToolsWalletId.Text).AddKey(INI_WalletName).Value = DefaultWalletName & g_Main.cbxToolsWalletId.Text
                 End If
 
                 INI.Save(IniFilePath)
                 Await Wait(100)
                 'Refresh the Wallet Names
-                g_Main.cbxWalletId_SelectedIndexChanged(Nothing, Nothing)
+                g_Main.cbxToolsWalletId_SelectedIndexChanged(Nothing, Nothing)
 
             Catch ex As Exception
                 Dim strMsg As String = "Error saving FAH settings to DAT file: " & ex.ToString

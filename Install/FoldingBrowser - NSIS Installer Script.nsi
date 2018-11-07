@@ -4,8 +4,8 @@
 
 
 ;---- Helper defines / constants ----
-!define PRODUCT_VERSION "17"  ;Match the displayed version in the program title. Example: 1.2.3
-!define PRODUCT_4_VALUE_VERSION "17.0.0.0"  ;Match the executable version: Right-click the program executable file | Properties | Version. Example: 1.2.3.4
+!define PRODUCT_VERSION "18"  ;Match the displayed version in the program title. Example: 1.2.3
+!define PRODUCT_4_VALUE_VERSION "18.0.0.0"  ;Match the executable version: Right-click the program executable file | Properties | Version. Example: 1.2.3.4
 !define PRODUCT_YEAR "2018"
 !define PRODUCT_NAME "FoldingBrowser"
 !define PRODUCT_EXE_NAME "FoldingBrowser"  ;Executable name without extension
@@ -202,7 +202,6 @@ Section "!${PRODUCT_NAME} v${PRODUCT_VERSION}" SEC01
   File "..\Browser\bin\Release\libGLESv2.dll"
   File "..\Browser\bin\Release\LICENSE.txt"
   File "..\Browser\bin\Release\*.bin"
-  File "..\Browser\bin\Release\widevinecdmadapter.dll"
 
   SetOutPath "$INSTDIR\Licenses"  ;Destination
   File "..\Browser\bin\Release\Licenses\*"
@@ -460,12 +459,18 @@ Section Uninstall
 
   SetShellVarContext current   ;for 'Current': $AppData = C:\Users\%username%\AppData\Roaming, otherwise for 'all': $AppData = C:\ProgramData
   ;Delete temp files and folders
+  Delete "$APPDATA\${PRODUCT_NAME}\Cache\Application Cache\*"
+  RMDir /r "$APPDATA\${PRODUCT_NAME}\Cache\Application Cache"
+  Delete "$APPDATA\${PRODUCT_NAME}\Cache\blob_storage\*"
+  RMDir /r "$APPDATA\${PRODUCT_NAME}\Cache\blob_storage"
   Delete "$APPDATA\${PRODUCT_NAME}\Cache\Cache\*"
   RMDir /r "$APPDATA\${PRODUCT_NAME}\Cache\Cache"
   Delete "$APPDATA\${PRODUCT_NAME}\Cache\databases\*"
   RMDir /r "$APPDATA\${PRODUCT_NAME}\Cache\databases"
   Delete "$APPDATA\${PRODUCT_NAME}\Cache\Dictionaries\*"
   RMDir /r "$APPDATA\${PRODUCT_NAME}\Cache\Dictionaries"
+  Delete "$APPDATA\${PRODUCT_NAME}\Cache\File System\*"
+  RMDir /r "$APPDATA\${PRODUCT_NAME}\Cache\File System"
   Delete "$APPDATA\${PRODUCT_NAME}\Cache\GPUCache\*"
   RMDir /r "$APPDATA\${PRODUCT_NAME}\Cache\GPUCache"
   Delete "$APPDATA\${PRODUCT_NAME}\Cache\IndexedDB\*"
@@ -474,6 +479,10 @@ Section Uninstall
   RMDir /r "$APPDATA\${PRODUCT_NAME}\Cache\Local Storage"
   Delete "$APPDATA\${PRODUCT_NAME}\Cache\Pepper Data\*"
   RMDir /r "$APPDATA\${PRODUCT_NAME}\Cache\Pepper Data"
+  Delete "$APPDATA\${PRODUCT_NAME}\Cache\Service Worker\*"
+  RMDir /r "$APPDATA\${PRODUCT_NAME}\Cache\Service Worker"
+  Delete "$APPDATA\${PRODUCT_NAME}\Cache\VideoDecodeStats\*"
+  RMDir /r "$APPDATA\${PRODUCT_NAME}\Cache\VideoDecodeStats"
   Delete "$APPDATA\${PRODUCT_NAME}\Cache\*"
   RMDir /r "$APPDATA\${PRODUCT_NAME}\Cache"
   ;Leave settings files in this folder for reinstalls / upgrades

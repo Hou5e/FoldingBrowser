@@ -3,17 +3,19 @@
 
     'Page loaded indicator
     Private m_bPageLoaded As Boolean = False
-    Private m_bDefaultHomepageLoaded As Boolean = False
+    Private m_bHomepage_TopAnBottomLoaded As Boolean = False
+    Private m_bHomepage_SideBySideLoaded As Boolean = False
     Private m_bLoadingFAHWebControl As Boolean = False
     'URL to help determine the page loaded indicator
     Private m_strPageURL As String = ""
+    Private m_iWebLinkPanelHeight As Integer = 260
 
 #Region "Form and Browser Events - Initialization, Exiting"
     Public Sub New()
         Try
             InitializeComponent()
 
-            Dim settings As New CefSharp.CefSettings()
+            Dim settings As New CefSharp.WinForms.CefSettings()
             'Set the Cache path to the user's appdata roaming folder
             settings.CachePath = System.IO.Path.Combine(UserProfileDir, "Cache")
             settings.UserDataPath = settings.CachePath
@@ -83,6 +85,9 @@
             Me.btnReload.Image = My.Resources.Reload_16.ToBitmap
             Me.btnHome.Text = ""
             Me.btnHome.Image = My.Resources.Home_16.ToBitmap
+            Me.chkToolsShow.Text = ""
+            Me.chkToolsShow.Image = My.Resources.ToolsSettingsGearNoBG_24.ToBitmap
+
             'Find/Search buttons
             Me.btnFindPrevious.Text = ""
             Me.btnFindPrevious.Image = My.Resources.FindUp_16.ToBitmap
@@ -91,25 +96,35 @@
             Me.btnFindClose.Text = ""
             Me.btnFindClose.Image = My.Resources.Stop_16.ToBitmap
 
-            'Button Images
-            Me.btnMyWallet.BackgroundImage = My.Resources.Coins_4_top_24.ToBitmap
-            Me.btnFAHControl.BackgroundImage = My.Resources.L_methionine_B_top_32.ToBitmap
-            Me.btnFoldingCoinWebsite.BackgroundImage = My.Resources.FoldingCoin_top_32.ToBitmap
-            Me.btnFLDC_Distribution.BackgroundImage = My.Resources.FLDC_48.ToBitmap
-            Me.btnCureCoin.BackgroundImage = My.Resources.CureCoinLogo_top_32.ToBitmap
-            Me.btnEOC.BackgroundImage = My.Resources.EOC_48.ToBitmap
+            'Web Link Button Images. Folding@Home Related:
+            Me.btnFAHControl.BackgroundImage = My.Resources.L_methionine_B_48.ToBitmap
+            Me.btnFAHTwitter.BackgroundImage = My.Resources.Twitter_48.ToBitmap
+            Me.btnFAHNews.BackgroundImage = My.Resources.News_48.ToBitmap
+            Me.btnEOC_UserStats.BackgroundImage = My.Resources.EOC_48.ToBitmap
+            Me.btnFoldingCoinUserStats.BackgroundImage = My.Resources.FLDC_48.ToBitmap
+            'FoldingCoin Related:
+            Me.btnFoldingCoinWebsite.BackgroundImage = My.Resources.FoldingCoin_48.ToBitmap
+            Me.btnMyWallet.BackgroundImage = My.Resources.Coins_48.ToBitmap
+            Me.btnFoldingCoinTwitter.BackgroundImage = My.Resources.Twitter_48.ToBitmap
+            Me.btnFoldingCoinDiscord.BackgroundImage = My.Resources.Discord_48.ToBitmap
+            Me.btnFoldingCoinBlockchain.BackgroundImage = My.Resources.BlockchainFLDC_48.ToBitmap
+            Me.btnBTCBlockchain.BackgroundImage = My.Resources.BlockchainBTC_48.ToBitmap
+            Me.btnFoldingCoinDistribution.BackgroundImage = My.Resources.DistributionFLDC_48.ToBitmap
+            Me.btnFoldingCoinShop.BackgroundImage = My.Resources.FLDC_Shop_Mug_48.ToBitmap
+            Me.btnFoldingCoinTeamStats.BackgroundImage = My.Resources.FLDC_48.ToBitmap
+            'CureCoin Related:
+            Me.btnCureCoin.BackgroundImage = My.Resources.CureCoin_48.ToBitmap
+            Me.btnCureCoinTwitter.BackgroundImage = My.Resources.Twitter_48.ToBitmap
+            Me.btnCureCoinDiscord.BackgroundImage = My.Resources.Discord_48.ToBitmap
+            Me.btnCureCoinBlockchain.BackgroundImage = My.Resources.BlockchainCURE_48.ToBitmap
+            Me.btnCurePool.BackgroundImage = My.Resources.DistributionCURE_48.ToBitmap
+            Me.btnCureCoinTeamStats.BackgroundImage = My.Resources.EOC_48.ToBitmap
 
-            'Protein image on the right side of the browser
-            Me.pbProgIcon.Image = My.Resources.L_cysteine_3D_vdW2_32.ToBitmap
+            'Protein image for branding in the browser
+            Me.pbProgIcon.Image = My.Resources.L_cysteine_48.ToBitmap
 
-#If DEBUG Then
-            'Debug: show Dev Tools
-            Me.chkShowTools.Checked = True
-            chkShowTools_CheckedChanged(Nothing, Nothing)
-#Else
-            'Release: hide Dev Tools by default
-            Me.chkShowTools.Checked = False
-#End If
+            'Button Link Panel: Initially show minimized
+            Me.pnlBtnLinks.Height = 6
 
             'Hide the form while it's being adjusted
             Me.WindowState = FormWindowState.Minimized
@@ -158,25 +173,25 @@
             'Make sure the INI key/value exists
             If INI.GetSection(INI_Settings).GetKey(INI_LastWalletId) IsNot Nothing Then
                 'Restore last Wallet Id used
-                Me.cbxWalletId.Text = INI.GetSection(INI_Settings).GetKey(INI_LastWalletId).GetValue()
+                Me.cbxToolsWalletId.Text = INI.GetSection(INI_Settings).GetKey(INI_LastWalletId).GetValue()
             End If
 
             'Make sure the INI key/value exists
             If INI.GetSection(INI_Settings).GetKey(INI_HideSavedDataButton) IsNot Nothing Then
                 'Show/hide the 'Show Dat' file button
                 If INI.GetSection(INI_Settings).GetKey(INI_HideSavedDataButton).GetValue() = "False" Then
-                    Me.btnSavedData.Visible = True
+                    Me.btnToolsSavedData.Visible = True
                 ElseIf INI.GetSection(INI_Settings).GetKey(INI_HideSavedDataButton).GetValue() = "True" Then
-                    Me.btnSavedData.Visible = False
+                    Me.btnToolsSavedData.Visible = False
                 Else
                     'Restore value, if missing
                     INI.AddSection(INI_Settings).AddKey(INI_HideSavedDataButton).Value = "False"
-                    Me.btnSavedData.Visible = True
+                    Me.btnToolsSavedData.Visible = True
                 End If
             Else
                 'Restore value, if missing
                 INI.AddSection(INI_Settings).AddKey(INI_HideSavedDataButton).Value = "False"
-                Me.btnSavedData.Visible = True
+                Me.btnToolsSavedData.Visible = True
             End If
 
         Else
@@ -249,8 +264,8 @@
                 'Make sure the INI key/value exists
                 If DAT.GetSection(OldSection) IsNot Nothing AndAlso DAT.GetSection(OldSection).GetKey(Old012W) IsNot Nothing Then
                     'Save the old info to the new location and delete old info
-                    DAT.AddSection(Id & Me.cbxWalletId.Text)
-                    DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_CP12Words).Value = DAT.GetSection(OldSection).GetKey(Old012W).GetValue
+                    DAT.AddSection(Id & Me.cbxToolsWalletId.Text)
+                    DAT.AddSection(Id & Me.cbxToolsWalletId.Text).AddKey(DAT_CP12Words).Value = DAT.GetSection(OldSection).GetKey(Old012W).GetValue
                     DAT.GetSection(OldSection).RemoveAllKeys()
                     DAT.RemoveSection(OldSection)
                     'Create text from the INI, Encrypt, and Write/flush DAT text to file
@@ -259,8 +274,8 @@
                     Await Wait(100)
 
                     'Save a wallet name
-                    INI.AddSection(Id & Me.cbxWalletId.Text)
-                    INI.AddSection(Id & Me.cbxWalletId.Text).AddKey(INI_WalletName).Value = DefaultWalletName & Me.cbxWalletId.Text
+                    INI.AddSection(Id & Me.cbxToolsWalletId.Text)
+                    INI.AddSection(Id & Me.cbxToolsWalletId.Text).AddKey(INI_WalletName).Value = DefaultWalletName & Me.cbxToolsWalletId.Text
                     'Last FoldingBrowser version, now upgraded to v5
                     INI.AddSection(INI_Settings).AddKey(INI_LastBrowserVersion).Value = "5"
                     INI.Save(IniFilePath)
@@ -353,7 +368,7 @@
             DAT = Nothing
         End If
         'Refresh the Wallet Names
-        cbxWalletId_SelectedIndexChanged(Nothing, Nothing)
+        cbxToolsWalletId_SelectedIndexChanged(Nothing, Nothing)
     End Sub
 
     'This was done because the New() constructor can't be run as Async. So, this was moved out to here
@@ -395,7 +410,7 @@
 
                         'Look for FAH username for FAH installation to un-check the dialog for existing users
                         Try
-                            If DAT.GetSection(Id & Me.cbxWalletId.Text) IsNot Nothing AndAlso DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FAH_Username) IsNot Nothing Then
+                            If DAT.GetSection(Id & Me.cbxToolsWalletId.Text) IsNot Nothing AndAlso DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_FAH_Username) IsNot Nothing Then
                                 'Has FAH setup already
                                 Setup.chkGetFAHSoftware.Checked = False
                             Else
@@ -415,7 +430,7 @@
 
                         'Look for 12-word Passphrase (or BTC address?) to un-check the dialog for existing users
                         Try
-                            If DAT.GetSection(Id & Me.cbxWalletId.Text) IsNot Nothing AndAlso DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CP12Words) IsNot Nothing Then
+                            If DAT.GetSection(Id & Me.cbxToolsWalletId.Text) IsNot Nothing AndAlso DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_CP12Words) IsNot Nothing Then
                                 'Wallet info exists
                                 Setup.chkGetWalletForFLDC.Checked = False
                             Else
@@ -517,7 +532,7 @@
         g_bCancelNav = True
         Try
             'Last Wallet Id used
-            INI.AddSection(INI_Settings).AddKey(INI_LastWalletId).Value = Me.cbxWalletId.Text
+            INI.AddSection(INI_Settings).AddKey(INI_LastWalletId).Value = Me.cbxToolsWalletId.Text
             'Last Window State
             INI.AddSection(INI_Settings).AddKey(INI_WindowState).Value = Me.WindowState.ToString
             'Skip saving the window position, if closed while being minimized or full screen
@@ -595,188 +610,61 @@
 #Enable Warning BC42358
     End Sub
 
-
-    Private Async Sub btnMyWallet_Click(sender As System.Object, e As System.EventArgs) Handles btnMyWallet.Click
-        If Await LoginToCounterwallet() = False Then MessageBox.Show("Task 'Log Into Wallet' did not complete. Please try again.")
-    End Sub
-
-    Private Sub btnFoldingCoinWebsite_Click(sender As System.Object, e As System.EventArgs) Handles btnFoldingCoinWebsite.Click
+    Private Sub btnFAHTwitter_Click(sender As System.Object, e As System.EventArgs) Handles btnFAHTwitter.Click
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
-        OpenURL(URL_FoldingCoin, False)
+        OpenURL(URL_FAHTwitter, False)
 #Enable Warning BC42358
     End Sub
 
-    Private Sub btnFoldingCoinTwitter_Click(sender As System.Object, e As System.EventArgs) Handles btnFoldingCoinTwitter.Click
+    Private Sub btnFAHNews_Click(sender As Object, e As EventArgs) Handles btnFAHNews.Click
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
-        OpenURL(URL_FoldingCoinTwitter, False)
+        OpenURL(URL_FAH & URL_FAH_News, False)
 #Enable Warning BC42358
     End Sub
 
-    Private Sub btnFoldingCoinBlockchain_Click(sender As Object, e As EventArgs) Handles btnFoldingCoinBlockchain.Click
+    Private Sub btnFoldingCoinUserStats_Click(sender As Object, e As EventArgs) Handles btnFoldingCoinUserStats.Click
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
-        'Make sure the INI key/value exists
-        If INI.GetSection(Id & Me.cbxWalletId.Text) IsNot Nothing AndAlso INI.GetSection(Id & Me.cbxWalletId.Text).GetKey(INI_WalletName) IsNot Nothing Then
-            'Load the Wallet name from the INI file based on the Wallet Id#
-            Me.txtWalletName.Text = INI.GetSection(Id & Me.cbxWalletId.Text).GetKey(INI_WalletName).GetValue()
+        Dim strUsername As String = ""
+        Dim DAT As New IniFile
+        'Load DAT file, decrypt it
+        DAT.LoadText(Decrypt(LoadDat))
+        If DAT.ToString.Length = 0 Then
+            'Decryption failed
+            Msg(DAT_ErrorMsg)
+            MessageBox.Show(DAT_ErrorMsg)
+        End If
 
-            If System.IO.File.Exists(DatFilePath) = True Then
-                Dim DAT As New IniFile
-                'Load DAT file, decrypt it
-                DAT.LoadText(Decrypt(LoadDat))
-                If DAT.ToString.Length = 0 Then
-                    'Decryption failed
-                    Msg(DAT_ErrorMsg)
-                    MessageBox.Show(DAT_ErrorMsg)
-                End If
+        'Look for FAH username for FAH installation to un-check the dialog for existing users
+        If DAT.GetSection(Id & Me.cbxToolsWalletId.Text) IsNot Nothing AndAlso DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_FAH_Username) IsNot Nothing Then
+            strUsername = DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_FAH_Username).GetValue()
+        End If
+        'Done with the DAT file
+        DAT = Nothing
 
-                If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_BTC_Addr) IsNot Nothing Then
-                    'If the address is available, then open that URL for the users wallet
-                    OpenURL(URL_FLDC_AddressBlockchain & DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_BTC_Addr).GetValue(), False)
-                Else
-                    'Just open the main URL instead
-                    OpenURL(URL_FLDC_DefaultBlockchain, False)
-                End If
-                DAT = Nothing
-
-            Else
-                'Just open the main URL instead
-                OpenURL(URL_FLDC_DefaultBlockchain, False)
-            End If
-
+        'Make sure the Username is FoldingCoin compatible, otherwise just display the main Stats page
+        If strUsername.Length > 0 AndAlso strUsername.Contains("_") = True Then
+            'Normal: Load User's Stats
+            OpenURL(URL_FoldingCoinStats & URL_FoldingCoinStatsUser & strUsername, False)
         Else
-            'Just open the main URL instead
-            OpenURL(URL_FLDC_DefaultBlockchain, False)
+            'Not a vailid FLDC username. Just go to the main FLDC Stats page
+            OpenURL(URL_FoldingCoinStats, False)
         End If
 #Enable Warning BC42358
     End Sub
-
-    Private Sub btnBTCBlockchain_Click(sender As Object, e As EventArgs) Handles btnBTCBlockchain.Click
-#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
-        'Make sure the INI key/value exists
-        If INI.GetSection(Id & Me.cbxWalletId.Text) IsNot Nothing AndAlso INI.GetSection(Id & Me.cbxWalletId.Text).GetKey(INI_WalletName) IsNot Nothing Then
-            'Load the Wallet name from the INI file based on the Wallet Id#
-            Me.txtWalletName.Text = INI.GetSection(Id & Me.cbxWalletId.Text).GetKey(INI_WalletName).GetValue()
-
-            If System.IO.File.Exists(DatFilePath) = True Then
-                Dim DAT As New IniFile
-                'Load DAT file, decrypt it
-                DAT.LoadText(Decrypt(LoadDat))
-                If DAT.ToString.Length = 0 Then
-                    'Decryption failed
-                    Msg(DAT_ErrorMsg)
-                    MessageBox.Show(DAT_ErrorMsg)
-                End If
-
-                If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_BTC_Addr) IsNot Nothing Then
-                    'If the address is available, then open that URL for the users wallet
-                    OpenURL(URL_BTC_Blockchain & "address/" & DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_BTC_Addr).GetValue(), False)
-                Else
-                    'Just open the main URL instead
-                    OpenURL(URL_BTC_Blockchain, False)
-                End If
-                DAT = Nothing
-
-            Else
-                'Just open the main URL instead
-                OpenURL(URL_BTC_Blockchain, False)
-            End If
-
-        Else
-            'Just open the main URL instead
-            OpenURL(URL_BTC_Blockchain, False)
-        End If
-#Enable Warning BC42358
-    End Sub
-
-    Private Sub btnFoldingCoinDiscord_Click(sender As Object, e As EventArgs) Handles btnFoldingCoinDiscord.Click
-#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
-        LoginToDiscord(True)
-#Enable Warning BC42358
-    End Sub
-
-    Private Sub btnFLDC_Distribution_Click(sender As System.Object, e As System.EventArgs) Handles btnFLDC_Distribution.Click
-#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
-        OpenURL(URL_FLDC_Distro & Now.AddDays(-1.0).ToString("yyyy-MM-dd") & "&end=" & Now.ToString("yyyy-MM-dd"), False)
-#Enable Warning BC42358
-    End Sub
-
-    Private Sub btnFoldingCoinShop_Click(sender As Object, e As EventArgs) Handles btnFoldingCoinShop.Click
-#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
-        OpenURL(URL_FoldingCoinShop, False)
-#Enable Warning BC42358
-    End Sub
-
-
-    Private Sub btnCureCoin_Click(sender As System.Object, e As System.EventArgs) Handles btnCureCoin.Click
-#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
-        OpenURL(URL_CureCoin, False)
-#Enable Warning BC42358
-    End Sub
-
-    Private Sub btnCureCoinTwitter_Click(sender As System.Object, e As System.EventArgs) Handles btnCureCoinTwitter.Click
-#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
-        OpenURL(URL_CureCoinTwitter, False)
-#Enable Warning BC42358
-    End Sub
-
-    Private Sub btnCureCoinBlockchain_Click(sender As Object, e As EventArgs) Handles btnCureCoinBlockchain.Click
-#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
-        'Make sure the INI key/value exists
-        If INI.GetSection(Id & Me.cbxWalletId.Text) IsNot Nothing AndAlso INI.GetSection(Id & Me.cbxWalletId.Text).GetKey(INI_WalletName) IsNot Nothing Then
-            'Load the Wallet name from the INI file based on the Wallet Id#
-            Me.txtWalletName.Text = INI.GetSection(Id & Me.cbxWalletId.Text).GetKey(INI_WalletName).GetValue()
-
-            If System.IO.File.Exists(DatFilePath) = True Then
-                Dim DAT As New IniFile
-                'Load DAT file, decrypt it
-                DAT.LoadText(Decrypt(LoadDat))
-                If DAT.ToString.Length = 0 Then
-                    'Decryption failed
-                    Msg(DAT_ErrorMsg)
-                    MessageBox.Show(DAT_ErrorMsg)
-                End If
-
-                If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CureCoin_Addr) IsNot Nothing Then
-                    'If the address is available, then open that URL for the users wallet
-                    OpenURL(URL_CureCoinBlockchain & "address.dws?" & DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CureCoin_Addr).GetValue() & ".htm", False)
-                Else
-                    'Just open the main URL instead
-                    OpenURL(URL_CureCoinBlockchain, False)
-                End If
-                DAT = Nothing
-
-            Else
-                'Just open the main URL instead
-                OpenURL(URL_CureCoinBlockchain, False)
-            End If
-
-        Else
-            'Just open the main URL instead
-            OpenURL(URL_CureCoinBlockchain, False)
-        End If
-#Enable Warning BC42358
-    End Sub
-
-    Private Sub btnCureCoinDiscord_Click(sender As Object, e As EventArgs) Handles btnCureCoinDiscord.Click
-#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
-        LoginToDiscord(False)
-#Enable Warning BC42358
-    End Sub
-
 
     'Extreme Overclocking's User Stats page: Needs to know user ID # ...  Once known, store the info in the INI file
-    Private Async Sub btnEOC_Click(sender As System.Object, e As System.EventArgs) Handles btnEOC.Click
+    Private Async Sub btnEOC_UserStats_Click(sender As System.Object, e As System.EventArgs) Handles btnEOC_UserStats.Click
         Dim strUserId As String = "0"
         Dim iUserId As Integer = 0
         Dim strUsername As String = ""
 
         Try
             'Get EOC Username ID from INI
-            If INI.GetSection(Id & Me.cbxWalletId.Text) IsNot Nothing AndAlso INI.GetSection(Id & Me.cbxWalletId.Text).GetKey(INI_EOC_ID) IsNot Nothing Then
-                strUserId = INI.GetSection(Id & Me.cbxWalletId.Text).GetKey(INI_EOC_ID).Value
+            If INI.GetSection(Id & Me.cbxToolsWalletId.Text) IsNot Nothing AndAlso INI.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(INI_EOC_ID) IsNot Nothing Then
+                strUserId = INI.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(INI_EOC_ID).Value
             Else
                 'Fix missing value. Add temp ExtremeOverclocking.com Username Id
-                INI.AddSection(Id & Me.cbxWalletId.Text).AddKey(INI_EOC_ID).Value = "0"
+                INI.AddSection(Id & Me.cbxToolsWalletId.Text).AddKey(INI_EOC_ID).Value = "0"
                 INI.Save(IniFilePath)
             End If
 
@@ -784,7 +672,7 @@
                 iUserId = CInt(strUserId)
             Else
                 'Fix bad values
-                INI.AddSection(Id & Me.cbxWalletId.Text).AddKey(INI_EOC_ID).Value = "0"
+                INI.AddSection(Id & Me.cbxToolsWalletId.Text).AddKey(INI_EOC_ID).Value = "0"
                 INI.Save(IniFilePath)
             End If
 
@@ -810,8 +698,8 @@
                 End If
 
                 'Look for FAH username for FAH installation to un-check the dialog for existing users
-                If DAT.GetSection(Id & Me.cbxWalletId.Text) IsNot Nothing AndAlso DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FAH_Username) IsNot Nothing Then
-                    strUsername = DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FAH_Username).GetValue()
+                If DAT.GetSection(Id & Me.cbxToolsWalletId.Text) IsNot Nothing AndAlso DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_FAH_Username) IsNot Nothing Then
+                    strUsername = DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_FAH_Username).GetValue()
                 Else
                     'Fix missing value. Ask for FAH Username
                     Dim TxtEntry As New TextEntryDialog
@@ -824,7 +712,7 @@
                     'Show modal dialog box
                     If TxtEntry.ShowDialog(Me) = DialogResult.OK Then
                         'Store FAH Username
-                        DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_FAH_Username).Value = TxtEntry.TextEnteredUpper.Text
+                        DAT.AddSection(Id & Me.cbxToolsWalletId.Text).AddKey(DAT_FAH_Username).Value = TxtEntry.TextEnteredUpper.Text
                         'Create text from the INI, Encrypt, and Write/Flush DAT text to file
                         SaveDat(Encrypt(DAT.SaveToString))
                         'Allow time for the file to be written out
@@ -851,7 +739,7 @@
                     'Get link, and parse Id. The line with the Username has the EOC User ID number
                     If FindTextInDoc("/user_summary.php?s=&amp;u=*"">" & strUsername & "</a></td>", "", strUserId, "", False, "") = True AndAlso strUserId.Length > 1 AndAlso IsNumeric(strUserId) AndAlso CInt(strUserId) > 3 Then
                         'Save the ExtremeOverclocking.com Username Id
-                        INI.AddSection(Id & Me.cbxWalletId.Text).AddKey(INI_EOC_ID).Value = strUserId
+                        INI.AddSection(Id & Me.cbxToolsWalletId.Text).AddKey(INI_EOC_ID).Value = strUserId
                         INI.Save(IniFilePath)
 
                         'Open the user's EOC stats page
@@ -870,14 +758,14 @@
                         'Show modal dialog box
                         If TxtEntry.ShowDialog(Me) = DialogResult.OK AndAlso IsNumeric(TxtEntry.TextEnteredUpper.Text) Then
                             'Store ExtremeOverclocking.com Username Id
-                            INI.AddSection(Id & Me.cbxWalletId.Text).AddKey(INI_EOC_ID).Value = TxtEntry.TextEnteredUpper.Text
+                            INI.AddSection(Id & Me.cbxToolsWalletId.Text).AddKey(INI_EOC_ID).Value = TxtEntry.TextEnteredUpper.Text
                             INI.Save(IniFilePath)
                             strUsername = TxtEntry.TextEnteredUpper.Text
                             'Open the user's EOC stats page
                             Await OpenURL(URL_EOC & strUserId, False)
                         Else
                             'Update the INI status for number of attempts (New users usually take a day to show up)
-                            INI.AddSection(Id & Me.cbxWalletId.Text).AddKey(INI_EOC_ID).Value = CStr(iUserId + 1)
+                            INI.AddSection(Id & Me.cbxToolsWalletId.Text).AddKey(INI_EOC_ID).Value = CStr(iUserId + 1)
                             INI.Save(IniFilePath)
                         End If
                         TxtEntry.Dispose()
@@ -897,20 +785,211 @@
         End Try
     End Sub
 
-    Private Sub chkShowTools_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles chkShowTools.CheckedChanged
-        If Me.chkShowTools.Checked = True Then
-            Me.gbxTools.Visible = True
-            Me.txtMsg.Visible = True
-            Me.btnBrowserTools.Visible = True
+    Private Sub btnFoldingCoinWebsite_Click(sender As System.Object, e As System.EventArgs) Handles btnFoldingCoinWebsite.Click
+#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
+        OpenURL(URL_FoldingCoin, False)
+#Enable Warning BC42358
+    End Sub
+
+    Private Sub btnFoldingCoinTwitter_Click(sender As System.Object, e As System.EventArgs) Handles btnFoldingCoinTwitter.Click
+#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
+        OpenURL(URL_FoldingCoinTwitter, False)
+#Enable Warning BC42358
+    End Sub
+
+    Private Async Sub btnMyWallet_Click(sender As System.Object, e As System.EventArgs) Handles btnMyWallet.Click
+        If Await LoginToCounterwallet() = False Then MessageBox.Show("Task 'Log Into Wallet' did not complete. Please try again.")
+    End Sub
+
+    Private Sub btnFoldingCoinBlockchain_Click(sender As Object, e As EventArgs) Handles btnFoldingCoinBlockchain.Click
+#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
+        'Make sure the INI key/value exists
+        If INI.GetSection(Id & Me.cbxToolsWalletId.Text) IsNot Nothing AndAlso INI.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(INI_WalletName) IsNot Nothing Then
+            'Load the Wallet name from the INI file based on the Wallet Id#
+            Me.txtToolsWalletName.Text = INI.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(INI_WalletName).GetValue()
+
+            If System.IO.File.Exists(DatFilePath) = True Then
+                Dim DAT As New IniFile
+                'Load DAT file, decrypt it
+                DAT.LoadText(Decrypt(LoadDat))
+                If DAT.ToString.Length = 0 Then
+                    'Decryption failed
+                    Msg(DAT_ErrorMsg)
+                    MessageBox.Show(DAT_ErrorMsg)
+                End If
+
+                If DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_BTC_Addr) IsNot Nothing Then
+                    'If the address is available, then open that URL for the users wallet
+                    OpenURL(URL_FLDC_AddressBlockchain & DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_BTC_Addr).GetValue(), False)
+                Else
+                    'Just open the main URL instead
+                    OpenURL(URL_FLDC_DefaultBlockchain, False)
+                End If
+                DAT = Nothing
+
+            Else
+                'Just open the main URL instead
+                OpenURL(URL_FLDC_DefaultBlockchain, False)
+            End If
+
         Else
-            Me.gbxTools.Visible = False
-            Me.txtMsg.Visible = False
-            Me.btnBrowserTools.Visible = False
+            'Just open the main URL instead
+            OpenURL(URL_FLDC_DefaultBlockchain, False)
+        End If
+#Enable Warning BC42358
+    End Sub
+
+    Private Sub btnBTCBlockchain_Click(sender As Object, e As EventArgs) Handles btnBTCBlockchain.Click
+#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
+        'Make sure the INI key/value exists
+        If INI.GetSection(Id & Me.cbxToolsWalletId.Text) IsNot Nothing AndAlso INI.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(INI_WalletName) IsNot Nothing Then
+            'Load the Wallet name from the INI file based on the Wallet Id#
+            Me.txtToolsWalletName.Text = INI.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(INI_WalletName).GetValue()
+
+            If System.IO.File.Exists(DatFilePath) = True Then
+                Dim DAT As New IniFile
+                'Load DAT file, decrypt it
+                DAT.LoadText(Decrypt(LoadDat))
+                If DAT.ToString.Length = 0 Then
+                    'Decryption failed
+                    Msg(DAT_ErrorMsg)
+                    MessageBox.Show(DAT_ErrorMsg)
+                End If
+
+                If DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_BTC_Addr) IsNot Nothing Then
+                    'If the address is available, then open that URL for the users wallet
+                    OpenURL(URL_BTC_Blockchain & "address/" & DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_BTC_Addr).GetValue(), False)
+                Else
+                    'Just open the main URL instead
+                    OpenURL(URL_BTC_Blockchain, False)
+                End If
+                DAT = Nothing
+
+            Else
+                'Just open the main URL instead
+                OpenURL(URL_BTC_Blockchain, False)
+            End If
+
+        Else
+            'Just open the main URL instead
+            OpenURL(URL_BTC_Blockchain, False)
+        End If
+#Enable Warning BC42358
+    End Sub
+
+    Private Sub btnFoldingCoinDiscord_Click(sender As Object, e As EventArgs) Handles btnFoldingCoinDiscord.Click
+#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
+        LoginToDiscord(True)
+#Enable Warning BC42358
+    End Sub
+
+    Private Sub btnFoldingCoinDistribution_Click(sender As System.Object, e As System.EventArgs) Handles btnFoldingCoinDistribution.Click
+#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
+        OpenURL(URL_FLDC_Distro, False)
+#Enable Warning BC42358
+    End Sub
+
+    Private Sub btnFoldingCoinShop_Click(sender As Object, e As EventArgs) Handles btnFoldingCoinShop.Click
+#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
+        OpenURL(URL_FoldingCoinShop, False)
+#Enable Warning BC42358
+    End Sub
+
+    Private Sub btnFoldingCoinTeamStats_Click(sender As Object, e As EventArgs) Handles btnFoldingCoinTeamStats.Click
+#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
+        OpenURL(URL_FoldingCoinStats, False)
+#Enable Warning BC42358
+    End Sub
+
+
+
+    Private Sub btnCureCoin_Click(sender As System.Object, e As System.EventArgs) Handles btnCureCoin.Click
+#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
+        OpenURL(URL_CureCoin, False)
+#Enable Warning BC42358
+    End Sub
+
+    Private Sub btnCureCoinTwitter_Click(sender As System.Object, e As System.EventArgs) Handles btnCureCoinTwitter.Click
+#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
+        OpenURL(URL_CureCoinTwitter, False)
+#Enable Warning BC42358
+    End Sub
+
+    Private Sub btnCureCoinBlockchain_Click(sender As Object, e As EventArgs) Handles btnCureCoinBlockchain.Click
+#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
+        'Make sure the INI key/value exists
+        If INI.GetSection(Id & Me.cbxToolsWalletId.Text) IsNot Nothing AndAlso INI.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(INI_WalletName) IsNot Nothing Then
+            'Load the Wallet name from the INI file based on the Wallet Id#
+            Me.txtToolsWalletName.Text = INI.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(INI_WalletName).GetValue()
+
+            If System.IO.File.Exists(DatFilePath) = True Then
+                Dim DAT As New IniFile
+                'Load DAT file, decrypt it
+                DAT.LoadText(Decrypt(LoadDat))
+                If DAT.ToString.Length = 0 Then
+                    'Decryption failed
+                    Msg(DAT_ErrorMsg)
+                    MessageBox.Show(DAT_ErrorMsg)
+                End If
+
+                If DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_CureCoin_Addr) IsNot Nothing Then
+                    'If the address is available, then open that URL for the users wallet
+                    OpenURL(URL_CureCoinBlockchain & "address.dws?" & DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_CureCoin_Addr).GetValue() & ".htm", False)
+                Else
+                    'Just open the main URL instead
+                    OpenURL(URL_CureCoinBlockchain, False)
+                End If
+                DAT = Nothing
+
+            Else
+                'Just open the main URL instead
+                OpenURL(URL_CureCoinBlockchain, False)
+            End If
+
+        Else
+            'Just open the main URL instead
+            OpenURL(URL_CureCoinBlockchain, False)
+        End If
+#Enable Warning BC42358
+    End Sub
+
+    Private Sub btnCureCoinDiscord_Click(sender As Object, e As EventArgs) Handles btnCureCoinDiscord.Click
+#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
+        LoginToDiscord(False)
+#Enable Warning BC42358
+    End Sub
+
+    Private Sub btnCureCoinTeamStats_Click(sender As Object, e As EventArgs) Handles btnCureCoinTeamStats.Click
+#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
+        OpenURL(URL_CureCoin_EOC, False)
+#Enable Warning BC42358
+    End Sub
+
+    Private Sub chkToolsShow_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles chkToolsShow.CheckedChanged
+        If Me.chkToolsShow.Checked = True Then
+            'Show Tools Panel
+            m_iWebLinkPanelHeight = 360
+            Me.chkToolsShow.Image = My.Resources.ToolsSettingsGearEnabled_24.ToBitmap
+        Else
+            'Hide Tools Panel
+            m_iWebLinkPanelHeight = 260
+            Me.chkToolsShow.Image = My.Resources.ToolsSettingsGearNoBG_24.ToBitmap
+        End If
+
+        If Me.pnlBtnLinks.Height < 10 Then
+            'Panel minimized: Show the panel when you click the show Tools button
+            pnlBtnLinks_MouseEnter(Nothing, Nothing)
+        Else
+            'Panel shown already: Increase / decrease the height of the shown panel
+            Me.pnlBtnLinks.Height = m_iWebLinkPanelHeight
         End If
     End Sub
 
-    Private Sub btnGetFAH_Click(sender As System.Object, e As System.EventArgs) Handles btnGetFAH.Click
+    Private Sub btnToolsGetFAH_Click(sender As System.Object, e As System.EventArgs) Handles btnToolsGetFAH.Click
         If MessageBox.Show("Get Folding@Home Software: Are you sure?", "", MessageBoxButtons.OKCancel) = MsgBoxResult.Ok Then
+            'Minimize the Tools panel
+            Main_MouseUp(Nothing, Nothing)
+
             g_bAskDownloadLocation = True
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
             GetFAH()
@@ -918,8 +997,11 @@
         End If
     End Sub
 
-    Private Async Sub btnGetWallet_Click(sender As System.Object, e As System.EventArgs) Handles btnGetWallet.Click
+    Private Async Sub btnToolsGetWallet_Click(sender As System.Object, e As System.EventArgs) Handles btnToolsGetWallet.Click
         If MessageBox.Show("Get Wallet: Are you sure?", "", MessageBoxButtons.OKCancel) = MsgBoxResult.Ok Then
+            'Minimize the Tools panel
+            Main_MouseUp(Nothing, Nothing)
+
             If Await GetWallet() = False Then
                 MessageBox.Show("Task 'Get Wallet' did not complete.")
             Else
@@ -934,7 +1016,10 @@
         End If
     End Sub
 
-    Private Sub btnFAHConfig_Click(sender As System.Object, e As System.EventArgs) Handles btnFAHConfig.Click
+    Private Sub btnToolsFAHConfig_Click(sender As System.Object, e As System.EventArgs) Handles btnToolsFAHConfig.Click
+        'Minimize the Tools panel
+        Main_MouseUp(Nothing, Nothing)
+
         Dim DialogFAH As New FAHSetupDialog
         Try
             'Prompt for FAH info: Ask for: (existing) Username, Merged Folding Coin Selection, FAH Team #. Show Username as typing and check it for errors. (Optional) Get Passkey by email. Show before and after of the FAH Config file changes 
@@ -948,8 +1033,11 @@
         DialogFAH.Dispose()
     End Sub
 
-    Private Async Sub btnCureCoinSetup_Click(sender As Object, e As EventArgs) Handles btnCureCoinSetup.Click
+    Private Async Sub btnToolsCureCoinSetup_Click(sender As Object, e As EventArgs) Handles btnToolsCureCoinSetup.Click
         If MessageBox.Show("Setup CureCoin Folding Pool: Are you sure?", "", MessageBoxButtons.OKCancel) = MsgBoxResult.Ok Then
+            'Minimize the Tools panel
+            Main_MouseUp(Nothing, Nothing)
+
             If Await SetupCureCoin() = False Then
                 MessageBox.Show("Task 'Setup CureCoin Folding Pool' did not complete.")
             Else
@@ -965,38 +1053,38 @@
         End If
     End Sub
 
-    Public Sub cbxWalletId_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbxWalletId.SelectedIndexChanged
+    Public Sub cbxToolsWalletId_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbxToolsWalletId.SelectedIndexChanged
         'Make sure the INI key/value exists
-        If INI.GetSection(Id & Me.cbxWalletId.Text) IsNot Nothing AndAlso INI.GetSection(Id & Me.cbxWalletId.Text).GetKey(INI_WalletName) IsNot Nothing Then
+        If INI.GetSection(Id & Me.cbxToolsWalletId.Text) IsNot Nothing AndAlso INI.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(INI_WalletName) IsNot Nothing Then
             'Load the Wallet name from the INI file based on the Wallet Id#
-            Me.txtWalletName.Text = INI.GetSection(Id & Me.cbxWalletId.Text).GetKey(INI_WalletName).GetValue()
+            Me.txtToolsWalletName.Text = INI.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(INI_WalletName).GetValue()
         Else
-            Me.txtWalletName.Text = NotUsed
+            Me.txtToolsWalletName.Text = NotUsed
         End If
     End Sub
 
-    Private Sub btnBrowserTools_Click(sender As System.Object, e As System.EventArgs) Handles btnBrowserTools.Click
+    Private Sub btnToolsBrowserTools_Click(sender As System.Object, e As System.EventArgs) Handles btnToolsBrowserTools.Click
         Me.browser.GetBrowser.GetHost.ShowDevTools()
     End Sub
 
-    Private Sub txtWalletName_KeyDown(sender As Object, e As KeyEventArgs) Handles txtWalletName.KeyDown
+    Private Sub txtToolsWalletName_KeyDown(sender As Object, e As KeyEventArgs) Handles txtToolsWalletName.KeyDown
         'Change wallet name when text is changed and <enter> is pressed
         If e.KeyCode = Keys.Enter Then
-            If Me.txtWalletName.Text.Length > 0 Then
+            If Me.txtToolsWalletName.Text.Length > 0 Then
                 'Save a wallet name
-                INI.AddSection(Id & Me.cbxWalletId.Text).AddKey(INI_WalletName).Value = Me.txtWalletName.Text
+                INI.AddSection(Id & Me.cbxToolsWalletId.Text).AddKey(INI_WalletName).Value = Me.txtToolsWalletName.Text
                 INI.Save(IniFilePath)
             End If
         End If
     End Sub
 
-    Private Sub btnOptions_Click(sender As Object, e As EventArgs) Handles btnOptions.Click
+    Private Sub btnToolsOptions_Click(sender As Object, e As EventArgs) Handles btnToolsOptions.Click
         Dim DlgDisplayOptions As New DisplayOptionsDialog
         DlgDisplayOptions.StartPosition = FormStartPosition.CenterScreen
         DlgDisplayOptions.Show(Me)
     End Sub
 
-    Private Sub btnSavedData_Click(sender As Object, e As EventArgs) Handles btnSavedData.Click
+    Private Sub btnToolsSavedData_Click(sender As Object, e As EventArgs) Handles btnToolsSavedData.Click
         Dim DlgDisplaySavedData As New DisplayTextDialog
         DlgDisplaySavedData.StartPosition = FormStartPosition.CenterScreen
         DlgDisplaySavedData.Show(Me)
@@ -1102,7 +1190,7 @@
             End If
 
             'If there is no DAT file, then prompt to make one. If no saved data, then ask for the 12-word Passphrase
-            If DAT.GetSection(Id & Me.cbxWalletId.Text) Is Nothing OrElse DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CP12Words) Is Nothing Then
+            If DAT.GetSection(Id & Me.cbxToolsWalletId.Text) Is Nothing OrElse DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_CP12Words) Is Nothing Then
                 'Prompt for PW, and save it
                 Dim TxtEntry As New TextEntryDialog
                 TxtEntry.Text = "Save Wallet Password"
@@ -1115,8 +1203,8 @@
                 If TxtEntry.ShowDialog(Me) = DialogResult.OK Then
                     'Save and encrypt 12-word Passphrase
                     If TxtEntry.TextEnteredUpper.Text.Length > 24 Then
-                        DAT.AddSection(Id & Me.cbxWalletId.Text)
-                        DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_CP12Words).Value = TxtEntry.TextEnteredUpper.Text
+                        DAT.AddSection(Id & Me.cbxToolsWalletId.Text)
+                        DAT.AddSection(Id & Me.cbxToolsWalletId.Text).AddKey(DAT_CP12Words).Value = TxtEntry.TextEnteredUpper.Text
                     End If
 
                     'Create text from the INI, Encrypt, and Write/Flush DAT text to file
@@ -1125,13 +1213,13 @@
                     Await Wait(100)
 
                     'Save a wallet name
-                    INI.AddSection(Id & Me.cbxWalletId.Text).AddKey(INI_WalletName).Value = DefaultWalletName & Me.cbxWalletId.Text
+                    INI.AddSection(Id & Me.cbxToolsWalletId.Text).AddKey(INI_WalletName).Value = DefaultWalletName & Me.cbxToolsWalletId.Text
                     INI.Save(IniFilePath)
                     'Allow time for the file to be written out
                     Await Wait(100)
 
                     'Refresh the Wallet Names
-                    cbxWalletId_SelectedIndexChanged(Nothing, Nothing)
+                    cbxToolsWalletId_SelectedIndexChanged(Nothing, Nothing)
                     bSaved12W = True
                 End If
                 TxtEntry.Dispose()
@@ -1141,7 +1229,7 @@
 
             If bSaved12W = True Then
                 'Enter 12-word Passphrase to login
-                EnterTextById("password", DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CP12Words).GetValue())
+                EnterTextById("password", DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_CP12Words).GetValue())
                 Await Wait(50)
                 DAT = Nothing
 
@@ -1172,11 +1260,11 @@
 
         Try
             'Make sure the INI key/value exists
-            If INI.GetSection(Id & Me.cbxWalletId.Text) IsNot Nothing AndAlso INI.GetSection(Id & Me.cbxWalletId.Text).GetKey(INI_DiscordInvites) IsNot Nothing Then
-                iDiscordInvite = CInt(INI.GetSection(Id & Me.cbxWalletId.Text).GetKey(INI_DiscordInvites).Value)
+            If INI.GetSection(Id & Me.cbxToolsWalletId.Text) IsNot Nothing AndAlso INI.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(INI_DiscordInvites) IsNot Nothing Then
+                iDiscordInvite = CInt(INI.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(INI_DiscordInvites).Value)
             Else
                 'Fix missing value. Add temp Discord invite status
-                INI.AddSection(Id & Me.cbxWalletId.Text).AddKey(INI_DiscordInvites).Value = "0"
+                INI.AddSection(Id & Me.cbxToolsWalletId.Text).AddKey(INI_DiscordInvites).Value = "0"
                 INI.Save(IniFilePath)
             End If
 
@@ -1191,12 +1279,12 @@
                 End If
 
                 'Look for the Discord Login Email to determine if this is a first-time setup or not
-                If DAT.GetSection(Id & Me.cbxWalletId.Text) Is Nothing OrElse DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_DiscordEmail) Is Nothing Then
+                If DAT.GetSection(Id & Me.cbxToolsWalletId.Text) Is Nothing OrElse DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_DiscordEmail) Is Nothing Then
                     'Fix missing values. Ask for email and passowrd to sign in
                     Dim DiscordDlg As New UserPwdDialog
                     'Suggest the Email from the saved settings, if available
-                    If DAT.GetSection(Id & Me.cbxWalletId.Text) IsNot Nothing AndAlso DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_Email) IsNot Nothing Then
-                        DiscordDlg.txtEmail.Text = DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_Email).GetValue()
+                    If DAT.GetSection(Id & Me.cbxToolsWalletId.Text) IsNot Nothing AndAlso DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_Email) IsNot Nothing Then
+                        DiscordDlg.txtEmail.Text = DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_Email).GetValue()
                     End If
 
                     'Suggest a strong Password (Skip characters that conflict with the INI format: =;#[]\)
@@ -1210,8 +1298,8 @@
                     DiscordDlg.txtPassword.Text = chrPW   'Don't use .ToString here
 
                     'Suggest the Username from the saved settings, if available
-                    If DAT.GetSection(Id & Me.cbxWalletId.Text) IsNot Nothing AndAlso DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FAH_Username) IsNot Nothing Then
-                        DiscordDlg.txtUsername.Text = DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FAH_Username).GetValue()
+                    If DAT.GetSection(Id & Me.cbxToolsWalletId.Text) IsNot Nothing AndAlso DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_FAH_Username) IsNot Nothing Then
+                        DiscordDlg.txtUsername.Text = DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_FAH_Username).GetValue()
 
                         'Remove the: _ALL_<BTC> from the FAH username
                         If DiscordDlg.txtUsername.Text.Contains("_") = True Then
@@ -1236,18 +1324,18 @@
                     If DiscordDlg.ShowDialog(Me) = DialogResult.OK Then
                         'Store Discord Email
                         If DiscordDlg.txtEmail.Text.Length > 0 Then
-                            DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_DiscordEmail).Value = DiscordDlg.txtEmail.Text
+                            DAT.AddSection(Id & Me.cbxToolsWalletId.Text).AddKey(DAT_DiscordEmail).Value = DiscordDlg.txtEmail.Text
                         Else
                             'Don't save info, if user doesn't enter it, or cancels
-                            DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_DiscordEmail).Value = SkipSavingDataFlag
+                            DAT.AddSection(Id & Me.cbxToolsWalletId.Text).AddKey(DAT_DiscordEmail).Value = SkipSavingDataFlag
                         End If
 
                         'Store Discord Password
                         If DiscordDlg.txtPassword.Text.Length > 0 Then
-                            DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_DiscordPassword).Value = DiscordDlg.txtPassword.Text
+                            DAT.AddSection(Id & Me.cbxToolsWalletId.Text).AddKey(DAT_DiscordPassword).Value = DiscordDlg.txtPassword.Text
                         Else
                             'Don't save info, if user doesn't enter it, or cancels
-                            DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_DiscordPassword).Value = SkipSavingDataFlag
+                            DAT.AddSection(Id & Me.cbxToolsWalletId.Text).AddKey(DAT_DiscordPassword).Value = SkipSavingDataFlag
                         End If
 
                         'Allow the sign-up process to run instead of signing-in
@@ -1267,10 +1355,10 @@
 #Enable Warning BC42358
                                 'Save status flag for which Discord server you've been invited to: 0 = None, 1 = FoldingCoin, 2 = CureCoin, 3 = Both invites have been completed
                                 If bForFoldingCoin = True Then
-                                    INI.AddSection(Id & Me.cbxWalletId.Text).AddKey(INI_DiscordInvites).Value = "1"
+                                    INI.AddSection(Id & Me.cbxToolsWalletId.Text).AddKey(INI_DiscordInvites).Value = "1"
                                     iDiscordInvite = 1
                                 Else
-                                    INI.AddSection(Id & Me.cbxWalletId.Text).AddKey(INI_DiscordInvites).Value = "2"
+                                    INI.AddSection(Id & Me.cbxToolsWalletId.Text).AddKey(INI_DiscordInvites).Value = "2"
                                     iDiscordInvite = 2
                                 End If
                                 INI.Save(IniFilePath)
@@ -1278,8 +1366,8 @@
                         End If
                     Else
                         'Don't save info, if user doesn't enter it, or cancels
-                        DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_DiscordEmail).Value = SkipSavingDataFlag
-                        DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_DiscordPassword).Value = SkipSavingDataFlag
+                        DAT.AddSection(Id & Me.cbxToolsWalletId.Text).AddKey(DAT_DiscordEmail).Value = SkipSavingDataFlag
+                        DAT.AddSection(Id & Me.cbxToolsWalletId.Text).AddKey(DAT_DiscordPassword).Value = SkipSavingDataFlag
 
                         'Suggest the Email from the saved settings, if available
                         If DiscordDlg.txtEmail.Text.Length > 0 Then
@@ -1301,7 +1389,7 @@
                 End If
 
                 'Normal Discord login: Load Email and Password for the login web page
-                If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_DiscordEmail) IsNot Nothing Then
+                If DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_DiscordEmail) IsNot Nothing Then
                     'Open the Discord Sign-in page for the FoldingCoin / CureCoin button pressed
                     If bForFoldingCoin = True Then
                         Await OpenURL(URL_FoldingCoinDiscord, False)
@@ -1313,7 +1401,7 @@
                     Await Wait(2000)
 
                     'Skip asking for this in the future, if originally cancelled - Don't store info
-                    Dim strEmail As String = DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_DiscordEmail).GetValue()
+                    Dim strEmail As String = DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_DiscordEmail).GetValue()
                     If strEmail <> SkipSavingDataFlag Then
                         'Don't try to login again if you're already logged in (pressing the button again or switching between FoldingCoin and CureCoin)
                         Dim strReturn As String = ""
@@ -1321,9 +1409,9 @@
                             'If available, then fill-in the Email
                             EnterTextById("register-email", strEmail)
 
-                            If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_DiscordPassword) IsNot Nothing Then
+                            If DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_DiscordPassword) IsNot Nothing Then
                                 'Skip asking for this in the future, if originally cancelled - Don't store info
-                                Dim strPw As String = DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_DiscordPassword).GetValue()
+                                Dim strPw As String = DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_DiscordPassword).GetValue()
                                 If strPw <> SkipSavingDataFlag Then
                                     'If available, then fill-in the password
                                     EnterTextById("register-password", strPw)
@@ -1345,12 +1433,12 @@
                                 If bForFoldingCoin = True Then
                                     Await Wait(2000)
                                     OpenURL(URL_FoldingCoinDiscordInvite, False)
-                                    INI.AddSection(Id & Me.cbxWalletId.Text).AddKey(INI_DiscordInvites).Value = "1"
+                                    INI.AddSection(Id & Me.cbxToolsWalletId.Text).AddKey(INI_DiscordInvites).Value = "1"
                                     INI.Save(IniFilePath)
                                 Else
                                     Await Wait(2000)
                                     OpenURL(URL_CureCoinDiscordInvite, False)
-                                    INI.AddSection(Id & Me.cbxWalletId.Text).AddKey(INI_DiscordInvites).Value = "2"
+                                    INI.AddSection(Id & Me.cbxToolsWalletId.Text).AddKey(INI_DiscordInvites).Value = "2"
                                     INI.Save(IniFilePath)
                                 End If
 
@@ -1359,7 +1447,7 @@
                                 If bForFoldingCoin = False Then
                                     Await Wait(2000)
                                     OpenURL(URL_CureCoinDiscordInvite, False)
-                                    INI.AddSection(Id & Me.cbxWalletId.Text).AddKey(INI_DiscordInvites).Value = "3"
+                                    INI.AddSection(Id & Me.cbxToolsWalletId.Text).AddKey(INI_DiscordInvites).Value = "3"
                                     INI.Save(IniFilePath)
                                 End If
 
@@ -1368,7 +1456,7 @@
                                 If bForFoldingCoin = True Then
                                     Await Wait(2000)
                                     OpenURL(URL_FoldingCoinDiscordInvite, False)
-                                    INI.AddSection(Id & Me.cbxWalletId.Text).AddKey(INI_DiscordInvites).Value = "3"
+                                    INI.AddSection(Id & Me.cbxToolsWalletId.Text).AddKey(INI_DiscordInvites).Value = "3"
                                     INI.Save(IniFilePath)
                                 End If
 
@@ -1415,9 +1503,9 @@
     Private Async Function GetWallet() As Threading.Tasks.Task(Of Boolean)
         Try
             'Look to see if the wallet INI key/value exists, and warn user to change wallet info slots, or the info will be overwritten
-            If INI.GetSection(Id & Me.cbxWalletId.Text) IsNot Nothing AndAlso INI.GetSection(Id & Me.cbxWalletId.Text).GetKey(INI_WalletName) IsNot Nothing Then
+            If INI.GetSection(Id & Me.cbxToolsWalletId.Text) IsNot Nothing AndAlso INI.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(INI_WalletName) IsNot Nothing Then
                 'Load the Wallet name from the INI file based on the Wallet Id#
-                If MessageBox.Show("WARNING: Wallet Id #" & Me.cbxWalletId.Text & " info already exists!  Overwrite?" & vbNewLine & "(A different Wallet Id can be set in the 'Tools' section)", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) <> MsgBoxResult.Ok Then
+                If MessageBox.Show("WARNING: Wallet Id #" & Me.cbxToolsWalletId.Text & " info already exists!  Overwrite?" & vbNewLine & "(A different Wallet Id can be set in the 'Tools' section)", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) <> MsgBoxResult.Ok Then
                     Return True
                 End If
             End If
@@ -1501,14 +1589,14 @@
                 End If
 
                 'Write out data to INI info
-                DAT.AddSection(Id & Me.cbxWalletId.Text)
-                DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_CP12Words).Value = str12W
+                DAT.AddSection(Id & Me.cbxToolsWalletId.Text)
+                DAT.AddSection(Id & Me.cbxToolsWalletId.Text).AddKey(DAT_CP12Words).Value = str12W
 
                 If strBTCAddr.Length > 25 Then
                     'Store Bitcoin address in both INI and DAT files
-                    DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_BTC_Addr).Value = strBTCAddr
+                    DAT.AddSection(Id & Me.cbxToolsWalletId.Text).AddKey(DAT_BTC_Addr).Value = strBTCAddr
                     'Set a wallet name
-                    INI.AddSection(Id & Me.cbxWalletId.Text).AddKey(INI_WalletName).Value = strBTCAddr.Substring(0, 8) & "..."
+                    INI.AddSection(Id & Me.cbxToolsWalletId.Text).AddKey(INI_WalletName).Value = strBTCAddr.Substring(0, 8) & "..."
                     INI.Save(IniFilePath)
                 End If
                 'Create text from the INI, Encrypt, and Write/flush DAT text to file
@@ -1518,7 +1606,7 @@
                 DAT = Nothing
 
                 'Refresh the Wallet Names
-                cbxWalletId_SelectedIndexChanged(Nothing, Nothing)
+                cbxToolsWalletId_SelectedIndexChanged(Nothing, Nothing)
 
                 'Return true, if you get here
                 Return True
@@ -1538,7 +1626,7 @@
     Private Async Function GetFAH() As Threading.Tasks.Task(Of Boolean)
         Try
             'Get Folding@Home App
-            Await OpenURL(URL_FAH, False)
+            Await OpenURL(URL_FAH & URL_FAH_DL, False)
             Await PageTitleWait("Start folding")
             Await Wait(500)
 
@@ -1703,8 +1791,8 @@
             End If
 
             'Try to get the CureCoin Address from saved info first
-            If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CureCoin_Addr) IsNot Nothing Then
-                strWalletAddress = DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CureCoin_Addr).GetValue()
+            If DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_CureCoin_Addr) IsNot Nothing Then
+                strWalletAddress = DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_CureCoin_Addr).GetValue()
             End If
 
             'See if the CureCoin Address was found, if not then try to get it
@@ -1835,13 +1923,13 @@
             If strWalletAddress.Length < 24 Then Return False
 
             'Save the DAT info
-            If DAT.GetSection(Id & Me.cbxWalletId.Text) Is Nothing Then DAT.AddSection(Id & Me.cbxWalletId.Text)
-            If strWalletVersion.Length > 5 Then DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_CureCoin_Wallet_Version).Value = strWalletVersion
-            If strWalletAddress.Length > 24 Then DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_CureCoin_Addr).Value = strWalletAddress
+            If DAT.GetSection(Id & Me.cbxToolsWalletId.Text) Is Nothing Then DAT.AddSection(Id & Me.cbxToolsWalletId.Text)
+            If strWalletVersion.Length > 5 Then DAT.AddSection(Id & Me.cbxToolsWalletId.Text).AddKey(DAT_CureCoin_Wallet_Version).Value = strWalletVersion
+            If strWalletAddress.Length > 24 Then DAT.AddSection(Id & Me.cbxToolsWalletId.Text).AddKey(DAT_CureCoin_Addr).Value = strWalletAddress
 
             'Try to get the FAH Username from saved info first
-            If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FAH_Username) IsNot Nothing Then
-                strFAHUser = DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FAH_Username).GetValue()
+            If DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_FAH_Username) IsNot Nothing Then
+                strFAHUser = DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_FAH_Username).GetValue()
             End If
             If strFAHUser.Length < 2 Then
                 'Prompt for FAH username. Can be short for a CureCoin only username...
@@ -1857,15 +1945,15 @@
                     'Get the Folding Username / CureCoin Pool Login
                     If TxtEntry.TextEnteredUpper.Text.Length > 1 Then
                         strFAHUser = TxtEntry.TextEnteredUpper.Text
-                        DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_FAH_Username).Value = strFAHUser
+                        DAT.AddSection(Id & Me.cbxToolsWalletId.Text).AddKey(DAT_FAH_Username).Value = strFAHUser
                     End If
                 End If
                 TxtEntry.Dispose()
             End If
 
             'Try to get the Email from saved info first
-            If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_Email) IsNot Nothing Then
-                strEmail = DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_Email).GetValue()
+            If DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_Email) IsNot Nothing Then
+                strEmail = DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_Email).GetValue()
             End If
             If strEmail.Length < 4 Then
                 'Prompt for Email Address
@@ -1881,15 +1969,15 @@
                     'Get the Email Address
                     If TxtEntry.TextEnteredUpper.Text.Length > 3 Then
                         strEmail = TxtEntry.TextEnteredUpper.Text
-                        DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_Email).Value = strEmail
+                        DAT.AddSection(Id & Me.cbxToolsWalletId.Text).AddKey(DAT_Email).Value = strEmail
                     End If
                 End If
                 TxtEntry.Dispose()
             End If
 
             'Try to get the CureCoin pool password from saved info first
-            If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CureCoin_Pwd) IsNot Nothing Then
-                strPoolPW = DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CureCoin_Pwd).GetValue()
+            If DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_CureCoin_Pwd) IsNot Nothing Then
+                strPoolPW = DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_CureCoin_Pwd).GetValue()
             End If
             If strPoolPW.Length < 5 Then
                 'Makeup a new 35-50 char Password (Skip characters that conflict with the INI format: =;#[]\)
@@ -1902,12 +1990,12 @@
                 strPoolPW = chrPW   'Don't use .ToString here
 
                 'Save the new Password
-                If strPoolPW.Length > 24 Then DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_CureCoin_Pwd).Value = strPoolPW
+                If strPoolPW.Length > 24 Then DAT.AddSection(Id & Me.cbxToolsWalletId.Text).AddKey(DAT_CureCoin_Pwd).Value = strPoolPW
             End If
 
             'Try to get the CureCoin pool pin from saved info first
-            If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CureCoin_Pin) IsNot Nothing Then
-                strPoolPin = DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CureCoin_Pin).GetValue()
+            If DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_CureCoin_Pin) IsNot Nothing Then
+                strPoolPin = DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_CureCoin_Pin).GetValue()
             End If
             If strPoolPin.Length < 6 Then
                 'Makeup a new Pin (6-20 char)
@@ -1919,7 +2007,7 @@
                     strPoolPin = strPoolPin.Substring(0, 20)
                 End If
                 'Save the new Pin
-                If strPoolPin.Length >= 6 Then DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_CureCoin_Pin).Value = strPoolPin
+                If strPoolPin.Length >= 6 Then DAT.AddSection(Id & Me.cbxToolsWalletId.Text).AddKey(DAT_CureCoin_Pin).Value = strPoolPin
             End If
 
             'Create text from the INI, Encrypt, and Write/flush DAT text to file
@@ -2122,8 +2210,8 @@
                 End If
             End If
             'Try to get the FAH Username from saved info first
-            If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FAH_Username) IsNot Nothing Then
-                strFAHUser = DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FAH_Username).GetValue()
+            If DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_FAH_Username) IsNot Nothing Then
+                strFAHUser = DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_FAH_Username).GetValue()
             End If
             If strFAHUser.Length < 2 Then
                 'Prompt for FAH username (and all the other info?). Can be short for a CureCoin only username...
@@ -2139,7 +2227,7 @@
                     'Get the Folding Username / CureCoin Pool Login
                     If TxtEntry.TextEnteredUpper.Text.Length > 1 Then
                         strFAHUser = TxtEntry.TextEnteredUpper.Text
-                        DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_FAH_Username).Value = strFAHUser
+                        DAT.AddSection(Id & Me.cbxToolsWalletId.Text).AddKey(DAT_FAH_Username).Value = strFAHUser
                         bSaveDat = True
                     End If
                 End If
@@ -2147,8 +2235,8 @@
             End If
 
             'Try to get the CureCoin pool password from saved info first
-            If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CureCoin_Pwd) IsNot Nothing Then
-                strPoolPW = DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_CureCoin_Pwd).GetValue()
+            If DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_CureCoin_Pwd) IsNot Nothing Then
+                strPoolPW = DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_CureCoin_Pwd).GetValue()
             End If
             If strPoolPW.Length < 5 Then
                 'Ask for existing password
@@ -2164,13 +2252,13 @@
                     'Get the CureCoin Pool Password (Top text box)
                     If TxtEntry.TextEnteredUpper.Text.Length > 1 Then
                         strPoolPW = TxtEntry.TextEnteredUpper.Text
-                        DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_CureCoin_Pwd).Value = strPoolPW
+                        DAT.AddSection(Id & Me.cbxToolsWalletId.Text).AddKey(DAT_CureCoin_Pwd).Value = strPoolPW
                         bSaveDat = True
                     End If
 
                     'Get the CureCoin Pool Pin (Bottom text box)
                     If TxtEntry.TextEnteredLower.Text.Length > 1 Then
-                        DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_CureCoin_Pin).Value = TxtEntry.TextEnteredLower.Text
+                        DAT.AddSection(Id & Me.cbxToolsWalletId.Text).AddKey(DAT_CureCoin_Pin).Value = TxtEntry.TextEnteredLower.Text
                         bSaveDat = True
                     End If
                 End If
@@ -2637,7 +2725,15 @@
     End Sub
 
     'Mouse Forward and Back: Works where mouse location is. Works for the main form window (but not over the browser control area) when using the extra mouse programmable 4th and 5th buttons on the mouse
-    Private Sub Main_MouseDown(sender As Object, e As MouseEventArgs) Handles Me.MouseDown, btnBack.MouseDown, btnBTCBlockchain.MouseDown, btnCureCoin.MouseDown, btnCureCoinBlockchain.MouseDown, btnCureCoinDiscord.MouseDown, btnCureCoinTwitter.MouseDown, btnCurePool.MouseDown, btnEOC.MouseDown, btnFAHControl.MouseDown, btnFLDC_Distribution.MouseDown, btnFoldingCoinBlockchain.MouseDown, btnFoldingCoinDiscord.MouseDown, btnFoldingCoinShop.MouseDown, btnFoldingCoinTwitter.MouseDown, btnFoldingCoinWebsite.MouseDown, btnFwd.MouseDown, btnGo.MouseDown, btnHome.MouseDown, btnMyWallet.MouseDown, btnReload.MouseDown, btnStopNav.MouseDown, chkShowTools.MouseDown, gbxCheckboxForTools.MouseDown, lblURL.MouseDown, pbProgIcon.MouseDown, txtURL.MouseDown
+    Private Sub Main_MouseDown(sender As Object, e As MouseEventArgs) Handles Me.MouseDown,
+            pnlURL.MouseDown, lblURL.MouseDown, txtURL.MouseDown, btnBack.MouseDown, btnFwd.MouseDown, btnGo.MouseDown, btnHome.MouseDown, btnReload.MouseDown, btnStopNav.MouseDown,
+            pnlFind.MouseDown, txtFind.MouseDown, btnFindPrevious.MouseDown, btnFindNext.MouseDown, btnFindClose.MouseDown, pnlFindDivider.MouseDown, pnlBtnLinks.MouseDown, pnlBtnLinksDividerTop.MouseDown,
+            btnFAHControl.MouseDown, btnFAHTwitter.MouseDown, btnFAHNews.MouseDown, btnFoldingCoinUserStats.MouseDown, btnEOC_UserStats.MouseDown, pbProgIcon.MouseDown,
+            btnFoldingCoinWebsite.MouseDown, btnFoldingCoinTwitter.MouseDown, btnFoldingCoinDiscord.MouseDown, btnMyWallet.MouseDown, btnFoldingCoinBlockchain.MouseDown, btnBTCBlockchain.MouseDown, btnFoldingCoinDistribution.MouseDown, btnFoldingCoinShop.MouseDown, btnFoldingCoinTeamStats.MouseDown,
+            btnCureCoin.MouseDown, btnCureCoinBlockchain.MouseDown, btnCureCoinDiscord.MouseDown, btnCureCoinTwitter.MouseDown, btnCurePool.MouseDown, btnCureCoinTeamStats.MouseDown,
+            pnlBtnLinksDividerBottom.MouseDown, chkToolsShow.MouseDown, txtMsg.MouseDown, btnToolsBrowserTools.MouseDown, btnToolsGetFAH.MouseDown, btnToolsGetWallet.MouseDown, btnToolsFAHConfig.MouseDown, btnToolsCureCoinSetup.MouseDown,
+            btnToolsOptions.MouseDown, btnToolsSavedData.MouseDown, lblToolsWalletNum.MouseDown, cbxToolsWalletId.MouseDown, txtToolsWalletName.MouseDown
+
         Select Case e.Button
             Case MouseButtons.XButton1
                 'Back
@@ -2648,6 +2744,28 @@
                 Me.browser.Select()
                 Me.browser.GetBrowser.GoForward()
         End Select
+    End Sub
+    'Additionally for GroupBoxes (they seem like they are handled slightly differently, since the event name doesn't select the same in VS)
+    Private Sub gbx_MouseDown(sender As Object, e As MouseEventArgs) Handles gbxFAHRelated.MouseDown, gbxFoldingCoinRelated.MouseDown, gbxCureCoinRelated.MouseDown, gbxTools.MouseDown
+        Main_MouseDown(Nothing, e)
+    End Sub
+
+    Private Sub Main_MouseUp(sender As Object, e As MouseEventArgs) Handles Me.MouseUp,
+            pnlURL.MouseUp, lblURL.MouseUp, txtURL.MouseUp, btnBack.MouseUp, btnFwd.MouseUp, btnGo.MouseUp, btnHome.MouseUp, btnReload.MouseUp, btnStopNav.MouseUp,
+            pnlFind.MouseUp, txtFind.MouseUp, btnFindPrevious.MouseUp, btnFindNext.MouseUp, btnFindClose.MouseUp, pnlFindDivider.MouseUp, pnlBtnLinks.MouseUp, pnlBtnLinksDividerTop.MouseUp,
+            btnFAHControl.MouseUp, btnFAHTwitter.MouseUp, btnFAHNews.MouseUp, btnFoldingCoinUserStats.MouseUp, btnEOC_UserStats.MouseUp, pbProgIcon.MouseUp,
+            btnFoldingCoinWebsite.MouseUp, btnFoldingCoinTwitter.MouseUp, btnFoldingCoinDiscord.MouseUp, btnMyWallet.MouseUp, btnFoldingCoinBlockchain.MouseUp, btnBTCBlockchain.MouseUp, btnFoldingCoinDistribution.MouseUp, btnFoldingCoinShop.MouseUp, btnFoldingCoinTeamStats.MouseUp,
+            btnCureCoin.MouseUp, btnCureCoinBlockchain.MouseUp, btnCureCoinDiscord.MouseUp, btnCureCoinTwitter.MouseUp, btnCurePool.MouseUp, btnCureCoinTeamStats.MouseUp,
+            pnlBtnLinksDividerBottom.MouseUp,
+            lblToolsWalletNum.MouseUp
+        'NOTE: Don't add the Tools buttons or controls to this event. If needed, those are handled in their button click events
+
+        'Button Link Panel: Reset panel back to minimized
+        Me.pnlBtnLinks.Height = 6
+    End Sub
+    'Additionally for GroupBoxes (they seem like they are handled slightly differently, since the event name doesn't select the same in VS)
+    Private Sub gbx_MouseUp(sender As Object, e As MouseEventArgs) Handles gbxFAHRelated.MouseUp, gbxFoldingCoinRelated.MouseUp, gbxCureCoinRelated.MouseUp, gbxTools.MouseUp
+        Main_MouseUp(Nothing, Nothing)
     End Sub
 
     Private Sub btnBack_Click(sender As System.Object, e As System.EventArgs) Handles btnBack.Click
@@ -2709,27 +2827,44 @@
             'Load homepage / portal based on the user's options
             Select Case INI.GetSection(INI_Settings).GetKey(INI_Homepage).GetValue()
                 Case HpgDefault
-                    If m_bDefaultHomepageLoaded = False Then
-                        CefSharp.WebBrowserExtensions.LoadHtml(Me.browser, HTML_PortalPage, URL_Portal)
-                        m_bDefaultHomepageLoaded = True
+                    If m_bHomepage_TopAnBottomLoaded = False Then
+                        CefSharp.WebBrowserExtensions.LoadHtml(Me.browser, HTML_Homepage_TopAndBottom, URL_Homepage_TopAndBottom)
+                        m_bHomepage_TopAnBottomLoaded = True
                     Else
-                        Await OpenURL(URL_Portal, False)
+                        Await OpenURL(URL_Homepage_TopAndBottom, False)
+                    End If
+
+                Case HpgSideBySide
+                    If m_bHomepage_SideBySideLoaded = False Then
+                        CefSharp.WebBrowserExtensions.LoadHtml(Me.browser, HTML_Homepage_SideBySide, URL_Homepage_SideBySide)
+                        m_bHomepage_SideBySideLoaded = True
+                    Else
+                        Await OpenURL(URL_Homepage_SideBySide, False)
                     End If
 
                 Case HpgFoldingCoin
                     Await OpenURL(URL_FoldingCoin, False)
 
+                Case HpgFoldingCoinMyStats
+                    btnFoldingCoinUserStats_Click(Nothing, Nothing)
+
+                Case HpgFoldingCoinTeamStats
+                    btnFoldingCoinTeamStats_Click(Nothing, Nothing)
+
                 Case HpgCureCoin
                     Await OpenURL(URL_CureCoin, False)
 
-                Case HpgEOC
-                    btnEOC_Click(Nothing, Nothing)
+                Case HpgCureCoinTeamStatsEOC
+                    btnCureCoinTeamStats_Click(Nothing, Nothing)
+
+                Case HpgMyStatsEOC, HpgEOC
+                    btnEOC_UserStats_Click(Nothing, Nothing)
 
                 Case HpgFAH
                     Await OpenURL(URL_FAH_Client, False)
 
                 Case HpgNaClFAH
-                    'TODO: Running the FAH NaCl plugin is not working yet
+                    'TODO: Running the FAH NaCl plugin doesn't work yet
                     Await OpenURL(URL_NaCl_FAH, False)
 
                 Case HpgBlank
@@ -2748,6 +2883,17 @@
 
         Return False
     End Function
+
+    Private Async Sub pnlBtnLinks_MouseEnter(sender As Object, e As EventArgs) Handles pnlBtnLinks.MouseEnter
+        'Skip, if already expanded
+        If Me.pnlBtnLinks.Height < 10 Then
+            'Button Link list: Mouse-over effect to expand area
+            For i As Integer = 20 To m_iWebLinkPanelHeight Step 20
+                Me.pnlBtnLinks.Height = i
+                Await Wait(5)
+            Next
+        End If
+    End Sub
 
     Private Sub btnFindPrevious_Click(sender As Object, e As EventArgs) Handles btnFindPrevious.Click
         FindTextInWebPage(False)
@@ -2832,7 +2978,7 @@
                 System.Net.ServicePointManager.ServerCertificateValidationCallback = New Net.Security.RemoteCertificateValidationCallback(AddressOf ValidateCertificate)
 
                 'Focus the URL text box so the KeyPress events work for Enter / ESC.
-                Me.txtURL.BackColor = Color.White
+                Me.txtURL.BackColor = Color.FromKnownColor(KnownColor.Window)
                 Me.txtURL.Focus()
                 Me.txtURL.Select(Me.txtURL.Text.Length, 0)
                 'Reset flag
@@ -2846,7 +2992,7 @@
 
             Else
                 'Error
-                Me.txtURL.BackColor = Color.Red
+                Me.txtURL.BackColor = Color.Tomato
             End If
 
         Catch ex As Exception

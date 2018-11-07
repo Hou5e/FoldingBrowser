@@ -10,12 +10,12 @@
             Me.SplitContainer1.Panel1Collapsed = True
 
             'Update the displayed data
-            If Me.cbxWalletId.Text = g_Main.cbxWalletId.Text Then
+            If Me.cbxWalletId.Text = g_Main.cbxToolsWalletId.Text Then
                 'Update the displayed data
                 cbxWalletId_SelectedIndexChanged(Nothing, Nothing)
             Else
                 'Change to the same wallet as the main interface
-                Me.cbxWalletId.Text = g_Main.cbxWalletId.Text
+                Me.cbxWalletId.Text = g_Main.cbxToolsWalletId.Text
             End If
 
             'Start with the textboxes instead of the raw data that is hard to look at

@@ -1,0 +1,8 @@
+Drag and drop the HTML file on the browser window to test.
+
+Or, use the local URL that would look like:
+--------------------------------------------
+file:///C:/Projects/FoldingBrowser/Browser/FoldingBrowser-TopAndBottom.html
+file:///C:/Projects/FoldingBrowser/Browser/FoldingBrowser-SideBySide.html
+
+The text from these files is embedded in the source code (See: GlobalRefs.vb).

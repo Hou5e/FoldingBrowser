@@ -55,6 +55,9 @@ Partial Class DisplayOptionsDialog
         '
         Me.btnOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK
+        Me.btnOK.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.GradientActiveCaption
+        Me.btnOK.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.GradientInactiveCaption
+        Me.btnOK.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnOK.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnOK.Location = New System.Drawing.Point(597, 229)
         Me.btnOK.Name = "btnOK"
@@ -76,6 +79,9 @@ Partial Class DisplayOptionsDialog
         'btnSaveChanges
         '
         Me.btnSaveChanges.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnSaveChanges.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.GradientActiveCaption
+        Me.btnSaveChanges.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.GradientInactiveCaption
+        Me.btnSaveChanges.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnSaveChanges.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnSaveChanges.Location = New System.Drawing.Point(288, 229)
         Me.btnSaveChanges.Name = "btnSaveChanges"
@@ -110,7 +116,7 @@ Partial Class DisplayOptionsDialog
         'SplitContainer1.Panel1
         '
         Me.SplitContainer1.Panel1.AutoScroll = True
-        Me.SplitContainer1.Panel1.BackColor = System.Drawing.SystemColors.Control
+        Me.SplitContainer1.Panel1.BackColor = System.Drawing.SystemColors.Window
         Me.SplitContainer1.Panel1.Controls.Add(Me.lblHomepage)
         Me.SplitContainer1.Panel1.Controls.Add(Me.cbxHomepage)
         '
@@ -135,10 +141,9 @@ Partial Class DisplayOptionsDialog
         'cbxHomepage
         '
         Me.cbxHomepage.FormattingEnabled = True
-        Me.cbxHomepage.Items.AddRange(New Object() {"Default", "FoldingCoin", "CureCoin", "EOC", "Folding@Home Web Control", "Blank"})
         Me.cbxHomepage.Location = New System.Drawing.Point(234, 25)
         Me.cbxHomepage.Name = "cbxHomepage"
-        Me.cbxHomepage.Size = New System.Drawing.Size(166, 21)
+        Me.cbxHomepage.Size = New System.Drawing.Size(228, 21)
         Me.cbxHomepage.TabIndex = 1
         Me.cbxHomepage.Text = "Default"
         '
@@ -146,6 +151,7 @@ Partial Class DisplayOptionsDialog
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.BackColor = System.Drawing.SystemColors.Window
         Me.ClientSize = New System.Drawing.Size(709, 269)
         Me.Controls.Add(Me.SplitContainer1)
         Me.Controls.Add(Me.chkShowRawData)

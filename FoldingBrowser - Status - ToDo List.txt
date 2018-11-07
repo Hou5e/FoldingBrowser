@@ -7,30 +7,27 @@ FoldingBrowser All-in-One Installer:
 Immediate Need /  Short-Term Goals:
 -----------------------------------
 
--Add other related website link buttons?    http://www.scienceblockchains.com/      https://mergedfolding.net/  (Skip)
 -Support other wallets, for pressing the 'FLDC Wallet' button, with option for:  https://freewallet.io/   And, reverse the CounterWallet website search order to use the 2nd one first?  (Currently only using: https://counterwallet.io/).    Other alternatives (ignore for now): https://wallet.indiesquare.me/     also: rarepepewallet.com (Not updated enough? security risks?)     (Not yet) https://tokenpockets.com/ (You cannot use tokenpockets currently. It is not compatible with existing passphrases from CounterWallet. If you want to use it, you will have to make a new address first)
--Strip out all not allowed characters that can be pasted in to the username textbox --> TextboxEx? -Automatic character removal with no warning that the pasted text was modified was originally (less desirable, but probably better. Make warning message).
--Evaluate upgrading to CefSharp/Chrome v67 (VC++2015) when released here: github.com/cefsharp/CefSharp/releases
+-Enable Multi-language support in the browser component to view pages that are available in other languages (Allow users to change the locale & supported languages)?
 
 ----------------------------------------------------
 Other Ideas, Improvements, Tasks, Longer-Term Goals:
 ----------------------------------------------------
 
+-Evaluate upgrading to CefSharp/Chrome v69-v71 (VC++2015) when released here: https://github.com/cefsharp/CefSharp/releases
 -Simple version of the FoldingBrowser: mostly to only run the FAH NaCl Chrome Plugin client (Can the FAH NaCl program be run without a Chrome browser? https://developer.chrome.com/native-client/sdk/download - Also, Chrome NaCl support will be depreciated soon: https://developer.chrome.com/native-client/migration) -Simplicity: Ideally, you only want to enter username and email, and you are up and Folding (as other users have described).
 -Use built-in multi-language uninstaller strings for the one non-built-in uninstaller dialog on upgrading? (Ignoring for now)
 -Enable Google Translate in Chrome/CefSharp for automatic web page translations?
--Enable Multi-language support in the browser component to view pages that are available in other languages (Allow users to change the locale & supported languages)?
 -Add Multi-language support in the FoldingBrowser for button text (and tooltips)?
--Add Fwd/Back navigation with 4th/5th mouse button clicks to the web control window
 -Add images to improve dialog prompt errors, instructions, or questions (It will help non-English speaking users)
 -Add an Ad Blocker Plugin, if possible?
 -Improve the process to change the default encryption password on the FoldingBrowser Saved settings: INI file: when encryption password is blank, prompt for password, if encryption fails (for extra security for not keeping the PW in a text file in your user account). Option to be prompted for it: once per session, or prompted every time when needed.
 -Make the other web page wait loops use JavaScript for detecting pages are fully loaded (like the CureCoin web page login), to make detection even less open loop
 -Linux and Mac version of the AIO setup:
   -Create an install script. Possibly use Docker to keep the installation simplified
-  -Start over from a Chromium web browser project that can already be compiled for Linux and Mac?
+  -Start over from a Chromium web browser project that can already be compiled for Linux and Mac? See Chromely(currently missing Mac compile): https://github.com/mattkol/Chromely
   -Port to and start from an existing MonoDevelop project that can already be compiled for Linux and Mac?
-  -Create a separate Electron framework App for Mac and Linux of the simple version that only runs the FAH NaCl Chrome Plugin client? -Try the FLDC Bar Electron app as a possible starting point?
+  -Create a separate Electron.NET App for Mac and Linux of the simple version that only runs the FAH NaCl Chrome Plugin client? -Try the FLDC Bar Electron app as a possible starting point?
   -Can the FoldingBrowser run on Wine in Linux? And, then update the FoldingBrowser to use the appropriate files and paths for Linux?
   -.NET Core simple project for Linux and Mac? (No, CefSharp isn't compatible with other OS's)
   -Create a simple encrypted dat file viewer for Linux and Mac (and include those files with making a backup, for going from Windows to Linux)?
@@ -45,7 +42,6 @@ Other Ideas, Improvements, Tasks, Longer-Term Goals:
 -Add stop button to cancel the automated process?
 -Get CounterWallet with CounterParty API instead of current methods from web page clicks? (probably more work than it's worth)
 -Support other blockchain explorers?  like: (Using:)https://xchain.io/     (depreciated) https://counterpartychain.io/      https://chain.so/      https://walletapp.indiesquare.me/explorer/      https://www.blocktrail.com/BTC/address/<addy>      https://xcpdex.com/
--Change to the new FLDC username format (Nope, not yet, as of July 2018)
 -Option to select alternate distribution stats server from: http://foldingcoin.xyz/?token=FLDC&total=250000&start=2017-08-21&end=2017-08-22 to using: http://fldc-stats.tokenly.com/?token=FLDC&total=250000&start=2017-08-21&end=2017-08-22
 -Improve the CureCoin HTTP JSON-RPC to use a JSON parser. And, find the wallet if there is more than one entry or (blank and a name)
 -Add a CureCoin Wallet button, that focus a running CURE wallet executable, or launches it as a new process?
@@ -53,15 +49,36 @@ Other Ideas, Improvements, Tasks, Longer-Term Goals:
 -Try to fix/automate this known issue: -Discord invites go to a blank page (Press the 'Discord' button again to reload/fix)
 -Improve the get .NET v4.0 from Microsoft message in the installer to: use Windows Update, or manually install from Microsoft's website?
 -Integration with HFM.NET, or something similar
+-Add other related website link buttons?    http://www.scienceblockchains.com/  (Maybe. Want to avoid too many buttons)    https://mergedfolding.net/  (Skip)      https://mergedfolding.net/official-distributions  (Skip)
+-Add links to CoinMarketCap (Maybe. It shouldn't be needed with website profit calculator)?     https://coinmarketcap.com/currencies/foldingcoin/       https://coinmarketcap.com/currencies/curecoin/
+-Add links to donation websites for both FLDC and CURE?  (maybe) -Donate Links: https://www.gofundme.com/help-cure-cancer-with-technology
+-Add Option: Dark or light windows & controls theme color options?
+-Add support for zooming in on webpages?
+-Right-click context menu: Add 'Find' to the list. Also, when highlighting text, add that text to the find dialog?
 
 
 ======================================================================================================
 Change Log - Release Notes - Tasks completed:
 ======================================================================================================
 
+v18 Release (11/07/2018)
+[DONE] -Split the 2-page homepage the other direction (top/bottom, instead of the original left/right sides that aren't wide enough for the webpages to work well normally)
+[DONE] -Add FLDC (User & Team) Stats, and EOC CureCoin Team Stats to the list of web links that can be selected for the Homepage button
+[DONE] -Update other buttons throughout the FoldingBrowser to be more like flat white rectangles (keeping border, if only text)
+[DONE] -Update the new distribution server link and button icon: https://mergedfolding.net/official-distributions
+[DONE] -Fix tabbing order of form items to be correct
+[DONE] -Check tool-tips on main window buttons
+[DONE] -Add Folding@Home Twitter and News buttons (good for seeing updates, but probably not super useful info)
+[DONE] -Add Stats website link buttons for both Team: https://stats.mergedfolding.net/    and User: https://stats.mergedfolding.net/member/<addy>    -Add similar CureCoin Team button to EOC: https://folding.extremeoverclocking.com/team_summary.php?s=&t=224497
+[DONE] -Add search 'topic' links to GitHub
+[DONE] -Make web-link buttons more interesting and modern-looking, and not like old clunky buttons. Use Discord image[DONE], Twitter image[DONE] -Improve the layout, so they are not as dense[DONE] -Make the Tools and Bookmark panels symmetrical and not contending for the same screen space[DONE]
+[DONE] -Add Fwd/Back navigation with 4th/5th mouse button clicks to the web control window [This seemed to work in CefSharp v67 without any extra code, and didn't in previous versions]
+[DONE] -Make the 'Tools' checkbox an image for settings (gear, dots[like Chrome: not obvious enough], or lines icon[like FireFox: maybe]) for checked/unchecked
+[DONE] -Upgrade to CefSharp/Chrome v67 (VC++2015)
+[DONE] -Change to the new FLDC username format now that it's available
 v17 Release (08/05/2018)
-[DONE] -Add other related website link buttons:    https://tokenmarkets.com/catalog/foldingcoin
-[DONE-08/05/2018] -Fix tabbing order of form items to be correct.
+[DONE] -Add other related website link buttons: https://tokenmarkets.com/catalog/foldingcoin
+[DONE] -Fix tabbing order of form items to be correct
 [DONE] -Upgrade to CefSharp/Chrome v65 (VC++2015), and updated the VC++ dependency in the installer
 [DONE] -Update the FoldingBrowser FAH download links for the FAH website domain change
 [DONE] -Add workaround for: FAH Web Control, where it gets stuck in an infinite refresh loop in Chrome v59+, and needs a refresh without cache to fix that condition.
@@ -137,7 +154,7 @@ v9 Release (3/4/2017)
 v8 Release (2/4/2017)
 [DONE] -Install complete message: also add for questions or feedback please contact us on Slack
 [DONE] -Improve last message for Install complete, to say the Distribution intervals (FLDC = Monthly, CURE = Daily).
-[DONE-2/4/2017] -Fix tabbing order of form items to be correct.
+[DONE] -Fix tabbing order of form items to be correct
 [DONE] -Have button to Slack for FLDC and CURE
 [DONE] -Make the 1 day date range for the FLDC Distribution link?
 [DONE] -Have direct link to your CURE address on the blockchain websites: https://chainz.cryptoid.info/cure/address.dws?<addy>.htm
@@ -171,8 +188,8 @@ v6 Release (12/21/2016)
 [DONE] -Logout after CureCoin Pool registration (reduce being logged in issues, later from loaded info from cache)
 [DONE] -Use the newer Await Wait(ms) function to avoid issues with: Threading.Thread.Sleep(ms)
 [DONE] -Installer: Check for Microsoft Visual C++ 2013 (x86) Redistributable installation (to avoid the Browser not working after install, like the laptop)
-[DONE-12/17/2016] -Fix tabbing order of form items to be correct.
-[DONE-12/5/2016] -Spell check source code.
+[DONE] -Fix tabbing order of form items to be correct
+[DONE] -Spell check source code
 [DONE] -Try to display the error with the FoldingBrowser on the laptop (try-catch block around load needs error message that you can see?). I think this issue was from the Microsoft Visual C++ 2013 (x86) Redistributable not being installed
 [DONE] -Change Passkey to FAHPasskey
 [DONE] -2nd captcha Prompt should one of my dialog boxes for a larger font
@@ -196,8 +213,8 @@ v6 Release (12/21/2016)
 v5 Release (11/13/2016)
 [DONE] -Fix starting (2) FAH Clients on a new installation, the process is running to fast. Change the way this works
 [DONE] -For Telnet, Try to fix or indicate no response back. Verify FAH is running, if not then ask to start it, retry and loop again?
-[DONE-11/12/2016] -Spell check source code.
-[DONE-11/12/2016] -Fix tabbing order of form items to be correct.
+[DONE] -Spell check source code
+[DONE] -Fix tabbing order of form items to be correct
 [DONE] -Delete temp file after download for F@H install. Look for file on exit and delete it then.
 [DONE] -Save wallet name for no wallet name and manually doing FAH settings
 [DONE] -For multiple wallet accounts, list which accounts are in use in INI settings? Add pull-down, for wallet info slots 1-10, and save last used slot in the INI file (show and hide with Tools checkbox?)
@@ -237,6 +254,7 @@ v3 (8/21/2016) & v4 Release (10/1/2016)
 [DONE] -Browser: Find the location of the FAH Config file, save a backup copy, and re-write a new cfg file. -Show FAH INI file changes (new vs old), and allow editing. Button w/ direct access to file for changes later?
 [DONE] -Browser: Launch FAH (restarting the PC is not required). Show control web page (in the FoldingBrowser, because it won't be the default browser)?
 
+(Skip) -Strip out all not allowed characters that can be pasted in to the username textbox --> TextboxEx? -Automatic character removal with no warning that the pasted text was modified was originally (less desirable, but probably better. Make warning message).
 (Skip) -A button to manually (unload the browser component), dump the cache, (and reload the browser)? Or, set a flag to do this on program exit.
 (Skip) -Add 'bookmark' link button titles and links to a separate INI file, that can be replaced to update. (No, not secure)
 (Skip) -Other CureCoin websites: https://curecoin.info     https://curecoin.io/      (Using:) http://curecoin.net/      (No, other websites are being consolidated into the one)
@@ -248,6 +266,8 @@ v3 (8/21/2016) & v4 Release (10/1/2016)
 (Skip) -Make all the entries for each Wallet slot in the DAT, and just leave unused blank?
 (Skip) -Login to CureCoin Pool: Display text for the Pool Pin once you've logged in (so you could copy and make changes later)? -Probably better as is, to lookup in saved data when needed.
 (No) -FAH shortcut: Open the Properties of the FAH shortcut in the Startup folder. There should be "--open-web-control" at the end of the target; remove it and Apply. -Probably considered modifying the FAH software... can't do it.
+(No) -Bookmarks, like a normal browser (User can save)? (probably not as secure. Limiting functionality seems better to keep the browser more single purpose for FLDC and CURE related only)
+(No) -Exchanges, like Bittrex, Livecoin?
 
 Browser buttons for:
 --------------------
@@ -255,11 +275,9 @@ Browser buttons for:
 [DONE] -Checking CounterParty Wallet
 [DONE] -FLDC, CureCoin websites
 [DONE] -FLDC, CureCoin Twitter pages
-(Needs update for new stats site) [DONE] -FLDC website daily distributions. [DONE] Change to FoldingCoin.xyz for daily distributions
+[DONE] -FLDC website distributions
 [DONE] -FAH user stats on http://folding.extremeoverclocking.com. Needs Id stored in INI from username lookup at EOC, or update bookmark links INI file (you would want this tied to wallet info?).
 [DONE] -Change/Set 12-word Passphrase / choose from the 10 save info slots
-(No) -Bookmarks, like a normal browser?
-(No) -Exchanges: Poloniex, Bittrex, Livecoin?
 [DONE] -CureCoin Blockchain explorer
 [DONE] -FoldingCoin Blockchain explorer
 =====================

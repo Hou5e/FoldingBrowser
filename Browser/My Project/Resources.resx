@@ -118,52 +118,85 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="L_cysteine_16_24_32_48_256" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\L-cysteine-16_24_32_48_256.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="CureCoin_48" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CureCoin_48.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Discord_48" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Discord_48.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FLDC_Shop_Mug_48" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FLDC_Shop_Mug_48.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FoldingCoin_48" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FoldingCoin_48.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Twitter_48" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Twitter_48.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Back_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Back-24.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\Resources\Back_24.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Coins_4_top_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Coins-4-top-24.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="BlockchainBTC_48" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\BlockchainBTC_48.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="CureCoinLogo_top_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\CureCoinLogo-top-32.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="BlockchainCURE_48" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\BlockchainCURE_48.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="BlockchainFLDC_48" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\BlockchainFLDC_48.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Coins_48" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Coins_48.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FindDown_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FindDown_16.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FindUp_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FindUp_16.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Fwd_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Fwd_24.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Go_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Go_16.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Home_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Home_16.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="L_cysteine_48" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\L-cysteine_48.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="L_methionine_B_48" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\L-methionine-B_48.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="News_48" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\News_48.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Reload_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Reload_16.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Stop_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Stop_16.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ToolsSettingsGearNoBG_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ToolsSettingsGearNoBG_24.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="DistributionCURE_48" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DistributionCURE_48.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="DistributionFLDC_48" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DistributionFLDC_48.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="EOC_48" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\EOC_48.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="FindDown_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\FindDown-16.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="FindUp_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\FindUp-16.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="FLDC_48" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\FLDC_48.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="FoldingCoin_top_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\FoldingCoin-top-32.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Fwd_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Fwd-24.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Go_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Go-16.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Home_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Home-16.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="L_cysteine_16_24_32_48_256" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\L-cysteine-16_24_32_48_256.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="L_cysteine_3D_vdW2_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\L-cysteine-3D-vdW2-32.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="L_methionine_B_top_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\L-methionine-B-top-32.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Reload_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Reload-16.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Stop_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Stop-16.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ToolsSettingsGearEnabled_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ToolsSettingsGearEnabled_24.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

@@ -85,6 +85,9 @@ Partial Class DisplayTextDialog
         '
         Me.btnOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK
+        Me.btnOK.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.GradientActiveCaption
+        Me.btnOK.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.GradientInactiveCaption
+        Me.btnOK.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnOK.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnOK.Location = New System.Drawing.Point(668, 495)
         Me.btnOK.Name = "btnOK"
@@ -106,6 +109,9 @@ Partial Class DisplayTextDialog
         'btnSaveChanges
         '
         Me.btnSaveChanges.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnSaveChanges.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.GradientActiveCaption
+        Me.btnSaveChanges.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.GradientInactiveCaption
+        Me.btnSaveChanges.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnSaveChanges.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnSaveChanges.Location = New System.Drawing.Point(399, 495)
         Me.btnSaveChanges.Name = "btnSaveChanges"
@@ -147,6 +153,9 @@ Partial Class DisplayTextDialog
         '
         Me.btnMakeBackup.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnMakeBackup.DialogResult = System.Windows.Forms.DialogResult.Yes
+        Me.btnMakeBackup.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.GradientActiveCaption
+        Me.btnMakeBackup.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.GradientInactiveCaption
+        Me.btnMakeBackup.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnMakeBackup.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnMakeBackup.Location = New System.Drawing.Point(533, 495)
         Me.btnMakeBackup.Name = "btnMakeBackup"
@@ -232,7 +241,7 @@ Partial Class DisplayTextDialog
         'SplitContainer1.Panel1
         '
         Me.SplitContainer1.Panel1.AutoScroll = True
-        Me.SplitContainer1.Panel1.BackColor = System.Drawing.SystemColors.Control
+        Me.SplitContainer1.Panel1.BackColor = System.Drawing.SystemColors.Window
         Me.SplitContainer1.Panel1.Controls.Add(Me.txtDiscordPassword)
         Me.SplitContainer1.Panel1.Controls.Add(Me.lblDiscordPassword)
         Me.SplitContainer1.Panel1.Controls.Add(Me.txtDiscordEmail)
@@ -458,6 +467,7 @@ Partial Class DisplayTextDialog
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.BackColor = System.Drawing.SystemColors.Window
         Me.ClientSize = New System.Drawing.Size(780, 535)
         Me.Controls.Add(Me.chkShowPW)
         Me.Controls.Add(Me.SplitContainer1)

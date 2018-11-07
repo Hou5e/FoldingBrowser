@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="packages\CefSharp.WinForms.65.0.0\build\CefSharp.WinForms.props" Condition="Exists('packages\CefSharp.WinForms.65.0.0\build\CefSharp.WinForms.props')" />
-  <Import Project="packages\CefSharp.Common.65.0.0\build\CefSharp.Common.props" Condition="Exists('packages\CefSharp.Common.65.0.0\build\CefSharp.Common.props')" />
-  <Import Project="packages\cef.redist.x86.3.3325.1758\build\cef.redist.x86.props" Condition="Exists('packages\cef.redist.x86.3.3325.1758\build\cef.redist.x86.props')" />
-  <Import Project="packages\cef.redist.x64.3.3325.1758\build\cef.redist.x64.props" Condition="Exists('packages\cef.redist.x64.3.3325.1758\build\cef.redist.x64.props')" />
+  <Import Project="packages\CefSharp.WinForms.67.0.0\build\CefSharp.WinForms.props" Condition="Exists('packages\CefSharp.WinForms.67.0.0\build\CefSharp.WinForms.props')" />
+  <Import Project="packages\CefSharp.Common.67.0.0\build\CefSharp.Common.props" Condition="Exists('packages\CefSharp.Common.67.0.0\build\CefSharp.Common.props')" />
+  <Import Project="packages\cef.redist.x86.3.3396.1786\build\cef.redist.x86.props" Condition="Exists('packages\cef.redist.x86.3.3396.1786\build\cef.redist.x86.props')" />
+  <Import Project="packages\cef.redist.x64.3.3396.1786\build\cef.redist.x64.props" Condition="Exists('packages\cef.redist.x64.3.3396.1786\build\cef.redist.x64.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
@@ -102,6 +102,11 @@
     <Compile Include="MsgBoxDialog.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="My Project\Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="SetupDialog.Designer.vb">
       <DependentUpon>SetupDialog.vb</DependentUpon>
     </Compile>
@@ -141,11 +146,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Application.myapp</DependentUpon>
     </Compile>
-    <Compile Include="My Project\Resources.Designer.vb">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="My Project\Settings.Designer.vb">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
@@ -180,9 +180,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -200,26 +200,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Resources\Reload-16.ico" />
-    <None Include="Resources\Fwd-24.ico" />
-    <None Include="Resources\Back-24.ico" />
-    <None Include="Resources\Stop-16.ico" />
-    <None Include="Resources\Go-16.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Coins-4-top-24.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\L-cysteine-3D-vdW2-32.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\L-methionine-B-top-32.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\FoldingCoin-top-32.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\CureCoinLogo-top-32.ico" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\FLDC_48.ico" />
@@ -231,31 +211,91 @@
     <None Include="Resources\L-cysteine-16_24_32_48_256.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="FoldingBrowser.html" />
+    <None Include="Resources\Discord_48.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Home-16.ico" />
+    <None Include="Resources\Twitter_48.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\FindDown-16.ico" />
+    <None Include="Resources\FoldingCoin_48.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\FindUp-16.ico" />
+    <None Include="Resources\CureCoin_48.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Coins_48.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\L-methionine-B_48.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\FLDC_Shop_Mug_48.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\News_48.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Back_24.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Fwd_24.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Go_16.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Stop_16.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Reload_16.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Home_16.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\FindUp_16.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\FindDown_16.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\L-cysteine_48.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BlockchainBTC_48.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BlockchainCURE_48.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BlockchainFLDC_48.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ToolsSettingsGearEnabled_24.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ToolsSettingsGearNoBG_24.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DistributionFLDC_48.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DistributionCURE_48.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('packages\cef.redist.x64.3.3325.1758\build\cef.redist.x64.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\cef.redist.x64.3.3325.1758\build\cef.redist.x64.props'))" />
-    <Error Condition="!Exists('packages\cef.redist.x86.3.3325.1758\build\cef.redist.x86.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\cef.redist.x86.3.3325.1758\build\cef.redist.x86.props'))" />
-    <Error Condition="!Exists('packages\CefSharp.Common.65.0.0\build\CefSharp.Common.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\CefSharp.Common.65.0.0\build\CefSharp.Common.props'))" />
-    <Error Condition="!Exists('packages\CefSharp.Common.65.0.0\build\CefSharp.Common.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\CefSharp.Common.65.0.0\build\CefSharp.Common.targets'))" />
-    <Error Condition="!Exists('packages\CefSharp.WinForms.65.0.0\build\CefSharp.WinForms.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\CefSharp.WinForms.65.0.0\build\CefSharp.WinForms.props'))" />
-    <Error Condition="!Exists('packages\CefSharp.WinForms.65.0.0\build\CefSharp.WinForms.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\CefSharp.WinForms.65.0.0\build\CefSharp.WinForms.targets'))" />
+    <Error Condition="!Exists('packages\cef.redist.x64.3.3396.1786\build\cef.redist.x64.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\cef.redist.x64.3.3396.1786\build\cef.redist.x64.props'))" />
+    <Error Condition="!Exists('packages\cef.redist.x86.3.3396.1786\build\cef.redist.x86.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\cef.redist.x86.3.3396.1786\build\cef.redist.x86.props'))" />
+    <Error Condition="!Exists('packages\CefSharp.Common.67.0.0\build\CefSharp.Common.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\CefSharp.Common.67.0.0\build\CefSharp.Common.props'))" />
+    <Error Condition="!Exists('packages\CefSharp.Common.67.0.0\build\CefSharp.Common.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\CefSharp.Common.67.0.0\build\CefSharp.Common.targets'))" />
+    <Error Condition="!Exists('packages\CefSharp.WinForms.67.0.0\build\CefSharp.WinForms.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\CefSharp.WinForms.67.0.0\build\CefSharp.WinForms.props'))" />
+    <Error Condition="!Exists('packages\CefSharp.WinForms.67.0.0\build\CefSharp.WinForms.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\CefSharp.WinForms.67.0.0\build\CefSharp.WinForms.targets'))" />
   </Target>
-  <Import Project="packages\CefSharp.Common.65.0.0\build\CefSharp.Common.targets" Condition="Exists('packages\CefSharp.Common.65.0.0\build\CefSharp.Common.targets')" />
-  <Import Project="packages\CefSharp.WinForms.65.0.0\build\CefSharp.WinForms.targets" Condition="Exists('packages\CefSharp.WinForms.65.0.0\build\CefSharp.WinForms.targets')" />
+  <Import Project="packages\CefSharp.Common.67.0.0\build\CefSharp.Common.targets" Condition="Exists('packages\CefSharp.Common.67.0.0\build\CefSharp.Common.targets')" />
+  <Import Project="packages\CefSharp.WinForms.67.0.0\build\CefSharp.WinForms.targets" Condition="Exists('packages\CefSharp.WinForms.67.0.0\build\CefSharp.WinForms.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

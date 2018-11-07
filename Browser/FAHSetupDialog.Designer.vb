@@ -57,11 +57,11 @@ Partial Class FAHSetupDialog
         Me.gbxConfigPreview = New System.Windows.Forms.GroupBox()
         Me.btnReload = New System.Windows.Forms.Button()
         Me.txtCfgPath = New System.Windows.Forms.TextBox()
-        Me.lblPreviewAfter = New System.Windows.Forms.Label()
-        Me.lblPreviewBefore = New System.Windows.Forms.Label()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.txtXmlBefore = New System.Windows.Forms.TextBox()
         Me.txtXmlAfter = New System.Windows.Forms.TextBox()
+        Me.lblPreviewBefore = New System.Windows.Forms.Label()
+        Me.lblPreviewAfter = New System.Windows.Forms.Label()
         Me.chkShowFAHCfg = New System.Windows.Forms.CheckBox()
         Me.gbxFAHVerifyConfig = New System.Windows.Forms.GroupBox()
         Me.txtPwd = New System.Windows.Forms.TextBox()
@@ -111,6 +111,9 @@ Partial Class FAHSetupDialog
         '
         Me.btnCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
+        Me.btnCancel.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.GradientActiveCaption
+        Me.btnCancel.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.GradientInactiveCaption
+        Me.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnCancel.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnCancel.Location = New System.Drawing.Point(997, 542)
         Me.btnCancel.Name = "btnCancel"
@@ -123,6 +126,9 @@ Partial Class FAHSetupDialog
         '
         Me.btnOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK
+        Me.btnOK.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.GradientActiveCaption
+        Me.btnOK.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.GradientInactiveCaption
+        Me.btnOK.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnOK.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnOK.Location = New System.Drawing.Point(901, 542)
         Me.btnOK.Name = "btnOK"
@@ -147,23 +153,25 @@ Partial Class FAHSetupDialog
         '
         Me.txtEmail.Location = New System.Drawing.Point(52, 24)
         Me.txtEmail.Name = "txtEmail"
-        Me.txtEmail.Size = New System.Drawing.Size(360, 24)
+        Me.txtEmail.Size = New System.Drawing.Size(346, 24)
         Me.txtEmail.TabIndex = 0
         Me.txtEmail.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'rbnFoldingCoin
         '
         Me.rbnFoldingCoin.AutoSize = True
+        Me.rbnFoldingCoin.BackColor = System.Drawing.SystemColors.Window
         Me.rbnFoldingCoin.Location = New System.Drawing.Point(62, 49)
         Me.rbnFoldingCoin.Name = "rbnFoldingCoin"
         Me.rbnFoldingCoin.Size = New System.Drawing.Size(167, 22)
         Me.rbnFoldingCoin.TabIndex = 1
         Me.rbnFoldingCoin.Text = "FoldingCoin (226728)"
-        Me.rbnFoldingCoin.UseVisualStyleBackColor = True
+        Me.rbnFoldingCoin.UseVisualStyleBackColor = False
         '
         'rbnCureCoin
         '
         Me.rbnCureCoin.AutoSize = True
+        Me.rbnCureCoin.BackColor = System.Drawing.SystemColors.Window
         Me.rbnCureCoin.Checked = True
         Me.rbnCureCoin.Location = New System.Drawing.Point(62, 23)
         Me.rbnCureCoin.Name = "rbnCureCoin"
@@ -171,17 +179,18 @@ Partial Class FAHSetupDialog
         Me.rbnCureCoin.TabIndex = 0
         Me.rbnCureCoin.TabStop = True
         Me.rbnCureCoin.Text = "CureCoin (224497)"
-        Me.rbnCureCoin.UseVisualStyleBackColor = True
+        Me.rbnCureCoin.UseVisualStyleBackColor = False
         '
         'rbnOtherTeam
         '
         Me.rbnOtherTeam.AutoSize = True
+        Me.rbnOtherTeam.BackColor = System.Drawing.SystemColors.Window
         Me.rbnOtherTeam.Location = New System.Drawing.Point(62, 76)
         Me.rbnOtherTeam.Name = "rbnOtherTeam"
         Me.rbnOtherTeam.Size = New System.Drawing.Size(109, 22)
         Me.rbnOtherTeam.TabIndex = 2
         Me.rbnOtherTeam.Text = "Other Team:"
-        Me.rbnOtherTeam.UseVisualStyleBackColor = True
+        Me.rbnOtherTeam.UseVisualStyleBackColor = False
         '
         'txtOtherTeam
         '
@@ -256,10 +265,13 @@ Partial Class FAHSetupDialog
         '
         'btnGetPasskey
         '
-        Me.btnGetPasskey.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnGetPasskey.Location = New System.Drawing.Point(416, 23)
+        Me.btnGetPasskey.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.GradientActiveCaption
+        Me.btnGetPasskey.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.GradientInactiveCaption
+        Me.btnGetPasskey.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnGetPasskey.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnGetPasskey.Location = New System.Drawing.Point(404, 22)
         Me.btnGetPasskey.Name = "btnGetPasskey"
-        Me.btnGetPasskey.Size = New System.Drawing.Size(103, 27)
+        Me.btnGetPasskey.Size = New System.Drawing.Size(115, 28)
         Me.btnGetPasskey.TabIndex = 1
         Me.btnGetPasskey.Text = "Get Passkey"
         Me.btnGetPasskey.UseVisualStyleBackColor = True
@@ -335,12 +347,12 @@ Partial Class FAHSetupDialog
         'cbxSeparator
         '
         Me.cbxSeparator.FormattingEnabled = True
-        Me.cbxSeparator.Items.AddRange(New Object() {"_ALL_", "_FLDC_"})
+        Me.cbxSeparator.Items.AddRange(New Object() {"_", "_ALL_", "_FLDC_"})
         Me.cbxSeparator.Location = New System.Drawing.Point(116, 78)
         Me.cbxSeparator.Name = "cbxSeparator"
         Me.cbxSeparator.Size = New System.Drawing.Size(72, 26)
         Me.cbxSeparator.TabIndex = 1
-        Me.cbxSeparator.Text = "_ALL_"
+        Me.cbxSeparator.Text = "_"
         '
         'lblErrorNote
         '
@@ -441,11 +453,12 @@ Partial Class FAHSetupDialog
         '
         'gbxConfigPreview
         '
-        Me.gbxConfigPreview.Controls.Add(Me.btnReload)
+        Me.gbxConfigPreview.BackColor = System.Drawing.SystemColors.Window
         Me.gbxConfigPreview.Controls.Add(Me.txtCfgPath)
-        Me.gbxConfigPreview.Controls.Add(Me.lblPreviewAfter)
-        Me.gbxConfigPreview.Controls.Add(Me.lblPreviewBefore)
+        Me.gbxConfigPreview.Controls.Add(Me.btnReload)
         Me.gbxConfigPreview.Controls.Add(Me.SplitContainer1)
+        Me.gbxConfigPreview.Controls.Add(Me.lblPreviewBefore)
+        Me.gbxConfigPreview.Controls.Add(Me.lblPreviewAfter)
         Me.gbxConfigPreview.Dock = System.Windows.Forms.DockStyle.Fill
         Me.gbxConfigPreview.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.gbxConfigPreview.Location = New System.Drawing.Point(0, 0)
@@ -458,9 +471,12 @@ Partial Class FAHSetupDialog
         'btnReload
         '
         Me.btnReload.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnReload.Location = New System.Drawing.Point(398, 18)
+        Me.btnReload.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.GradientActiveCaption
+        Me.btnReload.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.GradientInactiveCaption
+        Me.btnReload.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnReload.Location = New System.Drawing.Point(398, 19)
         Me.btnReload.Name = "btnReload"
-        Me.btnReload.Size = New System.Drawing.Size(103, 27)
+        Me.btnReload.Size = New System.Drawing.Size(103, 28)
         Me.btnReload.TabIndex = 0
         Me.btnReload.Text = "Reload XML"
         Me.btnReload.UseVisualStyleBackColor = True
@@ -471,35 +487,13 @@ Partial Class FAHSetupDialog
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtCfgPath.BackColor = System.Drawing.SystemColors.Window
         Me.txtCfgPath.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.txtCfgPath.Location = New System.Drawing.Point(253, 1)
+        Me.txtCfgPath.Location = New System.Drawing.Point(253, 0)
+        Me.txtCfgPath.Multiline = True
         Me.txtCfgPath.Name = "txtCfgPath"
         Me.txtCfgPath.ReadOnly = True
-        Me.txtCfgPath.Size = New System.Drawing.Size(274, 17)
+        Me.txtCfgPath.Size = New System.Drawing.Size(274, 19)
         Me.txtCfgPath.TabIndex = 3
         Me.txtCfgPath.Text = "Path"
-        '
-        'lblPreviewAfter
-        '
-        Me.lblPreviewAfter.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lblPreviewAfter.AutoSize = True
-        Me.lblPreviewAfter.BackColor = System.Drawing.SystemColors.Window
-        Me.lblPreviewAfter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lblPreviewAfter.Location = New System.Drawing.Point(346, 21)
-        Me.lblPreviewAfter.Name = "lblPreviewAfter"
-        Me.lblPreviewAfter.Size = New System.Drawing.Size(44, 20)
-        Me.lblPreviewAfter.TabIndex = 2
-        Me.lblPreviewAfter.Text = "After:"
-        '
-        'lblPreviewBefore
-        '
-        Me.lblPreviewBefore.AutoSize = True
-        Me.lblPreviewBefore.BackColor = System.Drawing.SystemColors.Window
-        Me.lblPreviewBefore.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lblPreviewBefore.Location = New System.Drawing.Point(86, 21)
-        Me.lblPreviewBefore.Name = "lblPreviewBefore"
-        Me.lblPreviewBefore.Size = New System.Drawing.Size(58, 20)
-        Me.lblPreviewBefore.TabIndex = 1
-        Me.lblPreviewBefore.Text = "Before:"
         '
         'SplitContainer1
         '
@@ -549,6 +543,27 @@ Partial Class FAHSetupDialog
         Me.txtXmlAfter.Size = New System.Drawing.Size(274, 491)
         Me.txtXmlAfter.TabIndex = 0
         Me.txtXmlAfter.WordWrap = False
+        '
+        'lblPreviewBefore
+        '
+        Me.lblPreviewBefore.AutoSize = True
+        Me.lblPreviewBefore.BackColor = System.Drawing.Color.Transparent
+        Me.lblPreviewBefore.Location = New System.Drawing.Point(86, 17)
+        Me.lblPreviewBefore.Name = "lblPreviewBefore"
+        Me.lblPreviewBefore.Size = New System.Drawing.Size(56, 18)
+        Me.lblPreviewBefore.TabIndex = 1
+        Me.lblPreviewBefore.Text = "Before:"
+        '
+        'lblPreviewAfter
+        '
+        Me.lblPreviewAfter.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lblPreviewAfter.AutoSize = True
+        Me.lblPreviewAfter.BackColor = System.Drawing.Color.Transparent
+        Me.lblPreviewAfter.Location = New System.Drawing.Point(329, 17)
+        Me.lblPreviewAfter.Name = "lblPreviewAfter"
+        Me.lblPreviewAfter.Size = New System.Drawing.Size(42, 18)
+        Me.lblPreviewAfter.TabIndex = 2
+        Me.lblPreviewAfter.Text = "After:"
         '
         'chkShowFAHCfg
         '
@@ -616,10 +631,13 @@ Partial Class FAHSetupDialog
         '
         'btnTelnetSave
         '
+        Me.btnTelnetSave.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.GradientActiveCaption
+        Me.btnTelnetSave.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.GradientInactiveCaption
+        Me.btnTelnetSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnTelnetSave.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnTelnetSave.Location = New System.Drawing.Point(278, 53)
+        Me.btnTelnetSave.Location = New System.Drawing.Point(278, 52)
         Me.btnTelnetSave.Name = "btnTelnetSave"
-        Me.btnTelnetSave.Size = New System.Drawing.Size(103, 27)
+        Me.btnTelnetSave.Size = New System.Drawing.Size(103, 28)
         Me.btnTelnetSave.TabIndex = 4
         Me.btnTelnetSave.Text = "Save"
         Me.btnTelnetSave.UseVisualStyleBackColor = True
@@ -668,7 +686,7 @@ Partial Class FAHSetupDialog
         '
         'SplitContainer2.Panel1
         '
-        Me.SplitContainer2.Panel1.BackColor = System.Drawing.SystemColors.Control
+        Me.SplitContainer2.Panel1.BackColor = System.Drawing.SystemColors.Window
         Me.SplitContainer2.Panel1.Controls.Add(Me.gbxFAHVerifyConfig)
         Me.SplitContainer2.Panel1.Controls.Add(Me.gbxPasskey)
         Me.SplitContainer2.Panel1.Controls.Add(Me.gbxUsername)
@@ -692,6 +710,7 @@ Partial Class FAHSetupDialog
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.BackColor = System.Drawing.SystemColors.Window
         Me.ClientSize = New System.Drawing.Size(1116, 580)
         Me.Controls.Add(Me.SplitContainer2)
         Me.Controls.Add(Me.btnOK)

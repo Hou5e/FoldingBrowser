@@ -73,9 +73,9 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         '''</summary>
-        Friend ReadOnly Property Coins_4_top_24() As System.Drawing.Icon
+        Friend ReadOnly Property BlockchainBTC_48() As System.Drawing.Icon
             Get
-                Dim obj As Object = ResourceManager.GetObject("Coins_4_top_24", resourceCulture)
+                Dim obj As Object = ResourceManager.GetObject("BlockchainBTC_48", resourceCulture)
                 Return CType(obj,System.Drawing.Icon)
             End Get
         End Property
@@ -83,9 +83,69 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         '''</summary>
-        Friend ReadOnly Property CureCoinLogo_top_32() As System.Drawing.Icon
+        Friend ReadOnly Property BlockchainCURE_48() As System.Drawing.Icon
             Get
-                Dim obj As Object = ResourceManager.GetObject("CureCoinLogo_top_32", resourceCulture)
+                Dim obj As Object = ResourceManager.GetObject("BlockchainCURE_48", resourceCulture)
+                Return CType(obj,System.Drawing.Icon)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        '''</summary>
+        Friend ReadOnly Property BlockchainFLDC_48() As System.Drawing.Icon
+            Get
+                Dim obj As Object = ResourceManager.GetObject("BlockchainFLDC_48", resourceCulture)
+                Return CType(obj,System.Drawing.Icon)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        '''</summary>
+        Friend ReadOnly Property Coins_48() As System.Drawing.Icon
+            Get
+                Dim obj As Object = ResourceManager.GetObject("Coins_48", resourceCulture)
+                Return CType(obj,System.Drawing.Icon)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        '''</summary>
+        Friend ReadOnly Property CureCoin_48() As System.Drawing.Icon
+            Get
+                Dim obj As Object = ResourceManager.GetObject("CureCoin_48", resourceCulture)
+                Return CType(obj,System.Drawing.Icon)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        '''</summary>
+        Friend ReadOnly Property Discord_48() As System.Drawing.Icon
+            Get
+                Dim obj As Object = ResourceManager.GetObject("Discord_48", resourceCulture)
+                Return CType(obj,System.Drawing.Icon)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        '''</summary>
+        Friend ReadOnly Property DistributionCURE_48() As System.Drawing.Icon
+            Get
+                Dim obj As Object = ResourceManager.GetObject("DistributionCURE_48", resourceCulture)
+                Return CType(obj,System.Drawing.Icon)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        '''</summary>
+        Friend ReadOnly Property DistributionFLDC_48() As System.Drawing.Icon
+            Get
+                Dim obj As Object = ResourceManager.GetObject("DistributionFLDC_48", resourceCulture)
                 Return CType(obj,System.Drawing.Icon)
             End Get
         End Property
@@ -133,9 +193,19 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         '''</summary>
-        Friend ReadOnly Property FoldingCoin_top_32() As System.Drawing.Icon
+        Friend ReadOnly Property FLDC_Shop_Mug_48() As System.Drawing.Icon
             Get
-                Dim obj As Object = ResourceManager.GetObject("FoldingCoin_top_32", resourceCulture)
+                Dim obj As Object = ResourceManager.GetObject("FLDC_Shop_Mug_48", resourceCulture)
+                Return CType(obj,System.Drawing.Icon)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        '''</summary>
+        Friend ReadOnly Property FoldingCoin_48() As System.Drawing.Icon
+            Get
+                Dim obj As Object = ResourceManager.GetObject("FoldingCoin_48", resourceCulture)
                 Return CType(obj,System.Drawing.Icon)
             End Get
         End Property
@@ -183,9 +253,9 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         '''</summary>
-        Friend ReadOnly Property L_cysteine_3D_vdW2_32() As System.Drawing.Icon
+        Friend ReadOnly Property L_cysteine_48() As System.Drawing.Icon
             Get
-                Dim obj As Object = ResourceManager.GetObject("L_cysteine_3D_vdW2_32", resourceCulture)
+                Dim obj As Object = ResourceManager.GetObject("L_cysteine_48", resourceCulture)
                 Return CType(obj,System.Drawing.Icon)
             End Get
         End Property
@@ -193,9 +263,19 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         '''</summary>
-        Friend ReadOnly Property L_methionine_B_top_32() As System.Drawing.Icon
+        Friend ReadOnly Property L_methionine_B_48() As System.Drawing.Icon
             Get
-                Dim obj As Object = ResourceManager.GetObject("L_methionine_B_top_32", resourceCulture)
+                Dim obj As Object = ResourceManager.GetObject("L_methionine_B_48", resourceCulture)
+                Return CType(obj,System.Drawing.Icon)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        '''</summary>
+        Friend ReadOnly Property News_48() As System.Drawing.Icon
+            Get
+                Dim obj As Object = ResourceManager.GetObject("News_48", resourceCulture)
                 Return CType(obj,System.Drawing.Icon)
             End Get
         End Property
@@ -216,6 +296,36 @@ Namespace My.Resources
         Friend ReadOnly Property Stop_16() As System.Drawing.Icon
             Get
                 Dim obj As Object = ResourceManager.GetObject("Stop_16", resourceCulture)
+                Return CType(obj,System.Drawing.Icon)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        '''</summary>
+        Friend ReadOnly Property ToolsSettingsGearEnabled_24() As System.Drawing.Icon
+            Get
+                Dim obj As Object = ResourceManager.GetObject("ToolsSettingsGearEnabled_24", resourceCulture)
+                Return CType(obj,System.Drawing.Icon)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        '''</summary>
+        Friend ReadOnly Property ToolsSettingsGearNoBG_24() As System.Drawing.Icon
+            Get
+                Dim obj As Object = ResourceManager.GetObject("ToolsSettingsGearNoBG_24", resourceCulture)
+                Return CType(obj,System.Drawing.Icon)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        '''</summary>
+        Friend ReadOnly Property Twitter_48() As System.Drawing.Icon
+            Get
+                Dim obj As Object = ResourceManager.GetObject("Twitter_48", resourceCulture)
                 Return CType(obj,System.Drawing.Icon)
             End Get
         End Property

@@ -7,6 +7,9 @@
             Me.SplitContainer1.SplitterWidth = 2
             Me.SplitContainer1.Panel1Collapsed = True
 
+            'Load the pull-down menu from the constants
+            Me.cbxHomepage.Items.AddRange({HpgDefault, HpgSideBySide, HpgFoldingCoin, HpgFoldingCoinTeamStats, HpgFoldingCoinMyStats, HpgCureCoin, HpgCureCoinTeamStatsEOC, HpgMyStatsEOC, HpgFAH, HpgBlank})
+
             'Start with the textboxes instead of the raw data that is hard to look at
             chkShowRawData_CheckedChanged(Nothing, Nothing)
 
