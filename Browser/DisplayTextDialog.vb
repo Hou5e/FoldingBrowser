@@ -205,7 +205,7 @@
                 Dim bFAH_Installed As Boolean = False
                 Dim strFAHConfigPath As String = ""
                 Const PATH_FAH_ALL_USER_CFG As String = "C:\ProgramData\FAHClient\config.xml"
-                Dim Path_FAH_CurrentUserCfg As String = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "FAHClient", "config.xml")
+                Dim Path_FAH_CurrentUserCfg As String = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), FAH_Client, "config.xml")
 
                 If System.IO.Directory.Exists(strBackupPath) = False Then
                     My.Computer.FileSystem.CreateDirectory(strBackupPath)

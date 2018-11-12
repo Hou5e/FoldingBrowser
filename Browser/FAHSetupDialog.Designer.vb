@@ -250,7 +250,7 @@ Partial Class FAHSetupDialog
         Me.lllTeamNumbersLink.Size = New System.Drawing.Size(298, 13)
         Me.lllTeamNumbersLink.TabIndex = 5
         Me.lllTeamNumbersLink.TabStop = True
-        Me.lllTeamNumbersLink.Text = "http://fah-web.stanford.edu/cgi-bin/main.py?qtype=teamstats"
+        Me.lllTeamNumbersLink.Text = "https://stats.foldingathome.org/teams"
         '
         'lblTeamNotes
         '

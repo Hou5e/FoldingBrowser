@@ -8,7 +8,7 @@ Immediate Need /  Short-Term Goals:
 -----------------------------------
 
 -Support other wallets, for pressing the 'FLDC Wallet' button, with option for:  https://freewallet.io/   And, reverse the CounterWallet website search order to use the 2nd one first?  (Currently only using: https://counterwallet.io/).    Other alternatives (ignore for now): https://wallet.indiesquare.me/     also: rarepepewallet.com (Not updated enough? security risks?)     (Not yet) https://tokenpockets.com/ (You cannot use tokenpockets currently. It is not compatible with existing passphrases from CounterWallet. If you want to use it, you will have to make a new address first)
--Enable Multi-language support in the browser component to view pages that are available in other languages (Allow users to change the locale & supported languages)?
+-Enable Multi-language support in the browser component to view pages that are available in other languages (Allow users to change the 'Locale' & 'AcceptLanguageList')? -Add language chosen from installer to 'AcceptLanguageList'? -Changing the language might make the search strings not work correctly anymore?
 
 ----------------------------------------------------
 Other Ideas, Improvements, Tasks, Longer-Term Goals:
@@ -55,13 +55,21 @@ Other Ideas, Improvements, Tasks, Longer-Term Goals:
 -Add Option: Dark or light windows & controls theme color options?
 -Add support for zooming in on webpages?
 -Right-click context menu: Add 'Find' to the list. Also, when highlighting text, add that text to the find dialog?
+-Look into issue with CefSharp v67 not always updating the Forward/Back buttons?
+-Save more than one log file for debugging issues later?
 
 
 ======================================================================================================
 Change Log - Release Notes - Tasks completed:
 ======================================================================================================
 
-v18 Release (11/07/2018)
+v18 Release (11/11/2018)
+[DONE] -Fixing getting a Passkey at the newer URL
+[DONE] -Make an option: Make the button links panel only fly-down when you click on it (It's a bit annoying when you mouse-over it, and you don't want it shown). I like the mouse-enter behavior by default so people know the panel is there, otherwise it's not obvious enough.
+[DONE] -Gear press, panel not shown, then just show panel (don't hide tools).
+[DONE] -Update / fix Discord buttons for auto-login issue
+[DONE] -Look into issue with the FAH Web Control not loading initially in CefSharp v67, until something gets created that allows it to load the FAH Web UI. On timeout, try going to: http://127.0.0.1:7396/?nocache=' + Math.random() [double between 0-1, formatted to 16 places. Using VB's random NextDouble gives 15 places by default]. Also, these pages won't be available if FAH is not running.
+[DONE] -Update for new code signing certificate
 [DONE] -Split the 2-page homepage the other direction (top/bottom, instead of the original left/right sides that aren't wide enough for the webpages to work well normally)
 [DONE] -Add FLDC (User & Team) Stats, and EOC CureCoin Team Stats to the list of web links that can be selected for the Homepage button
 [DONE] -Update other buttons throughout the FoldingBrowser to be more like flat white rectangles (keeping border, if only text)

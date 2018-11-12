@@ -5,9 +5,11 @@
     Private m_bPageLoaded As Boolean = False
     Private m_bHomepage_TopAnBottomLoaded As Boolean = False
     Private m_bHomepage_SideBySideLoaded As Boolean = False
-    Private m_bLoadingFAHWebControl As Boolean = False
     'URL to help determine the page loaded indicator
     Private m_strPageURL As String = ""
+    'Web Link Button Panel
+    Private Const MinPanelHeight As Integer = 8
+    Private m_iTempHeight As Integer = 20
     Private m_iWebLinkPanelHeight As Integer = 260
 
 #Region "Form and Browser Events - Initialization, Exiting"
@@ -97,7 +99,7 @@
             Me.btnFindClose.Image = My.Resources.Stop_16.ToBitmap
 
             'Web Link Button Images. Folding@Home Related:
-            Me.btnFAHControl.BackgroundImage = My.Resources.L_methionine_B_48.ToBitmap
+            Me.btnFAHWebControl.BackgroundImage = My.Resources.L_methionine_B_48.ToBitmap
             Me.btnFAHTwitter.BackgroundImage = My.Resources.Twitter_48.ToBitmap
             Me.btnFAHNews.BackgroundImage = My.Resources.News_48.ToBitmap
             Me.btnEOC_UserStats.BackgroundImage = My.Resources.EOC_48.ToBitmap
@@ -113,7 +115,7 @@
             Me.btnFoldingCoinShop.BackgroundImage = My.Resources.FLDC_Shop_Mug_48.ToBitmap
             Me.btnFoldingCoinTeamStats.BackgroundImage = My.Resources.FLDC_48.ToBitmap
             'CureCoin Related:
-            Me.btnCureCoin.BackgroundImage = My.Resources.CureCoin_48.ToBitmap
+            Me.btnCureCoinWebsite.BackgroundImage = My.Resources.CureCoin_48.ToBitmap
             Me.btnCureCoinTwitter.BackgroundImage = My.Resources.Twitter_48.ToBitmap
             Me.btnCureCoinDiscord.BackgroundImage = My.Resources.Discord_48.ToBitmap
             Me.btnCureCoinBlockchain.BackgroundImage = My.Resources.BlockchainCURE_48.ToBitmap
@@ -124,7 +126,7 @@
             Me.pbProgIcon.Image = My.Resources.L_cysteine_48.ToBitmap
 
             'Button Link Panel: Initially show minimized
-            Me.pnlBtnLinks.Height = 6
+            Me.pnlBtnLinks.Height = MinPanelHeight
 
             'Hide the form while it's being adjusted
             Me.WindowState = FormWindowState.Minimized
@@ -151,6 +153,11 @@
                 End If
             Else
                 Me.WindowState = FormWindowState.Normal
+            End If
+
+            'Restore Option for the Panel MouseEnter event
+            If INI.GetSection(INI_Settings).GetKey(INI_ShowPanelOnMouseEnter) IsNot Nothing Then
+                g_bShowWebLinkPanelOnMouseEnterEvent = CBool(INI.GetSection(INI_Settings).GetKey(INI_ShowPanelOnMouseEnter).GetValue())
             End If
 
             'Force the URL text to scroll all the way to the left
@@ -604,10 +611,49 @@
 #End Region
 
 #Region "Button, Checkbox, Combobox - Form Control Events"
-    Private Sub btnFAHControl_Click(sender As System.Object, e As System.EventArgs) Handles btnFAHControl.Click
+    Private Async Sub btnFAHWebControl_Click(sender As System.Object, e As System.EventArgs) Handles btnFAHWebControl.Click
+        'WORKAROUND: The FAH Web Control doesn't always load during the 30 second count down. So, try bypassing it for now. The URL to load without cache doesn't avoiding the other CORS infinite loop error (Refresh without cache still needed)
+
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
-        OpenURL(URL_FAH_Client, False)
+        Dim r As Random = New Random
+        OpenURL(URL_FAH_WebClient_IPAddr & r.NextDouble.ToString(), False)
 #Enable Warning BC42358
+
+        'This waits 3 seconds each time, to see if it's going to load quickly. Wait up to 9 seconds total for the page to load
+        If Await PageTitleWait(FAH_Version) = False AndAlso Await PageTitleWait(FAH_Version) = False AndAlso Await PageTitleWait(FAH_Version) = False Then
+            'If the user presses a different button to go to a different web page, then don't load the default FAH Web Control URL (can happen easily over the 9 second period, if FAH isn't running)
+            If Me.txtURL.Text.StartsWith(URL_FAH_WebClient_IPAddr) = True OrElse Me.txtURL.Text = URL_FAH_WebClient_URL Then
+#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
+                'If the IP Address version of the page doesn't load, go back to the main URL that has the annoyingly slow 30 countdown page before loading the FAH Web Control
+                OpenURL(URL_FAH_WebClient_URL, False)
+#Enable Warning BC42358
+
+                'Check to see if FAH is running, and if not then pop-up a message to indicate that
+                Try
+                    Dim bFAHRunning As Boolean = False
+                    Dim proc As Process
+                    For Each proc In Process.GetProcessesByName(FAH_Client)
+                        bFAHRunning = True
+                        'If you get here, exit searching through the processes
+                        Exit For
+                    Next
+
+                    If bFAHRunning = True Then
+                        'If FAH is running, then give it a chance for the page to load
+                        If Await PageTitleWait(FAH_Version) = False AndAlso Await PageTitleWait(FAH_Version) = False AndAlso Await PageTitleWait(FAH_Version) = False Then
+                            'If still not loaded, try a Refresh ignoring browser cache
+                            Me.browser.GetBrowser.Reload(True)
+                        End If
+                    Else
+                        'Indicate FAH is not running
+                        MessageBox.Show("Folding@Home is not running." & vbNewLine & "Please start the Folding@Home software, and try again.", "Folding@Home is not running", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                    End If
+
+                Catch ex As Exception
+                    Msg("Error checking if FAH is running: " & ex.ToString)
+                End Try
+            End If
+        End If
     End Sub
 
     Private Sub btnFAHTwitter_Click(sender As System.Object, e As System.EventArgs) Handles btnFAHTwitter.Click
@@ -728,7 +774,7 @@
                 'Skip the address lookup after 3 attempts. The user will have to save the info in the saved settings to fix it.
                 If iUserId < 3 AndAlso strUsername.Length > 0 Then
                     'Enter FAH Username in the Search TextBox
-                    EnterTextByName("searchbox", strUsername)
+                    EnterTextByName("searchbox", 0, strUsername)
                     Await Wait(100)
 
                     'Click the search button. Submit the form data since there are no real Ids, Names, or Tags for this button element, just use the 1st item in the array of forms
@@ -781,7 +827,7 @@
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
             OpenURL(URL_CureCoin_EOC, False)
 #Enable Warning BC42358
-            Msg("Error: Extreme Overclocking Username ID lookup failed: " & ex.ToString & vbNewLine & vbNewLine & "Please fix value in user's INI file:" & vbNewLine & IniFilePath)
+            Msg("Error: Extreme Overclocking Username ID lookup failed: " & ex.ToString & vbNewLine & vbNewLine & "Please fix value in INI file:" & vbNewLine & IniFilePath)
         End Try
     End Sub
 
@@ -902,8 +948,7 @@
     End Sub
 
 
-
-    Private Sub btnCureCoin_Click(sender As System.Object, e As System.EventArgs) Handles btnCureCoin.Click
+    Private Sub btnCureCoinWebsite_Click(sender As System.Object, e As System.EventArgs) Handles btnCureCoinWebsite.Click
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
         OpenURL(URL_CureCoin, False)
 #Enable Warning BC42358
@@ -971,14 +1016,20 @@
             m_iWebLinkPanelHeight = 360
             Me.chkToolsShow.Image = My.Resources.ToolsSettingsGearEnabled_24.ToBitmap
         Else
-            'Hide Tools Panel
-            m_iWebLinkPanelHeight = 260
-            Me.chkToolsShow.Image = My.Resources.ToolsSettingsGearNoBG_24.ToBitmap
+            If Me.pnlBtnLinks.Height <= MinPanelHeight Then
+                'Panel minimized: Show Tools Panel
+                m_iWebLinkPanelHeight = 360
+                Me.chkToolsShow.Image = My.Resources.ToolsSettingsGearEnabled_24.ToBitmap
+            Else
+                'Panel shown already: Hide Tools Panel
+                m_iWebLinkPanelHeight = 260
+                Me.chkToolsShow.Image = My.Resources.ToolsSettingsGearNoBG_24.ToBitmap
+            End If
         End If
 
-        If Me.pnlBtnLinks.Height < 10 Then
+        If Me.pnlBtnLinks.Height <= MinPanelHeight Then
             'Panel minimized: Show the panel when you click the show Tools button
-            pnlBtnLinks_MouseEnter(Nothing, Nothing)
+            pnlBtnLinks_Click(Nothing, Nothing)
         Else
             'Panel shown already: Increase / decrease the height of the shown panel
             Me.pnlBtnLinks.Height = m_iWebLinkPanelHeight
@@ -1278,7 +1329,7 @@
                     MessageBox.Show(DAT_ErrorMsg)
                 End If
 
-                'Look for the Discord Login Email to determine if this is a first-time setup or not
+                'Determine if this is a first-time setup or not: Look for the Discord Login Email in the saved settings
                 If DAT.GetSection(Id & Me.cbxToolsWalletId.Text) Is Nothing OrElse DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_DiscordEmail) Is Nothing Then
                     'Fix missing values. Ask for email and passowrd to sign in
                     Dim DiscordDlg As New UserPwdDialog
@@ -1288,7 +1339,7 @@
                     End If
 
                     'Suggest a strong Password (Skip characters that conflict with the INI format: =;#[]\)
-                    Dim s As String = "*$-+?_&!%{}/abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+                    Dim s As String = "*$-?_&!/abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
                     Dim randNum As New Random()
                     Dim iPwLen As Integer = randNum.Next(25, 50)
                     Dim chrPW() As Char = New Char(iPwLen - 1) {}
@@ -1351,7 +1402,7 @@
                             If DiscordDlg.txtEmail.Text.Length > 0 AndAlso DiscordDlg.txtPassword.Text.Length > 0 Then
                                 'Click Registration Continue button
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
-                                ClickByClass("btn btn-primary", True)
+                                ClickByClass("btn btn-primary", 0, True)
 #Enable Warning BC42358
                                 'Save status flag for which Discord server you've been invited to: 0 = None, 1 = FoldingCoin, 2 = CureCoin, 3 = Both invites have been completed
                                 If bForFoldingCoin = True Then
@@ -1405,22 +1456,26 @@
                     If strEmail <> SkipSavingDataFlag Then
                         'Don't try to login again if you're already logged in (pressing the button again or switching between FoldingCoin and CureCoin)
                         Dim strReturn As String = ""
-                        If FindTextInDoc("btn btn-primary", "", strReturn, "", False, "") = True Then
-                            'If available, then fill-in the Email
-                            EnterTextById("register-email", strEmail)
+                        If FindTextInDoc("Login", "", strReturn, "", False, "") = True Then
+                            'Discord is making it difficult to Auto-Login. Using SendKeys instead of entering text into the document and pressing the enter button
+                            SendKeys.Send(strEmail)
+                            Await Wait(300)
 
+                            'Move to the next textbox
+                            SendKeys.Send("{TAB}")
+                            'Enter the PW
                             If DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_DiscordPassword) IsNot Nothing Then
-                                'Skip asking for this in the future, if originally cancelled - Don't store info
                                 Dim strPw As String = DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_DiscordPassword).GetValue()
                                 If strPw <> SkipSavingDataFlag Then
-                                    'If available, then fill-in the password
-                                    EnterTextById("register-password", strPw)
+                                    'With curly braces, escape any SendKeys special characters: {, }, +, ^, %, ~, (, ), [, ]
+                                    strPw = strPw.Replace("{", "{{}").Replace("}", "{}}").Replace("+", "{+}").Replace("^", "{^}").Replace("%", "{%}").Replace("~", "{~}").Replace("(", "{(}").Replace(")", "{)}").Replace("[", "{[}").Replace("]", "{]}")
+                                    SendKeys.Send(strPw)
                                     strPw = Nothing
-                                    Await Wait(100)
-
-                                    'Click Login button
-                                    Await ClickByClass("btn btn-primary", True)
+                                    Await Wait(200)
                                     System.Windows.Forms.Application.DoEvents()
+
+                                    'Hit Enter to login
+                                    SendKeys.Send("{ENTER}")
                                 End If
                             End If
                         End If
@@ -1540,17 +1595,17 @@
 
             If str12W.Length > 24 Then
                 'Click the "I've written it down" check box
-                Await ClickByName("passphraseSaved", False)
+                Await ClickByName("passphraseSaved", 0, False)
                 'Click Continue button
                 Await ClickById("continueWalletCreation", False)
                 Await Wait(100)
 
                 'There are 3 buttons with this ID: finishWalletCreation. Use the class to get the ('btn btn-primary') 4th instance for the Create Wallet button:
-                Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementsByClassName('btn btn-primary')[3].click();")
+                Await ClickByClass("btn btn-primary", 3, False)
                 Await Wait(100)
 
                 'Click the 'X' close button.  Not working: click OK, the ('btn btn-primary') 9th instance for the OK button.
-                Await ClickByClass("bootbox-close-button close", False)
+                Await ClickByClass("bootbox-close-button close", 0, False)
 
                 'Enter 12-word Passphrase to login
                 EnterTextById("password", str12W)
@@ -1562,7 +1617,7 @@
                 Await Wait(1000)
 
                 'First login, accept terms. ('btn btn-success') 2nd instance for the Accept button:
-                Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementsByClassName('btn btn-success')[1].click();")
+                Await ClickByClass("btn btn-success", 1, False)
 
                 'The logged into wallet web page has no title, but the previous page had a title
                 Await PageNoTitleWait()
@@ -1639,7 +1694,7 @@
             'Close any running instances of FAH
             Try
                 Dim proc As Process
-                For Each proc In Process.GetProcessesByName("FAHClient")
+                For Each proc In Process.GetProcessesByName(FAH_Client)
                     Msg("Asking user to close FAH process: " & proc.Id.ToString() & " - " & proc.ProcessName)
                     MessageBox.Show("Please close the Folding@Home software before proceeding.", "", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                     Await Wait(1000)
@@ -1647,7 +1702,7 @@
                     'If still open, then close it
                     Dim p As Process
                     Try
-                        For Each p In Process.GetProcessesByName("FAHClient")
+                        For Each p In Process.GetProcessesByName(FAH_Client)
                             Msg("Closing process: " & p.Id.ToString() & " - " & p.ProcessName)
                             p.CloseMainWindow()
                             p.WaitForExit(3000)
@@ -1662,7 +1717,7 @@
 
                         'Try closing any FAH Core processes still active
                         For Each p In Process.GetProcesses
-                            If p.ProcessName.ToLower.StartsWith("fahcore_") = True Then
+                            If p.ProcessName.ToLower.StartsWith(FAH_Core) = True Then
                                 Msg("Killing process: " & p.Id.ToString() & " - " & p.ProcessName)
                                 p.Kill()
                             End If
@@ -1673,7 +1728,7 @@
 
                     '2nd try to close any running instances of FAH
                     Try
-                        For Each p In Process.GetProcessesByName("FAHClient")
+                        For Each p In Process.GetProcessesByName(FAH_Client)
                             'Wait for FAH to exit before trying again
                             Await Wait(5000)
                             Msg("Killing process: " & p.Id.ToString() & " - " & p.ProcessName)
@@ -1683,7 +1738,7 @@
 
                         'Try closing any FAH Core processes still active
                         For Each p In Process.GetProcesses
-                            If p.ProcessName.ToLower.StartsWith("fahcore_") = True Then
+                            If p.ProcessName.ToLower.StartsWith(FAH_Core) = True Then
                                 Msg("Killing process: " & p.Id.ToString() & " - " & p.ProcessName)
                                 p.Kill()
                             End If
@@ -2043,26 +2098,26 @@
 
                 'Fill in form info from the data
                 'Enter FAH Username
-                EnterTextByName("user", strFAHUser)
+                EnterTextByName("user", 0, strFAHUser)
                 'Fill in CureCoin address
-                EnterTextByName("cure", strWalletAddress)
+                EnterTextByName("cure", 0, strWalletAddress)
                 'Password
-                EnterTextByName("pass", strPoolPW)
-                EnterTextByName("pass2", strPoolPW)
+                EnterTextByName("pass", 0, strPoolPW)
+                EnterTextByName("pass2", 0, strPoolPW)
                 'Email
-                EnterTextByName("email", strEmail)
-                EnterTextByName("email2", strEmail)
+                EnterTextByName("email", 0, strEmail)
+                EnterTextByName("email2", 0, strEmail)
                 'Pin
-                EnterTextByName("authPin", strPoolPin)
+                EnterTextByName("authPin", 0, strPoolPin)
                 Await Wait(100)
 
                 'Scroll to the bottom of the page, so you can see the captcha when the modal dialog is in the way
                 Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("window.scrollTo(0,document.body.scrollHeight);")
 
                 'Login: Enter FAH Username
-                EnterTextByName("username", strFAHUser)
+                EnterTextByName("username", 0, strFAHUser)
                 'Password
-                EnterTextByName("password", strPoolPW)
+                EnterTextByName("password", 0, strPoolPW)
                 Await Wait(100)
 
                 'Ask for the Captcha in a modal dialog, to enter in the form (to keep the user from mofifying the passwords)
@@ -2081,11 +2136,11 @@
                 TxtEntry.MsgTextExtraBottomNote.Text = "(Attempt: " & (m + 1).ToString & " of 3)"
                 'Show modal dialog box
                 If TxtEntry.ShowDialog(Me) = DialogResult.OK Then
-                    EnterTextByName("captcha_code", TxtEntry.TextEnteredUpper.Text)
+                    EnterTextByName("captcha_code", 0, TxtEntry.TextEnteredUpper.Text)
                     TxtEntry.Dispose()
 
                     'Click "Register" (There are 2 buttons with this class. Click the 2nd button [1])
-                    Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementsByClassName('submit small')[1].click();")
+                    Await ClickByClass("submit small", 1, False)
                     Await Wait(1000)
 
                     'Wait for the page to load
@@ -2274,9 +2329,9 @@
             DAT = Nothing
 
             'Login: Enter FAH Username
-            EnterTextByName("username", strFAHUser)
+            EnterTextByName("username", 0, strFAHUser)
             'Password
-            EnterTextByName("password", strPoolPW)
+            EnterTextByName("password", 0, strPoolPW)
 
             'Ask user to solve the captcha
             Dim OkMsg As New MsgBoxDialog
@@ -2295,52 +2350,66 @@
 
 #Region "Browser Commands"
     'Specify text box {Object Id}, and text to enter in to the text box
-    Private Function EnterTextById(ObjectId As String, sText As String) As Boolean
+    Private Function EnterTextById(sId As String, sText As String) As Boolean
         EnterTextById = False
 
         Try
-            If ObjectId.Length > 0 Then
-                Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementById('" & ObjectId & "').value = '" & sText & "';")
+            If sId.Length > 0 Then
+                Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementById('" & sId & "').value = '" & sText & "';")
                 EnterTextById = True
             End If
         Catch ex As Exception
-            Msg("Enter Text By Id error: " & Err.Description)
+            Msg("Enter Text by Id error: " & Err.Description)
         End Try
     End Function
 
-    'Specify text box {Object Name}, and text to enter in to the text box
-    Private Function EnterTextByName(Name As String, sText As String) As Boolean
+    'Specify text box {Object Name} and array index (0-based), and text to enter in to the text box
+    Private Function EnterTextByName(sName As String, iIndex As Integer, sText As String) As Boolean
         EnterTextByName = False
 
         Try
-            If Name.Length > 0 Then
-                Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementsByName('" & Name & "')[0].value = '" & sText & "';")
+            If sName.Length > 0 Then
+                Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementsByName('" & sName & "')[" & iIndex.ToString & "].value = '" & sText & "';")
                 EnterTextByName = True
             End If
         Catch ex As Exception
-            Msg("Enter Text By Name error: " & Err.Description)
+            Msg("Enter Text by Name error: " & Err.Description)
         End Try
     End Function
 
-    'Specify text box {Object class}, and text to enter in to the text box
-    Private Function EnterTextByClass(Name As String, sText As String) As Boolean
+    'Specify text box {Class Name} and array index (0-based), and text to enter in to the text box
+    Private Function EnterTextByClass(sName As String, iIndex As Integer, sText As String) As Boolean
         EnterTextByClass = False
 
         Try
-            If Name.Length > 0 Then
-                Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementsByClassName('" & Name & "')[0].value = '" & sText & "';")
+            If sName.Length > 0 Then
+                Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementsByClassName('" & sName & "')[" & iIndex.ToString & "].value = '" & sText & "';")
                 EnterTextByClass = True
             End If
         Catch ex As Exception
-            Msg("Enter Text By Class error: " & Err.Description)
+            Msg("Enter Text by Class error: " & Err.Description)
+        End Try
+    End Function
+
+    'Specify text box {Tag Name} and array index (0-based), and text to enter in to the text box
+    Private Function EnterTextByTag(sName As String, iIndex As Integer, sText As String) As Boolean
+        EnterTextByTag = False
+
+        Try
+            If sName.Length > 0 Then
+                Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementsByTagName('" & sName & "')[" & iIndex.ToString & "].value = '" & sText & "';")
+                EnterTextByTag = True
+            End If
+        Catch ex As Exception
+            Msg("Enter Text by Tag error: " & Err.Description)
         End Try
     End Function
 
     'Specify object {Object Id} to click, and if you wait for the page to load or not
-    Private Async Function ClickById(ObjectId As String, bWait As Boolean) As Threading.Tasks.Task(Of Boolean)
+    Private Async Function ClickById(sId As String, bWait As Boolean) As Threading.Tasks.Task(Of Boolean)
         Try
-            If ObjectId.Length > 0 Then
-                Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementById('" & ObjectId & "').click();")
+            If sId.Length > 0 Then
+                Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementById('" & sId & "').click();")
 
                 'Wait for the page, if specified
                 If bWait = True Then
@@ -2351,18 +2420,18 @@
             End If
 
         Catch ex As Exception
-            Msg("Click By Id error: " & Err.Description)
+            Msg("Click by Id error: " & Err.Description)
         End Try
 
         Return False
     End Function
 
-    'Specify object {Object Class} to click, and if you wait for the page to load or not
-    Private Async Function ClickByClass(ObjectClass As String, bWait As Boolean) As Threading.Tasks.Task(Of Boolean)
+    'Specify object {Class Name} to click, and if you wait for the page to load or not
+    Private Async Function ClickByClass(sName As String, iIndex As Integer, bWait As Boolean) As Threading.Tasks.Task(Of Boolean)
         Try
-            If ObjectClass.Length > 0 Then
+            If sName.Length > 0 Then
                 'Click it
-                Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementsByClassName('" & ObjectClass & "')[0].click();")
+                Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementsByClassName('" & sName & "')[" & iIndex.ToString & "].click();")
                 'Wait for the page, if specified
                 If bWait = True Then
                     If Await PageLoadWait() = True Then Return True Else Return False
@@ -2372,17 +2441,17 @@
             End If
 
         Catch ex As Exception
-            Msg("Click By Class error: " & Err.Description)
+            Msg("Click by Class error: " & Err.Description)
         End Try
 
         Return False
     End Function
 
     'Specify object {Object Name} to click, and if you wait for the page to load or not
-    Private Async Function ClickByName(Name As String, bWait As Boolean) As Threading.Tasks.Task(Of Boolean)
+    Private Async Function ClickByName(sName As String, iIndex As Integer, bWait As Boolean) As Threading.Tasks.Task(Of Boolean)
         Try
-            If Name.Length > 0 Then
-                Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementsByName('" & Name & "')[0].click();")
+            If sName.Length > 0 Then
+                Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementsByName('" & sName & "')[" & iIndex.ToString & "].click();")
                 'Wait for the page, if specified
                 If bWait = True Then
                     If Await PageLoadWait() = True Then Return True Else Return False
@@ -2392,7 +2461,27 @@
             End If
 
         Catch ex As Exception
-            Msg("Click By Name error: " & Err.Description)
+            Msg("Click by Name error: " & Err.Description)
+        End Try
+
+        Return False
+    End Function
+
+    'Specify object {Tag Name} to click, and if you wait for the page to load or not
+    Public Async Function ClickByTag(sName As String, iIndex As Integer, bWait As Boolean) As Threading.Tasks.Task(Of Boolean)
+        Try
+            If sName.Length > 0 Then
+                Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementsByTagName('" & sName & "')[" & iIndex.ToString & "].click();")
+                'Wait for the page, if specified
+                If bWait = True Then
+                    If Await PageLoadWait() = True Then Return True Else Return False
+                Else
+                    Return True
+                End If
+            End If
+
+        Catch ex As Exception
+            Msg("Click by Tag error: " & Err.Description)
         End Try
 
         Return False
@@ -2499,28 +2588,28 @@
 #Region "Browser Control Event Handlers"
     Private Sub OnBrowserFrameLoadEnd(sender As Object, e As CefSharp.FrameLoadEndEventArgs)
         'Set a flag to indicate the web page has finished loading. This event is fired for each frame that loads, so compare URLs before setting the flag as loaded (NOTE: Me.browser.IsLoading = True, doesn't work)
-        If e.Url.Contains(m_strPageURL) Then
+        If e.Url IsNot Nothing AndAlso e.Url.Contains(m_strPageURL) Then
             m_bPageLoaded = True
         End If
     End Sub
 
     Private Sub OnBrowserConsoleMessage(sender As Object, e As CefSharp.ConsoleMessageEventArgs)
-        If e.Line > 0 Then
-            addActivity(e.Message & " (" & e.Source & ", ln " & e.Line.ToString & " )")
-        Else
-            addActivity(e.Message)
-        End If
+        Me.Invoke(Sub()
+                      Me.txtMsg.AppendText("[" & Now.ToString(LogDateTimeFormat) & "] " & e.Message & If(e.Line > 0, " (" & e.Source & ", ln " & e.Line.ToString & " )", "") & vbNewLine)
+                  End Sub)
 
-        'WORKAROUND: FAH Web Control, where it gets stuck in an infinite refresh loop in Chrome v59+, and needs a refresh without cache to fix that condition. This error also occurs almost every time you leave the FAH web control page, so avoid reloading when clicking other web link buttons or exiting.
-        If m_bLoadingFAHWebControl = True AndAlso g_bCancelNav = False AndAlso e.Message = "DEBUG: error: " AndAlso e.Source = "http://127.0.0.1:7396/js/main.js" Then
+        'WORKAROUND: FAH Web Control, where it gets stuck in an infinite refresh loop in Chrome v59+, and needs a refresh without cache to fix that condition.
+        'NOTE: This error also occurs almost every time you leave the FAH web control page, so avoid reloading when clicking other web link buttons or exiting. It also happens when you stay on the page for a long time, and the FAH stats update.
+        If (Me.txtURL.Text.StartsWith(URL_FAH_WebClient_IPAddr) = True OrElse Me.txtURL.Text = URL_FAH_WebClient_URL) AndAlso g_bCancelNav = False AndAlso e.Message = "DEBUG: error: " AndAlso e.Source = URL_FAH_WebClient_ErrorAddr Then
             'Refresh ignoring browser cache
             Me.browser.GetBrowser.Reload(True)
-            'Reset flag
-            m_bLoadingFAHWebControl = False
         End If
     End Sub
+
     Private Sub OnBrowserStatusMessage(sender As Object, args As CefSharp.StatusMessageEventArgs)
-        addActivity(args.Value)
+        Me.Invoke(Sub()
+                      Me.txtMsg.AppendText("[" & Now.ToString(LogDateTimeFormat) & "] " & args.Value & vbNewLine)
+                  End Sub)
     End Sub
 
     Private Sub OnBrowserLoadingStateChanged(sender As Object, args As CefSharp.LoadingStateChangedEventArgs)
@@ -2728,9 +2817,9 @@
     Private Sub Main_MouseDown(sender As Object, e As MouseEventArgs) Handles Me.MouseDown,
             pnlURL.MouseDown, lblURL.MouseDown, txtURL.MouseDown, btnBack.MouseDown, btnFwd.MouseDown, btnGo.MouseDown, btnHome.MouseDown, btnReload.MouseDown, btnStopNav.MouseDown,
             pnlFind.MouseDown, txtFind.MouseDown, btnFindPrevious.MouseDown, btnFindNext.MouseDown, btnFindClose.MouseDown, pnlFindDivider.MouseDown, pnlBtnLinks.MouseDown, pnlBtnLinksDividerTop.MouseDown,
-            btnFAHControl.MouseDown, btnFAHTwitter.MouseDown, btnFAHNews.MouseDown, btnFoldingCoinUserStats.MouseDown, btnEOC_UserStats.MouseDown, pbProgIcon.MouseDown,
+            btnFAHWebControl.MouseDown, btnFAHTwitter.MouseDown, btnFAHNews.MouseDown, btnFoldingCoinUserStats.MouseDown, btnEOC_UserStats.MouseDown, pbProgIcon.MouseDown,
             btnFoldingCoinWebsite.MouseDown, btnFoldingCoinTwitter.MouseDown, btnFoldingCoinDiscord.MouseDown, btnMyWallet.MouseDown, btnFoldingCoinBlockchain.MouseDown, btnBTCBlockchain.MouseDown, btnFoldingCoinDistribution.MouseDown, btnFoldingCoinShop.MouseDown, btnFoldingCoinTeamStats.MouseDown,
-            btnCureCoin.MouseDown, btnCureCoinBlockchain.MouseDown, btnCureCoinDiscord.MouseDown, btnCureCoinTwitter.MouseDown, btnCurePool.MouseDown, btnCureCoinTeamStats.MouseDown,
+            btnCureCoinWebsite.MouseDown, btnCureCoinBlockchain.MouseDown, btnCureCoinDiscord.MouseDown, btnCureCoinTwitter.MouseDown, btnCurePool.MouseDown, btnCureCoinTeamStats.MouseDown,
             pnlBtnLinksDividerBottom.MouseDown, chkToolsShow.MouseDown, txtMsg.MouseDown, btnToolsBrowserTools.MouseDown, btnToolsGetFAH.MouseDown, btnToolsGetWallet.MouseDown, btnToolsFAHConfig.MouseDown, btnToolsCureCoinSetup.MouseDown,
             btnToolsOptions.MouseDown, btnToolsSavedData.MouseDown, lblToolsWalletNum.MouseDown, cbxToolsWalletId.MouseDown, txtToolsWalletName.MouseDown
 
@@ -2752,16 +2841,16 @@
 
     Private Sub Main_MouseUp(sender As Object, e As MouseEventArgs) Handles Me.MouseUp,
             pnlURL.MouseUp, lblURL.MouseUp, txtURL.MouseUp, btnBack.MouseUp, btnFwd.MouseUp, btnGo.MouseUp, btnHome.MouseUp, btnReload.MouseUp, btnStopNav.MouseUp,
-            pnlFind.MouseUp, txtFind.MouseUp, btnFindPrevious.MouseUp, btnFindNext.MouseUp, btnFindClose.MouseUp, pnlFindDivider.MouseUp, pnlBtnLinks.MouseUp, pnlBtnLinksDividerTop.MouseUp,
-            btnFAHControl.MouseUp, btnFAHTwitter.MouseUp, btnFAHNews.MouseUp, btnFoldingCoinUserStats.MouseUp, btnEOC_UserStats.MouseUp, pbProgIcon.MouseUp,
+            pnlFind.MouseUp, txtFind.MouseUp, btnFindPrevious.MouseUp, btnFindNext.MouseUp, btnFindClose.MouseUp, pnlFindDivider.MouseUp,
+            btnFAHWebControl.MouseUp, btnFAHTwitter.MouseUp, btnFAHNews.MouseUp, btnFoldingCoinUserStats.MouseUp, btnEOC_UserStats.MouseUp, pbProgIcon.MouseUp,
             btnFoldingCoinWebsite.MouseUp, btnFoldingCoinTwitter.MouseUp, btnFoldingCoinDiscord.MouseUp, btnMyWallet.MouseUp, btnFoldingCoinBlockchain.MouseUp, btnBTCBlockchain.MouseUp, btnFoldingCoinDistribution.MouseUp, btnFoldingCoinShop.MouseUp, btnFoldingCoinTeamStats.MouseUp,
-            btnCureCoin.MouseUp, btnCureCoinBlockchain.MouseUp, btnCureCoinDiscord.MouseUp, btnCureCoinTwitter.MouseUp, btnCurePool.MouseUp, btnCureCoinTeamStats.MouseUp,
+            btnCureCoinWebsite.MouseUp, btnCureCoinBlockchain.MouseUp, btnCureCoinDiscord.MouseUp, btnCureCoinTwitter.MouseUp, btnCurePool.MouseUp, btnCureCoinTeamStats.MouseUp,
             pnlBtnLinksDividerBottom.MouseUp,
             lblToolsWalletNum.MouseUp
         'NOTE: Don't add the Tools buttons or controls to this event. If needed, those are handled in their button click events
 
         'Button Link Panel: Reset panel back to minimized
-        Me.pnlBtnLinks.Height = 6
+        Me.pnlBtnLinks.Height = MinPanelHeight
     End Sub
     'Additionally for GroupBoxes (they seem like they are handled slightly differently, since the event name doesn't select the same in VS)
     Private Sub gbx_MouseUp(sender As Object, e As MouseEventArgs) Handles gbxFAHRelated.MouseUp, gbxFoldingCoinRelated.MouseUp, gbxCureCoinRelated.MouseUp, gbxTools.MouseUp
@@ -2843,7 +2932,7 @@
                     End If
 
                 Case HpgFoldingCoin
-                    Await OpenURL(URL_FoldingCoin, False)
+                    btnFoldingCoinWebsite_Click(Nothing, Nothing)
 
                 Case HpgFoldingCoinMyStats
                     btnFoldingCoinUserStats_Click(Nothing, Nothing)
@@ -2852,7 +2941,7 @@
                     btnFoldingCoinTeamStats_Click(Nothing, Nothing)
 
                 Case HpgCureCoin
-                    Await OpenURL(URL_CureCoin, False)
+                    btnCureCoinWebsite_Click(Nothing, Nothing)
 
                 Case HpgCureCoinTeamStatsEOC
                     btnCureCoinTeamStats_Click(Nothing, Nothing)
@@ -2861,7 +2950,7 @@
                     btnEOC_UserStats_Click(Nothing, Nothing)
 
                 Case HpgFAH
-                    Await OpenURL(URL_FAH_Client, False)
+                    btnFAHWebControl_Click(Nothing, Nothing)
 
                 Case HpgNaClFAH
                     'TODO: Running the FAH NaCl plugin doesn't work yet
@@ -2886,12 +2975,28 @@
 
     Private Async Sub pnlBtnLinks_MouseEnter(sender As Object, e As EventArgs) Handles pnlBtnLinks.MouseEnter
         'Skip, if already expanded
-        If Me.pnlBtnLinks.Height < 10 Then
+        If Me.pnlBtnLinks.Height <= MinPanelHeight Then
+            'Skip, if set in the options
+            If g_bShowWebLinkPanelOnMouseEnterEvent = True Then
+                'Button Link list: Mouse-over effect to expand area
+                For m_iTempHeight = 20 To m_iWebLinkPanelHeight Step 20
+                    Me.pnlBtnLinks.Height = m_iTempHeight
+                    Await Wait(5)
+                Next
+            End If
+        End If
+    End Sub
+
+    Private Async Sub pnlBtnLinks_Click(sender As Object, e As EventArgs) Handles pnlBtnLinks.Click, pnlBtnLinksDividerTop.Click
+        If Me.pnlBtnLinks.Height <= MinPanelHeight Then
             'Button Link list: Mouse-over effect to expand area
-            For i As Integer = 20 To m_iWebLinkPanelHeight Step 20
-                Me.pnlBtnLinks.Height = i
+            For m_iTempHeight = 20 To m_iWebLinkPanelHeight Step 20
+                Me.pnlBtnLinks.Height = m_iTempHeight
                 Await Wait(5)
             Next
+        Else
+            'Minimize, if already expanded
+            Me.pnlBtnLinks.Height = MinPanelHeight
         End If
     End Sub
 
@@ -2966,13 +3071,6 @@
             'Load the web page
             If sURL.Length > 0 And Uri.IsWellFormedUriString(sURL, UriKind.RelativeOrAbsolute) = True Then
                 Me.txtURL.Text = sURL
-
-                'WORKAROUND: FAH Web Control, where it gets stuck in an infinite refresh loop in Chrome v59+, and needs a refresh without cache to fix that condition. This error also occurs almost every time you leave the FAH web control page, so avoid reloading when clicking other web link buttons or exiting.
-                If Me.txtURL.Text = URL_FAH_Client Then
-                    m_bLoadingFAHWebControl = True
-                Else
-                    m_bLoadingFAHWebControl = False
-                End If
 
                 'Accept Certs to avoid annoying prompts
                 System.Net.ServicePointManager.ServerCertificateValidationCallback = New Net.Security.RemoteCertificateValidationCallback(AddressOf ValidateCertificate)
@@ -3086,15 +3184,9 @@
 #End Region
 
 #Region "Messages / Errors"
-    Private Sub addActivity(sMsg As String)
-        Me.Invoke(Sub()
-                      Me.txtMsg.AppendText("[" & Now.ToString("yyyy-MM-dd HH:mm:ss.f") & "] " & sMsg & vbNewLine)
-                  End Sub)
-    End Sub
-
     Public Sub Msg(sMsg As String)
         Try
-            Me.txtMsg.AppendText("[" & Now.ToString("yyyy-MM-dd HH:mm:ss.f") & "] " & sMsg & vbNewLine)
+            Me.txtMsg.AppendText("[" & Now.ToString(LogDateTimeFormat) & "] " & sMsg & vbNewLine)
             If Me.txtMsg.Visible = True Then
                 Me.txtMsg.ScrollToCaret()
             End If

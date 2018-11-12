@@ -31,10 +31,10 @@ Partial Class Main
         Me.btnToolsGetWallet = New System.Windows.Forms.Button()
         Me.btnMyWallet = New System.Windows.Forms.Button()
         Me.btnToolsGetFAH = New System.Windows.Forms.Button()
-        Me.btnFAHControl = New System.Windows.Forms.Button()
+        Me.btnFAHWebControl = New System.Windows.Forms.Button()
         Me.btnToolsBrowserTools = New System.Windows.Forms.Button()
         Me.btnFoldingCoinWebsite = New System.Windows.Forms.Button()
-        Me.btnCureCoin = New System.Windows.Forms.Button()
+        Me.btnCureCoinWebsite = New System.Windows.Forms.Button()
         Me.btnReload = New System.Windows.Forms.Button()
         Me.btnBack = New System.Windows.Forms.Button()
         Me.btnFwd = New System.Windows.Forms.Button()
@@ -104,7 +104,7 @@ Partial Class Main
         Me.btnStopNav.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.GradientActiveCaption
         Me.btnStopNav.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.GradientInactiveCaption
         Me.btnStopNav.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnStopNav.Location = New System.Drawing.Point(1096, 5)
+        Me.btnStopNav.Location = New System.Drawing.Point(1104, 5)
         Me.btnStopNav.Name = "btnStopNav"
         Me.btnStopNav.Size = New System.Drawing.Size(17, 17)
         Me.btnStopNav.TabIndex = 2
@@ -118,7 +118,7 @@ Partial Class Main
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtURL.Location = New System.Drawing.Point(88, 4)
         Me.txtURL.Name = "txtURL"
-        Me.txtURL.Size = New System.Drawing.Size(1003, 20)
+        Me.txtURL.Size = New System.Drawing.Size(1011, 20)
         Me.txtURL.TabIndex = 0
         '
         'btnGo
@@ -129,7 +129,7 @@ Partial Class Main
         Me.btnGo.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.GradientActiveCaption
         Me.btnGo.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.GradientInactiveCaption
         Me.btnGo.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnGo.Location = New System.Drawing.Point(1045, 5)
+        Me.btnGo.Location = New System.Drawing.Point(1053, 5)
         Me.btnGo.Name = "btnGo"
         Me.btnGo.Size = New System.Drawing.Size(17, 17)
         Me.btnGo.TabIndex = 1
@@ -214,22 +214,22 @@ Partial Class Main
         Me.ToolTip1.SetToolTip(Me.btnToolsGetFAH, "One Time Only! Install and setup Folding@Home")
         Me.btnToolsGetFAH.UseVisualStyleBackColor = False
         '
-        'btnFAHControl
+        'btnFAHWebControl
         '
-        Me.btnFAHControl.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
-        Me.btnFAHControl.FlatAppearance.BorderSize = 0
-        Me.btnFAHControl.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.GradientActiveCaption
-        Me.btnFAHControl.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.GradientInactiveCaption
-        Me.btnFAHControl.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnFAHControl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnFAHControl.Location = New System.Drawing.Point(10, 19)
-        Me.btnFAHControl.Name = "btnFAHControl"
-        Me.btnFAHControl.Size = New System.Drawing.Size(86, 54)
-        Me.btnFAHControl.TabIndex = 0
-        Me.btnFAHControl.Text = "Web Control"
-        Me.btnFAHControl.TextAlign = System.Drawing.ContentAlignment.BottomCenter
-        Me.ToolTip1.SetToolTip(Me.btnFAHControl, "Folding@Home Web Control to View App Status")
-        Me.btnFAHControl.UseVisualStyleBackColor = True
+        Me.btnFAHWebControl.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
+        Me.btnFAHWebControl.FlatAppearance.BorderSize = 0
+        Me.btnFAHWebControl.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.GradientActiveCaption
+        Me.btnFAHWebControl.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.GradientInactiveCaption
+        Me.btnFAHWebControl.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnFAHWebControl.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnFAHWebControl.Location = New System.Drawing.Point(10, 19)
+        Me.btnFAHWebControl.Name = "btnFAHWebControl"
+        Me.btnFAHWebControl.Size = New System.Drawing.Size(86, 54)
+        Me.btnFAHWebControl.TabIndex = 0
+        Me.btnFAHWebControl.Text = "Web Control"
+        Me.btnFAHWebControl.TextAlign = System.Drawing.ContentAlignment.BottomCenter
+        Me.ToolTip1.SetToolTip(Me.btnFAHWebControl, "Folding@Home Web Control to View App Status")
+        Me.btnFAHWebControl.UseVisualStyleBackColor = True
         '
         'btnToolsBrowserTools
         '
@@ -238,7 +238,7 @@ Partial Class Main
         Me.btnToolsBrowserTools.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.GradientActiveCaption
         Me.btnToolsBrowserTools.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.GradientInactiveCaption
         Me.btnToolsBrowserTools.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnToolsBrowserTools.Location = New System.Drawing.Point(484, 267)
+        Me.btnToolsBrowserTools.Location = New System.Drawing.Point(492, 267)
         Me.btnToolsBrowserTools.Name = "btnToolsBrowserTools"
         Me.btnToolsBrowserTools.Size = New System.Drawing.Size(69, 23)
         Me.btnToolsBrowserTools.TabIndex = 1
@@ -264,22 +264,22 @@ Partial Class Main
         Me.ToolTip1.SetToolTip(Me.btnFoldingCoinWebsite, "FoldingCoin Website")
         Me.btnFoldingCoinWebsite.UseVisualStyleBackColor = True
         '
-        'btnCureCoin
+        'btnCureCoinWebsite
         '
-        Me.btnCureCoin.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
-        Me.btnCureCoin.FlatAppearance.BorderSize = 0
-        Me.btnCureCoin.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.GradientActiveCaption
-        Me.btnCureCoin.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.GradientInactiveCaption
-        Me.btnCureCoin.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnCureCoin.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnCureCoin.Location = New System.Drawing.Point(10, 19)
-        Me.btnCureCoin.Name = "btnCureCoin"
-        Me.btnCureCoin.Size = New System.Drawing.Size(66, 54)
-        Me.btnCureCoin.TabIndex = 0
-        Me.btnCureCoin.Text = "CureCoin"
-        Me.btnCureCoin.TextAlign = System.Drawing.ContentAlignment.BottomCenter
-        Me.ToolTip1.SetToolTip(Me.btnCureCoin, "CureCoin Website")
-        Me.btnCureCoin.UseVisualStyleBackColor = True
+        Me.btnCureCoinWebsite.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
+        Me.btnCureCoinWebsite.FlatAppearance.BorderSize = 0
+        Me.btnCureCoinWebsite.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.GradientActiveCaption
+        Me.btnCureCoinWebsite.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.GradientInactiveCaption
+        Me.btnCureCoinWebsite.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnCureCoinWebsite.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnCureCoinWebsite.Location = New System.Drawing.Point(10, 19)
+        Me.btnCureCoinWebsite.Name = "btnCureCoinWebsite"
+        Me.btnCureCoinWebsite.Size = New System.Drawing.Size(66, 54)
+        Me.btnCureCoinWebsite.TabIndex = 0
+        Me.btnCureCoinWebsite.Text = "CureCoin"
+        Me.btnCureCoinWebsite.TextAlign = System.Drawing.ContentAlignment.BottomCenter
+        Me.ToolTip1.SetToolTip(Me.btnCureCoinWebsite, "CureCoin Website")
+        Me.btnCureCoinWebsite.UseVisualStyleBackColor = True
         '
         'btnReload
         '
@@ -289,7 +289,7 @@ Partial Class Main
         Me.btnReload.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.GradientActiveCaption
         Me.btnReload.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.GradientInactiveCaption
         Me.btnReload.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnReload.Location = New System.Drawing.Point(1117, 5)
+        Me.btnReload.Location = New System.Drawing.Point(1125, 5)
         Me.btnReload.Name = "btnReload"
         Me.btnReload.Size = New System.Drawing.Size(17, 17)
         Me.btnReload.TabIndex = 3
@@ -304,7 +304,7 @@ Partial Class Main
         Me.btnBack.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.GradientActiveCaption
         Me.btnBack.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.GradientInactiveCaption
         Me.btnBack.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnBack.Location = New System.Drawing.Point(3, 1)
+        Me.btnBack.Location = New System.Drawing.Point(2, 3)
         Me.btnBack.Name = "btnBack"
         Me.btnBack.Size = New System.Drawing.Size(25, 25)
         Me.btnBack.TabIndex = 8
@@ -319,7 +319,7 @@ Partial Class Main
         Me.btnFwd.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.GradientActiveCaption
         Me.btnFwd.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.GradientInactiveCaption
         Me.btnFwd.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnFwd.Location = New System.Drawing.Point(29, 1)
+        Me.btnFwd.Location = New System.Drawing.Point(29, 3)
         Me.btnFwd.Name = "btnFwd"
         Me.btnFwd.Size = New System.Drawing.Size(25, 25)
         Me.btnFwd.TabIndex = 0
@@ -335,7 +335,7 @@ Partial Class Main
         Me.gbxTools.Controls.Add(Me.btnToolsFAHConfig)
         Me.gbxTools.Controls.Add(Me.btnToolsGetFAH)
         Me.gbxTools.Controls.Add(Me.btnToolsGetWallet)
-        Me.gbxTools.Location = New System.Drawing.Point(607, 275)
+        Me.gbxTools.Location = New System.Drawing.Point(615, 275)
         Me.gbxTools.Name = "gbxTools"
         Me.gbxTools.Size = New System.Drawing.Size(370, 44)
         Me.gbxTools.TabIndex = 2
@@ -379,7 +379,7 @@ Partial Class Main
         Me.btnToolsOptions.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.GradientActiveCaption
         Me.btnToolsOptions.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.GradientInactiveCaption
         Me.btnToolsOptions.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnToolsOptions.Location = New System.Drawing.Point(596, 329)
+        Me.btnToolsOptions.Location = New System.Drawing.Point(604, 329)
         Me.btnToolsOptions.Name = "btnToolsOptions"
         Me.btnToolsOptions.Size = New System.Drawing.Size(67, 23)
         Me.btnToolsOptions.TabIndex = 3
@@ -395,7 +395,7 @@ Partial Class Main
         Me.btnToolsSavedData.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.GradientActiveCaption
         Me.btnToolsSavedData.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.GradientInactiveCaption
         Me.btnToolsSavedData.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnToolsSavedData.Location = New System.Drawing.Point(669, 329)
+        Me.btnToolsSavedData.Location = New System.Drawing.Point(677, 329)
         Me.btnToolsSavedData.Name = "btnToolsSavedData"
         Me.btnToolsSavedData.Size = New System.Drawing.Size(84, 23)
         Me.btnToolsSavedData.TabIndex = 4
@@ -407,7 +407,7 @@ Partial Class Main
         'txtToolsWalletName
         '
         Me.txtToolsWalletName.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtToolsWalletName.Location = New System.Drawing.Point(881, 330)
+        Me.txtToolsWalletName.Location = New System.Drawing.Point(889, 330)
         Me.txtToolsWalletName.Name = "txtToolsWalletName"
         Me.txtToolsWalletName.Size = New System.Drawing.Size(112, 20)
         Me.txtToolsWalletName.TabIndex = 7
@@ -418,7 +418,7 @@ Partial Class Main
         Me.cbxToolsWalletId.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cbxToolsWalletId.FormattingEnabled = True
         Me.cbxToolsWalletId.Items.AddRange(New Object() {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"})
-        Me.cbxToolsWalletId.Location = New System.Drawing.Point(850, 330)
+        Me.cbxToolsWalletId.Location = New System.Drawing.Point(858, 330)
         Me.cbxToolsWalletId.Name = "cbxToolsWalletId"
         Me.cbxToolsWalletId.Size = New System.Drawing.Size(30, 21)
         Me.cbxToolsWalletId.TabIndex = 6
@@ -429,7 +429,7 @@ Partial Class Main
         '
         Me.lblToolsWalletNum.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lblToolsWalletNum.AutoSize = True
-        Me.lblToolsWalletNum.Location = New System.Drawing.Point(781, 333)
+        Me.lblToolsWalletNum.Location = New System.Drawing.Point(789, 333)
         Me.lblToolsWalletNum.Name = "lblToolsWalletNum"
         Me.lblToolsWalletNum.Size = New System.Drawing.Size(72, 13)
         Me.lblToolsWalletNum.TabIndex = 5
@@ -463,7 +463,7 @@ Partial Class Main
         Me.chkToolsShow.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.GradientActiveCaption
         Me.chkToolsShow.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.GradientInactiveCaption
         Me.chkToolsShow.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.chkToolsShow.Location = New System.Drawing.Point(1179, 2)
+        Me.chkToolsShow.Location = New System.Drawing.Point(1179, 1)
         Me.chkToolsShow.Name = "chkToolsShow"
         Me.chkToolsShow.Size = New System.Drawing.Size(24, 23)
         Me.chkToolsShow.TabIndex = 1
@@ -617,7 +617,7 @@ Partial Class Main
         Me.btnHome.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.GradientActiveCaption
         Me.btnHome.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.GradientInactiveCaption
         Me.btnHome.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnHome.Location = New System.Drawing.Point(1138, 5)
+        Me.btnHome.Location = New System.Drawing.Point(1146, 5)
         Me.btnHome.Name = "btnHome"
         Me.btnHome.Size = New System.Drawing.Size(17, 17)
         Me.btnHome.TabIndex = 4
@@ -801,7 +801,7 @@ Partial Class Main
         Me.txtMsg.Multiline = True
         Me.txtMsg.Name = "txtMsg"
         Me.txtMsg.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtMsg.Size = New System.Drawing.Size(576, 80)
+        Me.txtMsg.Size = New System.Drawing.Size(584, 80)
         Me.txtMsg.TabIndex = 0
         '
         'ProgressBar1
@@ -833,7 +833,7 @@ Partial Class Main
         Me.gbxDownload.Controls.Add(Me.lblPercent)
         Me.gbxDownload.Controls.Add(Me.ProgressBar1)
         Me.gbxDownload.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.gbxDownload.Location = New System.Drawing.Point(784, -2)
+        Me.gbxDownload.Location = New System.Drawing.Point(792, -2)
         Me.gbxDownload.Name = "gbxDownload"
         Me.gbxDownload.Size = New System.Drawing.Size(307, 31)
         Me.gbxDownload.TabIndex = 0
@@ -854,7 +854,7 @@ Partial Class Main
         'pbProgIcon
         '
         Me.pbProgIcon.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.pbProgIcon.Location = New System.Drawing.Point(934, 19)
+        Me.pbProgIcon.Location = New System.Drawing.Point(942, 19)
         Me.pbProgIcon.Name = "pbProgIcon"
         Me.pbProgIcon.Size = New System.Drawing.Size(50, 50)
         Me.pbProgIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
@@ -919,9 +919,9 @@ Partial Class Main
         Me.pnlBtnLinks.Controls.Add(Me.txtMsg)
         Me.pnlBtnLinks.Controls.Add(Me.lblToolsWalletNum)
         Me.pnlBtnLinks.Controls.Add(Me.gbxTools)
-        Me.pnlBtnLinks.Location = New System.Drawing.Point(100, 30)
+        Me.pnlBtnLinks.Location = New System.Drawing.Point(94, 28)
         Me.pnlBtnLinks.Name = "pnlBtnLinks"
-        Me.pnlBtnLinks.Size = New System.Drawing.Size(1003, 360)
+        Me.pnlBtnLinks.Size = New System.Drawing.Size(1011, 360)
         Me.pnlBtnLinks.TabIndex = 2
         '
         'pnlBtnLinksDividerBottom
@@ -930,9 +930,9 @@ Partial Class Main
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.pnlBtnLinksDividerBottom.BackColor = System.Drawing.SystemColors.GradientActiveCaption
         Me.pnlBtnLinksDividerBottom.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.pnlBtnLinksDividerBottom.Location = New System.Drawing.Point(5, 263)
+        Me.pnlBtnLinksDividerBottom.Location = New System.Drawing.Point(6, 263)
         Me.pnlBtnLinksDividerBottom.Name = "pnlBtnLinksDividerBottom"
-        Me.pnlBtnLinksDividerBottom.Size = New System.Drawing.Size(991, 2)
+        Me.pnlBtnLinksDividerBottom.Size = New System.Drawing.Size(997, 2)
         Me.pnlBtnLinksDividerBottom.TabIndex = 1
         '
         'gbxFAHRelated
@@ -941,7 +941,7 @@ Partial Class Main
         Me.gbxFAHRelated.Controls.Add(Me.btnFoldingCoinUserStats)
         Me.gbxFAHRelated.Controls.Add(Me.btnFAHTwitter)
         Me.gbxFAHRelated.Controls.Add(Me.btnEOC_UserStats)
-        Me.gbxFAHRelated.Controls.Add(Me.btnFAHControl)
+        Me.gbxFAHRelated.Controls.Add(Me.btnFAHWebControl)
         Me.gbxFAHRelated.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.gbxFAHRelated.Location = New System.Drawing.Point(5, 10)
         Me.gbxFAHRelated.Name = "gbxFAHRelated"
@@ -953,7 +953,7 @@ Partial Class Main
         'gbxCureCoinRelated
         '
         Me.gbxCureCoinRelated.Controls.Add(Me.btnCureCoinTeamStats)
-        Me.gbxCureCoinRelated.Controls.Add(Me.btnCureCoin)
+        Me.gbxCureCoinRelated.Controls.Add(Me.btnCureCoinWebsite)
         Me.gbxCureCoinRelated.Controls.Add(Me.btnCureCoinBlockchain)
         Me.gbxCureCoinRelated.Controls.Add(Me.btnCurePool)
         Me.gbxCureCoinRelated.Controls.Add(Me.btnCureCoinTwitter)
@@ -991,9 +991,9 @@ Partial Class Main
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.pnlBtnLinksDividerTop.BackColor = System.Drawing.SystemColors.GradientActiveCaption
         Me.pnlBtnLinksDividerTop.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.pnlBtnLinksDividerTop.Location = New System.Drawing.Point(5, 1)
+        Me.pnlBtnLinksDividerTop.Location = New System.Drawing.Point(6, 2)
         Me.pnlBtnLinksDividerTop.Name = "pnlBtnLinksDividerTop"
-        Me.pnlBtnLinksDividerTop.Size = New System.Drawing.Size(991, 2)
+        Me.pnlBtnLinksDividerTop.Size = New System.Drawing.Size(997, 2)
         Me.pnlBtnLinksDividerTop.TabIndex = 0
         '
         'pnlURL
@@ -1009,9 +1009,9 @@ Partial Class Main
         Me.pnlURL.Controls.Add(Me.btnReload)
         Me.pnlURL.Controls.Add(Me.btnBack)
         Me.pnlURL.Controls.Add(Me.btnHome)
-        Me.pnlURL.Location = New System.Drawing.Point(12, 3)
+        Me.pnlURL.Location = New System.Drawing.Point(6, 2)
         Me.pnlURL.Name = "pnlURL"
-        Me.pnlURL.Size = New System.Drawing.Size(1161, 29)
+        Me.pnlURL.Size = New System.Drawing.Size(1169, 29)
         Me.pnlURL.TabIndex = 0
         '
         'Main
@@ -1056,10 +1056,10 @@ Partial Class Main
     Friend WithEvents btnToolsGetWallet As System.Windows.Forms.Button
     Friend WithEvents btnMyWallet As System.Windows.Forms.Button
     Friend WithEvents btnToolsGetFAH As System.Windows.Forms.Button
-    Friend WithEvents btnFAHControl As System.Windows.Forms.Button
+    Friend WithEvents btnFAHWebControl As System.Windows.Forms.Button
     Friend WithEvents btnToolsBrowserTools As System.Windows.Forms.Button
     Friend WithEvents btnFoldingCoinWebsite As System.Windows.Forms.Button
-    Friend WithEvents btnCureCoin As System.Windows.Forms.Button
+    Friend WithEvents btnCureCoinWebsite As System.Windows.Forms.Button
     Friend WithEvents btnReload As System.Windows.Forms.Button
     Friend WithEvents btnBack As System.Windows.Forms.Button
     Friend WithEvents btnFwd As System.Windows.Forms.Button

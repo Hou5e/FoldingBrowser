@@ -155,6 +155,7 @@
   <ItemGroup>
     <EmbeddedResource Include="DisplayOptionsDialog.resx">
       <DependentUpon>DisplayOptionsDialog.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="FAHSetupDialog.resx">
       <DependentUpon>FAHSetupDialog.vb</DependentUpon>

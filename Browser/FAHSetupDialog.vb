@@ -466,7 +466,7 @@
         Me.txtEmail.BackColor = Color.FromKnownColor(KnownColor.Window)
     End Sub
 
-    'Run the script to send the Passkey. Web page: http://fah-web.stanford.edu/cgi-bin/getpasskey.py
+    'Run the web page to send the Passkey
     Private Async Sub btnGetPasskey_Click(sender As Object, e As EventArgs) Handles btnGetPasskey.Click
         'Check to see if email looks valid, and indicate if it isn't
         If Me.txtEmail.Text.Length > 5 AndAlso Me.txtEmail.Text.Contains("@") AndAlso Me.txtEmail.Text.Contains(".") Then
@@ -477,8 +477,12 @@
 
             'Remove any white space at the beginning or end of the email address
             Me.txtEmail.Text = Me.txtEmail.Text.Trim
-            'Run the script to send the Passkey. Like: http://fah-web.stanford.edu/cgi-bin/getpasskey.py?name=[user]&email=[email]
-            If Await g_Main.GetFAHpasskey("http://fah-web.stanford.edu/cgi-bin/getpasskey.py?name=" & Me.lblUsernamePreview.Text & "&email=" & Me.txtEmail.Text) = True Then
+            'Run the web page to send the Passkey
+            If Await g_Main.GetFAHpasskey(URL_FAH_Passkey & Me.lblUsernamePreview.Text & "&email=" & Me.txtEmail.Text) = True Then
+                Await Wait(200)
+                'Click Get Passkey button (only button on the page)
+                Await g_Main.ClickByTag("button", 0, False)
+
                 'Good - Check your email
                 Dim OkMsg As New MsgBoxDialog
                 OkMsg.Text = "Check your email"
@@ -537,7 +541,7 @@
                                 Try
                                     Dim bRunning As Boolean = False
                                     Dim p As Process
-                                    For Each p In Process.GetProcessesByName("FAHClient")
+                                    For Each p In Process.GetProcessesByName(FAH_Client)
                                         g_Main.Msg("FAH is running at id: " & p.Id.ToString() & " - " & p.ProcessName)
                                         bRunning = True
                                         Exit For

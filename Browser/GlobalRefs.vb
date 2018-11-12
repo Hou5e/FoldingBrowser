@@ -40,7 +40,10 @@ Public Module GlobalRefs
     Public Const URL_FAH_DL As String = "start-folding/"
     Public Const URL_FAH_News As String = "news/"
     Public Const URL_FAHTwitter As String = "https://twitter.com/foldingathome/"
-    Public Const URL_FAH_Client As String = "http://client.foldingathome.org/"
+    Public Const URL_FAH_Passkey As String = "https://apps.foldingathome.org/getpasskey?name="
+    Public Const URL_FAH_WebClient_URL As String = "http://client.foldingathome.org/"
+    Public Const URL_FAH_WebClient_IPAddr As String = "http://127.0.0.1:7396/?nocache="
+    Public Const URL_FAH_WebClient_ErrorAddr As String = "http://127.0.0.1:7396/js/main.js"
     Public Const URL_NaCl_FAH As String = "http://nacl.foldingathome.org/"
 
     'HTML from source code file: FoldingBrowser-SideBySide.html
@@ -104,6 +107,7 @@ Public Module GlobalRefs
     Public Const INI_LastBrowserVersion As String = "LastBrowserVersion"
     Public Const INI_HideSavedDataButton As String = "HideSavedDataButton"
     Public Const INI_Homepage As String = "Homepage"
+    Public Const INI_ShowPanelOnMouseEnter As String = "ShowPanelOnMouseEnter"
 
     'Wallet Id specific
     Public Const INI_EOC_ID As String = "ExtremeOverclockingUserId"
@@ -126,6 +130,10 @@ Public Module GlobalRefs
 
     'Website title to search for
     Public Const NameCryptoBullions As String = "CryptoBullions"
+    'Search strings
+    Public Const FAH_Version As String = "Version"
+    Public Const FAH_Client As String = "FAHClient"
+    Public Const FAH_Core As String = "fahcore_"
 
     Public UserProfileDir As String = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), Prog_Name)
     Public IniFilePath As String = System.IO.Path.Combine(UserProfileDir, Prog_Name & ".ini")
@@ -137,6 +145,12 @@ Public Module GlobalRefs
     Public g_bAskDownloadLocation As Boolean = True
     'Holds on to the last downloaded file path, when the download completes
     Public g_strDownloadedFilePath As String = ""
+
+    'Option to Show the Web Link Panel On MouseEnter Event
+    Public g_bShowWebLinkPanelOnMouseEnterEvent As Boolean = True
+
+    'Event logging date-time stamp format string
+    Public Const LogDateTimeFormat As String = "yyyy-MM-dd HH:mm:ss.f"
 
     Public Function SaveLogFile(ByRef strMsg As String) As Boolean
         SaveLogFile = False

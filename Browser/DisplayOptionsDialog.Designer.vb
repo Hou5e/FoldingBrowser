@@ -30,6 +30,7 @@ Partial Class DisplayOptionsDialog
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.chkShowRawData = New System.Windows.Forms.CheckBox()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
+        Me.chkShowPanelOnMouseEnterEvent = New System.Windows.Forms.CheckBox()
         Me.lblHomepage = New System.Windows.Forms.Label()
         Me.cbxHomepage = New System.Windows.Forms.ComboBox()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -117,6 +118,7 @@ Partial Class DisplayOptionsDialog
         '
         Me.SplitContainer1.Panel1.AutoScroll = True
         Me.SplitContainer1.Panel1.BackColor = System.Drawing.SystemColors.Window
+        Me.SplitContainer1.Panel1.Controls.Add(Me.chkShowPanelOnMouseEnterEvent)
         Me.SplitContainer1.Panel1.Controls.Add(Me.lblHomepage)
         Me.SplitContainer1.Panel1.Controls.Add(Me.cbxHomepage)
         '
@@ -129,13 +131,25 @@ Partial Class DisplayOptionsDialog
         Me.SplitContainer1.SplitterWidth = 2
         Me.SplitContainer1.TabIndex = 3
         '
+        'chkShowPanelOnMouseEnterEvent
+        '
+        Me.chkShowPanelOnMouseEnterEvent.AutoSize = True
+        Me.chkShowPanelOnMouseEnterEvent.Checked = True
+        Me.chkShowPanelOnMouseEnterEvent.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chkShowPanelOnMouseEnterEvent.Location = New System.Drawing.Point(234, 64)
+        Me.chkShowPanelOnMouseEnterEvent.Name = "chkShowPanelOnMouseEnterEvent"
+        Me.chkShowPanelOnMouseEnterEvent.Size = New System.Drawing.Size(254, 17)
+        Me.chkShowPanelOnMouseEnterEvent.TabIndex = 2
+        Me.chkShowPanelOnMouseEnterEvent.Text = "Show Web Button Panel On Mouse-Enter Event"
+        Me.chkShowPanelOnMouseEnterEvent.UseVisualStyleBackColor = True
+        '
         'lblHomepage
         '
         Me.lblHomepage.AutoSize = True
         Me.lblHomepage.Location = New System.Drawing.Point(169, 28)
         Me.lblHomepage.Name = "lblHomepage"
         Me.lblHomepage.Size = New System.Drawing.Size(62, 13)
-        Me.lblHomepage.TabIndex = 2
+        Me.lblHomepage.TabIndex = 0
         Me.lblHomepage.Text = "Homepage:"
         '
         'cbxHomepage
@@ -182,4 +196,5 @@ Partial Class DisplayOptionsDialog
     Friend WithEvents SplitContainer1 As SplitContainer
     Friend WithEvents cbxHomepage As ComboBox
     Friend WithEvents lblHomepage As Label
+    Friend WithEvents chkShowPanelOnMouseEnterEvent As CheckBox
 End Class
