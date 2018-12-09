@@ -4,8 +4,8 @@
 
 
 ;---- Helper defines / constants ----
-!define PRODUCT_VERSION "18"  ;Match the displayed version in the program title. Example: 1.2.3
-!define PRODUCT_4_VALUE_VERSION "18.0.0.0"  ;Match the executable version: Right-click the program executable file | Properties | Version. Example: 1.2.3.4
+!define PRODUCT_VERSION "19"  ;Match the displayed version in the program title. Example: 1.2.3
+!define PRODUCT_4_VALUE_VERSION "19.0.0.0"  ;Match the executable version: Right-click the program executable file | Properties | Version. Example: 1.2.3.4
 !define PRODUCT_YEAR "2018"
 !define PRODUCT_NAME "FoldingBrowser"
 !define PRODUCT_EXE_NAME "FoldingBrowser"  ;Executable name without extension
@@ -16,7 +16,7 @@
 !define PRODUCT_UNINST_EXE_NAME "Uninstall_${PRODUCT_EXE_NAME}"  ;Executable name without extension
 
 ;This constant must match the CureCoin installer version
-!define CURECOIN_VERSION "1.9.4.1"
+!define CURECOIN_VERSION "1.9.5.1"
 
 !define REQUIRED_MS_DOT_NET_VERSION "4.0*"
 

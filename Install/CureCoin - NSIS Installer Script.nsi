@@ -3,8 +3,8 @@
 ; Copyright © 2018 CureCoin
 
 ;---- Helper defines / constants ----
-!define PRODUCT_VERSION "1.9.4.1"  ;Match the displayed version in the program title. Example: 1.2.3
-!define PRODUCT_4_VALUE_VERSION "1.9.4.1"  ;Match the executable version: Right-click the program executable file | Properties | Version. Example: 1.2.3.4
+!define PRODUCT_VERSION "1.9.5.1"  ;Match the displayed version in the program title. Example: 1.2.3
+!define PRODUCT_4_VALUE_VERSION "1.9.5.1"  ;Match the executable version: Right-click the program executable file | Properties | Version. Example: 1.2.3.4
 !define PRODUCT_YEAR "2018"
 !define PRODUCT_NAME "CureCoin"
 !define PRODUCT_EXE_NAME "curecoin-qt"  ;Executable name without extension
@@ -169,6 +169,10 @@ Section "!Main Program Installation" SEC01
   SetShellVarContext current   ;for 'Current': $AppData = C:\Users\%username%\AppData\Roaming, otherwise for 'all': $AppData = C:\ProgramData
   SetOutPath "$APPDATA\curecoin"
   File "CureCoin\curecoin.conf.example"
+  SetOverwrite off
+  ;If this file exists already, then don't overwrite it. Include a 'peers.dat' file for a better list of bootstrap nodes
+  File "CureCoin\peers.dat"
+  SetOverwrite on
 
   ;Create program shortcuts
   SetShellVarContext all  ;Uninstall shortcuts from the 'All Users' folder (WinXP only), otherwise uninstall shortcuts from the user's folder
