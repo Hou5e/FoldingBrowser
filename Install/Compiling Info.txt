@@ -50,4 +50,4 @@ Visual Studio Compiling Notes:
 ------------------------------
 -Any time the CefSharp DLLs are upgraded to the next version (Use NuGet Package Manager, command: update-package):
    -Any previous versions of those DLLs need to be manually deleted from the Debug & Release folders before Visually Studio will compile the new executable without errors.
-   -The project reference folder path to the previous DLLs will need to be manually updated in the project settings to the new package folder
+   -The project reference folder path to the previous DLLs may need to be manually updated in the project settings to the new package folder
