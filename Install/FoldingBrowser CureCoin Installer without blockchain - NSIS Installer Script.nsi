@@ -3,8 +3,8 @@
 ; Copyright © 2018 CureCoin
 
 ;---- Helper defines / constants ----
-!define PRODUCT_VERSION "1.9.5.1"  ;Match the displayed version in the program title. Example: 1.2.3
-!define PRODUCT_4_VALUE_VERSION "1.9.5.1"  ;Match the executable version: Right-click the program executable file | Properties | Version. Example: 1.2.3.4
+!define PRODUCT_VERSION "2.0.0.1"  ;Match the displayed version in the program title. Example: 1.2.3
+!define PRODUCT_4_VALUE_VERSION "2.0.0.1"  ;Match the executable version: Right-click the program executable file | Properties | Version. Example: 1.2.3.4
 !define PRODUCT_YEAR "2018"
 !define PRODUCT_NAME "CureCoin"
 !define PRODUCT_EXE_NAME "curecoin-qt"  ;Executable name without extension
@@ -20,8 +20,9 @@ Unicode true   ;For all languages to display properly (Installer won't run on Wi
 !define MULTIUSER_EXECUTIONLEVEL admin  ;Set the execution level for 'MultiUser.nsh'
 !include MultiUser.nsh  ;Used for testing execution level. Does the installee have admin rights?
 
-!include FileFunc.nsh  ;File Functions Header, for RefreshShellIcons
+!include FileFunc.nsh  ;File Functions Header, for: RefreshShellIcons, GetTime
 !insertmacro un.RefreshShellIcons
+!insertmacro GetTime
 
 !include nsProcess.nsh  ;Used to see if the program is running and to close it, if it is
 
@@ -167,18 +168,38 @@ Section "!Main Program Installation" SEC01
   File "CureCoin\Curecoin- cygnusxi - Source files on GitHub.url"
 
   SetShellVarContext current   ;for 'Current': $AppData = C:\Users\%username%\AppData\Roaming, otherwise for 'all': $AppData = C:\ProgramData
+  SetOutPath "$APPDATA\curecoin\database"
+  ;Delete the anything in the database folder and remove it, if possible
+  Delete "$APPDATA\curecoin\database\*"
+
   SetOutPath "$APPDATA\curecoin"
+  ;Need to switch folders before this folder can be deleted
+  RMDir "$APPDATA\curecoin\database"
+  
+  ;Delete the old v1.9.x.x blockchain, if possible
+  Delete "$APPDATA\curecoin\blk0001.dat"
+  Delete "$APPDATA\curecoin\blkindex.dat"
+  Delete "$APPDATA\curecoin\.lock"
+  Delete "$APPDATA\curecoin\db.log"
+  Delete "$APPDATA\curecoin\debug.log"
+  Delete "$APPDATA\curecoin\peers.dat"
+  
+  ;Make a backup copy of 'wallet.dat' before adding the new wallet files
+  ${GetTime} "" "L" $0 $1 $2 $3 $4 $5 $6
+  CopyFiles /SILENT "$APPDATA\curecoin\wallet.dat" "$APPDATA\curecoin\wallet-Backup_$2-$1-$0_$4_$5.dat"
+
   File "CureCoin\curecoin.conf.example"
-  SetOverwrite off
-  ;If this file exists already, then don't overwrite it. Include a 'peers.dat' file for a better list of bootstrap nodes
+  ;Include a 'peers.dat' file for a better list of bootstrap nodes
   File "CureCoin\peers.dat"
-  SetOverwrite on
+
+  ;Skip Adding Curecoin v2.0.0.1 Blockchain files
 
   ;Create program shortcuts
   SetShellVarContext all  ;Uninstall shortcuts from the 'All Users' folder (WinXP only), otherwise uninstall shortcuts from the user's folder
   SetOutPath "$INSTDIR"  ;Destination. Required to make the EXE shortcut 'start in' path correct
   CreateShortCut "$DESKTOP\CureCoin.lnk" "$INSTDIR\curecoin-qt.exe"
   CreateShortCut "$SMPROGRAMS\CureCoin.lnk" "$INSTDIR\curecoin-qt.exe"
+  CreateShortCut "$SMPROGRAMS\CureCoin Wallet Rescan (Can fix missing tx).lnk" "$INSTDIR\curecoin-qt.exe" "-rescan"
 SectionEnd
 
 Section -Post
@@ -266,6 +287,8 @@ Section Uninstall
 
   ;Delete the program shortcuts
   Delete "$SMPROGRAMS\CureCoin.lnk"
+  Delete "$SMPROGRAMS\CureCoin Wallet Rescan (Can fix missing tx).lnk"
+
   Delete "$DESKTOP\CureCoin.lnk"
 
   ;Delete the main installation folder, if possible

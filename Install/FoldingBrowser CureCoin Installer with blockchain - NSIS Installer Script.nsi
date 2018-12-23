@@ -130,7 +130,7 @@ Unicode true   ;For all languages to display properly (Installer won't run on Wi
 
 ;---- Installer Info ----
 Name "${PRODUCT_NAME} v${PRODUCT_VERSION}"
-OutFile "CureInst\Install_${PRODUCT_NAME}_Wallet_v${PRODUCT_VERSION}.exe"
+OutFile "CureInst\Install_${PRODUCT_NAME}_v${PRODUCT_VERSION}_-_Blockchain_Included.exe"
 BrandingText "${PRODUCT_PUBLISHER}"
 InstallDir "$PROGRAMFILES\${PRODUCT_NAME}"  ;Default installation folder (Set to: $INSTDIR during MUI_PAGE_DIRECTORY)
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
@@ -192,7 +192,12 @@ Section "!Main Program Installation" SEC01
   ;Include a 'peers.dat' file for a better list of bootstrap nodes
   File "CureCoin\peers.dat"
 
-  ;Skip Adding Curecoin v2.0.0.1 Blockchain files
+  ;Add Curecoin v2.0.0.1 Blockchain files
+  File "CureCoin\blk0001.dat"
+  File "CureCoin\blkindex.dat"
+  File "CureCoin\.lock"
+  SetOutPath "$APPDATA\curecoin\database"
+  File "CureCoin\log.0000000068"
 
   ;Create program shortcuts
   SetShellVarContext all  ;Uninstall shortcuts from the 'All Users' folder (WinXP only), otherwise uninstall shortcuts from the user's folder
@@ -222,8 +227,8 @@ FunctionEnd
 
 Function .oninstsuccess
   SetShellVarContext current
-  ;Auto-run the main EXE, once installed, with the command line options to rescan for missing transactions
-  Exec "$INSTDIR\${PRODUCT_EXE_NAME}.exe -rescan"
+  ;Auto-run the main EXE, once installed, with the command line options to load settings for the RPC login and port
+  Exec "$INSTDIR\${PRODUCT_EXE_NAME}.exe -conf=$APPDATA\curecoin\curecoin.conf.example"
 FunctionEnd
 
 Function CloseCureCoin

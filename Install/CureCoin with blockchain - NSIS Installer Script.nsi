@@ -20,8 +20,9 @@ Unicode true   ;For all languages to display properly (Installer won't run on Wi
 !define MULTIUSER_EXECUTIONLEVEL admin  ;Set the execution level for 'MultiUser.nsh'
 !include MultiUser.nsh  ;Used for testing execution level. Does the installee have admin rights?
 
-!include FileFunc.nsh  ;File Functions Header, for RefreshShellIcons
+!include FileFunc.nsh  ;File Functions Header, for: RefreshShellIcons, GetTime
 !insertmacro un.RefreshShellIcons
+!insertmacro GetTime
 
 !include nsProcess.nsh  ;Used to see if the program is running and to close it, if it is
 
@@ -129,7 +130,7 @@ Unicode true   ;For all languages to display properly (Installer won't run on Wi
 
 ;---- Installer Info ----
 Name "${PRODUCT_NAME} v${PRODUCT_VERSION}"
-OutFile "CureInst\Install_${PRODUCT_NAME}_v${PRODUCT_VERSION}_WithBlockchain.exe"
+OutFile "CureInst\Install_${PRODUCT_NAME}_Wallet_v${PRODUCT_VERSION}_-_Blockchain_Included.exe"
 BrandingText "${PRODUCT_PUBLISHER}"
 InstallDir "$PROGRAMFILES\${PRODUCT_NAME}"  ;Default installation folder (Set to: $INSTDIR during MUI_PAGE_DIRECTORY)
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
@@ -184,7 +185,8 @@ Section "!Main Program Installation" SEC01
   Delete "$APPDATA\curecoin\peers.dat"
   
   ;Make a backup copy of 'wallet.dat' before adding the new wallet files
-  CopyFiles /SILENT "$APPDATA\curecoin\wallet.dat" "$APPDATA\curecoin\wallet-v1.9.x.x_Backup.dat"
+  ${GetTime} "" "L" $0 $1 $2 $3 $4 $5 $6
+  CopyFiles /SILENT "$APPDATA\curecoin\wallet.dat" "$APPDATA\curecoin\wallet-Backup_$2-$1-$0_$4_$5.dat"
 
   File "CureCoin\curecoin.conf.example"
   ;Include a 'peers.dat' file for a better list of bootstrap nodes

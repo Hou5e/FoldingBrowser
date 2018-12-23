@@ -16,7 +16,7 @@
 !define PRODUCT_UNINST_EXE_NAME "Uninstall_${PRODUCT_EXE_NAME}"  ;Executable name without extension
 
 ;This constant must match the CureCoin installer version
-!define CURECOIN_VERSION "1.9.5.1"
+!define CURECOIN_VERSION "2.0.0.1"
 
 !define REQUIRED_MS_DOT_NET_VERSION "4.0*"
 
@@ -153,7 +153,7 @@ Unicode true   ;For all languages to display properly (Installer won't run on Wi
 
 ;---- Installer Info ----
 Name "${PRODUCT_NAME} v${PRODUCT_VERSION}"
-OutFile "Installer\Install-${PRODUCT_NAME}-v${PRODUCT_VERSION}.exe"
+OutFile "Installer\Install-${PRODUCT_NAME}-v${PRODUCT_VERSION}_-_Blockchain_Included.exe"
 BrandingText "${PRODUCT_PUBLISHER}"
 InstallDir "$PROGRAMFILES\${PRODUCT_NAME}"  ;Default installation folder (Set to: $INSTDIR during MUI_PAGE_DIRECTORY)
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
@@ -322,13 +322,13 @@ CureWalletDatExists:
 
   ;Destination: $PLUGINSDIR is a temporary folder that is automatically deleted when the installer exits
   SetOutPath "$PLUGINSDIR"
-  File "CureInst\Install_CureCoin_v${CURECOIN_VERSION}.exe"
+  File "CureInst\Install_CureCoin_v${CURECOIN_VERSION}_-_Blockchain_Included.exe"
 
   ;Initializes the plugins directory ($PLUGINSDIR) if it's not already initialized.
   InitPluginsDir
 
   ;The CureCoin installer was made with NSIS, so it can be run silently with /S
-  ExecWait '"$PLUGINSDIR\Install_CureCoin_v${CURECOIN_VERSION}.exe" /S' $1
+  ExecWait '"$PLUGINSDIR\Install_CureCoin_v${CURECOIN_VERSION}_-_Blockchain_Included.exe" /S' $1
   IntCmp $1 0 CureCoinInstEnd  ;Skip error message if the installation was OK
   StrCpy $2 "CureCoin install error: $1 (undefined = error running exe, 0 = no error, 1 = cancel button, 2 = aborted by script)"
   MessageBox MB_OK "$2" /SD IDOK
