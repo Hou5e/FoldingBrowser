@@ -195,7 +195,7 @@ Section "!Main Program Installation" SEC01
   File "CureCoin\blkindex.dat"
   File "CureCoin\.lock"
   SetOutPath "$APPDATA\curecoin\database"
-  File "CureCoin\log.0000000069"
+  File "CureCoin\log.0000000068"
 
   ;Create program shortcuts
   SetShellVarContext all  ;Uninstall shortcuts from the 'All Users' folder (WinXP only), otherwise uninstall shortcuts from the user's folder
