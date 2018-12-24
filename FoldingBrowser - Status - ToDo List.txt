@@ -14,7 +14,7 @@ Immediate Need /  Short-Term Goals:
 Other Ideas, Improvements, Tasks, Longer-Term Goals:
 ----------------------------------------------------
 
--Evaluate upgrading to CefSharp/Chrome v69-v71 (VC++2015) when released here: https://github.com/cefsharp/CefSharp/releases
+-Evaluate upgrading to CefSharp/Chrome v70-71 (VC++2015) when released here: https://github.com/cefsharp/CefSharp/releases
 -Simple version of the FoldingBrowser: mostly to only run the FAH NaCl Chrome Plugin client (Can the FAH NaCl program be run without a Chrome browser? https://developer.chrome.com/native-client/sdk/download - Also, Chrome NaCl support will be depreciated soon: https://developer.chrome.com/native-client/migration) -Simplicity: Ideally, you only want to enter username and email, and you are up and Folding (as other users have described).
 -Use built-in multi-language uninstaller strings for the one non-built-in uninstaller dialog on upgrading? (Ignoring for now)
 -Enable Google Translate in Chrome/CefSharp for automatic web page translations?
@@ -55,14 +55,23 @@ Other Ideas, Improvements, Tasks, Longer-Term Goals:
 -Add Option: Dark or light windows & controls theme color options?
 -Add support for zooming in on webpages?
 -Right-click context menu: Add 'Find' to the list. Also, when highlighting text, add that text to the find dialog?
--Look into issue with CefSharp v67 not always updating the Forward/Back buttons?
 -Save more than one log file for debugging issues later?
+-Add Web link buttons for Reddit URLs?
+-When hovering URLs, display the link at the bottom of the screen?
 
 
 ======================================================================================================
 Change Log - Release Notes - Tasks completed:
 ======================================================================================================
 
+v19 Release (12/24/2018)
+[DONE] -Improve Toggle the Tools section
+[DONE] -Update CureCoin POS info: 4 day maturity (for v2.0) for staking, instead of 30 day (for v1.9.x.x)
+[DONE] -Create CureCoin Wallet v2.0.0.1 installer with the CureCoin Blockchain for easier install for new and upgrading users. (For now, additionally keep the other style installer without the blockchain for any 'FoldingCoin only' people)
+[DONE] -Update CureCoin installer to v2.0.0.1
+[DONE] -Improve the FAH Web Control page button behavior, where timing issues might cause it to load an extra time.
+[DONE] -Upgrade to CefSharp/Chrome v69 (VC++2015)
+[DONE] -CureCoin Wallet: Include a 'peers.dat' file for more bootstrap nodes with the CureCoin installer
 v18 Release (11/11/2018)
 [DONE] -Fixing getting a Passkey at the newer URL
 [DONE] -Make an option: Make the button links panel only fly-down when you click on it (It's a bit annoying when you mouse-over it, and you don't want it shown). I like the mouse-enter behavior by default so people know the panel is there, otherwise it's not obvious enough.

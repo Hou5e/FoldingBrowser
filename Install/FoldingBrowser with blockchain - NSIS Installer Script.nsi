@@ -153,7 +153,7 @@ Unicode true   ;For all languages to display properly (Installer won't run on Wi
 
 ;---- Installer Info ----
 Name "${PRODUCT_NAME} v${PRODUCT_VERSION}"
-OutFile "Installer\Install-${PRODUCT_NAME}-v${PRODUCT_VERSION}_-_Blockchain_Included.exe"
+OutFile "Installer\Install-${PRODUCT_NAME}-v${PRODUCT_VERSION}-Blockchain-Included.exe"
 BrandingText "${PRODUCT_PUBLISHER}"
 InstallDir "$PROGRAMFILES\${PRODUCT_NAME}"  ;Default installation folder (Set to: $INSTDIR during MUI_PAGE_DIRECTORY)
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""

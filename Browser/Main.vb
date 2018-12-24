@@ -520,7 +520,7 @@
                             "-Note Distribution Intervals: " & vbNewLine &
                             "     FoldingCoin: On the 1st Saturday of each month" & vbNewLine &
                             "         CureCoin: Daily.     Also, Proof of Stake (POS) when coins are" & vbNewLine &
-                            "            over 30 days old, with wallet unlocked and left running." & vbNewLine & vbNewLine &
+                            "            over 4 days old, with wallet unlocked and left running." & vbNewLine & vbNewLine &
                             "-Please contact us on Discord for questions (Use FoldingBrowser Discord buttons)"
                         FinMsg.Width = (FinMsg.MsgText.Left * 2) + FinMsg.MsgText.Width + 10
                         FinMsg.Height = (FinMsg.MsgText.Top * 2) + FinMsg.MsgText.Height + FinMsg.btnOK.Height + System.Windows.Forms.SystemInformation.CaptionHeight + System.Windows.Forms.SystemInformation.BorderSize.Height + 30
@@ -612,46 +612,59 @@
 
 #Region "Button, Checkbox, Combobox - Form Control Events"
     Private Async Sub btnFAHWebControl_Click(sender As System.Object, e As System.EventArgs) Handles btnFAHWebControl.Click
-        'WORKAROUND: The FAH Web Control doesn't always load during the 30 second count down. So, try bypassing it for now. The URL to load without cache doesn't avoiding the other CORS infinite loop error (Refresh without cache still needed)
+        'Check to see if FAH is running, and if not then pop-up a message to indicate that
+        Dim bFAHRunning As Boolean = False
+        Dim bFAH_PageLoaded As Boolean = False
+        Dim proc As Process
+        Try
+            For Each proc In Process.GetProcessesByName(FAH_Client)
+                bFAHRunning = True
+                'If you get here, exit searching through the processes
+                Exit For
+            Next
 
+            If bFAHRunning = False Then
+                'Indicate FAH is not running
+                MessageBox.Show("Folding@Home is not running." & vbNewLine & "Please start the Folding@Home software, and try again.", "Folding@Home is not running", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            End If
+
+        Catch ex As Exception
+            Msg("Error checking if FAH is running: " & ex.ToString)
+        End Try
+
+        'WORKAROUND: The FAH Web Control doesn't always load during the 30 second count down. So, try bypassing it for now. The URL to load without cache doesn't avoiding the other CORS infinite loop error (Refresh without cache still needed)
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
         Dim r As Random = New Random
         OpenURL(URL_FAH_WebClient_IPAddr & r.NextDouble.ToString(), False)
 #Enable Warning BC42358
 
-        'This waits 3 seconds each time, to see if it's going to load quickly. Wait up to 9 seconds total for the page to load
-        If Await PageTitleWait(FAH_Version) = False AndAlso Await PageTitleWait(FAH_Version) = False AndAlso Await PageTitleWait(FAH_Version) = False Then
-            'If the user presses a different button to go to a different web page, then don't load the default FAH Web Control URL (can happen easily over the 9 second period, if FAH isn't running)
-            If Me.txtURL.Text.StartsWith(URL_FAH_WebClient_IPAddr) = True OrElse Me.txtURL.Text = URL_FAH_WebClient_URL Then
+        'This waits 3 seconds each time, to see if it's going to load quickly. Wait up to 15 seconds total for the page to load
+        Dim i As Integer = 0
+        Do Until bFAH_PageLoaded = True OrElse g_bCancelNav = True OrElse i >= 4
+            i += 1
+            If Await PageTitleWait(FAH_Version) = True Then bFAH_PageLoaded = True
+        Loop
+
+        'If the user presses a different button to go to a different web page, then don't load the default FAH Web Control URL (can happen easily over the 15 second period, if FAH isn't running)
+        If bFAH_PageLoaded = False AndAlso (Me.txtURL.Text.StartsWith(URL_FAH_WebClient_IPAddr) = True OrElse Me.txtURL.Text = URL_FAH_WebClient_URL) Then
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
-                'If the IP Address version of the page doesn't load, go back to the main URL that has the annoyingly slow 30 countdown page before loading the FAH Web Control
-                OpenURL(URL_FAH_WebClient_URL, False)
+            'If the IP Address version of the page doesn't load, go back to the main URL that has the annoyingly slow 30 countdown page before loading the FAH Web Control
+            OpenURL(URL_FAH_WebClient_URL, False)
 #Enable Warning BC42358
 
-                'Check to see if FAH is running, and if not then pop-up a message to indicate that
-                Try
-                    Dim bFAHRunning As Boolean = False
-                    Dim proc As Process
-                    For Each proc In Process.GetProcessesByName(FAH_Client)
-                        bFAHRunning = True
-                        'If you get here, exit searching through the processes
-                        Exit For
-                    Next
+            If bFAHRunning = True Then
+                'If FAH is running, then give it a chance for the page to load
+                i = 0
+                Do Until bFAH_PageLoaded = True OrElse g_bCancelNav = True OrElse i >= 4
+                    i += 1
+                    If Await PageTitleWait(FAH_Version) = True Then bFAH_PageLoaded = True
+                Loop
 
-                    If bFAHRunning = True Then
-                        'If FAH is running, then give it a chance for the page to load
-                        If Await PageTitleWait(FAH_Version) = False AndAlso Await PageTitleWait(FAH_Version) = False AndAlso Await PageTitleWait(FAH_Version) = False Then
-                            'If still not loaded, try a Refresh ignoring browser cache
-                            Me.browser.GetBrowser.Reload(True)
-                        End If
-                    Else
-                        'Indicate FAH is not running
-                        MessageBox.Show("Folding@Home is not running." & vbNewLine & "Please start the Folding@Home software, and try again.", "Folding@Home is not running", MessageBoxButtons.OK, MessageBoxIcon.Information)
-                    End If
-
-                Catch ex As Exception
-                    Msg("Error checking if FAH is running: " & ex.ToString)
-                End Try
+                'If the user presses a different button to go to a different web page, then don't reload the default FAH Web Control URL (can happen easily over the 15 second period, if FAH isn't running)
+                If bFAH_PageLoaded = False AndAlso (Me.txtURL.Text.StartsWith(URL_FAH_WebClient_IPAddr) = True OrElse Me.txtURL.Text = URL_FAH_WebClient_URL) Then
+                    'If still not loaded, try a Refresh ignoring browser cache
+                    Me.browser.GetBrowser.Reload(True)
+                End If
             End If
         End If
     End Sub
@@ -1011,19 +1024,20 @@
     End Sub
 
     Private Sub chkToolsShow_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles chkToolsShow.CheckedChanged
-        If Me.chkToolsShow.Checked = True Then
-            'Show Tools Panel
+        If Me.pnlBtnLinks.Height <= MinPanelHeight Then
+            'Panel minimized: Show Tools Panel
             m_iWebLinkPanelHeight = 360
             Me.chkToolsShow.Image = My.Resources.ToolsSettingsGearEnabled_24.ToBitmap
         Else
-            If Me.pnlBtnLinks.Height <= MinPanelHeight Then
-                'Panel minimized: Show Tools Panel
-                m_iWebLinkPanelHeight = 360
-                Me.chkToolsShow.Image = My.Resources.ToolsSettingsGearEnabled_24.ToBitmap
-            Else
-                'Panel shown already: Hide Tools Panel
+            'Panel shown already: Toggle the Tools section
+            If Me.pnlBtnLinks.Height = 360 Then
+                'Hide Tools Panel
                 m_iWebLinkPanelHeight = 260
                 Me.chkToolsShow.Image = My.Resources.ToolsSettingsGearNoBG_24.ToBitmap
+            Else
+                'Show Tools Panel
+                m_iWebLinkPanelHeight = 360
+                Me.chkToolsShow.Image = My.Resources.ToolsSettingsGearEnabled_24.ToBitmap
             End If
         End If
 
@@ -3070,6 +3084,9 @@
         Try
             'Load the web page
             If sURL.Length > 0 And Uri.IsWellFormedUriString(sURL, UriKind.RelativeOrAbsolute) = True Then
+                'Blank out the page title, to allow it to be updated when the page loads for using PageTitleWait()
+                Me.Text = ""
+                'Update to the displayed text to the new URL
                 Me.txtURL.Text = sURL
 
                 'Accept Certs to avoid annoying prompts
