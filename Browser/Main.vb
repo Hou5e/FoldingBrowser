@@ -8,9 +8,18 @@
     'URL to help determine the page loaded indicator
     Private m_strPageURL As String = ""
     'Web Link Button Panel
-    Private Const MinPanelHeight As Integer = 8
+    Private m_iMinPanelHeight As Integer = 8
+    Private m_iNormPanelHeight As Integer = 260
+    Private m_iMaxPanelHeight As Integer = 360
     Private m_iTempHeight As Integer = 20
-    Private m_iWebLinkPanelHeight As Integer = 260
+    Private m_iTargetExpandedPanelHeight As Integer = 8
+    'DPI for Scaling
+    Private g_iOldDPI As Integer = 0
+    Private g_iCurrentDPI As Integer = 0
+    Private g_dScaleDPI As Double = 1.0
+    Private Const i16 As Integer = 16
+    Private Const i24 As Integer = 24
+    Private Const i48 As Integer = 48
 
 #Region "Form and Browser Events - Initialization, Exiting"
     Public Sub New()
@@ -67,66 +76,80 @@
 #Enable Warning BC42358
             End If
 
+            'Global reference to this form
+            g_Main = Me
+
             'Setup the rest of the window
             Me.Icon = My.Resources.L_cysteine_16_24_32_48_256
             Me.Text = Prog_Name & " v" & My.Application.Info.Version.Major.ToString
 
-            'Global reference to this form
-            g_Main = Me
+            Dim g As Graphics = Me.CreateGraphics()
+            Try
+                g_iCurrentDPI = CInt(g.DpiX)
+                g_iOldDPI = g_iCurrentDPI
+                g_dScaleDPI = g_iCurrentDPI / 96
+            Finally
+                g.Dispose()
+            End Try
 
             'Setup Browser buttons
             Me.btnBack.Text = ""
-            Me.btnBack.Image = My.Resources.Back_24.ToBitmap
+            Me.btnBack.Image = GetResizedImage(My.Resources.TB_Back_96, CInt(i24 * g_dScaleDPI))
             Me.btnFwd.Text = ""
-            Me.btnFwd.Image = My.Resources.Fwd_24.ToBitmap
+            Me.btnFwd.Image = GetResizedImage(My.Resources.TB_Fwd_96, CInt(i24 * g_dScaleDPI))
             Me.btnGo.Text = ""
-            Me.btnGo.Image = My.Resources.Go_16.ToBitmap
+            Me.btnGo.Image = GetResizedImage(My.Resources.TB_Go_64, CInt(i16 * g_dScaleDPI))
             Me.btnStopNav.Text = ""
-            Me.btnStopNav.Image = My.Resources.Stop_16.ToBitmap
+            Me.btnStopNav.Image = GetResizedImage(My.Resources.TB_Stop_64, CInt(i16 * g_dScaleDPI))
             Me.btnReload.Text = ""
-            Me.btnReload.Image = My.Resources.Reload_16.ToBitmap
+            Me.btnReload.Image = GetResizedImage(My.Resources.TB_Reload_64, CInt(i16 * g_dScaleDPI))
             Me.btnHome.Text = ""
-            Me.btnHome.Image = My.Resources.Home_16.ToBitmap
+            Me.btnHome.Image = GetResizedImage(My.Resources.TB_Home_64, CInt(i16 * g_dScaleDPI))
             Me.chkToolsShow.Text = ""
-            Me.chkToolsShow.Image = My.Resources.ToolsSettingsGearNoBG_24.ToBitmap
+            Me.chkToolsShow.Image = GetResizedImage(My.Resources.TB_ToolsSettingsGearNoBG_96, CInt(i24 * g_dScaleDPI))
 
             'Find/Search buttons
             Me.btnFindPrevious.Text = ""
-            Me.btnFindPrevious.Image = My.Resources.FindUp_16.ToBitmap
+            Me.btnFindPrevious.Image = GetResizedImage(My.Resources.TB_FindUp_64, CInt(i16 * g_dScaleDPI))
             Me.btnFindNext.Text = ""
-            Me.btnFindNext.Image = My.Resources.FindDown_16.ToBitmap
+            Me.btnFindNext.Image = GetResizedImage(My.Resources.TB_FindDown_64, CInt(i16 * g_dScaleDPI))
             Me.btnFindClose.Text = ""
-            Me.btnFindClose.Image = My.Resources.Stop_16.ToBitmap
+            Me.btnFindClose.Image = GetResizedImage(My.Resources.TB_Stop_64, CInt(i16 * g_dScaleDPI))
 
             'Web Link Button Images. Folding@Home Related:
-            Me.btnFAHWebControl.BackgroundImage = My.Resources.L_methionine_B_48.ToBitmap
-            Me.btnFAHTwitter.BackgroundImage = My.Resources.Twitter_48.ToBitmap
-            Me.btnFAHNews.BackgroundImage = My.Resources.News_48.ToBitmap
-            Me.btnEOC_UserStats.BackgroundImage = My.Resources.EOC_48.ToBitmap
-            Me.btnFoldingCoinUserStats.BackgroundImage = My.Resources.FLDC_48.ToBitmap
+            Me.btnFAHWebControl.BackgroundImage = GetResizedImage(My.Resources.L_methionine_B_192, CInt(i48 * g_dScaleDPI), Drawing2D.InterpolationMode.HighQualityBicubic)
+            Me.btnFAHTwitter.BackgroundImage = GetResizedImage(My.Resources.Twitter_192, CInt(i48 * g_dScaleDPI))
+            Me.btnFAHNews.BackgroundImage = GetResizedImage(My.Resources.News_192, CInt(i48 * g_dScaleDPI))
+            Me.btnEOC_UserStats.BackgroundImage = GetResizedImage(My.Resources.EOC_192, CInt(i48 * g_dScaleDPI))
+            Me.btnFoldingCoinUserStats.BackgroundImage = GetResizedImage(My.Resources.FLDC_192, CInt(i48 * g_dScaleDPI))
             'FoldingCoin Related:
-            Me.btnFoldingCoinWebsite.BackgroundImage = My.Resources.FoldingCoin_48.ToBitmap
-            Me.btnMyWallet.BackgroundImage = My.Resources.Coins_48.ToBitmap
-            Me.btnFoldingCoinTwitter.BackgroundImage = My.Resources.Twitter_48.ToBitmap
-            Me.btnFoldingCoinDiscord.BackgroundImage = My.Resources.Discord_48.ToBitmap
-            Me.btnFoldingCoinBlockchain.BackgroundImage = My.Resources.BlockchainFLDC_48.ToBitmap
-            Me.btnBTCBlockchain.BackgroundImage = My.Resources.BlockchainBTC_48.ToBitmap
-            Me.btnFoldingCoinDistribution.BackgroundImage = My.Resources.DistributionFLDC_48.ToBitmap
-            Me.btnFoldingCoinShop.BackgroundImage = My.Resources.FLDC_Shop_Mug_48.ToBitmap
-            Me.btnFoldingCoinTeamStats.BackgroundImage = My.Resources.FLDC_48.ToBitmap
+            Me.btnFoldingCoinWebsite.BackgroundImage = GetResizedImage(My.Resources.FoldingCoin_192, CInt(i48 * g_dScaleDPI), Drawing2D.InterpolationMode.HighQualityBicubic)
+            Me.btnMyWallet.BackgroundImage = GetResizedImage(My.Resources.Coins_192, CInt(i48 * g_dScaleDPI))
+            Me.btnFoldingCoinTwitter.BackgroundImage = GetResizedImage(My.Resources.Twitter_192, CInt(i48 * g_dScaleDPI))
+            Me.btnFoldingCoinDiscord.BackgroundImage = GetResizedImage(My.Resources.Discord_192, CInt(i48 * g_dScaleDPI))
+            Me.btnFoldingCoinBlockchain.BackgroundImage = GetResizedImage(My.Resources.BlockchainFLDC_192, CInt(i48 * g_dScaleDPI), Drawing2D.InterpolationMode.HighQualityBicubic)
+            Me.btnBTCBlockchain.BackgroundImage = GetResizedImage(My.Resources.BlockchainBTC_192, CInt(i48 * g_dScaleDPI), Drawing2D.InterpolationMode.HighQualityBicubic)
+            Me.btnFoldingCoinDistribution.BackgroundImage = GetResizedImage(My.Resources.DistributionFLDC_192, CInt(i48 * g_dScaleDPI), Drawing2D.InterpolationMode.HighQualityBicubic)
+            Me.btnFoldingCoinShop.BackgroundImage = GetResizedImage(My.Resources.FLDC_Shop_Mug_192, CInt(i48 * g_dScaleDPI), Drawing2D.InterpolationMode.HighQualityBicubic)
+            Me.btnFoldingCoinTeamStats.BackgroundImage = GetResizedImage(My.Resources.FLDC_192, CInt(i48 * g_dScaleDPI))
             'CureCoin Related:
-            Me.btnCureCoinWebsite.BackgroundImage = My.Resources.CureCoin_48.ToBitmap
-            Me.btnCureCoinTwitter.BackgroundImage = My.Resources.Twitter_48.ToBitmap
-            Me.btnCureCoinDiscord.BackgroundImage = My.Resources.Discord_48.ToBitmap
-            Me.btnCureCoinBlockchain.BackgroundImage = My.Resources.BlockchainCURE_48.ToBitmap
-            Me.btnCurePool.BackgroundImage = My.Resources.DistributionCURE_48.ToBitmap
-            Me.btnCureCoinTeamStats.BackgroundImage = My.Resources.EOC_48.ToBitmap
+            Me.btnCureCoinWebsite.BackgroundImage = GetResizedImage(My.Resources.CureCoin_192, CInt(i48 * g_dScaleDPI), Drawing2D.InterpolationMode.HighQualityBicubic)
+            Me.btnCureCoinTwitter.BackgroundImage = GetResizedImage(My.Resources.Twitter_192, CInt(i48 * g_dScaleDPI))
+            Me.btnCureCoinDiscord.BackgroundImage = GetResizedImage(My.Resources.Discord_192, CInt(i48 * g_dScaleDPI))
+            Me.btnCureCoinBlockchain.BackgroundImage = GetResizedImage(My.Resources.BlockchainCURE_192, CInt(i48 * g_dScaleDPI), Drawing2D.InterpolationMode.HighQualityBicubic)
+            Me.btnCurePool.BackgroundImage = GetResizedImage(My.Resources.DistributionCURE_192, CInt(i48 * g_dScaleDPI), Drawing2D.InterpolationMode.HighQualityBicubic)
+            Me.btnCureCoinTeamStats.BackgroundImage = GetResizedImage(My.Resources.EOC_192, CInt(i48 * g_dScaleDPI))
 
             'Protein image for branding in the browser
-            Me.pbProgIcon.Image = My.Resources.L_cysteine_48.ToBitmap
+            Me.pbProgIcon.Image = New Icon(My.Resources.L_cysteine_16_24_32_48_256, i48, i48).ToBitmap
 
+            'Calculate the web link button panel heights (shown vs minimized)
+            m_iNormPanelHeight = Me.pnlBtnLinksDividerBottom.Top - 3  '260px @ 96dpi
+            m_iTargetExpandedPanelHeight = m_iNormPanelHeight  'Initially set the expanded target size to the normal height (not showing 'Tools' at the bottom of it)
+            m_iMaxPanelHeight = Me.txtMsg.Top + Me.txtMsg.Height + 5  '360px @ 96dpi
+            m_iMinPanelHeight = (SystemInformation.BorderSize.Height * 2) + (Me.pnlBtnLinksDividerTop.Top * 2) + Me.pnlBtnLinksDividerTop.Height  '8px @ 96dpi
             'Button Link Panel: Initially show minimized
-            Me.pnlBtnLinks.Height = MinPanelHeight
+            Me.pnlBtnLinks.Height = m_iMinPanelHeight
 
             'Hide the form while it's being adjusted
             Me.WindowState = FormWindowState.Minimized
@@ -171,6 +194,15 @@
             MessageBox.Show("Error: initialization failed: " & ex.ToString)
         End Try
     End Sub
+
+    Private Function GetResizedImage(imgInput As Image, ByRef iOutputDim As Integer, ByRef Optional enImgResizeMode As Drawing2D.InterpolationMode = Drawing2D.InterpolationMode.NearestNeighbor) As Image
+        Dim imgResized As Image = New Bitmap(iOutputDim, iOutputDim)
+        Dim g As Graphics = Graphics.FromImage(imgResized)
+        g.InterpolationMode = enImgResizeMode
+        g.DrawImage(imgInput, New Rectangle(0, 0, iOutputDim, iOutputDim))
+        imgInput.Dispose()
+        GetResizedImage = imgResized
+    End Function
 
     Private Async Sub LoadINISettings()
         'Load, fix, or update the INI and DAT files for the stored settings. Look to see if there is an INI file first
@@ -293,10 +325,10 @@
                 DAT = Nothing
             End If
 
-            Dim strBrowserVersion As String = INI.GetSection(INI_Settings).GetKey(INI_LastBrowserVersion).Value
-            If strBrowserVersion <> My.Application.Info.Version.Major.ToString Then
+            Dim iBrowserVersion As Integer = CInt(INI.GetSection(INI_Settings).GetKey(INI_LastBrowserVersion).Value)
+            If iBrowserVersion <> My.Application.Info.Version.Major Then
                 'Fix old settings, if needed, for upgrading versions for v5 or higher:
-                If strBrowserVersion = "5" Then
+                If iBrowserVersion = 5 Then
                     'Folding Browser v5 upgrade: 12-word PW needing to go to a better key name
                     Dim DAT As New IniFile
                     'Load DAT file, decrypt it
@@ -346,6 +378,35 @@
                     INI.Save(IniFilePath)
                     'Allow time for the file to be written out
                     Await Wait(100)
+                End If
+
+                If iBrowserVersion <= 19 Then
+                    'FoldingBrowser v19 or older: Upgrade / remove unused informational CureCoin wallet version used during the sign-up process to avoid any confusion after upgrading wallet versions
+                    Dim DAT As New IniFile
+                    'Load DAT file, decrypt it
+                    DAT.LoadText(Decrypt(LoadDat))
+                    If DAT.ToString.Length = 0 Then
+                        'Decryption failed
+                        Msg(DAT_ErrorMsg)
+                        MessageBox.Show(DAT_ErrorMsg)
+                    End If
+
+                    Const Old_CureCoin_Wallet_Version As String = "CureCoinWalletVersion"
+                    'Fix the 10 wallet slot sections
+                    Dim i As Integer = 0
+                    For i = 0 To 9
+                        'Make sure the INI key/value exists
+                        If DAT.GetSection(Id & i.ToString) IsNot Nothing AndAlso DAT.GetSection(Id & i.ToString).GetKey(Old_CureCoin_Wallet_Version) IsNot Nothing Then
+                            'Delete old info
+                            DAT.GetSection(Id & i.ToString).RemoveKey(Old_CureCoin_Wallet_Version)
+                        End If
+                    Next
+
+                    'Create text from the INI, Encrypt, and Write/flush DAT text to file
+                    SaveDat(Encrypt(DAT.SaveToString))
+                    'Allow time for the file to be written out
+                    Await Wait(100)
+                    DAT = Nothing
                 End If
 
                 'Next DAT format version upgrade would go here
@@ -1024,29 +1085,29 @@
     End Sub
 
     Private Sub chkToolsShow_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles chkToolsShow.CheckedChanged
-        If Me.pnlBtnLinks.Height <= MinPanelHeight Then
+        If Me.pnlBtnLinks.Height <= m_iMinPanelHeight Then
             'Panel minimized: Show Tools Panel
-            m_iWebLinkPanelHeight = 360
-            Me.chkToolsShow.Image = My.Resources.ToolsSettingsGearEnabled_24.ToBitmap
+            m_iTargetExpandedPanelHeight = m_iMaxPanelHeight
+            Me.chkToolsShow.Image = GetResizedImage(My.Resources.TB_ToolsSettingsGearEnabled_96, CInt(i24 * g_dScaleDPI))
         Else
             'Panel shown already: Toggle the Tools section
-            If Me.pnlBtnLinks.Height = 360 Then
+            If Me.pnlBtnLinks.Height = m_iMaxPanelHeight Then
                 'Hide Tools Panel
-                m_iWebLinkPanelHeight = 260
-                Me.chkToolsShow.Image = My.Resources.ToolsSettingsGearNoBG_24.ToBitmap
+                m_iTargetExpandedPanelHeight = m_iNormPanelHeight
+                Me.chkToolsShow.Image = GetResizedImage(My.Resources.TB_ToolsSettingsGearNoBG_96, CInt(i24 * g_dScaleDPI))
             Else
                 'Show Tools Panel
-                m_iWebLinkPanelHeight = 360
-                Me.chkToolsShow.Image = My.Resources.ToolsSettingsGearEnabled_24.ToBitmap
+                m_iTargetExpandedPanelHeight = m_iMaxPanelHeight
+                Me.chkToolsShow.Image = GetResizedImage(My.Resources.TB_ToolsSettingsGearEnabled_96, CInt(i24 * g_dScaleDPI))
             End If
         End If
 
-        If Me.pnlBtnLinks.Height <= MinPanelHeight Then
+        If Me.pnlBtnLinks.Height <= m_iMinPanelHeight Then
             'Panel minimized: Show the panel when you click the show Tools button
             pnlBtnLinks_Click(Nothing, Nothing)
         Else
             'Panel shown already: Increase / decrease the height of the shown panel
-            Me.pnlBtnLinks.Height = m_iWebLinkPanelHeight
+            Me.pnlBtnLinks.Height = m_iTargetExpandedPanelHeight
         End If
     End Sub
 
@@ -1993,8 +2054,7 @@
 
             'Save the DAT info
             If DAT.GetSection(Id & Me.cbxToolsWalletId.Text) Is Nothing Then DAT.AddSection(Id & Me.cbxToolsWalletId.Text)
-            If strWalletVersion.Length > 5 Then DAT.AddSection(Id & Me.cbxToolsWalletId.Text).AddKey(DAT_CureCoin_Wallet_Version).Value = strWalletVersion
-            If strWalletAddress.Length > 24 Then DAT.AddSection(Id & Me.cbxToolsWalletId.Text).AddKey(DAT_CureCoin_Addr).Value = strWalletAddress
+            If strWalletAddress.Length >= 24 Then DAT.AddSection(Id & Me.cbxToolsWalletId.Text).AddKey(DAT_CureCoin_Addr).Value = strWalletAddress
 
             'Try to get the FAH Username from saved info first
             If DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_FAH_Username) IsNot Nothing Then
@@ -2864,7 +2924,7 @@
         'NOTE: Don't add the Tools buttons or controls to this event. If needed, those are handled in their button click events
 
         'Button Link Panel: Reset panel back to minimized
-        Me.pnlBtnLinks.Height = MinPanelHeight
+        Me.pnlBtnLinks.Height = m_iMinPanelHeight
     End Sub
     'Additionally for GroupBoxes (they seem like they are handled slightly differently, since the event name doesn't select the same in VS)
     Private Sub gbx_MouseUp(sender As Object, e As MouseEventArgs) Handles gbxFAHRelated.MouseUp, gbxFoldingCoinRelated.MouseUp, gbxCureCoinRelated.MouseUp, gbxTools.MouseUp
@@ -2989,28 +3049,32 @@
 
     Private Async Sub pnlBtnLinks_MouseEnter(sender As Object, e As EventArgs) Handles pnlBtnLinks.MouseEnter
         'Skip, if already expanded
-        If Me.pnlBtnLinks.Height <= MinPanelHeight Then
+        If Me.pnlBtnLinks.Height <= m_iMinPanelHeight Then
             'Skip, if set in the options
             If g_bShowWebLinkPanelOnMouseEnterEvent = True Then
                 'Button Link list: Mouse-over effect to expand area
-                For m_iTempHeight = 20 To m_iWebLinkPanelHeight Step 20
+                For m_iTempHeight = 20 To m_iTargetExpandedPanelHeight Step 20
                     Me.pnlBtnLinks.Height = m_iTempHeight
                     Await Wait(5)
                 Next
+                'Set to desired size, if it's not a multiple of 20
+                Me.pnlBtnLinks.Height = m_iTargetExpandedPanelHeight
             End If
         End If
     End Sub
 
     Private Async Sub pnlBtnLinks_Click(sender As Object, e As EventArgs) Handles pnlBtnLinks.Click, pnlBtnLinksDividerTop.Click
-        If Me.pnlBtnLinks.Height <= MinPanelHeight Then
+        If Me.pnlBtnLinks.Height <= m_iMinPanelHeight Then
             'Button Link list: Mouse-over effect to expand area
-            For m_iTempHeight = 20 To m_iWebLinkPanelHeight Step 20
+            For m_iTempHeight = 20 To m_iTargetExpandedPanelHeight Step 20
                 Me.pnlBtnLinks.Height = m_iTempHeight
                 Await Wait(5)
             Next
+            'Set to desired size, if it's not a multiple of 20
+            Me.pnlBtnLinks.Height = m_iTargetExpandedPanelHeight
         Else
             'Minimize, if already expanded
-            Me.pnlBtnLinks.Height = MinPanelHeight
+            Me.pnlBtnLinks.Height = m_iMinPanelHeight
         End If
     End Sub
 

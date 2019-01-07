@@ -58,12 +58,23 @@ Other Ideas, Improvements, Tasks, Longer-Term Goals:
 -Save more than one log file for debugging issues later?
 -Add Web link buttons for Reddit URLs?
 -When hovering URLs, display the link at the bottom of the screen?
+-Discord login for non-US keyboards: Maybe just pop-up a window with the login info to copy and paste from; hovered over the main window, but in the main form? 
+-Improvement to Auto-scale for 2 different monitors with different scaling, Per-Monitor-DPI-Aware (Ex- laptop and large monitor)
 
 
 ======================================================================================================
 Change Log - Release Notes - Tasks completed:
 ======================================================================================================
 
+v20 Release (1/??/2019)
+
+[DONE] -Fix Windows10 Scaling issue that causes the pull-down menu to be smaller, due to only being measured in a non-scaled pixel value (not sized on layout dimensions or DPI %).
+[DONE] -Fix loading button images for different scaling % and/or resizing lager images down are the best bet at this point. (Leave AutoScaleMode = Font for forms). 4x larger PNG images are now being used
+[DONE] -CureCoin installer: Merge changes from two similar but slightly different installer scripts and use a command line option to differentiate
+[DONE] -Update Copyright date for 2019
+[DONE] -Installer: Make the Uninstall first dialog more robust to delete the uninstall registry keys if the uninstaller program file is gone, to allow the installation process to continue
+[DONE] -CureCoin installer: Fix filenames to use dashes instead of underscores
+[DONE] -Remove dat file entry "CureCoinWalletVersion" to avoid any confusion. It only displays the information of what version you signed up with, and doesn't get updated when you upgrade to a newer version (might be misleading after upgrading). Examples: CureCoinWalletVersion=v1.9.4.1-CUR    CureCoinWalletVersion=v2.0.0.1-CURE    -Delete this entry from the Dat file v19 or older on startup upgrade?
 v19 Release (12/24/2018)
 [DONE] -Improve Toggle the Tools section
 [DONE] -Update CureCoin POS info: 4 day maturity (for v2.0) for staking, instead of 30 day (for v1.9.x.x)

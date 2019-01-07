@@ -203,85 +203,85 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\FLDC_48.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\EOC_48.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\L-cysteine-16_24_32_48_256.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Discord_48.ico" />
+    <None Include="Resources\News_192.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Twitter_48.ico" />
+    <None Include="Resources\BlockchainBTC_192.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\FoldingCoin_48.ico" />
+    <None Include="Resources\BlockchainCURE_192.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CureCoin_48.ico" />
+    <None Include="Resources\BlockchainFLDC_192.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Coins_48.ico" />
+    <None Include="Resources\CureCoin_192.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\L-methionine-B_48.ico" />
+    <None Include="Resources\Discord_192.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\FLDC_Shop_Mug_48.ico" />
+    <None Include="Resources\DistributionCURE_192.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\News_48.ico" />
+    <None Include="Resources\DistributionFLDC_192.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Back_24.ico" />
+    <None Include="Resources\EOC_192.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Fwd_24.ico" />
+    <None Include="Resources\FLDC_192.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Go_16.ico" />
+    <None Include="Resources\FLDC_Shop_Mug_192.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Stop_16.ico" />
+    <None Include="Resources\FoldingCoin_192.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Reload_16.ico" />
+    <None Include="Resources\L-cysteine_192.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Home_16.ico" />
+    <None Include="Resources\L-methionine-B_192.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\FindUp_16.ico" />
+    <None Include="Resources\Twitter_192.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\FindDown_16.ico" />
+    <None Include="Resources\Coins_192.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\L-cysteine_48.ico" />
+    <None Include="Resources\TB_Back_96.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\BlockchainBTC_48.ico" />
+    <None Include="Resources\TB_FindDown_64.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\BlockchainCURE_48.ico" />
+    <None Include="Resources\TB_FindUp_64.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\BlockchainFLDC_48.ico" />
+    <None Include="Resources\TB_Fwd_96.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\ToolsSettingsGearEnabled_24.ico" />
+    <None Include="Resources\TB_Go_64.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\ToolsSettingsGearNoBG_24.ico" />
+    <None Include="Resources\TB_Home_64.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\DistributionFLDC_48.ico" />
+    <None Include="Resources\TB_Reload_64.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\DistributionCURE_48.ico" />
+    <None Include="Resources\TB_Stop_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TB_ToolsSettingsGearEnabled_96.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TB_ToolsSettingsGearNoBG_96.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

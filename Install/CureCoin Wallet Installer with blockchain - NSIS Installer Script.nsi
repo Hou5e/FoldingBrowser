@@ -1,11 +1,11 @@
 ; Edit this installer script with HM NIS Edit.
 ; Requires that NSIS (Nullsoft Scriptable Install System) compiler be installed.
-; Copyright © 2018 CureCoin
+; Copyright © 2019 CureCoin
 
 ;---- Helper defines / constants ----
-!define PRODUCT_VERSION "2.0.0.1"  ;Match the displayed version in the program title. Example: 1.2.3
-!define PRODUCT_4_VALUE_VERSION "2.0.0.1"  ;Match the executable version: Right-click the program executable file | Properties | Version. Example: 1.2.3.4
-!define PRODUCT_YEAR "2018"
+!define PRODUCT_VERSION "2.0.0.2"  ;Match the displayed version in the program title. Example: 1.2.3
+!define PRODUCT_4_VALUE_VERSION "2.0.0.2"  ;Match the executable version: Right-click the program executable file | Properties | Version. Example: 1.2.3.4
+!define PRODUCT_YEAR "2019"
 !define PRODUCT_NAME "CureCoin"
 !define PRODUCT_EXE_NAME "curecoin-qt"  ;Executable name without extension
 !define PRODUCT_PUBLISHER "CureCoin"
@@ -130,7 +130,7 @@ Unicode true   ;For all languages to display properly (Installer won't run on Wi
 
 ;---- Installer Info ----
 Name "${PRODUCT_NAME} v${PRODUCT_VERSION}"
-OutFile "CureInst\Install_${PRODUCT_NAME}_v${PRODUCT_VERSION}.exe"
+OutFile "CureInst\Install-${PRODUCT_NAME}-Wallet-v${PRODUCT_VERSION}-Blockchain-Included.exe"
 BrandingText "${PRODUCT_PUBLISHER}"
 InstallDir "$PROGRAMFILES\${PRODUCT_NAME}"  ;Default installation folder (Set to: $INSTDIR during MUI_PAGE_DIRECTORY)
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
@@ -175,15 +175,15 @@ Section "!Main Program Installation" SEC01
   SetOutPath "$APPDATA\curecoin"
   ;Need to switch folders before this folder can be deleted
   RMDir "$APPDATA\curecoin\database"
-  
-  ;Delete the old v1.9.x.x blockchain, if possible
+
+  ;Delete the old blockchain, if possible
   Delete "$APPDATA\curecoin\blk0001.dat"
   Delete "$APPDATA\curecoin\blkindex.dat"
   Delete "$APPDATA\curecoin\.lock"
   Delete "$APPDATA\curecoin\db.log"
   Delete "$APPDATA\curecoin\debug.log"
   Delete "$APPDATA\curecoin\peers.dat"
-  
+
   ;Make a backup copy of 'wallet.dat' before adding the new wallet files
   ${GetTime} "" "L" $0 $1 $2 $3 $4 $5 $6
   CopyFiles /SILENT "$APPDATA\curecoin\wallet.dat" "$APPDATA\curecoin\wallet-Backup_$2-$1-$0_$4_$5.dat"
@@ -192,7 +192,12 @@ Section "!Main Program Installation" SEC01
   ;Include a 'peers.dat' file for a better list of bootstrap nodes
   File "CureCoin\peers.dat"
 
-  ;Skip Adding Curecoin v2.0.0.1 Blockchain files
+  ;Add Curecoin Blockchain files
+  File "CureCoin\blk0001.dat"
+  File "CureCoin\blkindex.dat"
+  File "CureCoin\.lock"
+  SetOutPath "$APPDATA\curecoin\database"
+  File "CureCoin\log.0000000068"
 
   ;Create program shortcuts
   SetShellVarContext all  ;Uninstall shortcuts from the 'All Users' folder (WinXP only), otherwise uninstall shortcuts from the user's folder
@@ -222,8 +227,21 @@ FunctionEnd
 
 Function .oninstsuccess
   SetShellVarContext current
-  ;Auto-run the main EXE, once installed, with the command line options to load settings for the RPC login and port
+  ClearErrors
+  ${GetOptions} $CMDLINE "/FoldingBrowser" $0
+  IfErrors NoCommandLineArg 0
+  StrCmp $0 "Install" 0 NoCommandLineArg
+  ;FoldingBrowser Only: Once installed, auto-run the main program with the command line options to load settings for the local RPC login and port. This is used to get the CureCoin wallet address for CryptoBullions account signup through the FoldingBrowser
+  ;MessageBox MB_OK "Got Cmdline Arg with parmeters: $0"    ;Enable for debugging
   Exec "$INSTDIR\${PRODUCT_EXE_NAME}.exe -conf=$APPDATA\curecoin\curecoin.conf.example"
+  Goto SkipDifferentFinish
+
+NoCommandLineArg:
+  ClearErrors
+  ;Normal CureCoin Wallet install: Once installed, auto-run the main program with the command line options to rescan for missing transactions
+  ;MessageBox MB_OK "No matching Command Line args: $CMDLINE"    ;Enable for debugging
+  Exec "$INSTDIR\${PRODUCT_EXE_NAME}.exe -rescan"
+SkipDifferentFinish:
 FunctionEnd
 
 Function CloseCureCoin
@@ -308,6 +326,8 @@ Section Uninstall
 
   DeleteRegKey HKLM "${PRODUCT_UNINST_KEY}"
   DeleteRegKey HKLM "${PRODUCT_DIR_REGKEY}"
+  DeleteRegKey HKLM "Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
+  DeleteRegKey HKLM "Software\Wow6432Node\Microsoft\Windows\CurrentVersion\App Paths\${PRODUCT_EXE_NAME}.exe"
   ${un.RefreshShellIcons}   ;Make sure the desktop is refreshed to cleanup any deleted desktop icons
   SetAutoClose true
 SectionEnd

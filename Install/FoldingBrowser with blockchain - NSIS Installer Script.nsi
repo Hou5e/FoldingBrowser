@@ -1,12 +1,12 @@
 ; Edit this installer script with HM NIS Edit.
 ; Requires that NSIS (Nullsoft Scriptable Install System) compiler be installed.
-; Copyright © 2018 FoldingCoin, CureCoin
+; Copyright © 2019 FoldingCoin, CureCoin
 
 
 ;---- Helper defines / constants ----
-!define PRODUCT_VERSION "19"  ;Match the displayed version in the program title. Example: 1.2.3
-!define PRODUCT_4_VALUE_VERSION "19.0.0.0"  ;Match the executable version: Right-click the program executable file | Properties | Version. Example: 1.2.3.4
-!define PRODUCT_YEAR "2018"
+!define PRODUCT_VERSION "20"  ;Match the displayed version in the program title. Example: 1.2.3
+!define PRODUCT_4_VALUE_VERSION "20.0.0.0"  ;Match the executable version: Right-click the program executable file | Properties | Version. Example: 1.2.3.4
+!define PRODUCT_YEAR "2019"
 !define PRODUCT_NAME "FoldingBrowser"
 !define PRODUCT_EXE_NAME "FoldingBrowser"  ;Executable name without extension
 !define PRODUCT_PUBLISHER "FoldingBrowser"
@@ -16,7 +16,7 @@
 !define PRODUCT_UNINST_EXE_NAME "Uninstall_${PRODUCT_EXE_NAME}"  ;Executable name without extension
 
 ;This constant must match the CureCoin installer version
-!define CURECOIN_VERSION "2.0.0.1"
+!define CURECOIN_VERSION "2.0.0.2"
 
 !define REQUIRED_MS_DOT_NET_VERSION "4.0*"
 
@@ -205,7 +205,7 @@ Section "!${PRODUCT_NAME} v${PRODUCT_VERSION}" SEC01
 
   SetOutPath "$INSTDIR\Licenses"  ;Destination
   File "..\Browser\bin\Release\Licenses\*"
-  
+
   SetOutPath "$INSTDIR\locales"  ;Destination
   File "..\Browser\bin\Release\locales\*.pak"
 
@@ -250,7 +250,8 @@ SectionEnd
 
 ; ---- Installer functions ----
 Function .onInit
-  !insertmacro MULTIUSER_INIT  ;On install startup, ensure Admin user privilege level
+  ;On install startup, ensure Admin user privilege level
+  !insertmacro MULTIUSER_INIT
 
   ;Language selection page
   !insertmacro MUI_LANGDLL_DISPLAY
@@ -258,6 +259,17 @@ Function .onInit
   ;On startup, force uninstall of previous installation before installing this version
   ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" "UninstallString"
   StrCmp $R0 "" UninstallFinished
+
+  ;Test if the Uninstaller EXE file is present. If not, then delete registry keys and skip trying to run the uninstaller that doesn't exist
+  ;MessageBox MB_OK "$R0"
+  IfFileExists "$R0" SkipMissingUninstaller 0
+    DeleteRegKey HKLM "${PRODUCT_UNINST_KEY}"
+    DeleteRegKey HKLM "${PRODUCT_DIR_REGKEY}"
+    DeleteRegKey HKLM "Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
+    DeleteRegKey HKLM "Software\Wow6432Node\Microsoft\Windows\CurrentVersion\App Paths\${PRODUCT_EXE_NAME}.exe"
+    Goto UninstallFinished
+SkipMissingUninstaller:
+
   MessageBox MB_YESNO|MB_ICONEXCLAMATION "Uninstall current copy of ${PRODUCT_NAME} and continue?$\r$\n(User settings will be left in your user profile)" /SD IDYES IDYES UninstallPrevious
   Abort
 UninstallPrevious:
@@ -322,13 +334,13 @@ CureWalletDatExists:
 
   ;Destination: $PLUGINSDIR is a temporary folder that is automatically deleted when the installer exits
   SetOutPath "$PLUGINSDIR"
-  File "CureInst\Install_CureCoin_v${CURECOIN_VERSION}_-_Blockchain_Included.exe"
+  File "CureInst\Install-CureCoin-Wallet-v${CURECOIN_VERSION}-Blockchain-Included.exe"
 
   ;Initializes the plugins directory ($PLUGINSDIR) if it's not already initialized.
   InitPluginsDir
 
   ;The CureCoin installer was made with NSIS, so it can be run silently with /S
-  ExecWait '"$PLUGINSDIR\Install_CureCoin_v${CURECOIN_VERSION}_-_Blockchain_Included.exe" /S' $1
+  ExecWait '"$PLUGINSDIR\Install-CureCoin-Wallet-v${CURECOIN_VERSION}-Blockchain-Included.exe" /S /FoldingBrowserInstall' $1
   IntCmp $1 0 CureCoinInstEnd  ;Skip error message if the installation was OK
   StrCpy $2 "CureCoin install error: $1 (undefined = error running exe, 0 = no error, 1 = cancel button, 2 = aborted by script)"
   MessageBox MB_OK "$2" /SD IDOK
@@ -453,7 +465,7 @@ Section Uninstall
   ;Delete the main folder if possible
   RMDir /r "$INSTDIR"
 
-  ;Delete the main folder if possible
+  ;Delete the main folder, if possible
   Delete "$INSTDIR\*"
   RMDir "$INSTDIR"
 
@@ -493,6 +505,7 @@ Section Uninstall
   DeleteRegKey HKLM "Software\Wow6432Node\Microsoft\Windows\CurrentVersion\App Paths\${PRODUCT_EXE_NAME}.exe"
   ${un.RefreshShellIcons}   ;Make sure the desktop is refreshed to cleanup any deleted desktop icons
 SectionEnd
+
 
 ;---- Uninstaller functions ----
 Function un.onInit

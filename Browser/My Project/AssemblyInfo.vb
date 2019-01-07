@@ -11,7 +11,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("FoldingBrowser All-In-One Installer for FoldingCoin (FLDC) and CureCoin (CURE)")>
 <Assembly: AssemblyCompany("")>
 <Assembly: AssemblyProduct("FoldingBrowser")>
-<Assembly: AssemblyCopyright("Copyright © 2018 FoldingCoin, CureCoin")>
+<Assembly: AssemblyCopyright("Copyright © 2019 FoldingCoin, CureCoin")>
 <Assembly: AssemblyTrademark("")>
 
 <Assembly: ComVisible(False)>
@@ -26,5 +26,5 @@ Imports System.Runtime.InteropServices
 '      Build Number
 '      Revision
 
-<Assembly: AssemblyVersion("19.0.0.0")>
-<Assembly: AssemblyFileVersion("19.0.0.0")>
+<Assembly: AssemblyVersion("20.0.0.0")>
+<Assembly: AssemblyFileVersion("20.0.0.0")>

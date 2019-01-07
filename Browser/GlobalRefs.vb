@@ -87,7 +87,6 @@ Public Module GlobalRefs
 
     Public Const DAT_CureCoin_Pwd As String = "CureCoinPoolPassword"
     Public Const DAT_CureCoin_Pin As String = "CureCoinPoolPin"
-    Public Const DAT_CureCoin_Wallet_Version As String = "CureCoinWalletVersion"
     Public Const DAT_CureCoin_Addr As String = "CureCoinAddress"
 
     Public Const DAT_DiscordEmail As String = "DiscordEmail"
