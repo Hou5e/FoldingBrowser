@@ -98,23 +98,23 @@
             Me.btnFwd.Text = ""
             Me.btnFwd.Image = GetResizedImage(My.Resources.TB_Fwd_96, CInt(i24 * g_dScaleDPI))
             Me.btnGo.Text = ""
-            Me.btnGo.Image = GetResizedImage(My.Resources.TB_Go_64, CInt(i16 * g_dScaleDPI))
+            Me.btnGo.Image = GetResizedImage(My.Resources.TB_Go_64, CInt(i16 * g_dScaleDPI), Drawing2D.InterpolationMode.HighQualityBicubic)
             Me.btnStopNav.Text = ""
-            Me.btnStopNav.Image = GetResizedImage(My.Resources.TB_Stop_64, CInt(i16 * g_dScaleDPI))
+            Me.btnStopNav.Image = GetResizedImage(My.Resources.TB_Stop_64, CInt(i16 * g_dScaleDPI), Drawing2D.InterpolationMode.HighQualityBicubic)
             Me.btnReload.Text = ""
-            Me.btnReload.Image = GetResizedImage(My.Resources.TB_Reload_64, CInt(i16 * g_dScaleDPI))
+            Me.btnReload.Image = GetResizedImage(My.Resources.TB_Reload_64, CInt(i16 * g_dScaleDPI), Drawing2D.InterpolationMode.HighQualityBicubic)
             Me.btnHome.Text = ""
-            Me.btnHome.Image = GetResizedImage(My.Resources.TB_Home_64, CInt(i16 * g_dScaleDPI))
+            Me.btnHome.Image = GetResizedImage(My.Resources.TB_Home_64, CInt(i16 * g_dScaleDPI), Drawing2D.InterpolationMode.HighQualityBicubic)
             Me.chkToolsShow.Text = ""
-            Me.chkToolsShow.Image = GetResizedImage(My.Resources.TB_ToolsSettingsGearNoBG_96, CInt(i24 * g_dScaleDPI))
+            Me.chkToolsShow.Image = GetResizedImage(My.Resources.TB_ToolsSettingsGearNoBG_96, CInt(i24 * g_dScaleDPI), Drawing2D.InterpolationMode.HighQualityBicubic)
 
             'Find/Search buttons
             Me.btnFindPrevious.Text = ""
-            Me.btnFindPrevious.Image = GetResizedImage(My.Resources.TB_FindUp_64, CInt(i16 * g_dScaleDPI))
+            Me.btnFindPrevious.Image = GetResizedImage(My.Resources.TB_FindUp_64, CInt(i16 * g_dScaleDPI), Drawing2D.InterpolationMode.HighQualityBicubic)
             Me.btnFindNext.Text = ""
-            Me.btnFindNext.Image = GetResizedImage(My.Resources.TB_FindDown_64, CInt(i16 * g_dScaleDPI))
+            Me.btnFindNext.Image = GetResizedImage(My.Resources.TB_FindDown_64, CInt(i16 * g_dScaleDPI), Drawing2D.InterpolationMode.HighQualityBicubic)
             Me.btnFindClose.Text = ""
-            Me.btnFindClose.Image = GetResizedImage(My.Resources.TB_Stop_64, CInt(i16 * g_dScaleDPI))
+            Me.btnFindClose.Image = GetResizedImage(My.Resources.TB_Stop_64, CInt(i16 * g_dScaleDPI), Drawing2D.InterpolationMode.HighQualityBicubic)
 
             'Web Link Button Images. Folding@Home Related:
             Me.btnFAHWebControl.BackgroundImage = GetResizedImage(My.Resources.L_methionine_B_192, CInt(i48 * g_dScaleDPI), Drawing2D.InterpolationMode.HighQualityBicubic)
@@ -140,8 +140,11 @@
             Me.btnCurePool.BackgroundImage = GetResizedImage(My.Resources.DistributionCURE_192, CInt(i48 * g_dScaleDPI), Drawing2D.InterpolationMode.HighQualityBicubic)
             Me.btnCureCoinTeamStats.BackgroundImage = GetResizedImage(My.Resources.EOC_192, CInt(i48 * g_dScaleDPI))
 
-            'Protein image for branding in the browser
-            Me.pbProgIcon.Image = New Icon(My.Resources.L_cysteine_16_24_32_48_256, i48, i48).ToBitmap
+            'Protein image for decoration / branding in the browser
+            Me.pbProgIcon.Width = CInt(i48 * g_dScaleDPI) + 2
+            Me.pbProgIcon.Height = Me.pbProgIcon.Width
+            Me.pbProgIcon.Left = Me.pnlBtnLinksDividerTop.Width - Me.pbProgIcon.Width
+            Me.pbProgIcon.Image = GetResizedImage(New Icon(My.Resources.L_cysteine_16_24_32_48_256, 256, 256).ToBitmap, (Me.pbProgIcon.Width - 2), Drawing2D.InterpolationMode.HighQualityBicubic)
 
             'Calculate the web link button panel heights (shown vs minimized)
             m_iNormPanelHeight = Me.pnlBtnLinksDividerBottom.Top - 3  '260px @ 96dpi
@@ -150,6 +153,18 @@
             m_iMinPanelHeight = (SystemInformation.BorderSize.Height * 2) + (Me.pnlBtnLinksDividerTop.Top * 2) + Me.pnlBtnLinksDividerTop.Height  '8px @ 96dpi
             'Button Link Panel: Initially show minimized
             Me.pnlBtnLinks.Height = m_iMinPanelHeight
+
+            'Resize the toolbar and browser window. On Win10 at 175%, the right anchors weren't resizing to the window size
+            Me.pnlURL.Width = Me.ClientSize.Width
+            Me.ToolStripContainer1.Width = Me.ClientSize.Width + (SystemInformation.BorderSize.Width * 2)
+            'Set other important positions that Windows might not adjust correctly
+            Me.pnlBtnLinks.Left = Me.txtURL.Left
+            Me.pnlBtnLinks.Width = Me.txtURL.Width
+            Me.gbxDownload.Left = Me.btnGo.Left - Me.gbxDownload.Width - 2
+            Me.pnlFind.Left = Me.chkToolsShow.Left - Me.pnlFind.Width - 2
+            'Resize the single-line textbox, otherwise the hight doesn't grow correctly, like on Win10 at 175%.
+            Me.txtURL.AutoSize = False
+            Me.txtURL.Height = Me.pnlBtnLinks.Top - Me.pnlURL.Top - Me.txtURL.Top - (SystemInformation.BorderSize.Width * 2)
 
             'Hide the form while it's being adjusted
             Me.WindowState = FormWindowState.Minimized
@@ -1088,17 +1103,17 @@
         If Me.pnlBtnLinks.Height <= m_iMinPanelHeight Then
             'Panel minimized: Show Tools Panel
             m_iTargetExpandedPanelHeight = m_iMaxPanelHeight
-            Me.chkToolsShow.Image = GetResizedImage(My.Resources.TB_ToolsSettingsGearEnabled_96, CInt(i24 * g_dScaleDPI))
+            Me.chkToolsShow.Image = GetResizedImage(My.Resources.TB_ToolsSettingsGearEnabled_96, CInt(i24 * g_dScaleDPI), Drawing2D.InterpolationMode.HighQualityBicubic)
         Else
             'Panel shown already: Toggle the Tools section
             If Me.pnlBtnLinks.Height = m_iMaxPanelHeight Then
                 'Hide Tools Panel
                 m_iTargetExpandedPanelHeight = m_iNormPanelHeight
-                Me.chkToolsShow.Image = GetResizedImage(My.Resources.TB_ToolsSettingsGearNoBG_96, CInt(i24 * g_dScaleDPI))
+                Me.chkToolsShow.Image = GetResizedImage(My.Resources.TB_ToolsSettingsGearNoBG_96, CInt(i24 * g_dScaleDPI), Drawing2D.InterpolationMode.HighQualityBicubic)
             Else
                 'Show Tools Panel
                 m_iTargetExpandedPanelHeight = m_iMaxPanelHeight
-                Me.chkToolsShow.Image = GetResizedImage(My.Resources.TB_ToolsSettingsGearEnabled_96, CInt(i24 * g_dScaleDPI))
+                Me.chkToolsShow.Image = GetResizedImage(My.Resources.TB_ToolsSettingsGearEnabled_96, CInt(i24 * g_dScaleDPI), Drawing2D.InterpolationMode.HighQualityBicubic)
             End If
         End If
 

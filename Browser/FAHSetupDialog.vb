@@ -180,13 +180,19 @@
         'Turn on auto-updating the settings, now that any existing info was loaded
         m_bSkipUpdating = False
         CreateFAHUserName()
-        Me.chkShowFAHCfg.Checked = False
 
         'Disable the OK button until settings are saved. NOTE: Pausing FAH with Telent is not Awaited above, and was undoing this on an initial install
         Me.btnOK.Enabled = False
 
+        'Set for inital state
+        Me.SplitContainer2.SplitterWidth = 2
+        Me.SplitContainer1.SplitterWidth = 2
+
         'Make the main form visible
         Me.WindowState = FormWindowState.Normal
+
+        'Update some window positions
+        Me.chkShowFAHCfg.Checked = False
     End Sub
 #End Region
 
@@ -734,19 +740,16 @@
 
     Private Sub chkShowFAHCfg_CheckedChanged(sender As Object, e As EventArgs) Handles chkShowFAHCfg.CheckedChanged
         If Me.chkShowFAHCfg.Checked = True Then
-            If SystemInformation.WorkingArea.Width >= 1600 Then
-                Me.Width = 1600
-            Else
-                Me.Width = SystemInformation.WorkingArea.Width - 10
-            End If
+            'Try using the main window width as a guide for how wide to make this window when showing the before / after settings text
+            Me.Width = g_Main.Width
             'Show full window
             Me.SplitContainer2.Panel2Collapsed = False
-            Me.SplitContainer2.SplitterWidth = 2
-            Me.SplitContainer1.SplitterWidth = 2
         Else
             'Small
             Me.SplitContainer2.Panel2Collapsed = True
-            Me.Width = Me.gbxUsername.Left + Me.gbxUsername.Width + (2 * (SystemInformation.BorderSize.Width + SystemInformation.FrameBorderSize.Width)) + 18
+            'Use the groupbox top measurement to make it the same spacing on the right side
+            Me.Width = Me.btnCancel.Left + Me.btnCancel.Width + (Me.Width - Me.ClientSize.Width) + Me.gbxUsername.Top
+            Me.SplitContainer2.SplitterDistance = Me.Width
         End If
     End Sub
 

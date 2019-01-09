@@ -104,7 +104,7 @@ Partial Class Main
         Me.btnStopNav.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.GradientActiveCaption
         Me.btnStopNav.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.GradientInactiveCaption
         Me.btnStopNav.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnStopNav.Location = New System.Drawing.Point(1104, 5)
+        Me.btnStopNav.Location = New System.Drawing.Point(1109, 6)
         Me.btnStopNav.Name = "btnStopNav"
         Me.btnStopNav.Size = New System.Drawing.Size(17, 17)
         Me.btnStopNav.TabIndex = 2
@@ -116,10 +116,12 @@ Partial Class Main
         '
         Me.txtURL.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtURL.Location = New System.Drawing.Point(88, 4)
+        Me.txtURL.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.txtURL.Location = New System.Drawing.Point(94, 4)
         Me.txtURL.Name = "txtURL"
         Me.txtURL.Size = New System.Drawing.Size(1011, 20)
         Me.txtURL.TabIndex = 0
+        Me.txtURL.WordWrap = False
         '
         'btnGo
         '
@@ -129,7 +131,7 @@ Partial Class Main
         Me.btnGo.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.GradientActiveCaption
         Me.btnGo.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.GradientInactiveCaption
         Me.btnGo.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnGo.Location = New System.Drawing.Point(1053, 5)
+        Me.btnGo.Location = New System.Drawing.Point(1084, 6)
         Me.btnGo.Name = "btnGo"
         Me.btnGo.Size = New System.Drawing.Size(17, 17)
         Me.btnGo.TabIndex = 1
@@ -140,7 +142,7 @@ Partial Class Main
         'lblURL
         '
         Me.lblURL.AutoSize = True
-        Me.lblURL.Location = New System.Drawing.Point(56, 8)
+        Me.lblURL.Location = New System.Drawing.Point(62, 8)
         Me.lblURL.Name = "lblURL"
         Me.lblURL.Size = New System.Drawing.Size(32, 13)
         Me.lblURL.TabIndex = 1
@@ -178,7 +180,6 @@ Partial Class Main
         Me.btnToolsGetWallet.Size = New System.Drawing.Size(81, 23)
         Me.btnToolsGetWallet.TabIndex = 1
         Me.btnToolsGetWallet.Text = "2. Get Wallet"
-        Me.btnToolsGetWallet.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         Me.ToolTip1.SetToolTip(Me.btnToolsGetWallet, "One Time Only! Get a CounterWallet for FLDC")
         Me.btnToolsGetWallet.UseVisualStyleBackColor = False
         '
@@ -210,7 +211,6 @@ Partial Class Main
         Me.btnToolsGetFAH.Size = New System.Drawing.Size(77, 23)
         Me.btnToolsGetFAH.TabIndex = 0
         Me.btnToolsGetFAH.Text = "1. Get F@H"
-        Me.btnToolsGetFAH.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         Me.ToolTip1.SetToolTip(Me.btnToolsGetFAH, "One Time Only! Install and setup Folding@Home")
         Me.btnToolsGetFAH.UseVisualStyleBackColor = False
         '
@@ -238,12 +238,11 @@ Partial Class Main
         Me.btnToolsBrowserTools.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.GradientActiveCaption
         Me.btnToolsBrowserTools.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.GradientInactiveCaption
         Me.btnToolsBrowserTools.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnToolsBrowserTools.Location = New System.Drawing.Point(492, 267)
+        Me.btnToolsBrowserTools.Location = New System.Drawing.Point(492, 266)
         Me.btnToolsBrowserTools.Name = "btnToolsBrowserTools"
         Me.btnToolsBrowserTools.Size = New System.Drawing.Size(69, 23)
         Me.btnToolsBrowserTools.TabIndex = 1
         Me.btnToolsBrowserTools.Text = "Web Tools"
-        Me.btnToolsBrowserTools.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         Me.ToolTip1.SetToolTip(Me.btnToolsBrowserTools, "Web Developer Tools:  <F12>")
         Me.btnToolsBrowserTools.UseVisualStyleBackColor = False
         '
@@ -289,7 +288,7 @@ Partial Class Main
         Me.btnReload.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.GradientActiveCaption
         Me.btnReload.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.GradientInactiveCaption
         Me.btnReload.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnReload.Location = New System.Drawing.Point(1125, 5)
+        Me.btnReload.Location = New System.Drawing.Point(1130, 6)
         Me.btnReload.Name = "btnReload"
         Me.btnReload.Size = New System.Drawing.Size(17, 17)
         Me.btnReload.TabIndex = 3
@@ -304,7 +303,7 @@ Partial Class Main
         Me.btnBack.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.GradientActiveCaption
         Me.btnBack.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.GradientInactiveCaption
         Me.btnBack.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnBack.Location = New System.Drawing.Point(2, 3)
+        Me.btnBack.Location = New System.Drawing.Point(8, 3)
         Me.btnBack.Name = "btnBack"
         Me.btnBack.Size = New System.Drawing.Size(25, 25)
         Me.btnBack.TabIndex = 8
@@ -319,7 +318,7 @@ Partial Class Main
         Me.btnFwd.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.GradientActiveCaption
         Me.btnFwd.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.GradientInactiveCaption
         Me.btnFwd.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnFwd.Location = New System.Drawing.Point(29, 3)
+        Me.btnFwd.Location = New System.Drawing.Point(35, 3)
         Me.btnFwd.Name = "btnFwd"
         Me.btnFwd.Size = New System.Drawing.Size(25, 25)
         Me.btnFwd.TabIndex = 0
@@ -353,7 +352,6 @@ Partial Class Main
         Me.btnToolsCureCoinSetup.Size = New System.Drawing.Size(96, 23)
         Me.btnToolsCureCoinSetup.TabIndex = 3
         Me.btnToolsCureCoinSetup.Text = "4. CURE Setup"
-        Me.btnToolsCureCoinSetup.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         Me.ToolTip1.SetToolTip(Me.btnToolsCureCoinSetup, "(One-Time only) Setup CureCoin's CryptoBullions Folding Pool info")
         Me.btnToolsCureCoinSetup.UseVisualStyleBackColor = False
         '
@@ -368,7 +366,6 @@ Partial Class Main
         Me.btnToolsFAHConfig.Size = New System.Drawing.Size(89, 23)
         Me.btnToolsFAHConfig.TabIndex = 2
         Me.btnToolsFAHConfig.Text = "3. F@H Config"
-        Me.btnToolsFAHConfig.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         Me.ToolTip1.SetToolTip(Me.btnToolsFAHConfig, "Setup Folding@Home: Username, Team, Passkey Config")
         Me.btnToolsFAHConfig.UseVisualStyleBackColor = False
         '
@@ -384,7 +381,6 @@ Partial Class Main
         Me.btnToolsOptions.Size = New System.Drawing.Size(67, 23)
         Me.btnToolsOptions.TabIndex = 3
         Me.btnToolsOptions.Text = "Options"
-        Me.btnToolsOptions.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         Me.ToolTip1.SetToolTip(Me.btnToolsOptions, "Show Options")
         Me.btnToolsOptions.UseVisualStyleBackColor = False
         '
@@ -400,7 +396,6 @@ Partial Class Main
         Me.btnToolsSavedData.Size = New System.Drawing.Size(84, 23)
         Me.btnToolsSavedData.TabIndex = 4
         Me.btnToolsSavedData.Text = "Saved Data"
-        Me.btnToolsSavedData.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         Me.ToolTip1.SetToolTip(Me.btnToolsSavedData, "Show Saved Settings from .Dat File")
         Me.btnToolsSavedData.UseVisualStyleBackColor = False
         '
@@ -463,7 +458,7 @@ Partial Class Main
         Me.chkToolsShow.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.GradientActiveCaption
         Me.chkToolsShow.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.GradientInactiveCaption
         Me.chkToolsShow.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.chkToolsShow.Location = New System.Drawing.Point(1179, 1)
+        Me.chkToolsShow.Location = New System.Drawing.Point(1176, -1)
         Me.chkToolsShow.Name = "chkToolsShow"
         Me.chkToolsShow.Size = New System.Drawing.Size(24, 23)
         Me.chkToolsShow.TabIndex = 1
@@ -617,7 +612,7 @@ Partial Class Main
         Me.btnHome.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.GradientActiveCaption
         Me.btnHome.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.GradientInactiveCaption
         Me.btnHome.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnHome.Location = New System.Drawing.Point(1146, 5)
+        Me.btnHome.Location = New System.Drawing.Point(1151, 6)
         Me.btnHome.Name = "btnHome"
         Me.btnHome.Size = New System.Drawing.Size(17, 17)
         Me.btnHome.TabIndex = 4
@@ -797,11 +792,11 @@ Partial Class Main
         Me.txtMsg.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtMsg.Location = New System.Drawing.Point(5, 275)
+        Me.txtMsg.Location = New System.Drawing.Point(5, 277)
         Me.txtMsg.Multiline = True
         Me.txtMsg.Name = "txtMsg"
         Me.txtMsg.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtMsg.Size = New System.Drawing.Size(584, 80)
+        Me.txtMsg.Size = New System.Drawing.Size(584, 78)
         Me.txtMsg.TabIndex = 0
         '
         'ProgressBar1
@@ -833,7 +828,7 @@ Partial Class Main
         Me.gbxDownload.Controls.Add(Me.lblPercent)
         Me.gbxDownload.Controls.Add(Me.ProgressBar1)
         Me.gbxDownload.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.gbxDownload.Location = New System.Drawing.Point(792, -2)
+        Me.gbxDownload.Location = New System.Drawing.Point(775, -2)
         Me.gbxDownload.Name = "gbxDownload"
         Me.gbxDownload.Size = New System.Drawing.Size(307, 31)
         Me.gbxDownload.TabIndex = 0
@@ -854,10 +849,10 @@ Partial Class Main
         'pbProgIcon
         '
         Me.pbProgIcon.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.pbProgIcon.Location = New System.Drawing.Point(942, 19)
+        Me.pbProgIcon.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
+        Me.pbProgIcon.Location = New System.Drawing.Point(950, 14)
         Me.pbProgIcon.Name = "pbProgIcon"
         Me.pbProgIcon.Size = New System.Drawing.Size(50, 50)
-        Me.pbProgIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
         Me.pbProgIcon.TabIndex = 140
         Me.pbProgIcon.TabStop = False
         '
@@ -871,7 +866,7 @@ Partial Class Main
         Me.pnlFind.Controls.Add(Me.btnFindNext)
         Me.pnlFind.Controls.Add(Me.btnFindPrevious)
         Me.pnlFind.Controls.Add(Me.txtFind)
-        Me.pnlFind.Location = New System.Drawing.Point(820, 29)
+        Me.pnlFind.Location = New System.Drawing.Point(835, 28)
         Me.pnlFind.Name = "pnlFind"
         Me.pnlFind.Size = New System.Drawing.Size(333, 25)
         Me.pnlFind.TabIndex = 3
@@ -889,8 +884,7 @@ Partial Class Main
         '
         'txtFind
         '
-        Me.txtFind.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtFind.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtFind.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.txtFind.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtFind.Location = New System.Drawing.Point(4, 4)
@@ -903,6 +897,7 @@ Partial Class Main
         '
         Me.pnlBtnLinks.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.pnlBtnLinks.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
         Me.pnlBtnLinks.BackColor = System.Drawing.SystemColors.Window
         Me.pnlBtnLinks.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.pnlBtnLinks.Controls.Add(Me.pnlBtnLinksDividerBottom)
@@ -1000,18 +995,20 @@ Partial Class Main
         '
         Me.pnlURL.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.pnlURL.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
+        Me.pnlURL.Controls.Add(Me.btnGo)
+        Me.pnlURL.Controls.Add(Me.chkToolsShow)
         Me.pnlURL.Controls.Add(Me.gbxDownload)
         Me.pnlURL.Controls.Add(Me.btnFwd)
         Me.pnlURL.Controls.Add(Me.lblURL)
         Me.pnlURL.Controls.Add(Me.txtURL)
-        Me.pnlURL.Controls.Add(Me.btnGo)
         Me.pnlURL.Controls.Add(Me.btnStopNav)
         Me.pnlURL.Controls.Add(Me.btnReload)
         Me.pnlURL.Controls.Add(Me.btnBack)
         Me.pnlURL.Controls.Add(Me.btnHome)
-        Me.pnlURL.Location = New System.Drawing.Point(6, 2)
+        Me.pnlURL.Location = New System.Drawing.Point(0, 2)
         Me.pnlURL.Name = "pnlURL"
-        Me.pnlURL.Size = New System.Drawing.Size(1169, 29)
+        Me.pnlURL.Size = New System.Drawing.Size(1205, 31)
         Me.pnlURL.TabIndex = 0
         '
         'Main
@@ -1020,7 +1017,6 @@ Partial Class Main
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Window
         Me.ClientSize = New System.Drawing.Size(1205, 708)
-        Me.Controls.Add(Me.chkToolsShow)
         Me.Controls.Add(Me.pnlFind)
         Me.Controls.Add(Me.pnlBtnLinks)
         Me.Controls.Add(Me.ToolStripContainer1)
@@ -1045,7 +1041,6 @@ Partial Class Main
         Me.pnlURL.ResumeLayout(False)
         Me.pnlURL.PerformLayout()
         Me.ResumeLayout(False)
-        Me.PerformLayout()
 
     End Sub
     Friend WithEvents btnStopNav As System.Windows.Forms.Button

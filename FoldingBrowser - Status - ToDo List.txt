@@ -14,7 +14,7 @@ Immediate Need /  Short-Term Goals:
 Other Ideas, Improvements, Tasks, Longer-Term Goals:
 ----------------------------------------------------
 
--Evaluate upgrading to CefSharp/Chrome v70-71 (VC++2015) when released here: https://github.com/cefsharp/CefSharp/releases
+-Evaluate upgrading to CefSharp/Chrome v71 (VC++2015) when released here: https://github.com/cefsharp/CefSharp/releases
 -Simple version of the FoldingBrowser: mostly to only run the FAH NaCl Chrome Plugin client (Can the FAH NaCl program be run without a Chrome browser? https://developer.chrome.com/native-client/sdk/download - Also, Chrome NaCl support will be depreciated soon: https://developer.chrome.com/native-client/migration) -Simplicity: Ideally, you only want to enter username and email, and you are up and Folding (as other users have described).
 -Use built-in multi-language uninstaller strings for the one non-built-in uninstaller dialog on upgrading? (Ignoring for now)
 -Enable Google Translate in Chrome/CefSharp for automatic web page translations?
@@ -68,8 +68,11 @@ Change Log - Release Notes - Tasks completed:
 
 v20 Release (1/??/2019)
 
-[DONE] -Fix Windows10 Scaling issue that causes the pull-down menu to be smaller, due to only being measured in a non-scaled pixel value (not sized on layout dimensions or DPI %).
-[DONE] -Fix loading button images for different scaling % and/or resizing lager images down are the best bet at this point. (Leave AutoScaleMode = Font for forms). 4x larger PNG images are now being used
+[DONE] -Fixed Windows10 scaling issue that causes the URL text box to not grow in height like everything else
+[DONE] -Fixed Windows10 scaling issue that causes the right-anchored form components to not size correctly
+[DONE] -Fixed the Go button that was being hidden
+[DONE] -Fixed Windows10 scaling issue that causes the pull-down menu to be smaller, due to only being measured in a non-scaled pixel value (not sized on layout dimensions or DPI %).
+[DONE] -Fixed loading button images for different scaling %. Resizing lager images down to the desired size looks like the best option. (Leave AutoScaleMode = Font for forms). 4x larger PNG images are now being used
 [DONE] -CureCoin installer: Merge changes from two similar but slightly different installer scripts and use a command line option to differentiate
 [DONE] -Update Copyright date for 2019
 [DONE] -Installer: Make the Uninstall first dialog more robust to delete the uninstall registry keys if the uninstaller program file is gone, to allow the installation process to continue
