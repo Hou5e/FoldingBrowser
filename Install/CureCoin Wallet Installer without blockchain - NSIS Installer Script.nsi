@@ -129,7 +129,7 @@ Unicode true   ;For all languages to display properly (Installer won't run on Wi
 ;---- MUI section end ----
 
 ;---- Installer Info ----
-Name "${PRODUCT_NAME} v${PRODUCT_VERSION}"
+Name "${PRODUCT_NAME} Wallet v${PRODUCT_VERSION}"
 OutFile "CureInst\Install-${PRODUCT_NAME}-Wallet-v${PRODUCT_VERSION}.exe"
 BrandingText "${PRODUCT_PUBLISHER}"
 InstallDir "$PROGRAMFILES\${PRODUCT_NAME}"  ;Default installation folder (Set to: $INSTDIR during MUI_PAGE_DIRECTORY)
@@ -168,29 +168,17 @@ Section "!Main Program Installation" SEC01
   File "CureCoin\Curecoin- cygnusxi - Source files on GitHub.url"
 
   SetShellVarContext current   ;for 'Current': $AppData = C:\Users\%username%\AppData\Roaming, otherwise for 'all': $AppData = C:\ProgramData
-  SetOutPath "$APPDATA\curecoin\database"
-  ;Delete the anything in the database folder and remove it, if possible
-  Delete "$APPDATA\curecoin\database\*"
-
   SetOutPath "$APPDATA\curecoin"
-  ;Need to switch folders before this folder can be deleted
-  RMDir "$APPDATA\curecoin\database"
 
-  ;Delete the old blockchain, if possible
-  Delete "$APPDATA\curecoin\blk0001.dat"
-  Delete "$APPDATA\curecoin\blkindex.dat"
-  Delete "$APPDATA\curecoin\.lock"
-  Delete "$APPDATA\curecoin\db.log"
-  Delete "$APPDATA\curecoin\debug.log"
-  Delete "$APPDATA\curecoin\peers.dat"
-
-  ;Make a backup copy of 'wallet.dat' before adding the new wallet files
+  ;Make a backup copy of 'wallet.dat'
   ${GetTime} "" "L" $0 $1 $2 $3 $4 $5 $6
   CopyFiles /SILENT "$APPDATA\curecoin\wallet.dat" "$APPDATA\curecoin\wallet-Backup_$2-$1-$0_$4_$5.dat"
 
   File "CureCoin\curecoin.conf.example"
-  ;Include a 'peers.dat' file for a better list of bootstrap nodes
+  ;(Only add on new installations) Include a 'peers.dat' file for a better list of bootstrap nodes
+  SetOverwrite off
   File "CureCoin\peers.dat"
+  SetOverwrite on
 
   ;Create program shortcuts
   SetShellVarContext all  ;Uninstall shortcuts from the 'All Users' folder (WinXP only), otherwise uninstall shortcuts from the user's folder

@@ -129,7 +129,7 @@ Unicode true   ;For all languages to display properly (Installer won't run on Wi
 ;---- MUI section end ----
 
 ;---- Installer Info ----
-Name "${PRODUCT_NAME} v${PRODUCT_VERSION}"
+Name "${PRODUCT_NAME} Wallet v${PRODUCT_VERSION}"
 OutFile "CureInst\Install-${PRODUCT_NAME}-Wallet-v${PRODUCT_VERSION}-Blockchain-Included.exe"
 BrandingText "${PRODUCT_PUBLISHER}"
 InstallDir "$PROGRAMFILES\${PRODUCT_NAME}"  ;Default installation folder (Set to: $INSTDIR during MUI_PAGE_DIRECTORY)
@@ -169,35 +169,24 @@ Section "!Main Program Installation" SEC01
 
   SetShellVarContext current   ;for 'Current': $AppData = C:\Users\%username%\AppData\Roaming, otherwise for 'all': $AppData = C:\ProgramData
   SetOutPath "$APPDATA\curecoin\database"
-  ;Delete the anything in the database folder and remove it, if possible
+  ;Delete the anything in the database folder
   Delete "$APPDATA\curecoin\database\*"
+  ;Update folder with the current blockchain file
+  File "CureCoin\log.0000000072"
 
   SetOutPath "$APPDATA\curecoin"
-  ;Need to switch folders before this folder can be deleted
-  RMDir "$APPDATA\curecoin\database"
+  ;Add or update other Curecoin Blockchain files
+  File "CureCoin\blk0001.dat"
+  File "CureCoin\blkindex.dat"
+  File "CureCoin\.lock"
 
-  ;Delete the old blockchain, if possible
-  Delete "$APPDATA\curecoin\blk0001.dat"
-  Delete "$APPDATA\curecoin\blkindex.dat"
-  Delete "$APPDATA\curecoin\.lock"
-  Delete "$APPDATA\curecoin\db.log"
-  Delete "$APPDATA\curecoin\debug.log"
-  Delete "$APPDATA\curecoin\peers.dat"
-
-  ;Make a backup copy of 'wallet.dat' before adding the new wallet files
+  ;Make a backup copy of 'wallet.dat'
   ${GetTime} "" "L" $0 $1 $2 $3 $4 $5 $6
   CopyFiles /SILENT "$APPDATA\curecoin\wallet.dat" "$APPDATA\curecoin\wallet-Backup_$2-$1-$0_$4_$5.dat"
 
   File "CureCoin\curecoin.conf.example"
   ;Include a 'peers.dat' file for a better list of bootstrap nodes
   File "CureCoin\peers.dat"
-
-  ;Add Curecoin Blockchain files
-  File "CureCoin\blk0001.dat"
-  File "CureCoin\blkindex.dat"
-  File "CureCoin\.lock"
-  SetOutPath "$APPDATA\curecoin\database"
-  File "CureCoin\log.0000000068"
 
   ;Create program shortcuts
   SetShellVarContext all  ;Uninstall shortcuts from the 'All Users' folder (WinXP only), otherwise uninstall shortcuts from the user's folder
