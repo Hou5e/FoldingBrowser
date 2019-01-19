@@ -20,6 +20,18 @@
         Dim strTeam As String = ""
         Me.Icon = My.Resources.L_cysteine_16_24_32_48_256
 
+        'Set the new font scalar to resize the form (For display scaling percentages other than 100% / 96 DPI)
+        If g_sScaleFactor <> DefaultFontScalar Then
+            'Scale font. This will force the child controls to resize and scale fonts (as long as they are the default font)
+            Me.Font = New Font(Me.Font.FontFamily, Me.Font.Size * g_sScaleFactor, Me.Font.Style)
+        End If
+
+        'Make the step numbers large after the form gets scaled
+        Me.lbl1.Font = New Font(Me.lbl1.Font.FontFamily, Me.lbl1.Font.Size * 3.5!, FontStyle.Bold)
+        Me.lbl2.Font = Me.lbl1.Font
+        Me.lbl3.Font = Me.lbl1.Font
+        Me.lbl4.Font = Me.lbl1.Font
+
         'Hide the form while it's being adjusted
         Me.WindowState = FormWindowState.Minimized
         'Create the main form (needs to come before the window size restore)
@@ -175,6 +187,7 @@
             End If
         Else
             Me.txtXmlBefore.Text = "No Config.xml"
+            Me.txtCfgPath.Text = ""
         End If
 
         'Turn on auto-updating the settings, now that any existing info was loaded
@@ -747,10 +760,14 @@
         Else
             'Small
             Me.SplitContainer2.Panel2Collapsed = True
-            'Use the groupbox top measurement to make it the same spacing on the right side
-            Me.Width = Me.btnCancel.Left + Me.btnCancel.Width + (Me.Width - Me.ClientSize.Width) + Me.gbxUsername.Top
+            'Try to make it the same spacing on the right side using another control's spacing (when scaled)
+            Me.Width = Me.btnCancel.Left + Me.btnCancel.Width + (Me.Width - Me.ClientSize.Width) + (Me.txtTelnetFAHCfg.Left * 2)
             Me.SplitContainer2.SplitterDistance = Me.Width
         End If
+
+        'Try to move the form to be parent centered
+        Me.Top = g_Main.Top + (g_Main.Height \ 2) - (Me.Height \ 2)
+        Me.Left = g_Main.Left + (g_Main.Width \ 2) - (Me.Width \ 2)
     End Sub
 
     Private Sub btnReload_Click(sender As Object, e As EventArgs) Handles btnReload.Click
@@ -788,10 +805,13 @@
                     Me.txtXmlBefore.Text = System.IO.File.ReadAllText(m_strFAHCfgPath)
                 Else
                     Me.txtXmlBefore.Text = "Could not find the FAH Config.xml"
+                    Me.txtCfgPath.Text = ""
                 End If
 
             Catch ex As Exception
-                MessageBox.Show("Could not find the FAH Config file: " & vbNewLine & m_strFAHCfgPath & vbNewLine & vbNewLine & ex.ToString)
+                Dim strMsg As String = "Could not find the FAH Config file: " & vbNewLine & m_strFAHCfgPath & vbNewLine & vbNewLine & ex.ToString
+                g_Main.Msg(strMsg)
+                MessageBox.Show(strMsg)
             End Try
         End If
 

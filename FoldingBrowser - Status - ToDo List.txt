@@ -54,21 +54,22 @@ Other Ideas, Improvements, Tasks, Longer-Term Goals:
 -Add Web link buttons for Reddit URLs?
 -Add Web link button for a CureCoin Shop button for the CoinPayments URL? https://www.coinpayments.net/store-directory-coin-CURE
 -Add a CureCoin Wallet button, that focus a running CURE wallet executable, or launches it as a new process?
+-CureCoin installer: Change the -rescan shortcut to -zapwallettxes (to fix orphans, too)?
 -Add Option: Dark or light windows & controls theme color options?
 -Add support for zooming in on webpages?
 -Right-click context menu: Add 'Find' to the list. Also, when highlighting text, add that text to the find dialog?
 -Save more than one log file for debugging issues later?
 -When hovering URLs, display the link at the bottom of the screen?
 -Discord login for non-US keyboards: Maybe just pop-up a window with the login info to copy and paste from; hovered over the main window, but in the main form? 
--Improvement to Auto-scale for 2 different monitors with different scaling, Per-Monitor-DPI-Aware (like a laptop with large monitor)
--Update .NET Framework target from v4.5.2 to v4.6.1 (and update the version checker in the installer)
+-Update .NET Framework target from v4.5.2 to v4.6.1 or newer (and update the version checker in the installer)?
 
 
 ======================================================================================================
 Change Log - Release Notes - Tasks completed:
 ======================================================================================================
 
-v20 Release (1/??/2019)
+v20 Release (1/19/2019)
+[DONE] -Improvement to auto-scale for different monitors with different scaling, Per-Monitor-DPI-Aware (like a laptop with large monitor)
 [DONE] -Update CureCoin installer to v2.0.0.2
 [DONE] -Fixed Windows10 scaling issue that causes the URL text box to not grow in height like everything else
 [DONE] -Fixed Windows10 scaling issue that causes the right-anchored form components to not size correctly

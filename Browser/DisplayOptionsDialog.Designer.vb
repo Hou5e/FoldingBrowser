@@ -45,10 +45,11 @@ Partial Class DisplayOptionsDialog
         Me.txtDisplayText.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.txtDisplayText.Dock = System.Windows.Forms.DockStyle.Fill
         Me.txtDisplayText.Location = New System.Drawing.Point(0, 0)
+        Me.txtDisplayText.Margin = New System.Windows.Forms.Padding(4)
         Me.txtDisplayText.Multiline = True
         Me.txtDisplayText.Name = "txtDisplayText"
         Me.txtDisplayText.ScrollBars = System.Windows.Forms.ScrollBars.Both
-        Me.txtDisplayText.Size = New System.Drawing.Size(81, 178)
+        Me.txtDisplayText.Size = New System.Drawing.Size(78, 220)
         Me.txtDisplayText.TabIndex = 0
         Me.txtDisplayText.WordWrap = False
         '
@@ -59,10 +60,10 @@ Partial Class DisplayOptionsDialog
         Me.btnOK.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.GradientActiveCaption
         Me.btnOK.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.GradientInactiveCaption
         Me.btnOK.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnOK.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnOK.Location = New System.Drawing.Point(597, 229)
+        Me.btnOK.Location = New System.Drawing.Point(503, 265)
+        Me.btnOK.Margin = New System.Windows.Forms.Padding(4)
         Me.btnOK.Name = "btnOK"
-        Me.btnOK.Size = New System.Drawing.Size(90, 28)
+        Me.btnOK.Size = New System.Drawing.Size(87, 34)
         Me.btnOK.TabIndex = 0
         Me.btnOK.Text = "Close"
         Me.btnOK.UseVisualStyleBackColor = True
@@ -70,10 +71,10 @@ Partial Class DisplayOptionsDialog
         'MsgTextTop
         '
         Me.MsgTextTop.AutoSize = True
-        Me.MsgTextTop.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.MsgTextTop.Location = New System.Drawing.Point(21, 9)
+        Me.MsgTextTop.Location = New System.Drawing.Point(16, 11)
+        Me.MsgTextTop.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.MsgTextTop.Name = "MsgTextTop"
-        Me.MsgTextTop.Size = New System.Drawing.Size(72, 18)
+        Me.MsgTextTop.Size = New System.Drawing.Size(57, 16)
         Me.MsgTextTop.TabIndex = 4
         Me.MsgTextTop.Text = "Options:"
         '
@@ -83,10 +84,10 @@ Partial Class DisplayOptionsDialog
         Me.btnSaveChanges.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.GradientActiveCaption
         Me.btnSaveChanges.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.GradientInactiveCaption
         Me.btnSaveChanges.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnSaveChanges.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnSaveChanges.Location = New System.Drawing.Point(288, 229)
+        Me.btnSaveChanges.Location = New System.Drawing.Point(273, 265)
+        Me.btnSaveChanges.Margin = New System.Windows.Forms.Padding(4)
         Me.btnSaveChanges.Name = "btnSaveChanges"
-        Me.btnSaveChanges.Size = New System.Drawing.Size(124, 28)
+        Me.btnSaveChanges.Size = New System.Drawing.Size(147, 34)
         Me.btnSaveChanges.TabIndex = 2
         Me.btnSaveChanges.Text = "Save Changes"
         Me.ToolTip1.SetToolTip(Me.btnSaveChanges, "If modified, this button allows saving any of those changes" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "to the encrypted Dat" &
@@ -95,11 +96,12 @@ Partial Class DisplayOptionsDialog
         '
         'chkShowRawData
         '
-        Me.chkShowRawData.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.chkShowRawData.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.chkShowRawData.AutoSize = True
-        Me.chkShowRawData.Location = New System.Drawing.Point(13, 235)
+        Me.chkShowRawData.Location = New System.Drawing.Point(82, 273)
+        Me.chkShowRawData.Margin = New System.Windows.Forms.Padding(4)
         Me.chkShowRawData.Name = "chkShowRawData"
-        Me.chkShowRawData.Size = New System.Drawing.Size(104, 17)
+        Me.chkShowRawData.Size = New System.Drawing.Size(122, 20)
         Me.chkShowRawData.TabIndex = 1
         Me.chkShowRawData.Text = "Show Raw Data"
         Me.chkShowRawData.UseVisualStyleBackColor = True
@@ -111,7 +113,8 @@ Partial Class DisplayOptionsDialog
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.SplitContainer1.BackColor = System.Drawing.SystemColors.Highlight
         Me.SplitContainer1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.SplitContainer1.Location = New System.Drawing.Point(24, 32)
+        Me.SplitContainer1.Location = New System.Drawing.Point(17, 31)
+        Me.SplitContainer1.Margin = New System.Windows.Forms.Padding(4)
         Me.SplitContainer1.Name = "SplitContainer1"
         '
         'SplitContainer1.Panel1
@@ -126,9 +129,9 @@ Partial Class DisplayOptionsDialog
         '
         Me.SplitContainer1.Panel2.BackColor = System.Drawing.SystemColors.Control
         Me.SplitContainer1.Panel2.Controls.Add(Me.txtDisplayText)
-        Me.SplitContainer1.Size = New System.Drawing.Size(663, 180)
-        Me.SplitContainer1.SplitterDistance = 578
-        Me.SplitContainer1.SplitterWidth = 2
+        Me.SplitContainer1.Size = New System.Drawing.Size(644, 222)
+        Me.SplitContainer1.SplitterDistance = 561
+        Me.SplitContainer1.SplitterWidth = 3
         Me.SplitContainer1.TabIndex = 3
         '
         'chkShowPanelOnMouseEnterEvent
@@ -136,9 +139,10 @@ Partial Class DisplayOptionsDialog
         Me.chkShowPanelOnMouseEnterEvent.AutoSize = True
         Me.chkShowPanelOnMouseEnterEvent.Checked = True
         Me.chkShowPanelOnMouseEnterEvent.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.chkShowPanelOnMouseEnterEvent.Location = New System.Drawing.Point(234, 64)
+        Me.chkShowPanelOnMouseEnterEvent.Location = New System.Drawing.Point(177, 71)
+        Me.chkShowPanelOnMouseEnterEvent.Margin = New System.Windows.Forms.Padding(4)
         Me.chkShowPanelOnMouseEnterEvent.Name = "chkShowPanelOnMouseEnterEvent"
-        Me.chkShowPanelOnMouseEnterEvent.Size = New System.Drawing.Size(254, 17)
+        Me.chkShowPanelOnMouseEnterEvent.Size = New System.Drawing.Size(306, 20)
         Me.chkShowPanelOnMouseEnterEvent.TabIndex = 2
         Me.chkShowPanelOnMouseEnterEvent.Text = "Show Web Button Panel On Mouse-Enter Event"
         Me.chkShowPanelOnMouseEnterEvent.UseVisualStyleBackColor = True
@@ -146,33 +150,37 @@ Partial Class DisplayOptionsDialog
         'lblHomepage
         '
         Me.lblHomepage.AutoSize = True
-        Me.lblHomepage.Location = New System.Drawing.Point(169, 28)
+        Me.lblHomepage.Location = New System.Drawing.Point(90, 26)
+        Me.lblHomepage.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblHomepage.Name = "lblHomepage"
-        Me.lblHomepage.Size = New System.Drawing.Size(62, 13)
+        Me.lblHomepage.Size = New System.Drawing.Size(80, 16)
         Me.lblHomepage.TabIndex = 0
         Me.lblHomepage.Text = "Homepage:"
         '
         'cbxHomepage
         '
         Me.cbxHomepage.FormattingEnabled = True
-        Me.cbxHomepage.Location = New System.Drawing.Point(234, 25)
+        Me.cbxHomepage.Location = New System.Drawing.Point(177, 23)
+        Me.cbxHomepage.Margin = New System.Windows.Forms.Padding(4)
         Me.cbxHomepage.Name = "cbxHomepage"
-        Me.cbxHomepage.Size = New System.Drawing.Size(228, 21)
+        Me.cbxHomepage.Size = New System.Drawing.Size(303, 24)
         Me.cbxHomepage.TabIndex = 1
         Me.cbxHomepage.Text = "Default"
         '
         'DisplayOptionsDialog
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Window
-        Me.ClientSize = New System.Drawing.Size(709, 269)
+        Me.ClientSize = New System.Drawing.Size(680, 313)
         Me.Controls.Add(Me.SplitContainer1)
         Me.Controls.Add(Me.chkShowRawData)
         Me.Controls.Add(Me.btnSaveChanges)
         Me.Controls.Add(Me.btnOK)
         Me.Controls.Add(Me.MsgTextTop)
+        Me.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.KeyPreview = True
+        Me.Margin = New System.Windows.Forms.Padding(4)
         Me.Name = "DisplayOptionsDialog"
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent

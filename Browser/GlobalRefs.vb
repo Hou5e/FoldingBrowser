@@ -139,6 +139,9 @@ Public Module GlobalRefs
     Public DatFilePath As String = System.IO.Path.Combine(UserProfileDir, Prog_Name & ".dat")
     Public LogFilePath As String = System.IO.Path.Combine(UserProfileDir, Prog_Name & ".txt")
 
+    'Font scalar for resizing the entire for for different scaling percentages
+    Public Const DefaultFontScalar As Single = 1.0!
+    Public g_sScaleFactor As Single = 1.0!
     'Cancel navigation / downloads indicator
     Public g_bCancelNav As Boolean = False
     Public g_bAskDownloadLocation As Boolean = True

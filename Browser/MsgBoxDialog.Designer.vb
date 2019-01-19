@@ -33,10 +33,10 @@ Partial Class MsgBoxDialog
         Me.btnOK.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.GradientActiveCaption
         Me.btnOK.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.GradientInactiveCaption
         Me.btnOK.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnOK.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnOK.Location = New System.Drawing.Point(221, 74)
+        Me.btnOK.Location = New System.Drawing.Point(180, 70)
+        Me.btnOK.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.btnOK.Name = "btnOK"
-        Me.btnOK.Size = New System.Drawing.Size(92, 28)
+        Me.btnOK.Size = New System.Drawing.Size(90, 34)
         Me.btnOK.TabIndex = 0
         Me.btnOK.Text = "OK"
         Me.btnOK.UseVisualStyleBackColor = True
@@ -44,22 +44,24 @@ Partial Class MsgBoxDialog
         'MsgText
         '
         Me.MsgText.AutoSize = True
-        Me.MsgText.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.MsgText.Location = New System.Drawing.Point(21, 9)
+        Me.MsgText.Location = New System.Drawing.Point(25, 31)
+        Me.MsgText.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.MsgText.Name = "MsgText"
-        Me.MsgText.Size = New System.Drawing.Size(45, 18)
+        Me.MsgText.Size = New System.Drawing.Size(37, 16)
         Me.MsgText.TabIndex = 2
         Me.MsgText.Text = "Msg:"
         '
         'MsgBoxDialog
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Window
-        Me.ClientSize = New System.Drawing.Size(335, 114)
+        Me.ClientSize = New System.Drawing.Size(300, 125)
         Me.Controls.Add(Me.btnOK)
         Me.Controls.Add(Me.MsgText)
+        Me.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
+        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.Name = "MsgBoxDialog"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.ResumeLayout(False)

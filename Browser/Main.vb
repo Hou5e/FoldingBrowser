@@ -16,7 +16,6 @@
     'DPI for Scaling
     Private m_iOldDPI As Integer = 0
     Private m_iCurrentDPI As Integer = 0
-    Private m_dScaleDPI As Double = 1.0
     Private m_bUpdateDPI As Boolean = False
     Private m_bFormMoving As Boolean = False
     Private Const i16 As Integer = 16
@@ -610,106 +609,125 @@
 
 #Region "Scaling form for different DPI scaling percentages"
     Private Sub ResizeControlsAndFormLayout()
-        If m_iCurrentDPI > 0 Then
-            m_dScaleDPI = m_iCurrentDPI / i96
+        Try
+            If m_iCurrentDPI > 0 Then
+                'This scale factor is also ued for loading any child forms later
+                g_sScaleFactor = CSng(m_iCurrentDPI / i96)
 
-            'Setup Browser buttons
-            Me.btnBack.Text = ""
-            Me.btnBack.Image = GetResizedImage(My.Resources.TB_Back_96, CInt(i24 * m_dScaleDPI))
-            Me.btnFwd.Text = ""
-            Me.btnFwd.Image = GetResizedImage(My.Resources.TB_Fwd_96, CInt(i24 * m_dScaleDPI))
-            Me.btnGo.Text = ""
-            Me.btnGo.Image = GetResizedImage(My.Resources.TB_Go_64, CInt(i16 * m_dScaleDPI), Drawing2D.InterpolationMode.HighQualityBicubic)
-            Me.btnStopNav.Text = ""
-            Me.btnStopNav.Image = GetResizedImage(My.Resources.TB_Stop_64, CInt(i16 * m_dScaleDPI), Drawing2D.InterpolationMode.HighQualityBicubic)
-            Me.btnReload.Text = ""
-            Me.btnReload.Image = GetResizedImage(My.Resources.TB_Reload_64, CInt(i16 * m_dScaleDPI), Drawing2D.InterpolationMode.HighQualityBicubic)
-            Me.btnHome.Text = ""
-            Me.btnHome.Image = GetResizedImage(My.Resources.TB_Home_64, CInt(i16 * m_dScaleDPI), Drawing2D.InterpolationMode.HighQualityBicubic)
-            Me.chkToolsShow.Text = ""
-            Me.chkToolsShow.Image = GetResizedImage(My.Resources.TB_ToolsSettingsGearNoBG_96, CInt(i24 * m_dScaleDPI), Drawing2D.InterpolationMode.HighQualityBicubic)
+                'Set the new font scalar to resize the form (Only after a DPI change)
+                If m_iOldDPI <> m_iCurrentDPI Then
+                    Dim sFontScalar As Single = CSng(m_iCurrentDPI / m_iOldDPI)
+                    'Scale font. This will force the child controls to resize and scale fonts (as long as they are the default font)
+                    Me.Font = New Font(Me.Font.FontFamily, Me.Font.Size * sFontScalar, Me.Font.Style)
+                End If
 
-            'Find/Search buttons
-            Me.btnFindPrevious.Text = ""
-            Me.btnFindPrevious.Image = GetResizedImage(My.Resources.TB_FindUp_64, CInt(i16 * m_dScaleDPI), Drawing2D.InterpolationMode.HighQualityBicubic)
-            Me.btnFindNext.Text = ""
-            Me.btnFindNext.Image = GetResizedImage(My.Resources.TB_FindDown_64, CInt(i16 * m_dScaleDPI), Drawing2D.InterpolationMode.HighQualityBicubic)
-            Me.btnFindClose.Text = ""
-            Me.btnFindClose.Image = GetResizedImage(My.Resources.TB_Stop_64, CInt(i16 * m_dScaleDPI), Drawing2D.InterpolationMode.HighQualityBicubic)
+                'Setup Browser buttons
+                Me.btnBack.Text = ""
+                Me.btnBack.Image = GetResizedImage(My.Resources.TB_Back_96, CInt(i24 * g_sScaleFactor))
+                Me.btnFwd.Text = ""
+                Me.btnFwd.Image = GetResizedImage(My.Resources.TB_Fwd_96, CInt(i24 * g_sScaleFactor))
+                Me.btnGo.Text = ""
+                Me.btnGo.Image = GetResizedImage(My.Resources.TB_Go_64, CInt(i16 * g_sScaleFactor), Drawing2D.InterpolationMode.HighQualityBicubic)
+                Me.btnStopNav.Text = ""
+                Me.btnStopNav.Image = GetResizedImage(My.Resources.TB_Stop_64, CInt(i16 * g_sScaleFactor), Drawing2D.InterpolationMode.HighQualityBicubic)
+                Me.btnReload.Text = ""
+                Me.btnReload.Image = GetResizedImage(My.Resources.TB_Reload_64, CInt(i16 * g_sScaleFactor), Drawing2D.InterpolationMode.HighQualityBicubic)
+                Me.btnHome.Text = ""
+                Me.btnHome.Image = GetResizedImage(My.Resources.TB_Home_64, CInt(i16 * g_sScaleFactor), Drawing2D.InterpolationMode.HighQualityBicubic)
+                Me.chkToolsShow.Text = ""
+                Me.chkToolsShow.Image = GetResizedImage(My.Resources.TB_ToolsSettingsGearNoBG_96, CInt(i24 * g_sScaleFactor), Drawing2D.InterpolationMode.HighQualityBicubic)
 
-            'Web Link Button Images. Folding@Home Related:
-            Me.btnFAHWebControl.BackgroundImage = GetResizedImage(My.Resources.L_methionine_B_192, CInt(i48 * m_dScaleDPI), Drawing2D.InterpolationMode.HighQualityBicubic)
-            Me.btnFAHTwitter.BackgroundImage = GetResizedImage(My.Resources.Twitter_192, CInt(i48 * m_dScaleDPI))
-            Me.btnFAHNews.BackgroundImage = GetResizedImage(My.Resources.News_192, CInt(i48 * m_dScaleDPI))
-            Me.btnEOC_UserStats.BackgroundImage = GetResizedImage(My.Resources.EOC_192, CInt(i48 * m_dScaleDPI))
-            Me.btnFoldingCoinUserStats.BackgroundImage = GetResizedImage(My.Resources.FLDC_192, CInt(i48 * m_dScaleDPI))
-            'FoldingCoin Related:
-            Me.btnFoldingCoinWebsite.BackgroundImage = GetResizedImage(My.Resources.FoldingCoin_192, CInt(i48 * m_dScaleDPI), Drawing2D.InterpolationMode.HighQualityBicubic)
-            Me.btnMyWallet.BackgroundImage = GetResizedImage(My.Resources.Coins_192, CInt(i48 * m_dScaleDPI))
-            Me.btnFoldingCoinTwitter.BackgroundImage = GetResizedImage(My.Resources.Twitter_192, CInt(i48 * m_dScaleDPI))
-            Me.btnFoldingCoinDiscord.BackgroundImage = GetResizedImage(My.Resources.Discord_192, CInt(i48 * m_dScaleDPI))
-            Me.btnFoldingCoinBlockchain.BackgroundImage = GetResizedImage(My.Resources.BlockchainFLDC_192, CInt(i48 * m_dScaleDPI), Drawing2D.InterpolationMode.HighQualityBicubic)
-            Me.btnBTCBlockchain.BackgroundImage = GetResizedImage(My.Resources.BlockchainBTC_192, CInt(i48 * m_dScaleDPI), Drawing2D.InterpolationMode.HighQualityBicubic)
-            Me.btnFoldingCoinDistribution.BackgroundImage = GetResizedImage(My.Resources.DistributionFLDC_192, CInt(i48 * m_dScaleDPI), Drawing2D.InterpolationMode.HighQualityBicubic)
-            Me.btnFoldingCoinShop.BackgroundImage = GetResizedImage(My.Resources.FLDC_Shop_Mug_192, CInt(i48 * m_dScaleDPI), Drawing2D.InterpolationMode.HighQualityBicubic)
-            Me.btnFoldingCoinTeamStats.BackgroundImage = GetResizedImage(My.Resources.FLDC_192, CInt(i48 * m_dScaleDPI))
-            'CureCoin Related:
-            Me.btnCureCoinWebsite.BackgroundImage = GetResizedImage(My.Resources.CureCoin_192, CInt(i48 * m_dScaleDPI), Drawing2D.InterpolationMode.HighQualityBicubic)
-            Me.btnCureCoinTwitter.BackgroundImage = GetResizedImage(My.Resources.Twitter_192, CInt(i48 * m_dScaleDPI))
-            Me.btnCureCoinDiscord.BackgroundImage = GetResizedImage(My.Resources.Discord_192, CInt(i48 * m_dScaleDPI))
-            Me.btnCureCoinBlockchain.BackgroundImage = GetResizedImage(My.Resources.BlockchainCURE_192, CInt(i48 * m_dScaleDPI), Drawing2D.InterpolationMode.HighQualityBicubic)
-            Me.btnCurePool.BackgroundImage = GetResizedImage(My.Resources.DistributionCURE_192, CInt(i48 * m_dScaleDPI), Drawing2D.InterpolationMode.HighQualityBicubic)
-            Me.btnCureCoinTeamStats.BackgroundImage = GetResizedImage(My.Resources.EOC_192, CInt(i48 * m_dScaleDPI))
+                'Find/Search buttons
+                Me.btnFindPrevious.Text = ""
+                Me.btnFindPrevious.Image = GetResizedImage(My.Resources.TB_FindUp_64, CInt(i16 * g_sScaleFactor), Drawing2D.InterpolationMode.HighQualityBicubic)
+                Me.btnFindNext.Text = ""
+                Me.btnFindNext.Image = GetResizedImage(My.Resources.TB_FindDown_64, CInt(i16 * g_sScaleFactor), Drawing2D.InterpolationMode.HighQualityBicubic)
+                Me.btnFindClose.Text = ""
+                Me.btnFindClose.Image = GetResizedImage(My.Resources.TB_Stop_64, CInt(i16 * g_sScaleFactor), Drawing2D.InterpolationMode.HighQualityBicubic)
 
-            'Protein image for decoration / branding in the browser
-            Me.pbProgIcon.Width = CInt(i48 * m_dScaleDPI) + 2
-            Me.pbProgIcon.Height = Me.pbProgIcon.Width
-            Me.pbProgIcon.Left = Me.pnlBtnLinksDividerTop.Width - Me.pbProgIcon.Width
-            Me.pbProgIcon.Image = GetResizedImage(New Icon(My.Resources.L_cysteine_16_24_32_48_256, i256, i256).ToBitmap, (Me.pbProgIcon.Width - 2), Drawing2D.InterpolationMode.HighQualityBicubic)
+                'Web Link Button Images. Folding@Home Related:
+                Me.btnFAHWebControl.BackgroundImage = GetResizedImage(My.Resources.L_methionine_B_192, CInt(i48 * g_sScaleFactor), Drawing2D.InterpolationMode.HighQualityBicubic)
+                Me.btnFAHTwitter.BackgroundImage = GetResizedImage(My.Resources.Twitter_192, CInt(i48 * g_sScaleFactor))
+                Me.btnFAHNews.BackgroundImage = GetResizedImage(My.Resources.News_192, CInt(i48 * g_sScaleFactor))
+                Me.btnEOC_UserStats.BackgroundImage = GetResizedImage(My.Resources.EOC_192, CInt(i48 * g_sScaleFactor))
+                Me.btnFoldingCoinUserStats.BackgroundImage = GetResizedImage(My.Resources.FLDC_192, CInt(i48 * g_sScaleFactor))
+                'FoldingCoin Related:
+                Me.btnFoldingCoinWebsite.BackgroundImage = GetResizedImage(My.Resources.FoldingCoin_192, CInt(i48 * g_sScaleFactor), Drawing2D.InterpolationMode.HighQualityBicubic)
+                Me.btnMyWallet.BackgroundImage = GetResizedImage(My.Resources.Coins_192, CInt(i48 * g_sScaleFactor))
+                Me.btnFoldingCoinTwitter.BackgroundImage = GetResizedImage(My.Resources.Twitter_192, CInt(i48 * g_sScaleFactor))
+                Me.btnFoldingCoinDiscord.BackgroundImage = GetResizedImage(My.Resources.Discord_192, CInt(i48 * g_sScaleFactor))
+                Me.btnFoldingCoinBlockchain.BackgroundImage = GetResizedImage(My.Resources.BlockchainFLDC_192, CInt(i48 * g_sScaleFactor), Drawing2D.InterpolationMode.HighQualityBicubic)
+                Me.btnBTCBlockchain.BackgroundImage = GetResizedImage(My.Resources.BlockchainBTC_192, CInt(i48 * g_sScaleFactor), Drawing2D.InterpolationMode.HighQualityBicubic)
+                Me.btnFoldingCoinDistribution.BackgroundImage = GetResizedImage(My.Resources.DistributionFLDC_192, CInt(i48 * g_sScaleFactor), Drawing2D.InterpolationMode.HighQualityBicubic)
+                Me.btnFoldingCoinShop.BackgroundImage = GetResizedImage(My.Resources.FLDC_Shop_Mug_192, CInt(i48 * g_sScaleFactor), Drawing2D.InterpolationMode.HighQualityBicubic)
+                Me.btnFoldingCoinTeamStats.BackgroundImage = GetResizedImage(My.Resources.FLDC_192, CInt(i48 * g_sScaleFactor))
+                'CureCoin Related:
+                Me.btnCureCoinWebsite.BackgroundImage = GetResizedImage(My.Resources.CureCoin_192, CInt(i48 * g_sScaleFactor), Drawing2D.InterpolationMode.HighQualityBicubic)
+                Me.btnCureCoinTwitter.BackgroundImage = GetResizedImage(My.Resources.Twitter_192, CInt(i48 * g_sScaleFactor))
+                Me.btnCureCoinDiscord.BackgroundImage = GetResizedImage(My.Resources.Discord_192, CInt(i48 * g_sScaleFactor))
+                Me.btnCureCoinBlockchain.BackgroundImage = GetResizedImage(My.Resources.BlockchainCURE_192, CInt(i48 * g_sScaleFactor), Drawing2D.InterpolationMode.HighQualityBicubic)
+                Me.btnCurePool.BackgroundImage = GetResizedImage(My.Resources.DistributionCURE_192, CInt(i48 * g_sScaleFactor), Drawing2D.InterpolationMode.HighQualityBicubic)
+                Me.btnCureCoinTeamStats.BackgroundImage = GetResizedImage(My.Resources.EOC_192, CInt(i48 * g_sScaleFactor))
 
-            'TODO: Needed? Only after a DPI change?
-            ''Set the new scale
-            'Me.Scale(New SizeF(CSng(m_dScaleDPI), CSng(m_dScaleDPI)))
-            ''Scale fonts
-            'Me.Font = New Font(Me.Font.FontFamily, Me.Font.Size * CSng(m_dScaleDPI), Me.Font.Style)
-            'For Each child As Control In Me.Controls
-            '    child.Font = New Font(child.Font.FontFamily, child.Font.Size * CSng(m_dScaleDPI), child.Font.Style)
-            'Next
+                'Protein image for decoration / branding in the browser
+                Me.pbProgIcon.Width = CInt(i48 * g_sScaleFactor) + 2
+                Me.pbProgIcon.Height = Me.pbProgIcon.Width
+                Me.pbProgIcon.Left = Me.pnlBtnLinksDividerTop.Width - Me.pbProgIcon.Width
+                Me.pbProgIcon.Image = GetResizedImage(New Icon(My.Resources.L_cysteine_16_24_32_48_256, i256, i256).ToBitmap, (Me.pbProgIcon.Width - 2), Drawing2D.InterpolationMode.HighQualityBicubic)
 
-            'Calculate the web link button panel heights (shown vs minimized)
-            m_iNormPanelHeight = Me.pnlBtnLinksDividerBottom.Top - 3  '260px @ 96dpi
-            m_iTargetExpandedPanelHeight = m_iNormPanelHeight  'Initially set the expanded target size to the normal height (not showing 'Tools' at the bottom of it)
-            m_iMaxPanelHeight = Me.txtMsg.Top + Me.txtMsg.Height + 5  '360px @ 96dpi
-            m_iMinPanelHeight = (SystemInformation.BorderSize.Height * 2) + (Me.pnlBtnLinksDividerTop.Top * 2) + Me.pnlBtnLinksDividerTop.Height  '8px @ 96dpi
-            'Button Link Panel: Initially show minimized
-            Me.pnlBtnLinks.Height = m_iMinPanelHeight
+                'Calculate the web link button panel heights (shown vs minimized)
+                m_iNormPanelHeight = Me.pnlBtnLinksDividerBottom.Top - 3  '260px @ 96dpi
+                m_iTargetExpandedPanelHeight = m_iNormPanelHeight  'Initially set the expanded target size to the normal height (not showing 'Tools' at the bottom of it)
+                m_iMinPanelHeight = (SystemInformation.BorderSize.Height * 2) + (Me.pnlBtnLinksDividerTop.Top * 2) + Me.pnlBtnLinksDividerTop.Height  '8px @ 96dpi
+                m_iMaxPanelHeight = Me.btnToolsSavedData.Top + Me.btnToolsSavedData.Height + m_iMinPanelHeight '360px @ 96dpi
+                'Button Link Panel: Initially show minimized
+                Me.pnlBtnLinks.Height = m_iMinPanelHeight
 
-            'Resize the toolbar and browser window. On Win10 at 175%, the right anchors weren't resizing to the window size
-            Me.pnlURL.Width = Me.ClientSize.Width
-            Me.ToolStripContainer1.Width = Me.ClientSize.Width + (SystemInformation.BorderSize.Width * 2)
-            'Set other important positions that Windows might not adjust correctly
-            Me.pnlBtnLinks.Left = Me.txtURL.Left
-            Me.pnlBtnLinks.Width = Me.txtURL.Width
-            Me.gbxDownload.Left = Me.btnGo.Left - Me.gbxDownload.Width - 2
-            Me.pnlFind.Left = Me.chkToolsShow.Left - Me.pnlFind.Width - 2
-            'Resize the single-line textbox, otherwise the height doesn't grow correctly, like on Win10 at 175%.
-            Me.txtURL.AutoSize = False
-            Me.txtURL.Height = Me.pnlBtnLinks.Top - Me.pnlURL.Top - Me.txtURL.Top - (SystemInformation.BorderSize.Width * 2)
+                'Resize the toolbar and browser window. On Win10 at 175%, the right anchors weren't resizing to the window size
+                Me.pnlURL.Width = Me.ClientSize.Width
+                Me.ToolStripContainer1.Width = Me.ClientSize.Width + (SystemInformation.BorderSize.Width * 2)
+                'Set other important positions that Windows might not adjust correctly
+                Me.pnlBtnLinks.Left = Me.txtURL.Left
+                Me.pnlBtnLinks.Width = Me.txtURL.Width
+                Me.gbxDownload.Left = Me.btnGo.Left - Me.gbxDownload.Width - 2
+                Me.pnlFind.Left = Me.chkToolsShow.Left - Me.pnlFind.Width - 2
+                'Resize the single-line textbox, otherwise the height doesn't grow correctly, like on Win10 at 175%.
+                Me.txtURL.AutoSize = False
+                Me.txtURL.Height = Me.pnlBtnLinks.Top - Me.pnlURL.Top - Me.txtURL.Top - (SystemInformation.BorderSize.Width * 2)
+                'Resize the bottom of the Messages text box to be even with the other buttons
+                Me.txtMsg.Height = Me.btnToolsSavedData.Top + Me.btnToolsSavedData.Height - Me.txtMsg.Top
 
-            'Reset the DPI changed flag, if needed
-            m_bUpdateDPI = False
-            Msg("DPI set to: " & m_iCurrentDPI.ToString & " dpi, with scale factor: " & CInt(m_dScaleDPI * 100).ToString & "%")
-        End If
+                'Reset the DPI changed flag, if needed
+                m_bUpdateDPI = False
+                m_iOldDPI = m_iCurrentDPI
+                Msg("DPI set to: " & m_iCurrentDPI.ToString & " dpi, with scale factor: " & CInt(g_sScaleFactor * 100).ToString & "%")
+
+                'If the form is larger than the screen, then resize it to fit (slightly smaller than full screen)
+                Dim scrMonitor As Screen = Screen.FromControl(Me)
+                If Me.Height > scrMonitor.Bounds.Height Then Me.Height = scrMonitor.Bounds.Height - (Me.btnToolsSavedData.Height * 2)
+                If Me.Width > scrMonitor.Bounds.Width Then Me.Width = scrMonitor.Bounds.Width - Me.btnToolsSavedData.Width
+                'If the form is off the screen, then move it
+                If Me.Top < 0 Then Me.Top = 0
+                If Me.Left < 0 Then Me.Left = 0
+            End If
+
+        Catch ex As Exception
+            Msg("Error: Trying to scale to: " & m_iCurrentDPI.ToString & " dpi, with scale factor: " & CInt(g_sScaleFactor * 100).ToString & "%")
+        End Try
     End Sub
 
     Private Function GetResizedImage(imgInput As Image, ByRef iOutputDim As Integer, ByRef Optional enImgResizeMode As Drawing2D.InterpolationMode = Drawing2D.InterpolationMode.NearestNeighbor) As Image
         'Resize the square image to the desired size for buttons (scaling images for different DPI scaling percentages)
-        Dim imgResized As Image = New Bitmap(iOutputDim, iOutputDim)
-        Dim g As Graphics = Graphics.FromImage(imgResized)
-        g.InterpolationMode = enImgResizeMode
-        g.DrawImage(imgInput, New Rectangle(0, 0, iOutputDim, iOutputDim))
-        imgInput.Dispose()
-        GetResizedImage = imgResized
+        GetResizedImage = New Bitmap(iOutputDim, iOutputDim)
+        Try
+            Dim g As Graphics = Graphics.FromImage(GetResizedImage)
+            g.InterpolationMode = enImgResizeMode
+            g.DrawImage(imgInput, New Rectangle(0, 0, iOutputDim, iOutputDim))
+            imgInput.Dispose()
+
+        Catch ex As Exception
+            Msg("Error: Trying to resize image height and width to: " & iOutputDim.ToString & " pixels")
+        End Try
     End Function
 
     Private Const WM_DPICHANGED As Integer = &H2E0
@@ -717,20 +735,28 @@
         'Get the DPI changed event when the larger half of the form is moved to another monitor with different DPI
         Select Case m.Msg
             Case WM_DPICHANGED
-                'Save the previous DPI value before updatating
-                m_iOldDPI = m_iCurrentDPI
-                'Only use the low word of this integer (using CShort)
-                m_iCurrentDPI = CShort(CInt(m.WParam))
-
-                'Only update if the DPI chages
-                If m_iCurrentDPI <> m_iOldDPI Then
-                    If m_bFormMoving = True Then
-                        'Set the flag to update for DPI scaling change
-                        m_bUpdateDPI = True
-                    Else
-                        ResizeControlsAndFormLayout()
+                Try
+                    'Save the previous DPI value before updatating
+                    m_iOldDPI = m_iCurrentDPI
+                    'Only use the low word of this integer
+                    m_iCurrentDPI = CInt(m.WParam)
+                    Dim bytes As Byte() = BitConverter.GetBytes(m_iCurrentDPI)
+                    'Dim shtLowWord As Short = BitConverter.ToInt16(bytes, 0)
+                    'Dim shtHighWord As Short = BitConverter.ToInt16(bytes, 2)
+                    m_iCurrentDPI = BitConverter.ToInt16(bytes, 0)
+                    'Only update if the DPI chages
+                    If m_iCurrentDPI <> m_iOldDPI Then
+                        If m_bFormMoving = True Then
+                            'Set the flag to update for DPI scaling change
+                            m_bUpdateDPI = True
+                        Else
+                            ResizeControlsAndFormLayout()
+                        End If
                     End If
-                End If
+
+                Catch ex As Exception
+                    Msg("Error: DPI change event, currently: " & m_iCurrentDPI.ToString & " DPI")
+                End Try
         End Select
         MyBase.WndProc(m)
     End Sub
@@ -747,7 +773,7 @@
         End If
     End Sub
 
-    'Is the form resizing to another monitor?
+    'Is the form moving or resizing to another monitor?
     Protected Overrides Sub OnResizeBegin(e As EventArgs)
         MyBase.OnResizeBegin(e)
         m_bFormMoving = True
@@ -1179,17 +1205,17 @@
         If Me.pnlBtnLinks.Height <= m_iMinPanelHeight Then
             'Panel minimized: Show Tools Panel
             m_iTargetExpandedPanelHeight = m_iMaxPanelHeight
-            Me.chkToolsShow.Image = GetResizedImage(My.Resources.TB_ToolsSettingsGearEnabled_96, CInt(i24 * m_dScaleDPI), Drawing2D.InterpolationMode.HighQualityBicubic)
+            Me.chkToolsShow.Image = GetResizedImage(My.Resources.TB_ToolsSettingsGearEnabled_96, CInt(i24 * g_sScaleFactor), Drawing2D.InterpolationMode.HighQualityBicubic)
         Else
             'Panel shown already: Toggle the Tools section
             If Me.pnlBtnLinks.Height = m_iMaxPanelHeight Then
                 'Hide Tools Panel
                 m_iTargetExpandedPanelHeight = m_iNormPanelHeight
-                Me.chkToolsShow.Image = GetResizedImage(My.Resources.TB_ToolsSettingsGearNoBG_96, CInt(i24 * m_dScaleDPI), Drawing2D.InterpolationMode.HighQualityBicubic)
+                Me.chkToolsShow.Image = GetResizedImage(My.Resources.TB_ToolsSettingsGearNoBG_96, CInt(i24 * g_sScaleFactor), Drawing2D.InterpolationMode.HighQualityBicubic)
             Else
                 'Show Tools Panel
                 m_iTargetExpandedPanelHeight = m_iMaxPanelHeight
-                Me.chkToolsShow.Image = GetResizedImage(My.Resources.TB_ToolsSettingsGearEnabled_96, CInt(i24 * m_dScaleDPI), Drawing2D.InterpolationMode.HighQualityBicubic)
+                Me.chkToolsShow.Image = GetResizedImage(My.Resources.TB_ToolsSettingsGearEnabled_96, CInt(i24 * g_sScaleFactor), Drawing2D.InterpolationMode.HighQualityBicubic)
             End If
         End If
 

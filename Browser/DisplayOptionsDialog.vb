@@ -7,6 +7,12 @@
             Me.SplitContainer1.SplitterWidth = 2
             Me.SplitContainer1.Panel1Collapsed = True
 
+            'Set the new font scalar to resize the form (For display scaling percentages other than 100% / 96 DPI)
+            If g_sScaleFactor <> DefaultFontScalar Then
+                'Scale font. This will force the child controls to resize and scale fonts (as long as they are the default font)
+                Me.Font = New Font(Me.Font.FontFamily, Me.Font.Size * g_sScaleFactor, Me.Font.Style)
+            End If
+
             'Load the pull-down menu from the constants
             Me.cbxHomepage.Items.AddRange({HpgDefault, HpgSideBySide, HpgFoldingCoin, HpgFoldingCoinTeamStats, HpgFoldingCoinMyStats, HpgCureCoin, HpgCureCoinTeamStatsEOC, HpgMyStatsEOC, HpgFAH, HpgBlank})
 
