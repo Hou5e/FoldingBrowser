@@ -48,6 +48,9 @@ and copy it to:  ..\Install\CureCoin
 ------------------------------
 Visual Studio Compiling Notes:
 ------------------------------
--Any time the CefSharp DLLs are upgraded to the next version (Use NuGet Package Manager, command: update-package):
-   -Any previous versions of those DLLs need to be manually deleted from the Debug & Release folders before Visually Studio will compile the new executable without errors.
-   -The project reference folder path to the previous DLLs may need to be manually updated in the project settings to the new package folder
+Anytime the CefSharp DLLs are upgraded to the next version:
+   -With Visual Studio 2015 closed, manually delete any previous versions of the CefSharp DLLs from the Debug & Release folders.
+   -Use NuGet Package Manager, command in Visual Studio to update DLLs:    update-package
+   -Then, do a Rebuild solution, and save the project changes
+   -(Typically not needed): If there are weird compiler errors, closing and reopening Visual Studio usually fixes the initial compiling errors after an upgrade.
+   -(Typically not needed): The project reference folder path to the previous DLLs may need to be manually updated in the project settings to the new package folders.

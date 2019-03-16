@@ -191,7 +191,7 @@ Partial Class DisplayTextDialog
         '
         'txtCureCoinPoolPin
         '
-        Me.txtCureCoinPoolPin.Location = New System.Drawing.Point(220, 269)
+        Me.txtCureCoinPoolPin.Location = New System.Drawing.Point(220, 266)
         Me.txtCureCoinPoolPin.Margin = New System.Windows.Forms.Padding(4)
         Me.txtCureCoinPoolPin.Name = "txtCureCoinPoolPin"
         Me.txtCureCoinPoolPin.Size = New System.Drawing.Size(411, 22)
@@ -200,7 +200,7 @@ Partial Class DisplayTextDialog
         '
         'txtExtremeOverclockingId
         '
-        Me.txtExtremeOverclockingId.Location = New System.Drawing.Point(220, 367)
+        Me.txtExtremeOverclockingId.Location = New System.Drawing.Point(220, 364)
         Me.txtExtremeOverclockingId.Margin = New System.Windows.Forms.Padding(4)
         Me.txtExtremeOverclockingId.Name = "txtExtremeOverclockingId"
         Me.txtExtremeOverclockingId.Size = New System.Drawing.Size(411, 22)
@@ -209,7 +209,7 @@ Partial Class DisplayTextDialog
         '
         'txtDiscordPassword
         '
-        Me.txtDiscordPassword.Location = New System.Drawing.Point(220, 331)
+        Me.txtDiscordPassword.Location = New System.Drawing.Point(220, 328)
         Me.txtDiscordPassword.Margin = New System.Windows.Forms.Padding(4)
         Me.txtDiscordPassword.Name = "txtDiscordPassword"
         Me.txtDiscordPassword.Size = New System.Drawing.Size(411, 22)
@@ -218,7 +218,7 @@ Partial Class DisplayTextDialog
         '
         'txtDiscordEmail
         '
-        Me.txtDiscordEmail.Location = New System.Drawing.Point(220, 305)
+        Me.txtDiscordEmail.Location = New System.Drawing.Point(220, 302)
         Me.txtDiscordEmail.Margin = New System.Windows.Forms.Padding(4)
         Me.txtDiscordEmail.Name = "txtDiscordEmail"
         Me.txtDiscordEmail.Size = New System.Drawing.Size(411, 22)
@@ -292,7 +292,7 @@ Partial Class DisplayTextDialog
         'lblDiscordPassword
         '
         Me.lblDiscordPassword.AutoSize = True
-        Me.lblDiscordPassword.Location = New System.Drawing.Point(100, 334)
+        Me.lblDiscordPassword.Location = New System.Drawing.Point(100, 331)
         Me.lblDiscordPassword.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblDiscordPassword.Name = "lblDiscordPassword"
         Me.lblDiscordPassword.Size = New System.Drawing.Size(118, 16)
@@ -302,7 +302,7 @@ Partial Class DisplayTextDialog
         'lblDiscordEmail
         '
         Me.lblDiscordEmail.AutoSize = True
-        Me.lblDiscordEmail.Location = New System.Drawing.Point(126, 308)
+        Me.lblDiscordEmail.Location = New System.Drawing.Point(126, 305)
         Me.lblDiscordEmail.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblDiscordEmail.Name = "lblDiscordEmail"
         Me.lblDiscordEmail.Size = New System.Drawing.Size(92, 16)
@@ -312,7 +312,7 @@ Partial Class DisplayTextDialog
         'lblCureCoinPoolPin
         '
         Me.lblCureCoinPoolPin.AutoSize = True
-        Me.lblCureCoinPoolPin.Location = New System.Drawing.Point(102, 272)
+        Me.lblCureCoinPoolPin.Location = New System.Drawing.Point(102, 269)
         Me.lblCureCoinPoolPin.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblCureCoinPoolPin.Name = "lblCureCoinPoolPin"
         Me.lblCureCoinPoolPin.Size = New System.Drawing.Size(116, 16)
@@ -321,7 +321,7 @@ Partial Class DisplayTextDialog
         '
         'txtCureCoinPoolPassword
         '
-        Me.txtCureCoinPoolPassword.Location = New System.Drawing.Point(220, 243)
+        Me.txtCureCoinPoolPassword.Location = New System.Drawing.Point(220, 240)
         Me.txtCureCoinPoolPassword.Margin = New System.Windows.Forms.Padding(4)
         Me.txtCureCoinPoolPassword.Name = "txtCureCoinPoolPassword"
         Me.txtCureCoinPoolPassword.Size = New System.Drawing.Size(411, 22)
@@ -330,7 +330,7 @@ Partial Class DisplayTextDialog
         'lblCureCoinPoolPassword
         '
         Me.lblCureCoinPoolPassword.AutoSize = True
-        Me.lblCureCoinPoolPassword.Location = New System.Drawing.Point(61, 246)
+        Me.lblCureCoinPoolPassword.Location = New System.Drawing.Point(61, 243)
         Me.lblCureCoinPoolPassword.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblCureCoinPoolPassword.Name = "lblCureCoinPoolPassword"
         Me.lblCureCoinPoolPassword.Size = New System.Drawing.Size(157, 16)
@@ -339,7 +339,7 @@ Partial Class DisplayTextDialog
         '
         'txtCureCoinAddress
         '
-        Me.txtCureCoinAddress.Location = New System.Drawing.Point(220, 216)
+        Me.txtCureCoinAddress.Location = New System.Drawing.Point(220, 214)
         Me.txtCureCoinAddress.Margin = New System.Windows.Forms.Padding(4)
         Me.txtCureCoinAddress.Name = "txtCureCoinAddress"
         Me.txtCureCoinAddress.Size = New System.Drawing.Size(411, 22)
@@ -348,7 +348,7 @@ Partial Class DisplayTextDialog
         'lblCureCoinAddress
         '
         Me.lblCureCoinAddress.AutoSize = True
-        Me.lblCureCoinAddress.Location = New System.Drawing.Point(101, 219)
+        Me.lblCureCoinAddress.Location = New System.Drawing.Point(101, 217)
         Me.lblCureCoinAddress.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblCureCoinAddress.Name = "lblCureCoinAddress"
         Me.lblCureCoinAddress.Size = New System.Drawing.Size(117, 16)
@@ -357,7 +357,7 @@ Partial Class DisplayTextDialog
         '
         'txtCounterParty12WordPassphrase
         '
-        Me.txtCounterParty12WordPassphrase.Location = New System.Drawing.Point(220, 181)
+        Me.txtCounterParty12WordPassphrase.Location = New System.Drawing.Point(220, 179)
         Me.txtCounterParty12WordPassphrase.Margin = New System.Windows.Forms.Padding(4)
         Me.txtCounterParty12WordPassphrase.Name = "txtCounterParty12WordPassphrase"
         Me.txtCounterParty12WordPassphrase.Size = New System.Drawing.Size(411, 22)
@@ -366,7 +366,7 @@ Partial Class DisplayTextDialog
         'lblCounterParty12WordPassphrase
         '
         Me.lblCounterParty12WordPassphrase.AutoSize = True
-        Me.lblCounterParty12WordPassphrase.Location = New System.Drawing.Point(13, 184)
+        Me.lblCounterParty12WordPassphrase.Location = New System.Drawing.Point(13, 182)
         Me.lblCounterParty12WordPassphrase.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblCounterParty12WordPassphrase.Name = "lblCounterParty12WordPassphrase"
         Me.lblCounterParty12WordPassphrase.Size = New System.Drawing.Size(205, 16)
@@ -375,7 +375,7 @@ Partial Class DisplayTextDialog
         '
         'txtBTCAddress
         '
-        Me.txtBTCAddress.Location = New System.Drawing.Point(220, 154)
+        Me.txtBTCAddress.Location = New System.Drawing.Point(220, 153)
         Me.txtBTCAddress.Margin = New System.Windows.Forms.Padding(4)
         Me.txtBTCAddress.Name = "txtBTCAddress"
         Me.txtBTCAddress.Size = New System.Drawing.Size(411, 22)
@@ -384,7 +384,7 @@ Partial Class DisplayTextDialog
         'lblBTCAddress
         '
         Me.lblBTCAddress.AutoSize = True
-        Me.lblBTCAddress.Location = New System.Drawing.Point(129, 157)
+        Me.lblBTCAddress.Location = New System.Drawing.Point(129, 156)
         Me.lblBTCAddress.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblBTCAddress.Name = "lblBTCAddress"
         Me.lblBTCAddress.Size = New System.Drawing.Size(89, 16)
@@ -394,7 +394,7 @@ Partial Class DisplayTextDialog
         'lblExtremeOverclockingId
         '
         Me.lblExtremeOverclockingId.AutoSize = True
-        Me.lblExtremeOverclockingId.Location = New System.Drawing.Point(65, 370)
+        Me.lblExtremeOverclockingId.Location = New System.Drawing.Point(65, 367)
         Me.lblExtremeOverclockingId.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblExtremeOverclockingId.Name = "lblExtremeOverclockingId"
         Me.lblExtremeOverclockingId.Size = New System.Drawing.Size(153, 16)
@@ -403,7 +403,7 @@ Partial Class DisplayTextDialog
         '
         'txtEmail
         '
-        Me.txtEmail.Location = New System.Drawing.Point(220, 119)
+        Me.txtEmail.Location = New System.Drawing.Point(220, 118)
         Me.txtEmail.Margin = New System.Windows.Forms.Padding(4)
         Me.txtEmail.Name = "txtEmail"
         Me.txtEmail.Size = New System.Drawing.Size(411, 22)
@@ -412,7 +412,7 @@ Partial Class DisplayTextDialog
         'lblEmail
         '
         Me.lblEmail.AutoSize = True
-        Me.lblEmail.Location = New System.Drawing.Point(176, 122)
+        Me.lblEmail.Location = New System.Drawing.Point(176, 121)
         Me.lblEmail.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblEmail.Name = "lblEmail"
         Me.lblEmail.Size = New System.Drawing.Size(42, 16)

@@ -14,7 +14,7 @@ Immediate Need /  Short-Term Goals:
 Other Ideas, Improvements, Tasks, Longer-Term Goals:
 ----------------------------------------------------
 
--Evaluate upgrading to CefSharp/Chrome v71 (VC++2015) when released here: https://github.com/cefsharp/CefSharp/releases
+-Evaluate upgrading to CefSharp/Chrome v73 (VC++2015) when released here: https://github.com/cefsharp/CefSharp/releases
 -Simple version of the FoldingBrowser: mostly to only run the FAH NaCl Chrome Plugin client (Can the FAH NaCl program be run without a Chrome browser? https://developer.chrome.com/native-client/sdk/download - Also, Chrome NaCl support will be depreciated soon: https://developer.chrome.com/native-client/migration) -Simplicity: Ideally, you only want to enter username and email, and you are up and Folding (as other users have described).
 -Use built-in multi-language uninstaller strings for the one non-built-in uninstaller dialog on upgrading? (Ignoring for now)
 -Enable Google Translate in Chrome/CefSharp for automatic web page translations?
@@ -54,8 +54,8 @@ Other Ideas, Improvements, Tasks, Longer-Term Goals:
 -Add Web link buttons for Reddit URLs?
 -Add Web link button for a CureCoin Shop button for the CoinPayments URL? https://www.coinpayments.net/store-directory-coin-CURE
 -Add a CureCoin Wallet button, that focus a running CURE wallet executable, or launches it as a new process?
--CureCoin installer: Change the -rescan shortcut to -zapwallettxes (to fix orphans, too)?
--Discord login for non-US keyboards: Maybe just pop-up a window with the login info to copy and paste from; hovered over the main window, but in the main form? 
+-CureCoin installer: Change the -rescan shortcut to -zapwallettxes (to fix orphans, too. It was really only needed after the hardfork)?
+-Discord login for non-US keyboards: Maybe just pop-up a window with the login info to copy and paste from; hovered over the main window, but in the main form? Use copy and paste buffer, and then paste the info?
 -Update .NET Framework target from v4.5.2 to v4.6.1 or newer (and update the version checker in the installer)?
 -Add Option: Dark or light windows & controls theme color options?
 -Add support for zooming in on webpages?
@@ -63,13 +63,18 @@ Other Ideas, Improvements, Tasks, Longer-Term Goals:
 -Save more than one log file for debugging issues later?
 -When hovering URLs, display the link at the bottom of the screen while hovering the link, or just for a few seconds, like other web browsers?
 -Support SegWit addresses for FLDC (start with 'bc1' and are about 9 characters longer). Probably should get both addresses (Legacy and SegWit) from CounterWallet, and offer a pull-down list selection. Might need to get the 50 character CureCoin folding pool username limit raised.
+-Installer: Change to a language selection page, instead of the pre-installer dialog box?
 
 
 ======================================================================================================
 Change Log - Release Notes - Tasks completed:
 ======================================================================================================
+v21 Release (2019-??-??)
 
-v20 Release (1/20/2019)
+[DONE] -Update to the latest bug fix version CefSharp/Chrome v71.0.2
+[DONE] -Evaluate upgrading to CefSharp/Chrome v71 (VC++2015) when released here: https://github.com/cefsharp/CefSharp/releases
+[DONE] -On exiting, sometime with a slow laptop the FoldingBrowser hangs and doesn't cleanly exit. Once the webapges are cached better, then this doesn't reproduce. Probably just needs the exit time interval increased like when this was an issue in the past.
+v20 Release (2019-01-20)
 [DONE] -Improvement to auto-scale for different monitors with different scaling, Per-Monitor-DPI-Aware (like a laptop with large monitor)
 [DONE] -Update CureCoin installer to v2.0.0.2
 [DONE] -Fixed Windows 10 scaling issue that causes the URL text box to not grow in height like everything else
@@ -82,7 +87,7 @@ v20 Release (1/20/2019)
 [DONE] -Installer: Make the Uninstall first dialog more robust to delete the uninstall registry keys if the uninstaller program file is gone, to allow the installation process to continue
 [DONE] -CureCoin installer: Fix filenames to use dashes instead of underscores
 [DONE] -Remove dat file entry "CureCoinWalletVersion" to avoid any confusion. It only displays the information of what version you signed up with, and doesn't get updated when you upgrade to a newer version (might be misleading after upgrading). Examples: CureCoinWalletVersion=v1.9.4.1-CUR    CureCoinWalletVersion=v2.0.0.1-CURE    -Delete this entry from the Dat file v19 or older on startup upgrade?
-v19 Release (12/24/2018)
+v19 Release (2018-12-24)
 [DONE] -Improve Toggle the Tools section
 [DONE] -Update CureCoin POS info: 4 day maturity (for v2.0) for staking, instead of 30 day (for v1.9.x.x)
 [DONE] -Create CureCoin Wallet v2.0.0.1 installer with the CureCoin Blockchain for easier install for new and upgrading users. (For now, additionally keep the other style installer without the blockchain for any 'FoldingCoin only' people)
@@ -90,7 +95,7 @@ v19 Release (12/24/2018)
 [DONE] -Improve the FAH Web Control page button behavior, where timing issues might cause it to load an extra time.
 [DONE] -Upgrade to CefSharp/Chrome v69 (VC++2015)
 [DONE] -CureCoin Wallet: Include a 'peers.dat' file for more bootstrap nodes with the CureCoin installer
-v18 Release (11/11/2018)
+v18 Release (2018-11-11)
 [DONE] -Fixing getting a Passkey at the newer URL
 [DONE] -Make an option: Make the button links panel only fly-down when you click on it (It's a bit annoying when you mouse-over it, and you don't want it shown). I like the mouse-enter behavior by default so people know the panel is there, otherwise it's not obvious enough.
 [DONE] -Gear press, panel not shown, then just show panel (don't hide tools).
@@ -111,14 +116,14 @@ v18 Release (11/11/2018)
 [DONE] -Make the 'Tools' checkbox an image for settings (gear, dots[like Chrome: not obvious enough], or lines icon[like FireFox: maybe]) for checked/unchecked
 [DONE] -Upgrade to CefSharp/Chrome v67 (VC++2015)
 [DONE] -Change to the new FLDC username format now that it's available
-v17 Release (08/05/2018)
+v17 Release (2018-08-05)
 [DONE] -Add other related website link buttons: https://tokenmarkets.com/catalog/foldingcoin
 [DONE] -Fix tabbing order of form items to be correct
 [DONE] -Upgrade to CefSharp/Chrome v65 (VC++2015), and updated the VC++ dependency in the installer
 [DONE] -Update the FoldingBrowser FAH download links for the FAH website domain change
 [DONE] -Add workaround for: FAH Web Control, where it gets stuck in an infinite refresh loop in Chrome v59+, and needs a refresh without cache to fix that condition.
 [DONE] -Upgrade to CefSharp/Chrome v63 (VC++2013)
-v16 Release (02/12/2018)
+v16 Release (2018-02-12)
 [DONE] -Add file exist searches to help determine if FAH is already installed on first-time use for setting the check box in the 3 check box dialog.
 [DONE] -Add Microsoft Visual C++ Redistributable 2013 - 32-bit (x86) installer to the FoldingBrowser installer (Not preloaded on new Win10 computers)
 [DONE] -Change the button text: 'My Wallet' to 'FLDC Wallet', for clarity
@@ -130,7 +135,7 @@ v16 Release (02/12/2018)
 [DONE] -Forward and back navigation keystrokes or mouse clicks: Forward (ALT+Right, or Next{mouse button}), Back (ALT+Left, or Prior{mouse button}), and Web Tools (F12). 4th and 5th mouse button clicks as Xbutton1 & Xbutton2 only work when hovering the upper part of the form (The browser control doesn't support it in this version).
 [DONE] -CTRL+F5: Refresh ignoring browser cache. F5: Refresh. (Previously, F5 did what only CTRL+F5 should do)
 [DONE] -Improved telnet connection error message for when Folding@Home isn't running
-v15 Release (12/07/2017)
+v15 Release (2017-12-07)
 [DONE] -Add intro clips to tutorial videos to improve them
 [DONE] -Split the installation video into initial install and features to keep it shorter.
 [DONE] -Adding attempts to pressing the EOC button to get the UserId from searching for their FAH Username (the 3 attempts is for new users who's username won't be searchable for the first ~24 hours: Hopefully this will let them retry some other day)
@@ -142,7 +147,7 @@ v15 Release (12/07/2017)
 [DONE] -Improvement to hide the Cancel button, in favor of showing: Attempt 1 of 3, for the Captcha text input at CryptoBullions
 [DONE] -Add instructions for compiling the NSIS installation kit
 [DONE] -Trim the input Email text for getting a passkey
-v14 Release (10/31/2017)
+v14 Release (2017-10-31)
 [DONE] -Pause folding on initial install: set FAH option for pause=true(didn't work in FAH v7.4.16), idle=true (used), or power=light (CPU folds and GPU on idle) to avoid the system being sluggish during install
 [DONE] -Add additional detection for the CounterWallet server being down for syncing to the blockchain, for using the alternate server
 [DONE] -Make the portal homepage internal within the app
@@ -154,7 +159,7 @@ v14 Release (10/31/2017)
 [DONE] -Set the CureCoin wallet address on the new Registration page. It will be required for new users signing up soon.
 [DONE] -Fix the URL bar alignment to the text & buttons (it got shifted to the right in v13)
 [DONE] -Adjust timing to help avoid a rare BTC wallet address web page scrape freeze
-v13 Release (8/4/2017)
+v13 Release (2017-08-04)
 [DONE] -Fixing the portal homepage, to open either page full screen
 [DONE] -Allow old username format of BTC address only, and must be on the FoldingCoin Team with a warning about not being able to earn CURE
 [DONE] -Limit FAH username to 2 underscores. 3+ underscores are not parsed but the current distribution server (likely to be updated soon)
@@ -162,19 +167,19 @@ v13 Release (8/4/2017)
 [DONE] -Show language selection box in the installer (Danish Windows selected the first alphabetical language, like Arabic. So, did the CureCoin wallet software, according to the user)
 [DONE] -Make the CureCoin Folding Pool Login button like the others, to make it more accessible for people who use it more often
 [DONE] -Remove the FLDC 'Stats' button (FLDC.tech is discontinued for now)
-v12 Release (6/9/2017)
+v12 Release (2017-06-09)
 [DONE] -Update CureCoin installer to v1.9.2.1
 [DONE] -Update link to new CounterParty block explorer: https://xchain.io/
 [DONE] -"Portal" FLDC & CURE web page for the browser homepage (iframe both CURE and FLDC webpages side by side)
 [DONE] -Make the FoldingBrowser more neutral for CURE & FLDC (Like the desktop / program icon was still FLDC, the homepage was FLDC only)
 [DONE] -Upgraded the CefSharp Chrome Web Browser Component from: v55 to v57
-v11 Release (4/14/2017)
+v11 Release (2017-04-14)
 [DONE] -Updated the FAH download link for the new WordPress-based website: https://folding.stanford.edu/start-folding/
-v10 Release (4/2/2017)
+v10 Release (2017-04-02)
 [DONE] -Enable Multi-language support for installer (The license, (2) installation sections, and their descriptions are not translated)
 [DONE] -Add secondary CounterWallet site (counterwallet.coindaddy.io) for when the main site (wallet.counterwallet.io) is down. counterwallet.io: They say it's the "same". "If having issues with one, feel free to try another. Your wallet will work on either."
 [DONE] -Deleted INI, restored, is missing setting HideSavedDataButton value
-v9 Release (3/4/2017)
+v9 Release (2017-03-04)
 [DONE] -Add note about how CureCoin's POS works, mostly for new users
 [DONE] -Check for the Wallet.dat file existing to set the checkbox for the CureCoin folding pool setup? (would need to detect this in the installer before installing / launching it from the installer)
 [DONE] -No Dat file error on initial install with previous install INI file only. HideSavedDataButton INI value not written.
@@ -186,7 +191,7 @@ v9 Release (3/4/2017)
 [DONE] -Slack buttons: save Slack login info in saved settings
 [DONE] -'Install complete' message for no options checked
 [DONE] -Update to CefSharp v55, when released (to see if it is better for the shutdown hang issue -Yes, fixes many issues)
-v8 Release (2/4/2017)
+v8 Release (2017-02-04)
 [DONE] -Install complete message: also add for questions or feedback please contact us on Slack
 [DONE] -Improve last message for Install complete, to say the Distribution intervals (FLDC = Monthly, CURE = Daily).
 [DONE] -Fix tabbing order of form items to be correct
@@ -196,7 +201,7 @@ v8 Release (2/4/2017)
 [DONE] -Have direct link to your FLDC address on the blockchain websites: http://blockscan.com/address?q=<addy>
 [DONE] -Have a BTC blockchain button for BTC transactions (not in Blockscan or counterwallet): https://blockchain.info   https://blockchain.info/address/<addy>
 [DONE] -Fix the last dialog box of the automated setup, so it shows up and says install complete
-v7 Release (1/7/2017)
+v7 Release (2017-01-07)
 [DONE] -Add ability to input all the 'Saved Data' settings manually, for existing users. Or, add to saved data dialog and just show/hide the 2 interfaces (raw data vs. GUI) for the data
 [DONE] -Fixing the INI & DAT file creation that wasn't being awaited before running the other setup stuff.
 [DONE] -Added more delay to let the webpage load and run Javascript for getting FAH.
@@ -216,7 +221,7 @@ v7 Release (1/7/2017)
 [DONE] -Update CefSharp to v53 (use NuGet)[DONE]. Update to a .NET v4.5.2 target[DONE]
 [DONE] -MsgBx doesn't stay on top of main window / not acting like modal. -Changed border style from Resizeable, to FixedDialog
 [DONE] -Add Dialog.Dispose() to modal dialog boxes
-v6 Release (12/21/2016)
+v6 Release (2016-12-21)
 [DONE] -Upgrade the 'check your email for passkey' dialog to look like the others
 [DONE] -For Backups, write out a text file that says what to do to restore the files? (mostly for the CureCoin wallet file)
 [DONE] -Backup the FAH Config.xml file, too. This would be useful for setting up multiple PCs with the same settings.
@@ -245,7 +250,7 @@ v6 Release (12/21/2016)
 [DONE] -Include CureCoin Wallet files [DONE] -Create a separate installer / uninstaller to run silently
 [DONE] -Get your CureCoin address from the Qt Wallet from the HTTP JSON-RPC server
 [DONE] -Rename 'Show Dat' to 'Saved Info' or Settings?
-v5 Release (11/13/2016)
+v5 Release (2016-11-13)
 [DONE] -Fix starting (2) FAH Clients on a new installation, the process is running to fast. Change the way this works
 [DONE] -For Telnet, Try to fix or indicate no response back. Verify FAH is running, if not then ask to start it, retry and loop again?
 [DONE] -Spell check source code
@@ -272,7 +277,7 @@ v5 Release (11/13/2016)
 [DONE] -Finish getting a wallet. Simplest way first: grab the info each button press, and save it
 [DONE] -Finish install FAH. Simplest way first: just need to run the installer.
 [DONE] -Get username / team info
-v3 (8/21/2016) & v4 Release (10/1/2016)
+v3 (2016-08-21) & v4 Release (2016-10-01)
 [DONE] -Move user's files to user account, not installation folder. Keep private data in your account.
 [DONE] -Need to fix title wait
 [DONE] -Need to fix downloads

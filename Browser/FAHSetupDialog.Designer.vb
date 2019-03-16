@@ -378,7 +378,7 @@ Partial Class FAHSetupDialog
         Me.lblErrorNote.AutoSize = True
         Me.lblErrorNote.BackColor = System.Drawing.Color.Tomato
         Me.lblErrorNote.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lblErrorNote.Location = New System.Drawing.Point(177, 14)
+        Me.lblErrorNote.Location = New System.Drawing.Point(76, 17)
         Me.lblErrorNote.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblErrorNote.Name = "lblErrorNote"
         Me.lblErrorNote.Size = New System.Drawing.Size(42, 18)

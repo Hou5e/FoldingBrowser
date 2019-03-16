@@ -578,7 +578,7 @@
             ClearWebpage()
             'Added in v63.0.3. Exiting the FAH Web control was hanging the Cef.Shutdown(). On shutdown, the FAH Web control error was happening, and reloading w/o cache when closing. 'Verbose' debug logging was getting cutoff too, and changing logging to 'info' helped fix it
             g_bCancelNav = True
-            Delay(150)
+            Delay(200)
 
             If Me.browser IsNot Nothing Then
                 RemoveHandler Me.browser.FrameLoadEnd, AddressOf OnBrowserFrameLoadEnd
@@ -594,8 +594,8 @@
                 If Me.browser.IsDisposed = False Then
                     'This is prone to hanging the app when exiting:
                     CefSharp.Cef.Shutdown()
-                    'Wait for CefSharp.Cef.Shutdown(): This 100ms delay seems to help prevent the messed up state for older (and current) CefSharp versions. Otherwise, the cache needs to be deleted for the FAH Control web page to work (at least with CEF1, v25)
-                    Delay(100)
+                    'Wait for CefSharp.Cef.Shutdown(): This 150ms delay seems to help prevent the messed up state for older (and current) CefSharp versions. Otherwise, the cache needs to be deleted for the FAH Control web page to work (at least with CEF1, v25)
+                    Delay(150)
                 End If
             End If
 
