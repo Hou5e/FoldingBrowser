@@ -244,7 +244,7 @@
                     Me.txtUsername.Text = strDim(0)
                     Exit Sub
 
-                ElseIf strDim(1).Length >= 26 AndAlso strDim(1).Length <= 35 AndAlso (strDim(1).StartsWith("1") = True OrElse strDim(1).StartsWith("3") = True) Then
+                ElseIf (strDim(1).Length >= 26 AndAlso strDim(1).Length <= 35 AndAlso (strDim(1).StartsWith("1") = True OrElse strDim(1).StartsWith("3") = True)) OrElse (strDim(1).StartsWith("bc1") = True AndAlso strDim(1).Length <= 90) Then
                     'New format. Only process if the second part is a Bitcoin address
                     Me.cbxSeparator.Text = "_"
                     Me.txtBitcoinAddress.Text = strDim(1)
@@ -281,33 +281,41 @@
                 End If
             End If
 
-            'Bitcoin address info, see: https://en.bitcoin.it/wiki/Address
-            'CounterParty Bitcoin Address: Must be 26-35 characters (typically 34 characters) in Base58 encoding (excludes: 0, O, I, l characters that look similar)
-            If Me.txtBitcoinAddress.Text.Length >= 26 AndAlso Me.txtBitcoinAddress.Text.Length <= 35 Then
-                'CounterParty Bitcoin Address: Must start with '1' (typical) or '3' (Multisig)
-                If Me.txtBitcoinAddress.Text.StartsWith("1") = True OrElse Me.txtBitcoinAddress.Text.StartsWith("3") = True Then
-                    'CounterParty Bitcoin Address: Check for invalid characters
-                    If m_regexBTC.IsMatch(Me.txtBitcoinAddress.Text) = True Then
-                        'CounterParty Bitcoin Address: Not all uppercase (very unlikely. Set as warning for now)
-                        If Me.txtBitcoinAddress.Text = Me.txtBitcoinAddress.Text.ToUpper Then
-                            Me.txtBitcoinAddress.BackColor = Color.Yellow
-                            Me.lblErrorNote.Text = "Counterparty Bitcoin Address: Typically not all uppercase"
+            'Bitcoin address info 'bc1' Segwit bech32 format: https://github.com/bitcoin/bips/blob/master/bip-0173.mediawiki
+            If Me.txtBitcoinAddress.Text.StartsWith("bc1") = True AndAlso Me.txtBitcoinAddress.Text.Length <= 90 Then
+                'Segwit bech32 'bc1' addresses are: Not currently supported by stats parser (or distributor?)
+                Me.txtBitcoinAddress.BackColor = Color.Tomato
+                Me.lblErrorNote.Text = "Counterparty Bitcoin Address: Must start with '1', not Segwit 'bc1'"
+                Me.lblErrorNote.Visible = True
+            Else
+                'Bitcoin address info, see: https://en.bitcoin.it/wiki/Address
+                'CounterParty Bitcoin Address: Must be 26-35 characters (typically 34 characters) in Base58 encoding (excludes: 0, O, I, l characters that look similar)
+                If Me.txtBitcoinAddress.Text.Length >= 26 AndAlso Me.txtBitcoinAddress.Text.Length <= 35 Then
+                    'CounterParty Bitcoin Address: Must start with: '1' (typical). Not currently supported by stats parser: '3' (Multisig)
+                    If Me.txtBitcoinAddress.Text.StartsWith("1") = True OrElse Me.txtBitcoinAddress.Text.StartsWith("3") = True Then
+                        'CounterParty Bitcoin Address: Check for invalid characters
+                        If m_regexBTC.IsMatch(Me.txtBitcoinAddress.Text) = True Then
+                            'CounterParty Bitcoin Address: Not all uppercase (very unlikely. Set as warning for now)
+                            If Me.txtBitcoinAddress.Text = Me.txtBitcoinAddress.Text.ToUpper Then
+                                Me.txtBitcoinAddress.BackColor = Color.Yellow
+                                Me.lblErrorNote.Text = "Counterparty Bitcoin Address: Typically not all uppercase"
+                                Me.lblErrorNote.Visible = True
+                            End If
+                        Else
+                            Me.txtBitcoinAddress.BackColor = Color.Tomato
+                            Me.lblErrorNote.Text = "Counterparty Bitcoin Address: Contains invalid characters"
                             Me.lblErrorNote.Visible = True
                         End If
                     Else
                         Me.txtBitcoinAddress.BackColor = Color.Tomato
-                        Me.lblErrorNote.Text = "Counterparty Bitcoin Address: Contains invalid characters"
+                        Me.lblErrorNote.Text = "Counterparty Bitcoin Address: Must start with '1'"
                         Me.lblErrorNote.Visible = True
                     End If
                 Else
                     Me.txtBitcoinAddress.BackColor = Color.Tomato
-                    Me.lblErrorNote.Text = "Counterparty Bitcoin Address: Must start with '1' (or '3')"
+                    Me.lblErrorNote.Text = "Counterparty Bitcoin Address: Typically 34 characters (26-35)"
                     Me.lblErrorNote.Visible = True
                 End If
-            Else
-                Me.txtBitcoinAddress.BackColor = Color.Tomato
-                Me.lblErrorNote.Text = "Counterparty Bitcoin Address: Typically 34 characters (26-35)"
-                Me.lblErrorNote.Visible = True
             End If
 
             'Check for characters not allowed in a FAH Username. See: https://foldingathome.org/support/faq/stats-teams-usernames/#are-there-any-characters-i-should-avoid-in-a-username  NOTE: Should only be letters, numbers, and underscore. Cannot be: # ^ ~ |  Also, Email addresses are truncated / not handled well, so block '@'. See: https://foldingathome.org/support/faq/stats-teams-usernames/#how-do-i-choose-a-username

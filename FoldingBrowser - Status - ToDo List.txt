@@ -6,24 +6,29 @@ FoldingBrowser All-in-One Installer:
 -----------------------------------
 Immediate Need /  Short-Term Goals:
 -----------------------------------
-
--Support other wallets, for pressing the 'FLDC Wallet' button, with option for:  https://freewallet.io/   And, reverse the CounterWallet website search order to use the 2nd one first?  (Currently only using: https://counterwallet.io/).    Other alternatives (ignore for now): https://wallet.indiesquare.me/     also: rarepepewallet.com (Not updated enough? security risks?)     (Not yet) https://tokenpockets.com/ (You cannot use tokenpockets currently. It is not compatible with existing passphrases from CounterWallet. If you want to use it, you will have to make a new address first)
--Enable Multi-language support in the browser component to view pages that are available in other languages (Allow users to change the 'Locale' & 'AcceptLanguageList')? -Add language chosen from installer to 'AcceptLanguageList'? -Changing the language might make the search strings not work correctly anymore?
+-CureCoin installer: Update blockchain files in the installer to be current.
+-CureCoin installer: Update 'peers.dat' file (use new smaller file?), or not include it, since it gets out of date in 1-3 months?
+-Have a button to try and get a new CounterParty Bitcoin Address, if it's blank (with a timeout & retry for the mirror Counterwallet site). Or, message to run button #2 to get an address?
+-Make it so when the main CounterWallet site is down, (2 minute timeout?) it tries the other mirror site. The website status says it's up, but it's not working, so the alternative site is not being used.
+-Reverse the CounterWallet website search order to use the 2nd one first?  (Currently using the main site first (which is down more often): https://counterwallet.io/).
+-Support other wallets, for pressing the 'FLDC Wallet' button, with option for:  https://freewallet.io/     Other alternatives (ignore for now): https://wallet.indiesquare.me/     also: rarepepewallet.com (Not updated enough? security risks?)     (Not yet) https://tokenpockets.com/ (You cannot use tokenpockets currently. It is not compatible with existing passphrases from CounterWallet. If you want to use it, you will have to make a new address first)
 
 ----------------------------------------------------
 Other Ideas, Improvements, Tasks, Longer-Term Goals:
 ----------------------------------------------------
 
--Evaluate upgrading to CefSharp/Chrome v73 (VC++2015) when released here: https://github.com/cefsharp/CefSharp/releases
+-Evaluate upgrading to CefSharp/Chrome v75 (VC++2015) when released here: https://github.com/cefsharp/CefSharp/releases
 -Simple version of the FoldingBrowser: mostly to only run the FAH NaCl Chrome Plugin client (Can the FAH NaCl program be run without a Chrome browser? https://developer.chrome.com/native-client/sdk/download - Also, Chrome NaCl support will be depreciated soon: https://developer.chrome.com/native-client/migration) -Simplicity: Ideally, you only want to enter username and email, and you are up and Folding (as other users have described).
 -Use built-in multi-language uninstaller strings for the one non-built-in uninstaller dialog on upgrading? (Ignoring for now)
 -Enable Google Translate in Chrome/CefSharp for automatic web page translations?
 -Add Multi-language support in the FoldingBrowser for button text (and tooltips)?
+-Enable Multi-language support in the browser component to view pages that are available in other languages (Allow users to change the 'Locale' & 'AcceptLanguageList')? -Add language chosen from installer to 'AcceptLanguageList'? -Changing the language might make the search strings not work correctly anymore?
 -Add images to improve dialog prompt errors, instructions, or questions (It will help non-English speaking users)
 -Add an Ad Blocker Plugin, if possible?
 -Improve the process to change the default encryption password on the FoldingBrowser Saved settings: INI file: when encryption password is blank, prompt for password, if encryption fails (for extra security for not keeping the PW in a text file in your user account). Option to be prompted for it: once per session, or prompted every time when needed.
 -Make the other web page wait loops use JavaScript for detecting pages are fully loaded (like the CureCoin web page login), to make detection even less open loop
 -Linux and Mac version of the AIO setup:
+  -Try running the FoldingBrowser on Mono in Linux
   -Create an install script. Possibly use Docker to keep the installation simplified
   -Start over from a Chromium web browser project that can already be compiled for Linux and Mac? See Chromely(currently missing Mac compile): https://github.com/mattkol/Chromely
   -Port to and start from an existing MonoDevelop project that can already be compiled for Linux and Mac?
@@ -54,7 +59,6 @@ Other Ideas, Improvements, Tasks, Longer-Term Goals:
 -Add Web link buttons for Reddit URLs?
 -Add Web link button for a CureCoin Shop button for the CoinPayments URL? https://www.coinpayments.net/store-directory-coin-CURE
 -Add a CureCoin Wallet button, that focus a running CURE wallet executable, or launches it as a new process?
--CureCoin installer: Change the -rescan shortcut to -zapwallettxes (to fix orphans, too. It was really only needed after the hardfork)?
 -Discord login for non-US keyboards: Maybe just pop-up a window with the login info to copy and paste from; hovered over the main window, but in the main form? Use copy and paste buffer, and then paste the info?
 -Update .NET Framework target from v4.5.2 to v4.6.1 or newer (and update the version checker in the installer)?
 -Add Option: Dark or light windows & controls theme color options?
@@ -71,9 +75,14 @@ Change Log - Release Notes - Tasks completed:
 ======================================================================================================
 v21 Release (2019-??-??)
 
+[DONE] -CureCoin installer: Change the -rescan shortcut to -zapwallettxes (to fix orphans, that do happen periodically)
+[DONE] -CefSharp v73: button panel fly-down is about 2x slower. Decreased redraw steps by half to compensate.
+[DONE] -Fixing issue loading the FAH web control page, where the 'refresh without cache' was not being sent when needed, to fix the infinite refresh loop issue.
+[DONE] -Improving FAH username error messages for Segwit Bech32 'bc1' addresses
+[DONE] -Evaluate upgrading to CefSharp/Chrome v73 (VC++2015) when released
 [DONE] -Update to the latest bug fix version CefSharp/Chrome v71.0.2
-[DONE] -Evaluate upgrading to CefSharp/Chrome v71 (VC++2015) when released here: https://github.com/cefsharp/CefSharp/releases
-[DONE] -On exiting, sometime with a slow laptop the FoldingBrowser hangs and doesn't cleanly exit. Once the webapges are cached better, then this doesn't reproduce. Probably just needs the exit time interval increased like when this was an issue in the past.
+[DONE] -Evaluate upgrading to CefSharp/Chrome v71 (VC++2015) when released
+[DONE] -On exiting, sometime with a slow laptop the FoldingBrowser v20 hangs and doesn't cleanly exit. Once the webpages are cached better, then this doesn't reproduce. Probably just needs the exit time interval increased like when this was an issue in the past.
 v20 Release (2019-01-20)
 [DONE] -Improvement to auto-scale for different monitors with different scaling, Per-Monitor-DPI-Aware (like a laptop with large monitor)
 [DONE] -Update CureCoin installer to v2.0.0.2

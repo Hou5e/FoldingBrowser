@@ -816,35 +816,18 @@
         OpenURL(URL_FAH_WebClient_IPAddr & r.NextDouble.ToString(), False)
 #Enable Warning BC42358
 
-        'This waits 3 seconds each time, to see if it's going to load quickly. Wait up to 15 seconds total for the page to load
+        'This waits 3 seconds each time, to see if it's going to load quickly. Wait up to ~30 seconds total for the page to load
         Dim i As Integer = 0
-        Do Until bFAH_PageLoaded = True OrElse g_bCancelNav = True OrElse i >= 4
+        Do Until bFAH_PageLoaded = True OrElse g_bCancelNav = True OrElse i > 12
             i += 1
+
+            'If the user presses a different button to go to a different web page, then don't reload the default FAH Web Control URL (can happen easily over the 15 second period, if FAH isn't running)
+            If i = 3 AndAlso (Me.txtURL.Text.StartsWith(URL_FAH_WebClient_IPAddr) = True OrElse Me.txtURL.Text = URL_FAH_WebClient_URL) Then
+                'If still not loaded, try a Refresh ignoring browser cache
+                Me.browser.GetBrowser.Reload(True)
+            End If
             If Await PageTitleWait(FAH_Version) = True Then bFAH_PageLoaded = True
         Loop
-
-        'If the user presses a different button to go to a different web page, then don't load the default FAH Web Control URL (can happen easily over the 15 second period, if FAH isn't running)
-        If bFAH_PageLoaded = False AndAlso (Me.txtURL.Text.StartsWith(URL_FAH_WebClient_IPAddr) = True OrElse Me.txtURL.Text = URL_FAH_WebClient_URL) Then
-#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
-            'If the IP Address version of the page doesn't load, go back to the main URL that has the annoyingly slow 30 countdown page before loading the FAH Web Control
-            OpenURL(URL_FAH_WebClient_URL, False)
-#Enable Warning BC42358
-
-            If bFAHRunning = True Then
-                'If FAH is running, then give it a chance for the page to load
-                i = 0
-                Do Until bFAH_PageLoaded = True OrElse g_bCancelNav = True OrElse i >= 4
-                    i += 1
-                    If Await PageTitleWait(FAH_Version) = True Then bFAH_PageLoaded = True
-                Loop
-
-                'If the user presses a different button to go to a different web page, then don't reload the default FAH Web Control URL (can happen easily over the 15 second period, if FAH isn't running)
-                If bFAH_PageLoaded = False AndAlso (Me.txtURL.Text.StartsWith(URL_FAH_WebClient_IPAddr) = True OrElse Me.txtURL.Text = URL_FAH_WebClient_URL) Then
-                    'If still not loaded, try a Refresh ignoring browser cache
-                    Me.browser.GetBrowser.Reload(True)
-                End If
-            End If
-        End If
     End Sub
 
     Private Sub btnFAHTwitter_Click(sender As System.Object, e As System.EventArgs) Handles btnFAHTwitter.Click
@@ -3170,11 +3153,11 @@
             'Skip, if set in the options
             If g_bShowWebLinkPanelOnMouseEnterEvent = True Then
                 'Button Link list: Mouse-over effect to expand area
-                For m_iTempHeight = 20 To m_iTargetExpandedPanelHeight Step 20
+                For m_iTempHeight = 40 To m_iTargetExpandedPanelHeight Step 40
                     Me.pnlBtnLinks.Height = m_iTempHeight
                     Await Wait(5)
                 Next
-                'Set to desired size, if it's not a multiple of 20
+                'Set to desired size, if it's not an exact multiple
                 Me.pnlBtnLinks.Height = m_iTargetExpandedPanelHeight
             End If
         End If
@@ -3183,11 +3166,11 @@
     Private Async Sub pnlBtnLinks_Click(sender As Object, e As EventArgs) Handles pnlBtnLinks.Click, pnlBtnLinksDividerTop.Click
         If Me.pnlBtnLinks.Height <= m_iMinPanelHeight Then
             'Button Link list: Mouse-over effect to expand area
-            For m_iTempHeight = 20 To m_iTargetExpandedPanelHeight Step 20
+            For m_iTempHeight = 40 To m_iTargetExpandedPanelHeight Step 40
                 Me.pnlBtnLinks.Height = m_iTempHeight
                 Await Wait(5)
             Next
-            'Set to desired size, if it's not a multiple of 20
+            'Set to desired size, if it's not an exact multiple
             Me.pnlBtnLinks.Height = m_iTargetExpandedPanelHeight
         Else
             'Minimize, if already expanded

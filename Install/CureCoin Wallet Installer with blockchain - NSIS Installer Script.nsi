@@ -193,7 +193,7 @@ Section "!Main Program Installation" SEC01
   SetOutPath "$INSTDIR"  ;Destination. Required to make the EXE shortcut 'start in' path correct
   CreateShortCut "$DESKTOP\CureCoin.lnk" "$INSTDIR\curecoin-qt.exe"
   CreateShortCut "$SMPROGRAMS\CureCoin.lnk" "$INSTDIR\curecoin-qt.exe"
-  CreateShortCut "$SMPROGRAMS\CureCoin Wallet Rescan (Can fix missing tx).lnk" "$INSTDIR\curecoin-qt.exe" "-rescan"
+  CreateShortCut "$SMPROGRAMS\CureCoin -ZapWalletTxes (Can fix issues).lnk" "$INSTDIR\curecoin-qt.exe" "-zapwallettxes"
 SectionEnd
 
 Section -Post
@@ -229,7 +229,7 @@ NoCommandLineArg:
   ClearErrors
   ;Normal CureCoin Wallet install: Once installed, auto-run the main program with the command line options to rescan for missing transactions
   ;MessageBox MB_OK "No matching Command Line args: $CMDLINE"    ;Enable for debugging
-  Exec "$INSTDIR\${PRODUCT_EXE_NAME}.exe -rescan"
+  Exec "$INSTDIR\${PRODUCT_EXE_NAME}.exe -zapwallettxes"
 SkipDifferentFinish:
 FunctionEnd
 
@@ -294,6 +294,7 @@ Section Uninstall
 
   ;Delete the program shortcuts
   Delete "$SMPROGRAMS\CureCoin.lnk"
+  Delete "$SMPROGRAMS\CureCoin -ZapWalletTxes (Can fix issues).lnk"
   Delete "$SMPROGRAMS\CureCoin Wallet Rescan (Can fix missing tx).lnk"
 
   Delete "$DESKTOP\CureCoin.lnk"
