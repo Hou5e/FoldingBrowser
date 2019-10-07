@@ -5,6 +5,7 @@
 ;---- Helper defines / constants ----
 !define PRODUCT_VERSION "2.0.0.2"  ;Match the displayed version in the program title. Example: 1.2.3
 !define PRODUCT_4_VALUE_VERSION "2.0.0.2"  ;Match the executable version: Right-click the program executable file | Properties | Version. Example: 1.2.3.4
+!define PRODUCT_UPDATED "2019-10-06"
 !define PRODUCT_YEAR "2019"
 !define PRODUCT_NAME "CureCoin"
 !define PRODUCT_EXE_NAME "curecoin-qt"  ;Executable name without extension
@@ -149,7 +150,7 @@ SilentInstall normal  ;Silent install or uninstall: run from the command line wi
   VIAddVersionKey /LANG=${LANG_ENGLISH} "Comments" "${PRODUCT_NAME} v${PRODUCT_VERSION} Installer"
   VIAddVersionKey /LANG=${LANG_ENGLISH} "CompanyName" "${PRODUCT_PUBLISHER}"
   VIAddVersionKey /LANG=${LANG_ENGLISH} "LegalCopyright" "Copyright © ${PRODUCT_YEAR} ${PRODUCT_PUBLISHER}"
-  VIAddVersionKey /LANG=${LANG_ENGLISH} "FileDescription" "${PRODUCT_NAME} v${PRODUCT_VERSION} Installer"
+  VIAddVersionKey /LANG=${LANG_ENGLISH} "FileDescription" "${PRODUCT_NAME} v${PRODUCT_VERSION} Installer: ${PRODUCT_UPDATED} Update"
   VIAddVersionKey /LANG=${LANG_ENGLISH} "FileVersion" "${PRODUCT_VERSION}"
 
 ;---- Installer sections, selectable on configuration page if shown ----
@@ -172,7 +173,7 @@ Section "!Main Program Installation" SEC01
   ;Delete the anything in the database folder
   Delete "$APPDATA\curecoin\database\*"
   ;Update folder with the current blockchain file
-  File "CureCoin\log.0000000072"
+  File "CureCoin\log.0000000134"
 
   SetOutPath "$APPDATA\curecoin"
   ;Add or update other Curecoin Blockchain files

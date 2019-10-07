@@ -10,7 +10,7 @@
 - **FoldingBrowser [Screenshot #1](Screenshot.jpg), [Screenshot #2](Screenshot-LinksMenu.jpg), and [Setup Video](https://www.youtube.com/playlist?list=PLMWSISjQe0XFz9bFy5KXLq4hrgFH-94eI).**
   - **Please ask questions on the Discord Contact links below**
 - FoldingBrowser is written in VB.NET, compiled with VS2015, targeting the .NET Framework v4.5.2
-- Currently based on [cefsharp/69](https://github.com/cefsharp/CefSharp/tree/cefsharp/69) Chrome / Chromium Embedded Framework (CEF)
+- Currently based on [cefsharp/75](https://github.com/cefsharp/CefSharp/tree/cefsharp/75) Chrome / Chromium Embedded Framework (CEF)
   - Requires: [VC++ 2015 x86 Redist](https://download.microsoft.com/download/9/3/F/93FCF1E7-E6A4-478B-96E7-D4B285925B00/vc_redist.x86.exe) & [.NET v4.5.2](https://www.microsoft.com/en-us/download/details.aspx?id=42643)
 - [Status, release notes, & ideas for future development](FoldingBrowser%20-%20Status%20-%20ToDo%20List.txt)
 
@@ -35,4 +35,4 @@ F12 | Open web developer tools
 **Please ask questions on Discord (I'm user Hou5e):**
   * [FoldingCoin Discord Invite](https://discord.gg/CvZ7gAs)
   * [CureCoin Discord Invite](https://discord.gg/jtztkFZ)
-  * BitcoinTalk forum for: [FoldingCoin](https://bitcointalk.org/index.php?topic=781352), or [CureCoin](https://bitcointalk.org/index.php?topic=603757)
+  * See Websites: [FoldingCoin](http://foldingcoin.net/) & [CureCoin](http://curecoin.net/) 

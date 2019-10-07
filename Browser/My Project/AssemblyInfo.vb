@@ -1,30 +1,17 @@
-﻿Imports System.Reflection
-Imports System.Runtime.InteropServices
-
-' General Information about an assembly is controlled through the following
-' set of attributes. Change these attribute values to modify the information
-' associated with an assembly.
-
-' Review the values of the assembly attributes
-
-<Assembly: AssemblyTitle("FoldingBrowser")>
-<Assembly: AssemblyDescription("FoldingBrowser All-In-One Installer for FoldingCoin (FLDC) and CureCoin (CURE)")>
-<Assembly: AssemblyCompany("")>
-<Assembly: AssemblyProduct("FoldingBrowser")>
-<Assembly: AssemblyCopyright("Copyright © 2019 FoldingCoin, CureCoin")>
-<Assembly: AssemblyTrademark("")>
-
-<Assembly: ComVisible(False)>
+﻿'General Information about an assembly is controlled through the following set of attributes. Change these attribute values to modify the information associated with an assembly.
+<Assembly: System.CLSCompliant(True)>
+<Assembly: System.Reflection.AssemblyTitle("FoldingBrowser")>
+<Assembly: System.Reflection.AssemblyDescription("FoldingBrowser All-In-One Installer for FoldingCoin (FLDC) and CureCoin (CURE)")>
+<Assembly: System.Reflection.AssemblyCompany("")>
+<Assembly: System.Reflection.AssemblyProduct("FoldingBrowser")>
+<Assembly: System.Reflection.AssemblyCopyright("Copyright © 2019 FoldingCoin, CureCoin")>
+<Assembly: System.Reflection.AssemblyTrademark("")>
+<Assembly: System.Resources.NeutralResourcesLanguage("en-US")>
+<Assembly: System.Runtime.InteropServices.ComVisible(False)>
 
 'The following GUID is for the ID of the typelib if this project is exposed to COM
-<Assembly: Guid("9f4a2899-3e26-41f1-b423-05e2201c2282")>
+<Assembly: System.Runtime.InteropServices.Guid("9f4a2899-3e26-41f1-b423-05e2201c2282")>
 
-' Version information for an assembly consists of the following four values:
-'
-'      Major Version
-'      Minor Version
-'      Build Number
-'      Revision
-
-<Assembly: AssemblyVersion("21.0.0.0")>
-<Assembly: AssemblyFileVersion("21.0.0.0")>
+'Version information for an assembly consists of the following four values: <Major Version>.<Minor Version>.<Build Number>.<Revision>
+<Assembly: System.Reflection.AssemblyVersion("21.0.0.0")>
+<Assembly: System.Reflection.AssemblyFileVersion("21.0.0.0")>

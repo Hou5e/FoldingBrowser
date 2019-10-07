@@ -33,6 +33,7 @@ Partial Class DisplayOptionsDialog
         Me.chkShowPanelOnMouseEnterEvent = New System.Windows.Forms.CheckBox()
         Me.lblHomepage = New System.Windows.Forms.Label()
         Me.cbxHomepage = New System.Windows.Forms.ComboBox()
+        Me.chkDarkTheme = New System.Windows.Forms.CheckBox()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
@@ -121,6 +122,7 @@ Partial Class DisplayOptionsDialog
         '
         Me.SplitContainer1.Panel1.AutoScroll = True
         Me.SplitContainer1.Panel1.BackColor = System.Drawing.SystemColors.Window
+        Me.SplitContainer1.Panel1.Controls.Add(Me.chkDarkTheme)
         Me.SplitContainer1.Panel1.Controls.Add(Me.chkShowPanelOnMouseEnterEvent)
         Me.SplitContainer1.Panel1.Controls.Add(Me.lblHomepage)
         Me.SplitContainer1.Panel1.Controls.Add(Me.cbxHomepage)
@@ -167,6 +169,18 @@ Partial Class DisplayOptionsDialog
         Me.cbxHomepage.TabIndex = 1
         Me.cbxHomepage.Text = "Default"
         '
+        'chkDarkTheme
+        '
+        Me.chkDarkTheme.AutoSize = True
+        Me.chkDarkTheme.Checked = True
+        Me.chkDarkTheme.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chkDarkTheme.Location = New System.Drawing.Point(177, 107)
+        Me.chkDarkTheme.Name = "chkDarkTheme"
+        Me.chkDarkTheme.Size = New System.Drawing.Size(118, 20)
+        Me.chkDarkTheme.TabIndex = 3
+        Me.chkDarkTheme.Text = "Dark UI Theme"
+        Me.chkDarkTheme.UseVisualStyleBackColor = True
+        '
         'DisplayOptionsDialog
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
@@ -205,4 +219,5 @@ Partial Class DisplayOptionsDialog
     Friend WithEvents cbxHomepage As ComboBox
     Friend WithEvents lblHomepage As Label
     Friend WithEvents chkShowPanelOnMouseEnterEvent As CheckBox
+    Friend WithEvents chkDarkTheme As CheckBox
 End Class

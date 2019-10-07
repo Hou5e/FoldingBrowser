@@ -151,9 +151,6 @@
   <data name="FLDC_192" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\FLDC_192.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="FLDC_Shop_Mug_192" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\FLDC_Shop_Mug_192.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="FoldingCoin_192" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\FoldingCoin_192.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -198,5 +195,8 @@
   </data>
   <data name="Twitter_192" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Twitter_192.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="p1159_L939_K12M_298k" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\p1159_L939_K12M_298k.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

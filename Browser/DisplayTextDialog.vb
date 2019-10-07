@@ -249,7 +249,7 @@
                 'ReadMe.txt: Write out a text file that says what to do to restore the files
                 strRestoreInfo = "Restore settings from the backup on " & Now.ToString("yyyy-MM-dd") & ":" & vbNewLine &
                     "================================================" & vbNewLine & vbNewLine &
-                    Prog_Name & " v" & My.Application.Info.Version.Major.ToString & " Settings Files:" & vbNewLine &
+                    g_strTitleEnd & " Settings Files:" & vbNewLine &
                     "-------------------------------------------------------------------------" & vbNewLine &
                     System.IO.Path.GetFileName(DatFilePath) & "  Copy to:  " & DatFilePath & vbNewLine &
                     System.IO.Path.GetFileName(IniFilePath) & "  Copy to:  " & IniFilePath &

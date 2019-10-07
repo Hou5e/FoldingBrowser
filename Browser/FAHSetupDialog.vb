@@ -792,21 +792,21 @@
 
                 Else
                     'Ask for file location. Use a File Open Dialog to select the Config file
-                    Dim OpenDlg As New System.Windows.Forms.OpenFileDialog
-                    OpenDlg.Title = "Select FAH Config File"
-                    OpenDlg.DefaultExt = "xml"
-                    OpenDlg.Filter = "Config File (*.xml)|*.xml"
-                    OpenDlg.FileName = System.IO.Path.GetFileName(PATH_FAH_ALL_USER_CFG)
-                    OpenDlg.InitialDirectory = System.IO.Path.GetDirectoryName(PATH_FAH_ALL_USER_CFG)
-                    OpenDlg.CheckPathExists = True
-                    OpenDlg.CheckFileExists = True
-                    OpenDlg.RestoreDirectory = False
-                    OpenDlg.Multiselect = False
-                    OpenDlg.FilterIndex = 0
-                    If OpenDlg.ShowDialog(Me) = DialogResult.OK Then
-                        m_strFAHCfgPath = OpenDlg.FileName
-                    End If
-                    OpenDlg.Dispose()
+                    Using OpenDlg As New System.Windows.Forms.OpenFileDialog
+                        OpenDlg.Title = "Select FAH Config File"
+                        OpenDlg.DefaultExt = "xml"
+                        OpenDlg.Filter = "Config File (*.xml)|*.xml"
+                        OpenDlg.FileName = System.IO.Path.GetFileName(PATH_FAH_ALL_USER_CFG)
+                        OpenDlg.InitialDirectory = System.IO.Path.GetDirectoryName(PATH_FAH_ALL_USER_CFG)
+                        OpenDlg.CheckPathExists = True
+                        OpenDlg.CheckFileExists = True
+                        OpenDlg.RestoreDirectory = False
+                        OpenDlg.Multiselect = False
+                        OpenDlg.FilterIndex = 0
+                        If OpenDlg.ShowDialog(Me) = DialogResult.OK Then
+                            m_strFAHCfgPath = OpenDlg.FileName
+                        End If
+                    End Using
                 End If
 
                 If m_strFAHCfgPath.Length > 0 Then

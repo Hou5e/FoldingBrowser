@@ -14,7 +14,7 @@
             End If
 
             'Load the pull-down menu from the constants
-            Me.cbxHomepage.Items.AddRange({HpgDefault, HpgSideBySide, HpgFoldingCoin, HpgFoldingCoinTeamStats, HpgFoldingCoinMyStats, HpgCureCoin, HpgCureCoinTeamStatsEOC, HpgMyStatsEOC, HpgFAH, HpgBlank})
+            Me.cbxHomepage.Items.AddRange({HpgDefault, HpgTopBottom, HpgSideBySide, HpgFoldingCoin, HpgFoldingCoinTeamStats, HpgFoldingCoinMyStats, HpgCureCoin, HpgCureCoinTeamStatsEOC, HpgMyStatsEOC, HpgFAH, HpgBlank})
 
             'Start with the textboxes instead of the raw data that is hard to look at
             chkShowRawData_CheckedChanged(Nothing, Nothing)
@@ -34,6 +34,14 @@
             Else
                 'Add, if it doesn't exist
                 INI.AddSection(INI_Settings).AddKey(INI_ShowPanelOnMouseEnter).Value = g_bShowWebLinkPanelOnMouseEnterEvent.ToString
+            End If
+
+            If INI.GetSection(INI_Settings).GetKey(INI_DarkThemeUI) IsNot Nothing Then
+                'Load option
+                Me.chkDarkTheme.Checked = CBool(INI.GetSection(INI_Settings).GetKey(INI_DarkThemeUI).GetValue())
+            Else
+                'Add, if it doesn't exist
+                INI.AddSection(INI_Settings).AddKey(INI_DarkThemeUI).Value = Me.chkDarkTheme.Checked.ToString
             End If
 
             'Display the INI data in the main raw data textbox
@@ -82,6 +90,8 @@
 
             g_bShowWebLinkPanelOnMouseEnterEvent = Me.chkShowPanelOnMouseEnterEvent.Checked
             INI.AddSection(INI_Settings).AddKey(INI_ShowPanelOnMouseEnter).Value = g_bShowWebLinkPanelOnMouseEnterEvent.ToString
+
+            INI.AddSection(INI_Settings).AddKey(INI_DarkThemeUI).Value = Me.chkDarkTheme.Checked.ToString
             INI.Save(IniFilePath)
 
             'Display the INI data in the main raw data textbox
@@ -113,6 +123,14 @@
 
     'If any of the options are changed, then enable the Save Changes button
     Private Sub chkShowPanelOnMouseEnterEvent_CheckedChanged(sender As Object, e As EventArgs) Handles chkShowPanelOnMouseEnterEvent.CheckedChanged
+        Me.btnSaveChanges.Enabled = True
+    End Sub
+
+    'If any of the options are changed, then enable the Save Changes button
+    Private Sub chkDarkTheme_CheckedChanged(sender As Object, e As EventArgs) Handles chkDarkTheme.CheckedChanged
+        'Update the UI
+        g_Main.ThemeColorUI(Me.chkDarkTheme.Checked)
+
         Me.btnSaveChanges.Enabled = True
     End Sub
 End Class

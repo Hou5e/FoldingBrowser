@@ -3,6 +3,7 @@ Public Module GlobalRefs
 
     'Don't change this:
     Public Const Prog_Name As String = "FoldingBrowser"
+    Public g_strTitleEnd As String = Prog_Name & " v" & My.Application.Info.Version.Major.ToString
 
     'Common URLs
     Public Const URL_BLANK As String = "about:blank"
@@ -16,12 +17,11 @@ Public Module GlobalRefs
     Public Const URL_FoldingCoinTwitter As String = "https://twitter.com/FoldingCoin/"
     Public Const URL_FLDC_DefaultBlockchain As String = "https://xchain.io/asset/FLDC"
     Public Const URL_FLDC_AddressBlockchain As String = "https://xchain.io/address/"
-    Public Const URL_BTC_Blockchain As String = "https://blockchain.info/"
+    Public Const URL_BTC_Blockchain As String = "https://www.blockchain.com/"
     Public Const URL_FLDC_Distro As String = "https://mergedfolding.net/official-distributions"
     Public Const URL_FoldingCoinDiscordInvite As String = "https://discord.gg/CvZ7gAs"
     Public Const URL_FoldingCoinDiscordRegister As String = "https://discordapp.com/register?redirect_to=%2Finvite%2FCvZ7gAs"
     Public Const URL_FoldingCoinDiscord As String = "https://discordapp.com/channels/379168590626029568/379168590626029571"
-    Public Const URL_FoldingCoinShop As String = "https://tokenmarkets.com/catalog/foldingcoin"
     Public Const URL_FoldingCoinStats As String = "https://stats.mergedfolding.net/"
     Public Const URL_FoldingCoinStatsUser As String = "member/"
 
@@ -44,7 +44,6 @@ Public Module GlobalRefs
     Public Const URL_FAH_WebClient_URL As String = "http://client.foldingathome.org/"
     Public Const URL_FAH_WebClient_IPAddr As String = "http://127.0.0.1:7396/?nocache="
     Public Const URL_FAH_WebClient_ErrorAddr As String = "http://127.0.0.1:7396/js/main.js"
-    Public Const URL_NaCl_FAH As String = "http://nacl.foldingathome.org/"
 
     'HTML from source code file: FoldingBrowser-SideBySide.html
     Public Const HTML_Homepage_SideBySide As String =
@@ -107,6 +106,7 @@ Public Module GlobalRefs
     Public Const INI_HideSavedDataButton As String = "HideSavedDataButton"
     Public Const INI_Homepage As String = "Homepage"
     Public Const INI_ShowPanelOnMouseEnter As String = "ShowPanelOnMouseEnter"
+    Public Const INI_DarkThemeUI As String = "DarkThemeUI"
 
     'Wallet Id specific
     Public Const INI_EOC_ID As String = "ExtremeOverclockingUserId"
@@ -116,6 +116,7 @@ Public Module GlobalRefs
     'Homepage Options List
     Public Const HpgDefault As String = "Default"
     Public Const HpgSideBySide As String = "Side-By-Side: FoldingCoin and CureCoin"
+    Public Const HpgTopBottom As String = "Top-Bottom: FoldingCoin and CureCoin"
     Public Const HpgFoldingCoin As String = "FoldingCoin"
     Public Const HpgFoldingCoinTeamStats As String = "FoldingCoin: Team Stats"
     Public Const HpgFoldingCoinMyStats As String = "FoldingCoin: My Stats"
@@ -124,11 +125,11 @@ Public Module GlobalRefs
     Public Const HpgMyStatsEOC As String = "My Stats from EOC"
     Public Const HpgEOC As String = "EOC"  'This is depreciated in v18(don't show in pull-down list). Use 'My Stats from EOC' instead
     Public Const HpgFAH As String = "Folding@Home Web Control"
-    Public Const HpgNaClFAH As String = "Folding@Home NaCl"  'Not working (don't show in pull-down list)
     Public Const HpgBlank As String = "Blank"
 
     'Website title to search for
     Public Const NameCryptoBullions As String = "CryptoBullions"
+    Public Const NameCounterwallet As String = "Counterwallet"
     'Search strings
     Public Const FAH_Version As String = "Version"
     Public Const FAH_Client As String = "FAHClient"
@@ -203,7 +204,7 @@ End Module
 'File download, see: https://github.com/cefsharp/CefSharp/blob/master/CefSharp.Example/DownloadHandler.cs
 Public Class DownloadHandler
     Implements CefSharp.IDownloadHandler
-    Public Sub OnBeforeDownload(webBrowser As CefSharp.IWebBrowser, browser As CefSharp.IBrowser, downloadItem As CefSharp.DownloadItem, callback As CefSharp.IBeforeDownloadCallback) Implements CefSharp.IDownloadHandler.OnBeforeDownload
+    <CLSCompliant(False)> Public Sub OnBeforeDownload(webBrowser As CefSharp.IWebBrowser, browser As CefSharp.IBrowser, downloadItem As CefSharp.DownloadItem, callback As CefSharp.IBeforeDownloadCallback) Implements CefSharp.IDownloadHandler.OnBeforeDownload
         'Reset the downloaded file path at the start of downloading the file
         g_strDownloadedFilePath = ""
         g_bCancelNav = False
@@ -214,7 +215,7 @@ Public Class DownloadHandler
         End If
     End Sub
 
-    Public Sub OnDownloadUpdated(webBrowser As CefSharp.IWebBrowser, browser As CefSharp.IBrowser, downloadItem As CefSharp.DownloadItem, callback As CefSharp.IDownloadItemCallback) Implements CefSharp.IDownloadHandler.OnDownloadUpdated
+    <CLSCompliant(False)> Public Sub OnDownloadUpdated(webBrowser As CefSharp.IWebBrowser, browser As CefSharp.IBrowser, downloadItem As CefSharp.DownloadItem, callback As CefSharp.IDownloadItemCallback) Implements CefSharp.IDownloadHandler.OnDownloadUpdated
         If callback.IsDisposed = False Then
             'Stop the download if Navigation canceled or <Esc> was pressed
             If g_bCancelNav = True Then
@@ -236,7 +237,7 @@ End Class
 'Keypress example, see: https://github.com/cefsharp/CefSharp/blob/master/CefSharp.WinForms.Example/Handlers/KeyboardHandler.cs
 Public Class KeyboardHandler
     Implements CefSharp.IKeyboardHandler
-    Public Function OnPreKeyEvent(browserControl As CefSharp.IWebBrowser, browser As CefSharp.IBrowser, type As CefSharp.KeyType, windowsKeyCode As Integer, nativeKeyCode As Integer, modifiers As CefSharp.CefEventFlags, isSystemKey As Boolean, ByRef isKeyboardShortcut As Boolean) As Boolean Implements CefSharp.IKeyboardHandler.OnPreKeyEvent
+    <CLSCompliant(False)> Public Function OnPreKeyEvent(browserControl As CefSharp.IWebBrowser, browser As CefSharp.IBrowser, type As CefSharp.KeyType, windowsKeyCode As Integer, nativeKeyCode As Integer, modifiers As CefSharp.CefEventFlags, isSystemKey As Boolean, ByRef isKeyboardShortcut As Boolean) As Boolean Implements CefSharp.IKeyboardHandler.OnPreKeyEvent
         If type = CefSharp.KeyType.RawKeyDown Then
             Select Case windowsKeyCode
                 'Browser active control event: Press ESC to cancel Navigation, F5 to Refresh, CTRL+F5 to Clear Cache, ALT+Left for Navigate Back, ALT+Right for Navigate Forward, F12 for Web Tools
@@ -265,7 +266,7 @@ Public Class KeyboardHandler
         Return False
     End Function
 
-    Public Function OnKeyEvent(browserControl As CefSharp.IWebBrowser, browser As CefSharp.IBrowser, type As CefSharp.KeyType, windowsKeyCode As Integer, nativeKeyCode As Integer, modifiers As CefSharp.CefEventFlags, isSystemKey As Boolean) As Boolean Implements CefSharp.IKeyboardHandler.OnKeyEvent
+    <CLSCompliant(False)> Public Function OnKeyEvent(browserControl As CefSharp.IWebBrowser, browser As CefSharp.IBrowser, type As CefSharp.KeyType, windowsKeyCode As Integer, nativeKeyCode As Integer, modifiers As CefSharp.CefEventFlags, isSystemKey As Boolean) As Boolean Implements CefSharp.IKeyboardHandler.OnKeyEvent
         Return False
     End Function
 End Class

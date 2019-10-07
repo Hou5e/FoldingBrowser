@@ -2,23 +2,17 @@
 FoldingBrowser All-in-One Installer:
 ====================================
 
-
 -----------------------------------
 Immediate Need /  Short-Term Goals:
 -----------------------------------
--CureCoin installer: Update blockchain files in the installer to be current.
--CureCoin installer: Update 'peers.dat' file (use new smaller file?), or not include it, since it gets out of date in 1-3 months?
--Have a button to try and get a new CounterParty Bitcoin Address, if it's blank (with a timeout & retry for the mirror Counterwallet site). Or, message to run button #2 to get an address?
--Make it so when the main CounterWallet site is down, (2 minute timeout?) it tries the other mirror site. The website status says it's up, but it's not working, so the alternative site is not being used.
--Reverse the CounterWallet website search order to use the 2nd one first?  (Currently using the main site first (which is down more often): https://counterwallet.io/).
+-Evaluate upgrading to CefSharp/Chrome v77 (VC++2015) when released here: https://github.com/cefsharp/CefSharp/releases
+-CureCoin installer: Update blockchain files and 'peers.dat' file in the installer to be current.
 -Support other wallets, for pressing the 'FLDC Wallet' button, with option for:  https://freewallet.io/     Other alternatives (ignore for now): https://wallet.indiesquare.me/     also: rarepepewallet.com (Not updated enough? security risks?)     (Not yet) https://tokenpockets.com/ (You cannot use tokenpockets currently. It is not compatible with existing passphrases from CounterWallet. If you want to use it, you will have to make a new address first)
+-Option to select which CounterWallet site to use first by default. -(skipping for now) Reverse the CounterWallet website search order to use the mirror site first?  Was using the main site first, which is down more often, but the mirror site is slower to load?
 
 ----------------------------------------------------
 Other Ideas, Improvements, Tasks, Longer-Term Goals:
 ----------------------------------------------------
-
--Evaluate upgrading to CefSharp/Chrome v75 (VC++2015) when released here: https://github.com/cefsharp/CefSharp/releases
--Simple version of the FoldingBrowser: mostly to only run the FAH NaCl Chrome Plugin client (Can the FAH NaCl program be run without a Chrome browser? https://developer.chrome.com/native-client/sdk/download - Also, Chrome NaCl support will be depreciated soon: https://developer.chrome.com/native-client/migration) -Simplicity: Ideally, you only want to enter username and email, and you are up and Folding (as other users have described).
 -Use built-in multi-language uninstaller strings for the one non-built-in uninstaller dialog on upgrading? (Ignoring for now)
 -Enable Google Translate in Chrome/CefSharp for automatic web page translations?
 -Add Multi-language support in the FoldingBrowser for button text (and tooltips)?
@@ -32,7 +26,7 @@ Other Ideas, Improvements, Tasks, Longer-Term Goals:
   -Create an install script. Possibly use Docker to keep the installation simplified
   -Start over from a Chromium web browser project that can already be compiled for Linux and Mac? See Chromely(currently missing Mac compile): https://github.com/mattkol/Chromely
   -Port to and start from an existing MonoDevelop project that can already be compiled for Linux and Mac?
-  -Create a separate Electron.NET App for Mac and Linux of the simple version that only runs the FAH NaCl Chrome Plugin client? -Try the FLDC Bar Electron app as a possible starting point?
+  -Create a separate Electron.NET App for Mac and Linux? -Try the FLDC Bar Electron app as a possible starting point?
   -Can the FoldingBrowser run on Wine in Linux? And, then update the FoldingBrowser to use the appropriate files and paths for Linux?
   -.NET Core simple project for Linux and Mac? (No, CefSharp isn't compatible with other OS's)
   -Create a simple encrypted dat file viewer for Linux and Mac (and include those files with making a backup, for going from Windows to Linux)?
@@ -40,7 +34,7 @@ Other Ideas, Improvements, Tasks, Longer-Term Goals:
 -Add FLDC & CURE Ticker info (from Coin Market Cap API?) (or pull from exchanges?). Update hourly? Do as notify icon? Might not be worth it, if the FLDC homepage gets it. See:  https://coinmarketcap.com/api/    https://api.coinmarketcap.com/v1/ticker/CureCoin/
 -Add option to get Wallet info from blockchain explorer APIs to display value? FLDC- https://xchain.io/     CURE-  https://chainz.cryptoid.info/cure
 -Save some stats from API data, and show difference from last time, or from a past time interval?
--Add notify icon (system tray icon) for folding with NaCl Chrome Plug-in (add option to enable / disable exiting on program close) and other coin ticker info
+-Add notify icon (system tray icon) for folding and other coin ticker info?
 -Option to create backup copies of the settings in a 'Backup' folder periodically, or get a pop-up reminder on a time interval?
 -Make a better way to determine if the settings (.dat) file loads. This won't work: DAT.ToString.Length = 0, it really needs to be .SaveToString(), but all you want to know is there data loaded or not. You don't need a full text string output...
 -Restore from backup button (or separate app)? Make something to make setting up multiple computers easier (rename existing files, and copy new one) (and telnet FAH settings from Config file)
@@ -54,35 +48,49 @@ Other Ideas, Improvements, Tasks, Longer-Term Goals:
 -Improve the get .NET v4.0 from Microsoft message in the installer to: use Windows Update, or manually install from Microsoft's website?
 -Integration with HFM.NET, or something similar
 -Add other related website link buttons?    http://www.scienceblockchains.com/  (Maybe. Want to avoid too many buttons)    https://mergedfolding.net/  (Skip)      https://mergedfolding.net/official-distributions  (Skip)
--Add links to CoinMarketCap (Maybe. It shouldn't be needed with website profit calculator)?     https://coinmarketcap.com/currencies/foldingcoin/       https://coinmarketcap.com/currencies/curecoin/
+-Add links to CoinMarketCap / CoinGecko (Maybe. It shouldn't be needed with website profit calculator)?     https://coinmarketcap.com/currencies/foldingcoin/     https://coinmarketcap.com/currencies/curecoin/     https://www.coingecko.com/en/coins/curecoin     https://www.coingecko.com/en/coins/foldingcoin
 -Add links to donation websites for both FLDC and CURE?  (maybe) -Donate Links: https://www.gofundme.com/help-cure-cancer-with-technology
 -Add Web link buttons for Reddit URLs?
--Add Web link button for a CureCoin Shop button for the CoinPayments URL? https://www.coinpayments.net/store-directory-coin-CURE
--Add a CureCoin Wallet button, that focus a running CURE wallet executable, or launches it as a new process?
+-Re-add the FLDC Shop button when link is restored. The store link was only good for 1 year: https://tokenmarkets.com/catalog/foldingcoin
+-Add Web link button for a CureCoin Shop button for the CoinPayments URL? https://www.coinpayments.net/store-directory-coin-CURE (no longer listed with new service: https://cryptwerk.com/adv/add-coin/)-Add a CureCoin Wallet button, that focus a running CURE wallet executable, or launches it as a new process?
 -Discord login for non-US keyboards: Maybe just pop-up a window with the login info to copy and paste from; hovered over the main window, but in the main form? Use copy and paste buffer, and then paste the info?
 -Update .NET Framework target from v4.5.2 to v4.6.1 or newer (and update the version checker in the installer)?
--Add Option: Dark or light windows & controls theme color options?
 -Add support for zooming in on webpages?
 -Right-click context menu: Add 'Find' to the list. Also, when highlighting text, add that text to the find dialog?
 -Save more than one log file for debugging issues later?
 -When hovering URLs, display the link at the bottom of the screen while hovering the link, or just for a few seconds, like other web browsers?
 -Support SegWit addresses for FLDC (start with 'bc1' and are about 9 characters longer). Probably should get both addresses (Legacy and SegWit) from CounterWallet, and offer a pull-down list selection. Might need to get the 50 character CureCoin folding pool username limit raised.
 -Installer: Change to a language selection page, instead of the pre-installer dialog box?
+-Have a button to try and get a new CounterParty Bitcoin Address, if it's blank (with a timeout & retry for the mirror Counterwallet site). Or, message to run button #2 to get an address?
 
 
 ======================================================================================================
 Change Log - Release Notes - Tasks completed:
 ======================================================================================================
-v21 Release (2019-??-??)
-
+v21 Release (2019-10-07)
+[DONE] -Update the BTC blockchain explorer URL format to be: https://www.blockchain.com/btc/address/<addy>
+[DONE] -Make it so when the main CounterWallet site is down, (1 minute timeout) it tries the other mirror site. The website status says it's up, but it's not working (logging-in to your wallet doesn't do anything), so the alternative site was not being used (because the site status said it wasn't down).
+[DONE] -CureCoin installer: Update blockchain files in the installer to be current.
+[DONE] -CureCoin installer: Update 'peers.dat' file (use new smaller file?), or not include it, since it gets out of date in 1-3 months?
+[DONE] -Show URL in a bottom status bar when you mouse-over / hover a link? (Was only the URL text is written to the debug log)
+[DONE] -Add Option: Dark or light windows & controls theme color options?
+[DONE] -Dark UI theme
+[DONE] -Add the molecule image to fly-down menu
+[DONE] -Make the default homepage the F@H web control now that it loads more reliably
+[DONE] -Add a specific 'Top-Bottom: FoldingCoin and CureCoin' homepage option to the list
+[DONE] -Removed all references to Folding@Home NaCl Chrome Browser plugin, now that it's discontinued as of 2019-06-21
+[DONE] -Swap the button order: make the FLDC Wallet first, and the FLDC Stats later in the list
+[DONE] -Remove the FLDC Shop button. The store link was only good for 1 year: https://tokenmarkets.com/catalog/foldingcoin
+[DONE] -Evaluate upgrading to CefSharp/Chrome v75 (VC++2015) when released (Updated to bug fix v75.1.142)
+[DONE] -Run Code Analysis, and fix the more important warnings
 [DONE] -CureCoin installer: Change the -rescan shortcut to -zapwallettxes (to fix orphans, that do happen periodically)
 [DONE] -CefSharp v73: button panel fly-down is about 2x slower. Decreased redraw steps by half to compensate.
-[DONE] -Fixing issue loading the FAH web control page, where the 'refresh without cache' was not being sent when needed, to fix the infinite refresh loop issue.
+[DONE] -Fixing issue loading the FAH web control page, where the 'refresh without cache' was not being sent when needed, to fix the infinite refresh loop issue. By default, send 'refresh without cache' immediately, since it's needed most of the time.
 [DONE] -Improving FAH username error messages for Segwit Bech32 'bc1' addresses
 [DONE] -Evaluate upgrading to CefSharp/Chrome v73 (VC++2015) when released
 [DONE] -Update to the latest bug fix version CefSharp/Chrome v71.0.2
 [DONE] -Evaluate upgrading to CefSharp/Chrome v71 (VC++2015) when released
-[DONE] -On exiting, sometime with a slow laptop the FoldingBrowser v20 hangs and doesn't cleanly exit. Once the webpages are cached better, then this doesn't reproduce. Probably just needs the exit time interval increased like when this was an issue in the past.
+[DONE] -On exiting, sometime with a slow laptop the FoldingBrowser v20 hangs and doesn't cleanly exit. Once the webpages are cached better, then this doesn't reproduce. Probably just needs the exit time interval increased like when this was an issue in the past. Newer Chrome component should not have this problem now.
 v20 Release (2019-01-20)
 [DONE] -Improvement to auto-scale for different monitors with different scaling, Per-Monitor-DPI-Aware (like a laptop with large monitor)
 [DONE] -Update CureCoin installer to v2.0.0.2

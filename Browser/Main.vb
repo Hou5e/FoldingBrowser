@@ -29,62 +29,63 @@
         Try
             InitializeComponent()
 
-            Dim settings As New CefSharp.WinForms.CefSettings()
-            'Set the Cache path to the user's appdata roaming folder
-            settings.CachePath = System.IO.Path.Combine(UserProfileDir, "Cache")
-            settings.UserDataPath = settings.CachePath
-            settings.LogFile = System.IO.Path.Combine(settings.CachePath, "debug.log")
-            settings.LocalesDirPath = System.IO.Path.Combine(My.Application.Info.DirectoryPath, "locales")
-            settings.Locale = "en-US"
-            settings.AcceptLanguageList = settings.Locale & "," & settings.Locale.Substring(0, 2)
+            Using settings As New CefSharp.WinForms.CefSettings()
+                'Set the Cache path to the user's appdata roaming folder
+                settings.CachePath = System.IO.Path.Combine(UserProfileDir, "Cache")
+                settings.UserDataPath = settings.CachePath
+                settings.LogFile = System.IO.Path.Combine(settings.CachePath, "debug.log")
+                settings.LocalesDirPath = System.IO.Path.Combine(My.Application.Info.DirectoryPath, "locales")
+                settings.Locale = "en-US"
+                settings.AcceptLanguageList = settings.Locale & "," & settings.Locale.Substring(0, 2)
 
-            'For Debugging, to log everything, use: Verbose. Can cause Cef.Shutdown() to hang.
-            'settings.LogSeverity = CefSharp.LogSeverity.Verbose
-            settings.LogSeverity = CefSharp.LogSeverity.Info
+                'For Debugging, to log everything, use: Verbose. Can cause Cef.Shutdown() to hang.
+                'settings.LogSeverity = CefSharp.LogSeverity.Verbose
+                settings.LogSeverity = CefSharp.LogSeverity.Info
 
-            Try
-                'The log file gets appended to each time, so delete it (or else it can get large over time)
-                If System.IO.File.Exists(settings.LogFile) = True Then
-                    System.IO.File.Delete(settings.LogFile)
-                    Threading.Thread.Sleep(50)
-                End If
-            Catch ex As Exception
-                Msg("Error: deleting temp file " & settings.LogFile & ": " & ex.ToString)
-            End Try
+                Try
+                    'The log file gets appended to each time, so delete it (or else it can get large over time)
+                    If System.IO.File.Exists(settings.LogFile) = True Then
+                        System.IO.File.Delete(settings.LogFile)
+                        Threading.Thread.Sleep(50)
+                    End If
+                Catch ex As Exception
+                    Msg("Error: deleting temp file " & settings.LogFile & ": " & ex.ToString)
+                End Try
 
-            'Load the INI data before loading the Homepage (which is based on the user's options in the INI file). Fix the INI file, if needed
-            LoadINISettings()
+                'Load the INI data before loading the Homepage (which is based on the user's options in the INI file). Fix the INI file, if needed
+                LoadINISettings()
 
-            CefSharp.Cef.EnableHighDPISupport()
-            If CefSharp.Cef.Initialize(settings) = True Then
-                Me.browser = New CefSharp.WinForms.ChromiumWebBrowser(URL_BLANK)
-                'Add browser event handlers to pass events back to the main UI
-                AddHandler Me.browser.FrameLoadEnd, AddressOf OnBrowserFrameLoadEnd
-                AddHandler Me.browser.ConsoleMessage, AddressOf OnBrowserConsoleMessage
-                AddHandler Me.browser.StatusMessage, AddressOf OnBrowserStatusMessage
-                AddHandler Me.browser.LoadingStateChanged, AddressOf OnBrowserLoadingStateChanged
-                AddHandler Me.browser.TitleChanged, AddressOf OnBrowserTitleChanged
-                AddHandler Me.browser.AddressChanged, AddressOf OnBrowserAddressChanged
-                'Add keypress handler: ESC to cancel Navigation, F5 to Refresh, CTRL+F for Find, ...
-                Me.browser.KeyboardHandler = New KeyboardHandler()
-                'Add download handler
-                Me.browser.DownloadHandler = New DownloadHandler()
-                'Add to a UI container
-                Me.ToolStripContainer1.ContentPanel.Controls.Add(browser)
+                CefSharp.Cef.EnableHighDPISupport()
+                If CefSharp.Cef.Initialize(settings) = True Then
+                    Me.browser = New CefSharp.WinForms.ChromiumWebBrowser(URL_BLANK)
+                    'Add browser event handlers to pass events back to the main UI
+                    AddHandler Me.browser.FrameLoadEnd, AddressOf OnBrowserFrameLoadEnd
+                    AddHandler Me.browser.ConsoleMessage, AddressOf OnBrowserConsoleMessage
+                    AddHandler Me.browser.StatusMessage, AddressOf OnBrowserStatusMessage
+                    AddHandler Me.browser.LoadingStateChanged, AddressOf OnBrowserLoadingStateChanged
+                    AddHandler Me.browser.TitleChanged, AddressOf OnBrowserTitleChanged
+                    AddHandler Me.browser.AddressChanged, AddressOf OnBrowserAddressChanged
+                    'Add keypress handler: ESC to cancel Navigation, F5 to Refresh, CTRL+F for Find, ...
+                    Me.browser.KeyboardHandler = New KeyboardHandler()
+                    'Add download handler
+                    Me.browser.DownloadHandler = New DownloadHandler()
+                    'Add to a UI container
+                    Me.ToolStripContainer1.ContentPanel.Controls.Add(browser)
 
-                'Default homepage / portal set to the FoldingCoin webpage
+                    'Default homepage / portal set to the FoldingCoin webpage
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
-                'Load the Homepage based on the user's options in the INI file (call after loading the INI settings)
-                LoadHomepage()
+                    'Load the Homepage based on the user's options in the INI file (call after loading the INI settings)
+                    LoadHomepage()
 #Enable Warning BC42358
-            End If
+                End If
+            End Using
 
             'Global reference to this form
             g_Main = Me
 
             'Setup the rest of the window
             Me.Icon = My.Resources.L_cysteine_16_24_32_48_256
-            Me.Text = Prog_Name & " v" & My.Application.Info.Version.Major.ToString
+            Me.Text = g_strTitleEnd
 
             'Update the form for different DPI scaling percentages other than 100% (96 dpi, the default) mostly for Win10
             Dim g As Graphics = Me.CreateGraphics()
@@ -126,6 +127,10 @@
             'Restore Option for the Panel MouseEnter event
             If INI.GetSection(INI_Settings).GetKey(INI_ShowPanelOnMouseEnter) IsNot Nothing Then
                 g_bShowWebLinkPanelOnMouseEnterEvent = CBool(INI.GetSection(INI_Settings).GetKey(INI_ShowPanelOnMouseEnter).GetValue())
+            End If
+            'Set UI Theme colors
+            If INI.GetSection(INI_Settings).GetKey(INI_DarkThemeUI) IsNot Nothing Then
+                ThemeColorUI(CBool(INI.GetSection(INI_Settings).GetKey(INI_DarkThemeUI).GetValue()))
             End If
 
             'Force the URL text to scroll all the way to the left
@@ -659,7 +664,6 @@
                 Me.btnFoldingCoinBlockchain.BackgroundImage = GetResizedImage(My.Resources.BlockchainFLDC_192, CInt(i48 * g_sScaleFactor), Drawing2D.InterpolationMode.HighQualityBicubic)
                 Me.btnBTCBlockchain.BackgroundImage = GetResizedImage(My.Resources.BlockchainBTC_192, CInt(i48 * g_sScaleFactor), Drawing2D.InterpolationMode.HighQualityBicubic)
                 Me.btnFoldingCoinDistribution.BackgroundImage = GetResizedImage(My.Resources.DistributionFLDC_192, CInt(i48 * g_sScaleFactor), Drawing2D.InterpolationMode.HighQualityBicubic)
-                Me.btnFoldingCoinShop.BackgroundImage = GetResizedImage(My.Resources.FLDC_Shop_Mug_192, CInt(i48 * g_sScaleFactor), Drawing2D.InterpolationMode.HighQualityBicubic)
                 Me.btnFoldingCoinTeamStats.BackgroundImage = GetResizedImage(My.Resources.FLDC_192, CInt(i48 * g_sScaleFactor))
                 'CureCoin Related:
                 Me.btnCureCoinWebsite.BackgroundImage = GetResizedImage(My.Resources.CureCoin_192, CInt(i48 * g_sScaleFactor), Drawing2D.InterpolationMode.HighQualityBicubic)
@@ -673,7 +677,12 @@
                 Me.pbProgIcon.Width = CInt(i48 * g_sScaleFactor) + 2
                 Me.pbProgIcon.Height = Me.pbProgIcon.Width
                 Me.pbProgIcon.Left = Me.pnlBtnLinksDividerTop.Width - Me.pbProgIcon.Width
-                Me.pbProgIcon.Image = GetResizedImage(New Icon(My.Resources.L_cysteine_16_24_32_48_256, i256, i256).ToBitmap, (Me.pbProgIcon.Width - 2), Drawing2D.InterpolationMode.HighQualityBicubic)
+                Using iconProg As New Icon(My.Resources.L_cysteine_16_24_32_48_256, i256, i256)
+                    Me.pbProgIcon.Image = GetResizedImage(iconProg.ToBitmap, (Me.pbProgIcon.Width - 2), Drawing2D.InterpolationMode.HighQualityBicubic)
+                End Using
+
+                'Molecule image for decoration (not resized)
+                Me.pbMolecule.Image = My.Resources.p1159_L939_K12M_298k
 
                 'Calculate the web link button panel heights (shown vs minimized)
                 m_iNormPanelHeight = Me.pnlBtnLinksDividerBottom.Top - 3  '260px @ 96dpi
@@ -700,7 +709,7 @@
                 'Reset the DPI changed flag, if needed
                 m_bUpdateDPI = False
                 m_iOldDPI = m_iCurrentDPI
-                Msg("DPI set to: " & m_iCurrentDPI.ToString & " dpi, with scale factor: " & CInt(g_sScaleFactor * 100).ToString & "%")
+                Msg("DPI set to: " & m_iCurrentDPI.ToString & " dpi. Scale: " & CInt(g_sScaleFactor * 100).ToString & "%")
 
                 'If the form is larger than the screen, then resize it to fit (slightly smaller than full screen)
                 Dim scrMonitor As Screen = Screen.FromControl(Me)
@@ -712,21 +721,23 @@
             End If
 
         Catch ex As Exception
-            Msg("Error: Trying to scale to: " & m_iCurrentDPI.ToString & " dpi, with scale factor: " & CInt(g_sScaleFactor * 100).ToString & "%")
+            Msg("Error: Trying to scale to: " & m_iCurrentDPI.ToString & " dpi. Scale: " & CInt(g_sScaleFactor * 100).ToString & "%")
         End Try
     End Sub
 
-    Private Function GetResizedImage(imgInput As Image, ByRef iOutputDim As Integer, ByRef Optional enImgResizeMode As Drawing2D.InterpolationMode = Drawing2D.InterpolationMode.NearestNeighbor) As Image
+    Private Function GetResizedImage(ByRef imgInput As Image, ByRef iOutputDim As Integer, ByRef Optional enImgResizeMode As Drawing2D.InterpolationMode = Drawing2D.InterpolationMode.NearestNeighbor) As Image
         'Resize the square image to the desired size for buttons (scaling images for different DPI scaling percentages)
         GetResizedImage = New Bitmap(iOutputDim, iOutputDim)
         Try
-            Dim g As Graphics = Graphics.FromImage(GetResizedImage)
-            g.InterpolationMode = enImgResizeMode
-            g.DrawImage(imgInput, New Rectangle(0, 0, iOutputDim, iOutputDim))
-            imgInput.Dispose()
+            Using g As Graphics = Graphics.FromImage(GetResizedImage)
+                g.CompositingMode = Drawing2D.CompositingMode.SourceCopy
+                g.CompositingQuality = Drawing2D.CompositingQuality.HighQuality
+                g.InterpolationMode = enImgResizeMode
+                g.DrawImage(imgInput, 0, 0, iOutputDim, iOutputDim)
+            End Using
 
         Catch ex As Exception
-            Msg("Error: Trying to resize image height and width to: " & iOutputDim.ToString & " pixels")
+            Msg("Error: Resizing image to: " & iOutputDim.ToString & " x " & iOutputDim.ToString & " pixels")
         End Try
     End Function
 
@@ -789,10 +800,37 @@
 #End Region
 
 #Region "Button, Checkbox, Combobox - Form Control Events"
+    Public Sub ThemeColorUI(bDark As Boolean)
+        If bDark = True Then
+            'URL bar at the top
+            Me.pnlURL.BackColor = Color.LightGray
+            Me.chkToolsShow.FlatAppearance.CheckedBackColor = Color.Silver
+            'Fly-down panel
+            Me.pnlBtnLinks.BackColor = Color.FromArgb(36, 36, 36)
+            Me.gbxFAHRelated.BackColor = Color.Silver
+            Me.gbxFoldingCoinRelated.BackColor = Color.Silver
+            Me.gbxCureCoinRelated.BackColor = Color.Silver
+            Me.lblToolsWalletNum.BackColor = Color.Silver
+        Else
+            'URL bar at the top
+            Me.pnlURL.BackColor = Color.White
+            Me.chkToolsShow.FlatAppearance.CheckedBackColor = Color.White
+            'Fly-down panel
+            Me.pnlBtnLinks.BackColor = Color.White
+            Me.gbxFAHRelated.BackColor = Color.White
+            Me.gbxFoldingCoinRelated.BackColor = Color.White
+            Me.gbxCureCoinRelated.BackColor = Color.White
+            Me.lblToolsWalletNum.BackColor = Color.White
+        End If
+    End Sub
+
     Private Async Sub btnFAHWebControl_Click(sender As System.Object, e As System.EventArgs) Handles btnFAHWebControl.Click
         'Check to see if FAH is running, and if not then pop-up a message to indicate that
-        Dim bFAHRunning As Boolean = False
+        Dim r As Random = New Random
+        Dim i As Integer = 0
+        Dim iPageReloads As Integer = 0
         Dim bFAH_PageLoaded As Boolean = False
+        Dim bFAHRunning As Boolean = False
         Dim proc As Process
         Try
             For Each proc In Process.GetProcessesByName(FAH_Client)
@@ -810,66 +848,34 @@
             Msg("Error checking if FAH is running: " & ex.ToString)
         End Try
 
-        'WORKAROUND: The FAH Web Control doesn't always load during the 30 second count down. So, try bypassing it for now. The URL to load without cache doesn't avoiding the other CORS infinite loop error (Refresh without cache still needed)
-#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
-        Dim r As Random = New Random
-        OpenURL(URL_FAH_WebClient_IPAddr & r.NextDouble.ToString(), False)
-#Enable Warning BC42358
-
-        'This waits 3 seconds each time, to see if it's going to load quickly. Wait up to ~30 seconds total for the page to load
-        Dim i As Integer = 0
-        Do Until bFAH_PageLoaded = True OrElse g_bCancelNav = True OrElse i > 12
-            i += 1
-
-            'If the user presses a different button to go to a different web page, then don't reload the default FAH Web Control URL (can happen easily over the 15 second period, if FAH isn't running)
-            If i = 3 AndAlso (Me.txtURL.Text.StartsWith(URL_FAH_WebClient_IPAddr) = True OrElse Me.txtURL.Text = URL_FAH_WebClient_URL) Then
-                'If still not loaded, try a Refresh ignoring browser cache
+        Try
+            'Try up to 2 differnt URLs. This shouldn't be needed anymore
+            Do Until bFAH_PageLoaded = True OrElse g_bCancelNav = True OrElse iPageReloads > 2
+                'WORKAROUND: The FAH Web Control doesn't always load during the 30 second count down. Bypass it, and load the unique URL directly with a Refresh 'ignoring browser cache' to avoid the CORS infinite loop web page error
+                iPageReloads += 1
+                Await OpenURL(URL_FAH_WebClient_IPAddr & r.NextDouble.ToString(), False)
+                'Try a Refresh 'ignoring browser cache' immediately, since it's needed most of the time
                 Me.browser.GetBrowser.Reload(True)
-            End If
-            If Await PageTitleWait(FAH_Version) = True Then bFAH_PageLoaded = True
-        Loop
-    End Sub
 
-    Private Sub btnFAHTwitter_Click(sender As System.Object, e As System.EventArgs) Handles btnFAHTwitter.Click
-#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
-        OpenURL(URL_FAHTwitter, False)
-#Enable Warning BC42358
-    End Sub
+                'Wait up to ~30 seconds total for the page to load (3 seconds each iteration)
+                Do Until bFAH_PageLoaded = True OrElse g_bCancelNav = True OrElse i > 10
+                    i += 1
 
-    Private Sub btnFAHNews_Click(sender As Object, e As EventArgs) Handles btnFAHNews.Click
-#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
-        OpenURL(URL_FAH & URL_FAH_News, False)
-#Enable Warning BC42358
-    End Sub
+                    If i = 5 Then
+                        'If still not loaded, try a Refresh 'ignoring browser cache'
+                        Me.browser.GetBrowser.Reload(True)
+                    End If
+                    'This waits 3 seconds each time, until loaded
+                    If Await PageTitleWait(FAH_Version) = True Then bFAH_PageLoaded = True
 
-    Private Sub btnFoldingCoinUserStats_Click(sender As Object, e As EventArgs) Handles btnFoldingCoinUserStats.Click
-#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
-        Dim strUsername As String = ""
-        Dim DAT As New IniFile
-        'Load DAT file, decrypt it
-        DAT.LoadText(Decrypt(LoadDat))
-        If DAT.ToString.Length = 0 Then
-            'Decryption failed
-            Msg(DAT_ErrorMsg)
-            MessageBox.Show(DAT_ErrorMsg)
-        End If
+                    'If the user presses a different button to go to a different web page, then don't reload the default FAH Web Control URL (can happen easily over the 15-30 second period, if FAH isn't running)
+                    If Me.txtURL.Text.StartsWith(URL_FAH_WebClient_IPAddr) = False AndAlso Me.txtURL.Text <> URL_FAH_WebClient_URL Then Exit Sub
+                Loop
+            Loop
 
-        'Look for FAH username for FAH installation to un-check the dialog for existing users
-        If DAT.GetSection(Id & Me.cbxToolsWalletId.Text) IsNot Nothing AndAlso DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_FAH_Username) IsNot Nothing Then
-            strUsername = DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_FAH_Username).GetValue()
-        End If
-        'Done with the DAT file
-        DAT = Nothing
-
-        'Make sure the Username is FoldingCoin compatible, otherwise just display the main Stats page
-        If strUsername.Length > 0 AndAlso strUsername.Contains("_") = True Then
-            'Normal: Load User's Stats
-            OpenURL(URL_FoldingCoinStats & URL_FoldingCoinStatsUser & strUsername, False)
-        Else
-            'Not a vailid FLDC username. Just go to the main FLDC Stats page
-            OpenURL(URL_FoldingCoinStats, False)
-        End If
-#Enable Warning BC42358
+        Catch ex As Exception
+            Msg("Error unable to load FAH Web Control: " & ex.ToString)
+        End Try
     End Sub
 
     'Extreme Overclocking's User Stats page: Needs to know user ID # ...  Once known, store the info in the INI file
@@ -1005,17 +1011,48 @@
         End Try
     End Sub
 
-    Private Sub btnFoldingCoinWebsite_Click(sender As System.Object, e As System.EventArgs) Handles btnFoldingCoinWebsite.Click
+    Private Sub btnFoldingCoinUserStats_Click(sender As Object, e As EventArgs) Handles btnFoldingCoinUserStats.Click
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
-        OpenURL(URL_FoldingCoin, False)
+        Dim strUsername As String = ""
+        Dim DAT As New IniFile
+        'Load DAT file, decrypt it
+        DAT.LoadText(Decrypt(LoadDat))
+        If DAT.ToString.Length = 0 Then
+            'Decryption failed
+            Msg(DAT_ErrorMsg)
+            MessageBox.Show(DAT_ErrorMsg)
+        End If
+
+        'Look for FAH username for FAH installation to un-check the dialog for existing users
+        If DAT.GetSection(Id & Me.cbxToolsWalletId.Text) IsNot Nothing AndAlso DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_FAH_Username) IsNot Nothing Then
+            strUsername = DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_FAH_Username).GetValue()
+        End If
+        'Done with the DAT file
+        DAT = Nothing
+
+        'Make sure the Username is FoldingCoin compatible, otherwise just display the main Stats page
+        If strUsername.Length > 0 AndAlso strUsername.Contains("_") = True Then
+            'Normal: Load User's Stats
+            OpenURL(URL_FoldingCoinStats & URL_FoldingCoinStatsUser & strUsername, False)
+        Else
+            'Not a vailid FLDC username. Just go to the main FLDC Stats page
+            OpenURL(URL_FoldingCoinStats, False)
+        End If
 #Enable Warning BC42358
     End Sub
 
-    Private Sub btnFoldingCoinTwitter_Click(sender As System.Object, e As System.EventArgs) Handles btnFoldingCoinTwitter.Click
+    Private Sub btnFAHTwitter_Click(sender As System.Object, e As System.EventArgs) Handles btnFAHTwitter.Click
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
-        OpenURL(URL_FoldingCoinTwitter, False)
+        OpenURL(URL_FAHTwitter, False)
 #Enable Warning BC42358
     End Sub
+
+    Private Sub btnFAHNews_Click(sender As Object, e As EventArgs) Handles btnFAHNews.Click
+#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
+        OpenURL(URL_FAH & URL_FAH_News, False)
+#Enable Warning BC42358
+    End Sub
+
 
     Private Async Sub btnMyWallet_Click(sender As System.Object, e As System.EventArgs) Handles btnMyWallet.Click
         If Await LoginToCounterwallet() = False Then MessageBox.Show("Task 'Log Into Wallet' did not complete. Please try again.")
@@ -1078,7 +1115,7 @@
 
                 If DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_BTC_Addr) IsNot Nothing Then
                     'If the address is available, then open that URL for the users wallet
-                    OpenURL(URL_BTC_Blockchain & "address/" & DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_BTC_Addr).GetValue(), False)
+                    OpenURL(URL_BTC_Blockchain & "btc/address/" & DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_BTC_Addr).GetValue(), False)
                 Else
                     'Just open the main URL instead
                     OpenURL(URL_BTC_Blockchain, False)
@@ -1097,21 +1134,9 @@
 #Enable Warning BC42358
     End Sub
 
-    Private Sub btnFoldingCoinDiscord_Click(sender As Object, e As EventArgs) Handles btnFoldingCoinDiscord.Click
-#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
-        LoginToDiscord(True)
-#Enable Warning BC42358
-    End Sub
-
     Private Sub btnFoldingCoinDistribution_Click(sender As System.Object, e As System.EventArgs) Handles btnFoldingCoinDistribution.Click
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
         OpenURL(URL_FLDC_Distro, False)
-#Enable Warning BC42358
-    End Sub
-
-    Private Sub btnFoldingCoinShop_Click(sender As Object, e As EventArgs) Handles btnFoldingCoinShop.Click
-#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
-        OpenURL(URL_FoldingCoinShop, False)
 #Enable Warning BC42358
     End Sub
 
@@ -1121,16 +1146,28 @@
 #Enable Warning BC42358
     End Sub
 
-
-    Private Sub btnCureCoinWebsite_Click(sender As System.Object, e As System.EventArgs) Handles btnCureCoinWebsite.Click
+    Private Sub btnFoldingCoinWebsite_Click(sender As System.Object, e As System.EventArgs) Handles btnFoldingCoinWebsite.Click
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
-        OpenURL(URL_CureCoin, False)
+        OpenURL(URL_FoldingCoin, False)
 #Enable Warning BC42358
     End Sub
 
-    Private Sub btnCureCoinTwitter_Click(sender As System.Object, e As System.EventArgs) Handles btnCureCoinTwitter.Click
+    Private Sub btnFoldingCoinTwitter_Click(sender As System.Object, e As System.EventArgs) Handles btnFoldingCoinTwitter.Click
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
-        OpenURL(URL_CureCoinTwitter, False)
+        OpenURL(URL_FoldingCoinTwitter, False)
+#Enable Warning BC42358
+    End Sub
+
+    Private Sub btnFoldingCoinDiscord_Click(sender As Object, e As EventArgs) Handles btnFoldingCoinDiscord.Click
+#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
+        LoginToDiscord(True)
+#Enable Warning BC42358
+    End Sub
+
+
+    Private Sub btnCureCoinTeamStats_Click(sender As Object, e As EventArgs) Handles btnCureCoinTeamStats.Click
+#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
+        OpenURL(URL_CureCoin_EOC, False)
 #Enable Warning BC42358
     End Sub
 
@@ -1172,17 +1209,24 @@
 #Enable Warning BC42358
     End Sub
 
+    Private Sub btnCureCoinWebsite_Click(sender As System.Object, e As System.EventArgs) Handles btnCureCoinWebsite.Click
+#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
+        OpenURL(URL_CureCoin, False)
+#Enable Warning BC42358
+    End Sub
+
+    Private Sub btnCureCoinTwitter_Click(sender As System.Object, e As System.EventArgs) Handles btnCureCoinTwitter.Click
+#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
+        OpenURL(URL_CureCoinTwitter, False)
+#Enable Warning BC42358
+    End Sub
+
     Private Sub btnCureCoinDiscord_Click(sender As Object, e As EventArgs) Handles btnCureCoinDiscord.Click
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
         LoginToDiscord(False)
 #Enable Warning BC42358
     End Sub
 
-    Private Sub btnCureCoinTeamStats_Click(sender As Object, e As EventArgs) Handles btnCureCoinTeamStats.Click
-#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
-        OpenURL(URL_CureCoin_EOC, False)
-#Enable Warning BC42358
-    End Sub
 
     Private Sub chkToolsShow_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles chkToolsShow.CheckedChanged
         If Me.pnlBtnLinks.Height <= m_iMinPanelHeight Then
@@ -1246,17 +1290,19 @@
         'Minimize the Tools panel
         Main_MouseUp(Nothing, Nothing)
 
-        Dim DialogFAH As New FAHSetupDialog
+        Dim DialogFAH As FAHSetupDialog = Nothing
         Try
             'Prompt for FAH info: Ask for: (existing) Username, Merged Folding Coin Selection, FAH Team #. Show Username as typing and check it for errors. (Optional) Get Passkey by email. Show before and after of the FAH Config file changes 
+            DialogFAH = New FAHSetupDialog
             DialogFAH.m_bInitialInstall = False
             'Show modal dialog box
             DialogFAH.ShowDialog(Me)
 
         Catch ex As Exception
             Msg("Setup FAH User, Team, and Config error:" & ex.ToString)
+        Finally
+            DialogFAH.Dispose()
         End Try
-        DialogFAH.Dispose()
     End Sub
 
     Private Async Sub btnToolsCureCoinSetup_Click(sender As Object, e As EventArgs) Handles btnToolsCureCoinSetup.Click
@@ -1318,16 +1364,16 @@
 #End Region
 
 #Region "Auto-Wallet Login"
-    'Main CounterWallet server is up: m_iCounterWalletServerUp = 1. If set to 2, then use the secondary server.
+    'Main CounterWallet server is up: m_iCounterWalletServerUp = 1. If set to 2, then use the secondary mirror server.
     Private m_iCounterWalletServerUp As Integer = 0
     Private Async Function IsCounterwalletUp() As Threading.Tasks.Task
+        Dim OkMsg As New MsgBoxDialog
         Try
-            'Get CounterWallet server status to make sure it is up
+            'Get CounterWallet server status to make sure it is up. Use the main site as the default
             Dim strResponse1 As String = ""
             Dim strResponse2 As String = ""
             Msg("Getting CounterWallet server status from: " & URL_Counterwallet & CounterwalletAPI)
             'Display status
-            Dim OkMsg As New MsgBoxDialog
             OkMsg.Text = "Checking CounterWallet Server Status"
             OkMsg.MsgText.Text = OkMsg.Text & vbNewLine & vbNewLine & "1. " & URL_Counterwallet & CounterwalletAPI & vbNewLine & "(Can take 40 seconds)"
             OkMsg.MsgText.Left = 70
@@ -1341,7 +1387,7 @@
 
             'Get CounterWallet status from server
             Await OpenURL(URL_Counterwallet & CounterwalletAPI, False)
-            Await PageTitleWait("counterwallet")
+            Await PageTitleWait(NameCounterwallet)
             Await Wait(50)
 
             'Find status data in web page
@@ -1355,6 +1401,7 @@
                 Await Wait(700)
             Next
 
+            'Use the mirror CounterWallet site as the backup
             If m_iCounterWalletServerUp <> 1 Then
                 Msg("Getting CounterWallet server status from: " & URL_CoinDaddyCounterwallet & CounterwalletAPI)
                 'Display status
@@ -1363,7 +1410,7 @@
 
                 'Get CounterWallet status from server
                 Await OpenURL(URL_CoinDaddyCounterwallet & CounterwalletAPI, False)
-                Await PageTitleWait("counterwallet")
+                Await PageTitleWait(NameCounterwallet)
                 Await Wait(50)
 
                 'Find status data in web page
@@ -1377,19 +1424,24 @@
                 Next
             End If
 
-            'Close the informational message
-            OkMsg.Close()
-            OkMsg.Dispose()
             Msg("Using CounterWallet server: #" & m_iCounterWalletServerUp)
 
         Catch ex As Exception
             Msg("CounterWallet Status error:" & ex.ToString)
         End Try
+
+        'Close the informational message
+        OkMsg.Close()
+        OkMsg.Dispose()
     End Function
 
     Private Async Function LoginToCounterwallet() As Threading.Tasks.Task(Of Boolean)
+        Dim i As Integer = 0
+        Dim bFAH_PageLoaded As Boolean = False
         Dim DAT As New IniFile
         Dim bSaved12W As Boolean = False
+        Dim OkMsg As New MsgBoxDialog
+
         Try
             'Check server status
             Await IsCounterwalletUp()
@@ -1398,11 +1450,6 @@
                     Return True
                 End If
             End If
-
-            'CounterWallet web page 
-            Await OpenURL(If(m_iCounterWalletServerUp = 2, URL_CoinDaddyCounterwallet, URL_Counterwallet), False)
-            Await PageTitleWait("Counterwallet")
-            Await Wait(700)
 
             'Make sure DAT file exists
             If System.IO.File.Exists(DatFilePath) = True Then
@@ -1454,19 +1501,62 @@
             End If
 
             If bSaved12W = True Then
-                'Enter 12-word Passphrase to login
-                EnterTextById("password", DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_CP12Words).GetValue())
-                Await Wait(50)
-                DAT = Nothing
+                'Display status
+                OkMsg.Text = "Login to wallet"
+                OkMsg.MsgText.Text = OkMsg.Text & vbNewLine & vbNewLine & "1. " & If(m_iCounterWalletServerUp = 2, URL_CoinDaddyCounterwallet, URL_Counterwallet) & vbNewLine & "(Can take 60 seconds)"
+                OkMsg.MsgText.Left = 70
+                OkMsg.MsgText.Top = 70
+                OkMsg.Width = (OkMsg.MsgText.Left * 2) + OkMsg.MsgText.Width + 20
+                OkMsg.Height = (OkMsg.MsgText.Top * 2) + OkMsg.MsgText.Height + System.Windows.Forms.SystemInformation.CaptionHeight + System.Windows.Forms.SystemInformation.BorderSize.Height + 20
+                OkMsg.StartPosition = FormStartPosition.CenterScreen
+                OkMsg.btnOK.Visible = False
+                OkMsg.BackColor = Color.PaleGreen
+                OkMsg.Show(Me)
 
-                'Trigger event to enable the Login button, since there was no keystroke event to enable the button
-                Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("ko.utils.triggerEvent(document.getElementById('password'), 'input');")
+                'Wait up to ~1 minute for trying to login on either the mirror site or the main site (3 seconds each iteration)
+                i = 0
+                bFAH_PageLoaded = False
+                Do Until bFAH_PageLoaded = True OrElse g_bCancelNav = True OrElse i > 40
+                    i += 1
+                    If i = 1 OrElse i = 20 Then
+                        If i = 1 Then
+                            'CounterWallet web page (Use the mirror site as the default)
+                            Await OpenURL(If(m_iCounterWalletServerUp = 2, URL_CoinDaddyCounterwallet, URL_Counterwallet), False)
+                        ElseIf i = 20 Then
+                            'If still not loaded, try the other site
+                            OkMsg.BackColor = Color.LightSkyBlue
+                            OkMsg.MsgText.Text = OkMsg.Text & vbNewLine & vbNewLine & "2. " & If(m_iCounterWalletServerUp = 2, URL_Counterwallet, URL_CoinDaddyCounterwallet) & vbNewLine & "(Can take 60 seconds)"
 
-                'Click Login button
-                Await ClickById("walletLoginButton", True)
+                            'If still not loaded, try the other site
+                            Await OpenURL(If(m_iCounterWalletServerUp = 2, URL_Counterwallet, URL_CoinDaddyCounterwallet), False)
+                        End If
+                        Await PageTitleWait(NameCounterwallet)
+                        Await Wait(700)
 
-                'Return true, if you get here
-                Return True
+                        'Enter 12-word Passphrase to login
+                        EnterTextById("password", DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_CP12Words).GetValue())
+                        Await Wait(50)
+                        DAT = Nothing
+
+                        'Trigger event to enable the Login button, since there was no keystroke event to enable the button
+                        Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("ko.utils.triggerEvent(document.getElementById('password'), 'input');")
+
+                        'Click Login button
+                        Await ClickById("walletLoginButton", True)
+                    End If
+
+                    'This waits 3 seconds each time, until loaded. Wait for the Title text to disappear (happens when logged in)
+                    If Await PageNoTitleWait() = True Then bFAH_PageLoaded = True
+                Loop
+
+                If bFAH_PageLoaded = True Then
+                    'Close the informational message
+                    OkMsg.Close()
+                    OkMsg.Dispose()
+
+                    'Return true, if the page loaded
+                    Return True
+                End If
             End If
 
         Catch ex As Exception
@@ -1474,6 +1564,9 @@
             If DAT IsNot Nothing Then DAT = Nothing
         End Try
 
+        'Close the informational message
+        OkMsg.Close()
+        OkMsg.Dispose()
         Return False
     End Function
 #End Region
@@ -1731,6 +1824,11 @@
 
 #Region "Automated Processes - Mostly for the 'one time only' setups"
     Private Async Function GetWallet() As Threading.Tasks.Task(Of Boolean)
+        Dim i As Integer = 0
+        Dim iPageReloads As Integer = 0
+        Dim bFAH_PageLoaded As Boolean = False
+        Dim OkMsg As New MsgBoxDialog
+
         Try
             'Look to see if the wallet INI key/value exists, and warn user to change wallet info slots, or the info will be overwritten
             If INI.GetSection(Id & Me.cbxToolsWalletId.Text) IsNot Nothing AndAlso INI.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(INI_WalletName) IsNot Nothing Then
@@ -1748,108 +1846,162 @@
                 End If
             End If
 
-            'CounterWallet web page 
-            Await OpenURL(If(m_iCounterWalletServerUp = 2, URL_CoinDaddyCounterwallet, URL_Counterwallet), False)
-            Await PageTitleWait("Counterwallet")
-            Await Wait(700)
+            'Display status
+            OkMsg.Text = "Getting wallet address"
+            OkMsg.MsgText.Text = OkMsg.Text & vbNewLine & vbNewLine & "1. " & If(m_iCounterWalletServerUp = 2, URL_CoinDaddyCounterwallet, URL_Counterwallet) & vbNewLine & "(Can take 60 seconds)"
+            OkMsg.MsgText.Left = 70
+            OkMsg.MsgText.Top = 70
+            OkMsg.Width = (OkMsg.MsgText.Left * 2) + OkMsg.MsgText.Width + 20
+            OkMsg.Height = (OkMsg.MsgText.Top * 2) + OkMsg.MsgText.Height + System.Windows.Forms.SystemInformation.CaptionHeight + System.Windows.Forms.SystemInformation.BorderSize.Height + 20
+            OkMsg.StartPosition = FormStartPosition.CenterScreen
+            OkMsg.btnOK.Visible = False
+            OkMsg.BackColor = Color.PaleGreen
+            OkMsg.Show(Me)
 
-            'Click Create New CounterWallet
-            Await ClickById("newWalletButton", False)
-            Await Wait(300)
+            'Try up to 2 differnt URLs
+            Do Until bFAH_PageLoaded = True OrElse g_bCancelNav = True OrElse iPageReloads > 2
+                iPageReloads += 1
+                If iPageReloads = 1 Then
+                    'CounterWallet web page (Use the mirror site as the default)
+                    Await OpenURL(If(m_iCounterWalletServerUp = 2, URL_CoinDaddyCounterwallet, URL_Counterwallet), False)
+                Else
+                    'If still not loaded, try the other site
+                    OkMsg.BackColor = Color.LightSkyBlue
+                    OkMsg.MsgText.Text = OkMsg.Text & vbNewLine & vbNewLine & "2. " & If(m_iCounterWalletServerUp = 2, URL_Counterwallet, URL_CoinDaddyCounterwallet) & vbNewLine & "(Can take 60 seconds)"
 
-            'Save 12-word Passphrase and BTC address
-            Dim str12W As String = ""
-            Dim strBTCAddr As String = ""
-
-            For i As Integer = 0 To 10
-                If FindTextInDoc("generatedPassphrase"">*</span>", "", str12W, "", False, "") = True AndAlso str12W.Length > 24 Then
-                    Exit For
+                    Await OpenURL(If(m_iCounterWalletServerUp = 2, URL_Counterwallet, URL_CoinDaddyCounterwallet), False)
                 End If
-                Await Wait(400)
-            Next
 
-            If str12W.Length > 24 Then
-                'Click the "I've written it down" check box
-                Await ClickByName("passphraseSaved", 0, False)
-                'Click Continue button
-                Await ClickById("continueWalletCreation", False)
-                Await Wait(100)
+                'Wait up to ~1 minute total for each page to load (3 seconds each iteration)
+                i = 0
+                bFAH_PageLoaded = False
+                Do Until bFAH_PageLoaded = True OrElse g_bCancelNav = True OrElse i > 20
+                    i += 1
+                    'This waits 3 seconds each time, until loaded
+                    If Await PageTitleWait(NameCounterwallet) = True Then bFAH_PageLoaded = True
+                Loop
+                Await Wait(700)
 
-                'There are 3 buttons with this ID: finishWalletCreation. Use the class to get the ('btn btn-primary') 4th instance for the Create Wallet button:
-                Await ClickByClass("btn btn-primary", 3, False)
-                Await Wait(100)
+                'Click Create New CounterWallet
+                Await ClickById("newWalletButton", False)
+                Await Wait(300)
 
-                'Click the 'X' close button.  Not working: click OK, the ('btn btn-primary') 9th instance for the OK button.
-                Await ClickByClass("bootbox-close-button close", 0, False)
+                'Save 12-word Passphrase and BTC address
+                Dim str12W As String = ""
+                Dim strBTCAddr As String = ""
 
-                'Enter 12-word Passphrase to login
-                EnterTextById("password", str12W)
-                'Trigger event to enable the Login button, since there was no keystroke event to enable the button
-                Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("ko.utils.triggerEvent(document.getElementById('password'), 'input');")
-
-                'Click Login button
-                Await ClickById("walletLoginButton", True)
-                Await Wait(1000)
-
-                'First login, accept terms. ('btn btn-success') 2nd instance for the Accept button:
-                Await ClickByClass("btn btn-success", 1, False)
-
-                'The logged into wallet web page has no title, but the previous page had a title
-                Await PageNoTitleWait()
-
-                For i As Integer = 1 To 40
-                    If FindTextInDoc("selectAddressText, text: dispAddress"">*</span>", "", strBTCAddr, "", False, "") = True Then
-                        If strBTCAddr.Length >= 26 AndAlso strBTCAddr.Length <= 35 AndAlso (strBTCAddr.StartsWith("1") = True OrElse strBTCAddr.StartsWith("3") = True) Then
-                            Exit For
-                        End If
+                For i = 0 To 10
+                    If FindTextInDoc("generatedPassphrase"">*</span>", "", str12W, "", False, "") = True AndAlso str12W.Length > 24 Then
+                        Exit For
                     End If
-                    Await Wait(200)
+                    Await Wait(400)
                 Next
 
-                'Save and encrypt the 12 word Passphrase and the Bitcoin address
-                Dim DAT As New IniFile
-                If System.IO.File.Exists(DatFilePath) = True Then
-                    'Load DAT file, decrypt it
-                    DAT.LoadText(Decrypt(LoadDat))
-                    If DAT.ToString.Length = 0 Then
-                        'Decryption failed
-                        Msg(DAT_ErrorMsg)
-                        MessageBox.Show(DAT_ErrorMsg)
+                If str12W.Length > 24 Then
+                    'Click the "I've written it down" check box
+                    Await ClickByName("passphraseSaved", 0, False)
+                    'Click Continue button
+                    Await ClickById("continueWalletCreation", False)
+                    Await Wait(100)
+
+                    'There are 3 buttons with this ID: finishWalletCreation. Use the class to get the ('btn btn-primary') 4th instance for the Create Wallet button:
+                    Await ClickByClass("btn btn-primary", 3, False)
+                    Await Wait(100)
+
+                    'Click the 'X' close button.  Not working: click OK, the ('btn btn-primary') 9th instance for the OK button.
+                    Await ClickByClass("bootbox-close-button close", 0, False)
+
+                    'Enter 12-word Passphrase to login
+                    EnterTextById("password", str12W)
+                    'Trigger event to enable the Login button, since there was no keystroke event to enable the button
+                    Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("ko.utils.triggerEvent(document.getElementById('password'), 'input');")
+
+                    'Click Login button
+                    Await ClickById("walletLoginButton", True)
+                    Await Wait(1200)
+
+                    'Wait up to ~1 minute. The logged into wallet web page has no title, but the previous page had a title
+                    i = 0
+                    bFAH_PageLoaded = False
+                    Do Until bFAH_PageLoaded = True OrElse g_bCancelNav = True OrElse i > 20
+                        i += 1
+
+                        'If 1.2 second wait wasn't long enough, retry at 12 seconds
+                        If i = 1 OrElse i = 4 Then
+                            'First login, accept terms. ('btn btn-success') 2nd instance for the Accept button:
+                            Await ClickByClass("btn btn-success", 1, False)
+                        End If
+
+                        'This waits 3 seconds each time, until loaded. Wait for the Title text to disappear (happens when logged in)
+                        If Await PageNoTitleWait() = True Then bFAH_PageLoaded = True
+                    Loop
+
+                    'Exit this web page, and try the other site, if it didn't load. Or, run it anyway on the second website
+                    If bFAH_PageLoaded = True OrElse iPageReloads = 2 Then
+                        'Find the FLDC / BTC wallet address
+                        For i = 1 To 40
+                            If FindTextInDoc("selectAddressText, text: dispAddress"">*</span>", "", strBTCAddr, "", False, "") = True Then
+                                If strBTCAddr.Length >= 26 AndAlso strBTCAddr.Length <= 35 AndAlso (strBTCAddr.StartsWith("1") = True OrElse strBTCAddr.StartsWith("3") = True) Then
+                                    Exit For
+                                End If
+                            End If
+                            Await Wait(200)
+                        Next
+
+                        'Save and encrypt the 12 word Passphrase and the Bitcoin address
+                        Dim DAT As New IniFile
+                        If System.IO.File.Exists(DatFilePath) = True Then
+                            'Load DAT file, decrypt it
+                            DAT.LoadText(Decrypt(LoadDat))
+                            If DAT.ToString.Length = 0 Then
+                                'Decryption failed
+                                Msg(DAT_ErrorMsg)
+                                MessageBox.Show(DAT_ErrorMsg)
+                            End If
+                        End If
+
+                        'Write out data to INI info
+                        DAT.AddSection(Id & Me.cbxToolsWalletId.Text)
+                        DAT.AddSection(Id & Me.cbxToolsWalletId.Text).AddKey(DAT_CP12Words).Value = str12W
+
+                        If strBTCAddr.Length > 25 Then
+                            'Store Bitcoin address in both INI and DAT files
+                            DAT.AddSection(Id & Me.cbxToolsWalletId.Text).AddKey(DAT_BTC_Addr).Value = strBTCAddr
+                            'Set a wallet name
+                            INI.AddSection(Id & Me.cbxToolsWalletId.Text).AddKey(INI_WalletName).Value = strBTCAddr.Substring(0, 8) & "..."
+                            INI.Save(IniFilePath)
+                        End If
+                        'Create text from the INI, Encrypt, and Write/flush DAT text to file
+                        SaveDat(Encrypt(DAT.SaveToString))
+                        'Allow time for the file to be written out
+                        Await Wait(100)
+                        DAT = Nothing
+
+                        'Refresh the Wallet Names
+                        cbxToolsWalletId_SelectedIndexChanged(Nothing, Nothing)
+
+                        'Close the informational message
+                        OkMsg.Close()
+                        OkMsg.Dispose()
+
+                        'Return true, if you get here
+                        Return True
                     End If
+
+                Else
+                    str12W = "Error: 12 Word password not found while getting Wallet. Please try again."
+                    Msg(str12W)
+                    MessageBox.Show(str12W)
                 End If
-
-                'Write out data to INI info
-                DAT.AddSection(Id & Me.cbxToolsWalletId.Text)
-                DAT.AddSection(Id & Me.cbxToolsWalletId.Text).AddKey(DAT_CP12Words).Value = str12W
-
-                If strBTCAddr.Length > 25 Then
-                    'Store Bitcoin address in both INI and DAT files
-                    DAT.AddSection(Id & Me.cbxToolsWalletId.Text).AddKey(DAT_BTC_Addr).Value = strBTCAddr
-                    'Set a wallet name
-                    INI.AddSection(Id & Me.cbxToolsWalletId.Text).AddKey(INI_WalletName).Value = strBTCAddr.Substring(0, 8) & "..."
-                    INI.Save(IniFilePath)
-                End If
-                'Create text from the INI, Encrypt, and Write/flush DAT text to file
-                SaveDat(Encrypt(DAT.SaveToString))
-                'Allow time for the file to be written out
-                Await Wait(100)
-                DAT = Nothing
-
-                'Refresh the Wallet Names
-                cbxToolsWalletId_SelectedIndexChanged(Nothing, Nothing)
-
-                'Return true, if you get here
-                Return True
-
-            Else
-                str12W = "Error: 12 Word password not found while getting Wallet. Please try again."
-                Msg(str12W)
-                MessageBox.Show(str12W)
-            End If
+            Loop
 
         Catch ex As Exception
             Msg("Get Wallet error:" & ex.ToString)
         End Try
+
+        'Close the informational message
+        OkMsg.Close()
+        OkMsg.Dispose()
         Return False
     End Function
 
@@ -2551,33 +2703,33 @@
         End Try
     End Function
 
-    'Specify text box {Class Name} and array index (0-based), and text to enter in to the text box
-    Private Function EnterTextByClass(sName As String, iIndex As Integer, sText As String) As Boolean
-        EnterTextByClass = False
+    ''Specify text box {Class Name} and array index (0-based), and text to enter in to the text box
+    'Private Function EnterTextByClass(sName As String, iIndex As Integer, sText As String) As Boolean
+    '    EnterTextByClass = False
 
-        Try
-            If sName.Length > 0 Then
-                Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementsByClassName('" & sName & "')[" & iIndex.ToString & "].value = '" & sText & "';")
-                EnterTextByClass = True
-            End If
-        Catch ex As Exception
-            Msg("Enter Text by Class error: " & Err.Description)
-        End Try
-    End Function
+    '    Try
+    '        If sName.Length > 0 Then
+    '            Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementsByClassName('" & sName & "')[" & iIndex.ToString & "].value = '" & sText & "';")
+    '            EnterTextByClass = True
+    '        End If
+    '    Catch ex As Exception
+    '        Msg("Enter Text by Class error: " & Err.Description)
+    '    End Try
+    'End Function
 
-    'Specify text box {Tag Name} and array index (0-based), and text to enter in to the text box
-    Private Function EnterTextByTag(sName As String, iIndex As Integer, sText As String) As Boolean
-        EnterTextByTag = False
+    ''Specify text box {Tag Name} and array index (0-based), and text to enter in to the text box
+    'Private Function EnterTextByTag(sName As String, iIndex As Integer, sText As String) As Boolean
+    '    EnterTextByTag = False
 
-        Try
-            If sName.Length > 0 Then
-                Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementsByTagName('" & sName & "')[" & iIndex.ToString & "].value = '" & sText & "';")
-                EnterTextByTag = True
-            End If
-        Catch ex As Exception
-            Msg("Enter Text by Tag error: " & Err.Description)
-        End Try
-    End Function
+    '    Try
+    '        If sName.Length > 0 Then
+    '            Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementsByTagName('" & sName & "')[" & iIndex.ToString & "].value = '" & sText & "';")
+    '            EnterTextByTag = True
+    '        End If
+    '    Catch ex As Exception
+    '        Msg("Enter Text by Tag error: " & Err.Description)
+    '    End Try
+    'End Function
 
     'Specify object {Object Id} to click, and if you wait for the page to load or not
     Private Async Function ClickById(sId As String, bWait As Boolean) As Threading.Tasks.Task(Of Boolean)
@@ -2775,14 +2927,22 @@
         'WORKAROUND: FAH Web Control, where it gets stuck in an infinite refresh loop in Chrome v59+, and needs a refresh without cache to fix that condition.
         'NOTE: This error also occurs almost every time you leave the FAH web control page, so avoid reloading when clicking other web link buttons or exiting. It also happens when you stay on the page for a long time, and the FAH stats update.
         If (Me.txtURL.Text.StartsWith(URL_FAH_WebClient_IPAddr) = True OrElse Me.txtURL.Text = URL_FAH_WebClient_URL) AndAlso g_bCancelNav = False AndAlso e.Message = "DEBUG: error: " AndAlso e.Source = URL_FAH_WebClient_ErrorAddr Then
-            'Refresh ignoring browser cache
+            'Refresh 'ignoring browser cache'
             Me.browser.GetBrowser.Reload(True)
         End If
     End Sub
 
     Private Sub OnBrowserStatusMessage(sender As Object, args As CefSharp.StatusMessageEventArgs)
         Me.Invoke(Sub()
-                      Me.txtMsg.AppendText("[" & Now.ToString(LogDateTimeFormat) & "] " & args.Value & vbNewLine)
+                      If args.Value.Length = 0 Then
+                          'Hide the info text
+                          Me.lblHoverURL.Visible = False
+                      Else
+                          'Display the info
+                          Me.lblHoverURL.Text = args.Value
+                          Me.lblHoverURL.Visible = True
+                          Me.txtMsg.AppendText("[" & Now.ToString(LogDateTimeFormat) & "] " & args.Value & vbNewLine)
+                      End If
                   End Sub)
     End Sub
 
@@ -2805,7 +2965,7 @@
     End Sub
     Private Sub updateTitle(strTitle As String)
         Me.Invoke(Sub()
-                      Me.Text = If(strTitle.Length = 0, "", strTitle & " - ") & Prog_Name & " v" & My.Application.Info.Version.Major.ToString
+                      Me.Text = If(strTitle.Length = 0, "", strTitle & " - ") & g_strTitleEnd
                   End Sub)
     End Sub
 
@@ -2849,12 +3009,12 @@
     End Sub
 
     'NOTE: These control keypress events should match the equivalent events for the form events below (so they happen for whichever is active)
-    Public Delegate Sub updateKP(iKeyCode As Integer, efModifiers As CefSharp.CefEventFlags)
-    Public Sub updateKeyPress(iKeyCode As Integer, efModifiers As CefSharp.CefEventFlags)
+    <CLSCompliant(False)> Public Delegate Sub updateKP(iKeyCode As Integer, efModifiers As CefSharp.CefEventFlags)
+    <CLSCompliant(False)> Public Sub updateKeyPress(iKeyCode As Integer, efModifiers As CefSharp.CefEventFlags)
         Me.Invoke(New updateKP(AddressOf upKeyPress), {iKeyCode, efModifiers})
     End Sub
 
-    Public Sub upKeyPress(iKeyCode As Integer, efModifiers As CefSharp.CefEventFlags)
+    <CLSCompliant(False)> Public Sub upKeyPress(iKeyCode As Integer, efModifiers As CefSharp.CefEventFlags)
         Select Case iKeyCode
             Case Keys.Escape
                 If Me.pnlFind.Visible = True Then
@@ -2866,7 +3026,7 @@
 
             Case Keys.F5
                 If efModifiers = CefSharp.CefEventFlags.ControlDown Then
-                    'Refresh ignoring browser cache
+                    'Refresh 'ignoring browser cache'
                     Me.browser.GetBrowser.Reload(True)
                 Else
                     'Refresh
@@ -2934,7 +3094,7 @@
 
             Case Keys.F5
                 If e.Modifiers = Keys.Control Then
-                    'Refresh ignoring browser cache
+                    'Refresh 'ignoring browser cache'
                     Me.browser.GetBrowser.Reload(True)
                     e.SuppressKeyPress = True
                 Else
@@ -2991,8 +3151,8 @@
     Private Sub Main_MouseDown(sender As Object, e As MouseEventArgs) Handles Me.MouseDown,
             pnlURL.MouseDown, lblURL.MouseDown, txtURL.MouseDown, btnBack.MouseDown, btnFwd.MouseDown, btnGo.MouseDown, btnHome.MouseDown, btnReload.MouseDown, btnStopNav.MouseDown,
             pnlFind.MouseDown, txtFind.MouseDown, btnFindPrevious.MouseDown, btnFindNext.MouseDown, btnFindClose.MouseDown, pnlFindDivider.MouseDown, pnlBtnLinks.MouseDown, pnlBtnLinksDividerTop.MouseDown,
-            btnFAHWebControl.MouseDown, btnFAHTwitter.MouseDown, btnFAHNews.MouseDown, btnFoldingCoinUserStats.MouseDown, btnEOC_UserStats.MouseDown, pbProgIcon.MouseDown,
-            btnFoldingCoinWebsite.MouseDown, btnFoldingCoinTwitter.MouseDown, btnFoldingCoinDiscord.MouseDown, btnMyWallet.MouseDown, btnFoldingCoinBlockchain.MouseDown, btnBTCBlockchain.MouseDown, btnFoldingCoinDistribution.MouseDown, btnFoldingCoinShop.MouseDown, btnFoldingCoinTeamStats.MouseDown,
+            btnFAHWebControl.MouseDown, btnFAHTwitter.MouseDown, btnFAHNews.MouseDown, btnFoldingCoinUserStats.MouseDown, btnEOC_UserStats.MouseDown, pbMolecule.MouseDown, pbProgIcon.MouseDown,
+            btnFoldingCoinWebsite.MouseDown, btnFoldingCoinTwitter.MouseDown, btnFoldingCoinDiscord.MouseDown, btnMyWallet.MouseDown, btnFoldingCoinBlockchain.MouseDown, btnBTCBlockchain.MouseDown, btnFoldingCoinDistribution.MouseDown, btnFoldingCoinTeamStats.MouseDown,
             btnCureCoinWebsite.MouseDown, btnCureCoinBlockchain.MouseDown, btnCureCoinDiscord.MouseDown, btnCureCoinTwitter.MouseDown, btnCurePool.MouseDown, btnCureCoinTeamStats.MouseDown,
             pnlBtnLinksDividerBottom.MouseDown, chkToolsShow.MouseDown, txtMsg.MouseDown, btnToolsBrowserTools.MouseDown, btnToolsGetFAH.MouseDown, btnToolsGetWallet.MouseDown, btnToolsFAHConfig.MouseDown, btnToolsCureCoinSetup.MouseDown,
             btnToolsOptions.MouseDown, btnToolsSavedData.MouseDown, lblToolsWalletNum.MouseDown, cbxToolsWalletId.MouseDown, txtToolsWalletName.MouseDown
@@ -3016,8 +3176,8 @@
     Private Sub Main_MouseUp(sender As Object, e As MouseEventArgs) Handles Me.MouseUp,
             pnlURL.MouseUp, lblURL.MouseUp, txtURL.MouseUp, btnBack.MouseUp, btnFwd.MouseUp, btnGo.MouseUp, btnHome.MouseUp, btnReload.MouseUp, btnStopNav.MouseUp,
             pnlFind.MouseUp, txtFind.MouseUp, btnFindPrevious.MouseUp, btnFindNext.MouseUp, btnFindClose.MouseUp, pnlFindDivider.MouseUp,
-            btnFAHWebControl.MouseUp, btnFAHTwitter.MouseUp, btnFAHNews.MouseUp, btnFoldingCoinUserStats.MouseUp, btnEOC_UserStats.MouseUp, pbProgIcon.MouseUp,
-            btnFoldingCoinWebsite.MouseUp, btnFoldingCoinTwitter.MouseUp, btnFoldingCoinDiscord.MouseUp, btnMyWallet.MouseUp, btnFoldingCoinBlockchain.MouseUp, btnBTCBlockchain.MouseUp, btnFoldingCoinDistribution.MouseUp, btnFoldingCoinShop.MouseUp, btnFoldingCoinTeamStats.MouseUp,
+            btnFAHWebControl.MouseUp, btnFAHTwitter.MouseUp, btnFAHNews.MouseUp, btnFoldingCoinUserStats.MouseUp, btnEOC_UserStats.MouseUp, pbMolecule.MouseUp, pbProgIcon.MouseUp,
+            btnFoldingCoinWebsite.MouseUp, btnFoldingCoinTwitter.MouseUp, btnFoldingCoinDiscord.MouseUp, btnMyWallet.MouseUp, btnFoldingCoinBlockchain.MouseUp, btnBTCBlockchain.MouseUp, btnFoldingCoinDistribution.MouseUp, btnFoldingCoinTeamStats.MouseUp,
             btnCureCoinWebsite.MouseUp, btnCureCoinBlockchain.MouseUp, btnCureCoinDiscord.MouseUp, btnCureCoinTwitter.MouseUp, btnCurePool.MouseUp, btnCureCoinTeamStats.MouseUp,
             pnlBtnLinksDividerBottom.MouseUp,
             lblToolsWalletNum.MouseUp
@@ -3090,6 +3250,9 @@
             'Load homepage / portal based on the user's options
             Select Case INI.GetSection(INI_Settings).GetKey(INI_Homepage).GetValue()
                 Case HpgDefault
+                    btnFAHWebControl_Click(Nothing, Nothing)
+
+                Case HpgTopBottom
                     If m_bHomepage_TopAnBottomLoaded = False Then
                         CefSharp.WebBrowserExtensions.LoadHtml(Me.browser, HTML_Homepage_TopAndBottom, URL_Homepage_TopAndBottom)
                         m_bHomepage_TopAnBottomLoaded = True
@@ -3126,10 +3289,6 @@
                 Case HpgFAH
                     btnFAHWebControl_Click(Nothing, Nothing)
 
-                Case HpgNaClFAH
-                    'TODO: Running the FAH NaCl plugin doesn't work yet
-                    Await OpenURL(URL_NaCl_FAH, False)
-
                 Case HpgBlank
                     Await OpenURL(URL_BLANK, False)
 
@@ -3163,7 +3322,7 @@
         End If
     End Sub
 
-    Private Async Sub pnlBtnLinks_Click(sender As Object, e As EventArgs) Handles pnlBtnLinks.Click, pnlBtnLinksDividerTop.Click
+    Private Async Sub pnlBtnLinks_Click(sender As Object, e As EventArgs) Handles pnlBtnLinks.Click, pnlBtnLinksDividerTop.Click, pbMolecule.Click
         If Me.pnlBtnLinks.Height <= m_iMinPanelHeight Then
             'Button Link list: Mouse-over effect to expand area
             For m_iTempHeight = 40 To m_iTargetExpandedPanelHeight Step 40
@@ -3331,7 +3490,7 @@
             Dim i As Integer = 0
             'Wait for the web page title, or 3 seconds
             For i = 0 To 30
-                If Me.Text.StartsWith(Prog_Name) = True OrElse g_bCancelNav = True Then Exit For
+                If Me.Text = g_strTitleEnd OrElse g_bCancelNav = True Then Exit For
                 Await Wait(100)
             Next
             g_bCancelNav = False
