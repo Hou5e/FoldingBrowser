@@ -8,7 +8,6 @@ Immediate Need /  Short-Term Goals:
 -Evaluate upgrading to CefSharp/Chrome v77 (VC++2015) when released here: https://github.com/cefsharp/CefSharp/releases
 -CureCoin installer: Update blockchain files and 'peers.dat' file in the installer to be current.
 -Support other wallets, for pressing the 'FLDC Wallet' button, with option for:  https://freewallet.io/     Other alternatives (ignore for now): https://wallet.indiesquare.me/     also: rarepepewallet.com (Not updated enough? security risks?)     (Not yet) https://tokenpockets.com/ (You cannot use tokenpockets currently. It is not compatible with existing passphrases from CounterWallet. If you want to use it, you will have to make a new address first)
--Option to select which CounterWallet site to use first by default. -(skipping for now) Reverse the CounterWallet website search order to use the mirror site first?  Was using the main site first, which is down more often, but the mirror site is slower to load?
 
 ----------------------------------------------------
 Other Ideas, Improvements, Tasks, Longer-Term Goals:
@@ -67,7 +66,10 @@ Other Ideas, Improvements, Tasks, Longer-Term Goals:
 ======================================================================================================
 Change Log - Release Notes - Tasks completed:
 ======================================================================================================
-v21 Release (2019-10-07)
+v21 Release (2019-10-21)
+[DONE] -Changes for a better initial browser window location (center screen, on initial launch)
+[DONE] -Spell check source code
+[DONE] -Option to reverse the CounterWallet website search order (to use the mirror site first)?  Was using the main site first, which is down more often, but the mirror site is slower to load?
 [DONE] -Update the BTC blockchain explorer URL format to be: https://www.blockchain.com/btc/address/<addy>
 [DONE] -Make it so when the main CounterWallet site is down, (1 minute timeout) it tries the other mirror site. The website status says it's up, but it's not working (logging-in to your wallet doesn't do anything), so the alternative site was not being used (because the site status said it wasn't down).
 [DONE] -CureCoin installer: Update blockchain files in the installer to be current.

@@ -4,7 +4,7 @@
     Public m_bInitialInstall As Boolean = False
 
     Private Const PATH_FAH_ALL_USER_CFG As String = "C:\ProgramData\FAHClient\config.xml"
-    Private Const PAUSE_FAH As String = "options idle=true open-web-control=false"  'Disabling the web control popup doesn't happen soon enough to stop it
+    Private Const PAUSE_FAH As String = "options idle=true open-web-control=false"  'Disabling the web control pop-up doesn't happen soon enough to stop it
     Private Path_FAH_CurrentUserCfg As String = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "FAHClient\config.xml")
     Private m_strFAHCfgPath As String = ""
 
@@ -194,10 +194,10 @@
         m_bSkipUpdating = False
         CreateFAHUserName()
 
-        'Disable the OK button until settings are saved. NOTE: Pausing FAH with Telent is not Awaited above, and was undoing this on an initial install
+        'Disable the OK button until settings are saved. NOTE: Pausing FAH with Telnet is not Awaited above, and was undoing this on an initial install
         Me.btnOK.Enabled = False
 
-        'Set for inital state
+        'Set for initial state
         Me.SplitContainer2.SplitterWidth = 2
         Me.SplitContainer1.SplitterWidth = 2
 
@@ -334,7 +334,7 @@
                     Me.lblErrorNote.Visible = True
 
                 Case m_regexFAH_Warning.IsMatch(Me.lblUsernamePreview.Text) = True
-                    'This could be a warning, but it's safer to constrain the usernames to safe values, especially so the username might work in web link URLs, searches, databases, etc
+                    'This could be a warning, but it's safer to constrain the user names to safe values, especially so the username might work in web link URLs, searches, databases, etc
                     Me.txtUsername.BackColor = Color.Tomato
                     Me.lblErrorNote.Text = "Avoid special characters that may not work"
                     Me.lblErrorNote.Visible = True

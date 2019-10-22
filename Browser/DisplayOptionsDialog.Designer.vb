@@ -30,10 +30,11 @@ Partial Class DisplayOptionsDialog
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.chkShowRawData = New System.Windows.Forms.CheckBox()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
+        Me.chkRevCWServers = New System.Windows.Forms.CheckBox()
+        Me.chkDarkTheme = New System.Windows.Forms.CheckBox()
         Me.chkShowPanelOnMouseEnterEvent = New System.Windows.Forms.CheckBox()
         Me.lblHomepage = New System.Windows.Forms.Label()
         Me.cbxHomepage = New System.Windows.Forms.ComboBox()
-        Me.chkDarkTheme = New System.Windows.Forms.CheckBox()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
@@ -122,6 +123,7 @@ Partial Class DisplayOptionsDialog
         '
         Me.SplitContainer1.Panel1.AutoScroll = True
         Me.SplitContainer1.Panel1.BackColor = System.Drawing.SystemColors.Window
+        Me.SplitContainer1.Panel1.Controls.Add(Me.chkRevCWServers)
         Me.SplitContainer1.Panel1.Controls.Add(Me.chkDarkTheme)
         Me.SplitContainer1.Panel1.Controls.Add(Me.chkShowPanelOnMouseEnterEvent)
         Me.SplitContainer1.Panel1.Controls.Add(Me.lblHomepage)
@@ -135,6 +137,30 @@ Partial Class DisplayOptionsDialog
         Me.SplitContainer1.SplitterDistance = 561
         Me.SplitContainer1.SplitterWidth = 3
         Me.SplitContainer1.TabIndex = 3
+        '
+        'chkRevCWServers
+        '
+        Me.chkRevCWServers.AutoSize = True
+        Me.chkRevCWServers.Checked = True
+        Me.chkRevCWServers.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chkRevCWServers.Location = New System.Drawing.Point(177, 141)
+        Me.chkRevCWServers.Name = "chkRevCWServers"
+        Me.chkRevCWServers.Size = New System.Drawing.Size(362, 20)
+        Me.chkRevCWServers.TabIndex = 4
+        Me.chkRevCWServers.Text = "Reverse CounterWallet Severs (Try using mirror site first)"
+        Me.chkRevCWServers.UseVisualStyleBackColor = True
+        '
+        'chkDarkTheme
+        '
+        Me.chkDarkTheme.AutoSize = True
+        Me.chkDarkTheme.Checked = True
+        Me.chkDarkTheme.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chkDarkTheme.Location = New System.Drawing.Point(177, 106)
+        Me.chkDarkTheme.Name = "chkDarkTheme"
+        Me.chkDarkTheme.Size = New System.Drawing.Size(118, 20)
+        Me.chkDarkTheme.TabIndex = 3
+        Me.chkDarkTheme.Text = "Dark UI Theme"
+        Me.chkDarkTheme.UseVisualStyleBackColor = True
         '
         'chkShowPanelOnMouseEnterEvent
         '
@@ -168,18 +194,6 @@ Partial Class DisplayOptionsDialog
         Me.cbxHomepage.Size = New System.Drawing.Size(303, 24)
         Me.cbxHomepage.TabIndex = 1
         Me.cbxHomepage.Text = "Default"
-        '
-        'chkDarkTheme
-        '
-        Me.chkDarkTheme.AutoSize = True
-        Me.chkDarkTheme.Checked = True
-        Me.chkDarkTheme.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.chkDarkTheme.Location = New System.Drawing.Point(177, 107)
-        Me.chkDarkTheme.Name = "chkDarkTheme"
-        Me.chkDarkTheme.Size = New System.Drawing.Size(118, 20)
-        Me.chkDarkTheme.TabIndex = 3
-        Me.chkDarkTheme.Text = "Dark UI Theme"
-        Me.chkDarkTheme.UseVisualStyleBackColor = True
         '
         'DisplayOptionsDialog
         '
@@ -220,4 +234,5 @@ Partial Class DisplayOptionsDialog
     Friend WithEvents lblHomepage As Label
     Friend WithEvents chkShowPanelOnMouseEnterEvent As CheckBox
     Friend WithEvents chkDarkTheme As CheckBox
+    Friend WithEvents chkRevCWServers As CheckBox
 End Class

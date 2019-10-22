@@ -23,11 +23,33 @@
     Private Const i48 As Integer = 48
     Private Const i96 As Integer = 96
     Private Const i256 As Integer = 256
+    'Ini settings
+    Private Const cTrue As String = "True"
+    Private Const cFalse As String = "False"
+    'Initial install command line flags for with or without the CureCoin Wallet installer being run
+    Private Const cCmdLnInstl As String = "-Instl"
+    Private Const cCmdLnInstWithCure As String = "-InstWithCure"
+    Private m_aryCmdLnArgs As String()
+    Private m_bInitialInstall As Boolean = False
+    'CounterWallet
+    Private m_iCounterWalletServerUp As Integer = 0
 
 #Region "Form and Browser Events - Initialization, Exiting"
     Public Sub New()
         Try
             InitializeComponent()
+
+            'Process command line values (Only for initial installations)
+            If Environment.CommandLine.Length > 0 Then
+                'MessageBox.Show(Environment.CommandLine.ToString)
+                m_aryCmdLnArgs = Environment.GetCommandLineArgs()
+                If m_aryCmdLnArgs.Length > 1 Then
+                    Select Case m_aryCmdLnArgs(1)
+                        Case cCmdLnInstl, cCmdLnInstWithCure
+                            m_bInitialInstall = True
+                    End Select
+                End If
+            End If
 
             Using settings As New CefSharp.WinForms.CefSettings()
                 'Set the Cache path to the user's appdata roaming folder
@@ -38,7 +60,7 @@
                 settings.Locale = "en-US"
                 settings.AcceptLanguageList = settings.Locale & "," & settings.Locale.Substring(0, 2)
 
-                'For Debugging, to log everything, use: Verbose. Can cause Cef.Shutdown() to hang.
+                'For Debugging, to log everything, use: Verbose. Can cause older versions of Cef.Shutdown() to hang
                 'settings.LogSeverity = CefSharp.LogSeverity.Verbose
                 settings.LogSeverity = CefSharp.LogSeverity.Info
 
@@ -72,11 +94,13 @@
                     'Add to a UI container
                     Me.ToolStripContainer1.ContentPanel.Controls.Add(browser)
 
-                    'Default homepage / portal set to the FoldingCoin webpage
+                    'On initial install only, skip loading the homepage (skips message saying to load the FAH control because it's not installed yet)
+                    If m_bInitialInstall = False Then
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
-                    'Load the Homepage based on the user's options in the INI file (call after loading the INI settings)
-                    LoadHomepage()
+                        'Load the Homepage based on the user's options in the INI file (call after loading the INI settings)
+                        LoadHomepage()
 #Enable Warning BC42358
+                    End If
                 End If
             End Using
 
@@ -97,11 +121,6 @@
             End Try
             ResizeControlsAndFormLayout()
 
-            'Hide the form while it's being adjusted
-            Me.WindowState = FormWindowState.Minimized
-            'Create the main form (Needs to come before restoring the window size and window state)
-            Me.Show()
-
             'Restore window size
             If INI.GetSection(INI_Settings).GetKey(INI_Size) IsNot Nothing Then
                 'Restore dimensions from string: {Left};{Top};{Width};{Height}
@@ -110,6 +129,16 @@
                 Me.Top = CInt(strDim(1))
                 Me.Width = CInt(strDim(2))
                 Me.Height = CInt(strDim(3))
+            End If
+
+            'Create the main form (Needs to come before restoring the window size and window state)
+            Me.Show()
+
+            'Window size not set yet, which is typical for initial installs
+            If INI.GetSection(INI_Settings).GetKey(INI_Size) Is Nothing Then
+                Me.CenterToScreen()
+                'Store window size: {Left};{Top};{Width};{Height}. This will get updated when the program exits normally.
+                INI.AddSection(INI_Settings).AddKey(INI_Size).Value = If(Me.Left < 0, "0", Me.Left.ToString()) & ";" & If(Me.Top < 0, "0", Me.Top.ToString()) & ";" & Me.Width.ToString() & ";" & Me.Height.ToString()
             End If
 
             'Restore window state
@@ -122,15 +151,6 @@
                 End If
             Else
                 Me.WindowState = FormWindowState.Normal
-            End If
-
-            'Restore Option for the Panel MouseEnter event
-            If INI.GetSection(INI_Settings).GetKey(INI_ShowPanelOnMouseEnter) IsNot Nothing Then
-                g_bShowWebLinkPanelOnMouseEnterEvent = CBool(INI.GetSection(INI_Settings).GetKey(INI_ShowPanelOnMouseEnter).GetValue())
-            End If
-            'Set UI Theme colors
-            If INI.GetSection(INI_Settings).GetKey(INI_DarkThemeUI) IsNot Nothing Then
-                ThemeColorUI(CBool(INI.GetSection(INI_Settings).GetKey(INI_DarkThemeUI).GetValue()))
             End If
 
             'Force the URL text to scroll all the way to the left
@@ -159,19 +179,43 @@
             'Make sure the INI key/value exists
             If INI.GetSection(INI_Settings).GetKey(INI_HideSavedDataButton) IsNot Nothing Then
                 'Show/hide the 'Show Dat' file button
-                If INI.GetSection(INI_Settings).GetKey(INI_HideSavedDataButton).GetValue() = "False" Then
+                If INI.GetSection(INI_Settings).GetKey(INI_HideSavedDataButton).GetValue() = cFalse Then
                     Me.btnToolsSavedData.Visible = True
-                ElseIf INI.GetSection(INI_Settings).GetKey(INI_HideSavedDataButton).GetValue() = "True" Then
+                ElseIf INI.GetSection(INI_Settings).GetKey(INI_HideSavedDataButton).GetValue() = cTrue Then
                     Me.btnToolsSavedData.Visible = False
                 Else
                     'Restore value, if missing
-                    INI.AddSection(INI_Settings).AddKey(INI_HideSavedDataButton).Value = "False"
+                    INI.AddSection(INI_Settings).AddKey(INI_HideSavedDataButton).Value = cFalse
                     Me.btnToolsSavedData.Visible = True
                 End If
             Else
                 'Restore value, if missing
-                INI.AddSection(INI_Settings).AddKey(INI_HideSavedDataButton).Value = "False"
+                INI.AddSection(INI_Settings).AddKey(INI_HideSavedDataButton).Value = cFalse
                 Me.btnToolsSavedData.Visible = True
+            End If
+
+            'Restore Option for the Panel MouseEnter event
+            If INI.GetSection(INI_Settings).GetKey(INI_ShowPanelOnMouseEnter) IsNot Nothing Then
+                g_bShowWebLinkPanelOnMouseEnterEvent = CBool(INI.GetSection(INI_Settings).GetKey(INI_ShowPanelOnMouseEnter).GetValue())
+            Else
+                'Restore value, if missing
+                INI.AddSection(INI_Settings).AddKey(INI_ShowPanelOnMouseEnter).Value = cTrue
+            End If
+
+            'Set UI Theme colors
+            If INI.GetSection(INI_Settings).GetKey(INI_DarkThemeUI) IsNot Nothing Then
+                ThemeColorUI(CBool(INI.GetSection(INI_Settings).GetKey(INI_DarkThemeUI).GetValue()))
+            Else
+                'Restore value, if missing
+                INI.AddSection(INI_Settings).AddKey(INI_DarkThemeUI).Value = cTrue
+            End If
+
+            'Reverse CounterWallet Server order (Try using the mirror server first, mostly for when the main site says it's OK, but it isn't)
+            If INI.GetSection(INI_Settings).GetKey(INI_RevCWServers) IsNot Nothing Then
+                g_bRevCWServers = CBool(INI.GetSection(INI_Settings).GetKey(INI_RevCWServers).GetValue())
+            Else
+                'Restore value, if missing
+                INI.AddSection(INI_Settings).AddKey(INI_RevCWServers).Value = cTrue
             End If
 
         Else
@@ -191,10 +235,8 @@
             INI.AddSection(INI_Settings).AddKey(INI_LastBrowserVersion).Value = My.Application.Info.Version.Major.ToString
             'Create a new INI for first time use. Set the default encryption PW
             INI.AddSection(INI_Settings).AddKey(INI_PW).Value = Default_DAT_PW
-            'Store window size: {Left};{Top};{Width};{Height}. This will get updated when the program exits normally.
-            INI.AddSection(INI_Settings).AddKey(INI_Size).Value = "5;5;955;805"
             'Show/hide the 'Show Dat' file button
-            INI.AddSection(INI_Settings).AddKey(INI_HideSavedDataButton).Value = "False"
+            INI.AddSection(INI_Settings).AddKey(INI_HideSavedDataButton).Value = cFalse
             INI.Save(IniFilePath)
 
             'Save and encrypt the 12 word Passphrase and the Bitcoin address
@@ -312,7 +354,7 @@
 
                     Const OldShowTheShowDatButton As String = "ShowTheShowDatButton"
                     'Renamed the 'Show Dat' file button to 'Saved Data'
-                    INI.AddSection(INI_Settings).AddKey(INI_HideSavedDataButton).Value = "False"
+                    INI.AddSection(INI_Settings).AddKey(INI_HideSavedDataButton).Value = cFalse
                     INI.GetSection(INI_Settings).RemoveKey(OldShowTheShowDatButton)
                     'Last FoldingBrowser version, now upgraded to v6
                     INI.AddSection(INI_Settings).AddKey(INI_LastBrowserVersion).Value = "6"
@@ -398,125 +440,119 @@
 
         '''''''''''''''''''''
         'Process command line values (Only for initial installations).
-        If Environment.CommandLine.Length > 0 Then
-            'MessageBox.Show(Environment.CommandLine.ToString)
-            Dim args As String() = Environment.GetCommandLineArgs()
-            If args.Length > 1 Then
-                Select Case args(1)
-                        'This command line option represents the FoldingBrowser was just installed
-                    Case "-Instl", "-InstWithCure"
-                        'Create a dialog that sets the default checkbox selections based on stored wallet and F@H info.
-                        Dim Setup As New SetupDialog
+        If m_bInitialInstall = True Then
+            'Create a dialog that sets the default checkbox selections based on stored wallet and F@H info.
+            Dim Setup As New SetupDialog
 
-                        Dim DAT As New IniFile
-                        'Load DAT file, decrypt it
-                        DAT.LoadText(Decrypt(LoadDat))
-                        If DAT.ToString.Length = 0 Then
-                            'Decryption failed
-                            Msg(DAT_ErrorMsg)
-                            MessageBox.Show(DAT_ErrorMsg)
-                        End If
+            Dim DAT As New IniFile
+            'Load DAT file, decrypt it
+            DAT.LoadText(Decrypt(LoadDat))
+            If DAT.ToString.Length = 0 Then
+                'Decryption failed
+                Msg(DAT_ErrorMsg)
+                MessageBox.Show(DAT_ErrorMsg)
+            End If
 
-                        'Look for FAH username for FAH installation to un-check the dialog for existing users
-                        Try
-                            If DAT.GetSection(Id & Me.cbxToolsWalletId.Text) IsNot Nothing AndAlso DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_FAH_Username) IsNot Nothing Then
-                                'Has FAH setup already
-                                Setup.chkGetFAHSoftware.Checked = False
-                            Else
+            'Look for FAH username for FAH installation to un-check the dialog for existing users
+            Try
+                If DAT.GetSection(Id & Me.cbxToolsWalletId.Text) IsNot Nothing AndAlso DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_FAH_Username) IsNot Nothing Then
+                    'Has FAH setup already
+                    Setup.chkGetFAHSoftware.Checked = False
+                Else
 
-                                'Additionally look for FAH installation on PC
-                                If System.IO.File.Exists("C:\Program Files (x86)\FAHClient\FAHClient.exe") = True OrElse System.IO.File.Exists("C:\Program Files\FAHClient\FAHClient.exe") = True Then
-                                    'Has FAH setup already
-                                    Setup.chkGetFAHSoftware.Checked = False
-                                Else
-                                    'Needs FAH
-                                    Setup.chkGetFAHSoftware.Checked = True
-                                End If
-                            End If
-                        Catch
-                            Setup.chkGetFAHSoftware.Checked = True
-                        End Try
+                    'Additionally look for FAH installation on PC
+                    If System.IO.File.Exists("C:\Program Files (x86)\FAHClient\FAHClient.exe") = True OrElse System.IO.File.Exists("C:\Program Files\FAHClient\FAHClient.exe") = True Then
+                        'Has FAH setup already
+                        Setup.chkGetFAHSoftware.Checked = False
+                    Else
+                        'Needs FAH
+                        Setup.chkGetFAHSoftware.Checked = True
+                    End If
+                End If
+            Catch
+                Setup.chkGetFAHSoftware.Checked = True
+            End Try
 
-                        'Look for 12-word Passphrase (or BTC address?) to un-check the dialog for existing users
-                        Try
-                            If DAT.GetSection(Id & Me.cbxToolsWalletId.Text) IsNot Nothing AndAlso DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_CP12Words) IsNot Nothing Then
-                                'Wallet info exists
-                                Setup.chkGetWalletForFLDC.Checked = False
-                            Else
-                                'No saved Wallet info
-                                Setup.chkGetWalletForFLDC.Checked = True
+            'Look for 12-word Passphrase (or BTC address?) to un-check the dialog for existing users
+            Try
+                If DAT.GetSection(Id & Me.cbxToolsWalletId.Text) IsNot Nothing AndAlso DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_CP12Words) IsNot Nothing Then
+                    'Wallet info exists
+                    Setup.chkGetWalletForFLDC.Checked = False
+                Else
+                    'No saved Wallet info
+                    Setup.chkGetWalletForFLDC.Checked = True
 
-                                'TODO: Ask for existing 12-word PW CounterParty wallet info? (probably too confusing / too many options)
-                            End If
-                        Catch
-                            Setup.chkGetWalletForFLDC.Checked = True
-                        End Try
+                    'TODO: Ask for existing 12-word PW CounterParty wallet info? (probably too confusing / too many options)
+                End If
+            Catch
+                Setup.chkGetWalletForFLDC.Checked = True
+            End Try
 
-                        'Done with the DAT file
-                        DAT = Nothing
+            'Done with the DAT file
+            DAT = Nothing
 
-                        'If installing the CureCoin wallet, set this check box to setup the CureCoin pool info
-                        If args(1) = "-InstWithCure" Then
-                            Setup.chkSetupCURE.Checked = True
-                        Else
-                            Setup.chkSetupCURE.Checked = False
-                        End If
+            'If installing the CureCoin wallet, set this check box to setup the CureCoin pool info
+            If m_aryCmdLnArgs(1) = cCmdLnInstWithCure Then
+                Setup.chkSetupCURE.Checked = True
+            Else
+                Setup.chkSetupCURE.Checked = False
+            End If
 
+            'Show modal dialog box
+            If Setup.ShowDialog(Me) = DialogResult.OK Then
+                'Run the tasks the operator selected
+
+                'FAH advanced client installation
+                If Setup.chkGetFAHSoftware.Checked = True Then
+                    g_bAskDownloadLocation = False
+                    If Await GetFAH() = False Then
+                        MessageBox.Show("Task 'Get Folding@Home App' did not complete." & vbNewLine & "Please use the buttons in the 'Tools' checkbox")
+                        Exit Sub
+                    End If
+                End If
+
+                'Get Wallet
+                If Setup.chkGetWalletForFLDC.Checked = True Then
+                    If Await GetWallet() = False Then
+                        MessageBox.Show("Task 'Get Wallet' did not complete." & vbNewLine & "Please use the buttons in the 'Tools' checkbox")
+                        Exit Sub
+                    End If
+                End If
+
+                'FAH Username / Team # settings setup
+                If Setup.chkGetFAHSoftware.Checked = True OrElse Setup.chkGetWalletForFLDC.Checked = True Then
+                    Dim DialogFAH As New FAHSetupDialog
+                    Try
+                        'Prompt for FAH info: Ask for: (existing) Username, Merged Folding Coin Selection, FAH Team #. Show Username as typing and check it for errors. (Optional) Get Passkey by email. Show before and after of the FAH Config file changes 
+                        DialogFAH.m_bInitialInstall = True
                         'Show modal dialog box
-                        If Setup.ShowDialog(Me) = DialogResult.OK Then
-                            'Run the tasks the operator selected
+                        DialogFAH.ShowDialog(Me)
 
-                            'FAH adavanced client installation
-                            If Setup.chkGetFAHSoftware.Checked = True Then
-                                g_bAskDownloadLocation = False
-                                If Await GetFAH() = False Then
-                                    MessageBox.Show("Task 'Get Folding@Home App' did not complete." & vbNewLine & "Please use the buttons in the 'Tools' checkbox")
-                                    Exit Sub
-                                End If
-                            End If
+                    Catch ex As Exception
+                        Msg("Setup FAH User, Team, and Config error:" & ex.ToString)
+                    End Try
+                    DialogFAH.Dispose()
+                End If
 
-                            'Get Wallet
-                            If Setup.chkGetWalletForFLDC.Checked = True Then
-                                If Await GetWallet() = False Then
-                                    MessageBox.Show("Task 'Get Wallet' did not complete." & vbNewLine & "Please use the buttons in the 'Tools' checkbox")
-                                    Exit Sub
-                                End If
-                            End If
+                'Only do this step if the CureCoin wallet.dat file wasn't found on the PC during the initial installation, or if the user chooses this option
+                If Setup.chkSetupCURE.Checked = True Then
+                    Await SetupCureCoin()
+                End If
 
-                            'FAH Username / Teamname settings setup
-                            If Setup.chkGetFAHSoftware.Checked = True OrElse Setup.chkGetWalletForFLDC.Checked = True Then
-                                Dim DialogFAH As New FAHSetupDialog
-                                Try
-                                    'Prompt for FAH info: Ask for: (existing) Username, Merged Folding Coin Selection, FAH Team #. Show Username as typing and check it for errors. (Optional) Get Passkey by email. Show before and after of the FAH Config file changes 
-                                    DialogFAH.m_bInitialInstall = True
-                                    'Show modal dialog box
-                                    DialogFAH.ShowDialog(Me)
+                'Show DAT file saved info. Ask to make backups / store data in a safe place
+                If Setup.chkGetFAHSoftware.Checked = True OrElse Setup.chkGetWalletForFLDC.Checked = True OrElse Setup.chkSetupCURE.Checked = True Then
+                    Dim DlgDisplaySavedData As New DisplayTextDialog
+                    DlgDisplaySavedData.StartPosition = FormStartPosition.CenterScreen
+                    'Show the Saved Data dialog
+                    DlgDisplaySavedData.Show(Me)
+                    Delay(100)
+                End If
+            End If
 
-                                Catch ex As Exception
-                                    Msg("Setup FAH User, Team, and Config error:" & ex.ToString)
-                                End Try
-                                DialogFAH.Dispose()
-                            End If
-
-                            'Only do this step if the CureCoin wallet.dat file wasn't found on the PC during the initial installation, or if the user chooses this option
-                            If Setup.chkSetupCURE.Checked = True Then
-                                Await SetupCureCoin()
-                            End If
-
-                            'Show DAT file saved info. Ask to make backups / store data in a safe place
-                            If Setup.chkGetFAHSoftware.Checked = True OrElse Setup.chkGetWalletForFLDC.Checked = True OrElse Setup.chkSetupCURE.Checked = True Then
-                                Dim DlgDisplaySavedData As New DisplayTextDialog
-                                DlgDisplaySavedData.StartPosition = FormStartPosition.CenterScreen
-                                'Show the Saved Data dialog
-                                DlgDisplaySavedData.Show(Me)
-                                Delay(100)
-                            End If
-                        End If
-
-                        'Automated process finished - Make a backup reminder, other informational messages
-                        Dim FinMsg As New MsgBoxDialog
-                        FinMsg.Text = "Setup Finished"
-                        FinMsg.MsgText.Text = "Setup Finished:" & vbNewLine &
+            'Automated process finished - Make a backup reminder, other informational messages
+            Dim FinMsg As New MsgBoxDialog
+            FinMsg.Text = "Setup Finished"
+            FinMsg.MsgText.Text = "Setup Finished:" & vbNewLine &
                             DividerLine & vbNewLine & vbNewLine &
                             "-Please use: Tools | Saved Data | 'Make Backup' button to backup your settings" & vbNewLine & vbNewLine &
                             "-Note Distribution Intervals: " & vbNewLine &
@@ -524,16 +560,14 @@
                             "         CureCoin: Daily.     Also, Proof of Stake (POS) when coins are" & vbNewLine &
                             "            over 4 days old, with wallet unlocked and left running." & vbNewLine & vbNewLine &
                             "-Please contact us on Discord for questions (Use FoldingBrowser Discord buttons)"
-                        FinMsg.Width = (FinMsg.MsgText.Left * 2) + FinMsg.MsgText.Width + 10
-                        FinMsg.Height = (FinMsg.MsgText.Top * 2) + FinMsg.MsgText.Height + FinMsg.btnOK.Height + System.Windows.Forms.SystemInformation.CaptionHeight + System.Windows.Forms.SystemInformation.BorderSize.Height + 30
-                        FinMsg.StartPosition = FormStartPosition.CenterScreen
-                        FinMsg.ShowDialog(Me)
-                        FinMsg.Dispose()
+            FinMsg.Width = (FinMsg.MsgText.Left * 2) + FinMsg.MsgText.Width + 10
+            FinMsg.Height = (FinMsg.MsgText.Top * 2) + FinMsg.MsgText.Height + FinMsg.btnOK.Height + System.Windows.Forms.SystemInformation.CaptionHeight + System.Windows.Forms.SystemInformation.BorderSize.Height + 30
+            FinMsg.StartPosition = FormStartPosition.CenterScreen
+            FinMsg.ShowDialog(Me)
+            FinMsg.Dispose()
 
-                        'Cleanup
-                        Setup.Dispose()
-                End Select
-            End If
+            'Cleanup
+            Setup.Dispose()
         End If
     End Sub
 
@@ -547,7 +581,7 @@
             'Skip saving the window position, if closed while being minimized or full screen
             If Me.WindowState = FormWindowState.Normal Then
                 'Store window size: {Left};{Top};{Width};{Height}
-                INI.AddSection(INI_Settings).AddKey(INI_Size).Value = IIf(Me.Left < 0, "0", Me.Left).ToString() & ";" & IIf(Me.Top < 0, "0", Me.Top).ToString() & ";" & IIf(Me.Width < 700, "700", Me.Width).ToString() & ";" & IIf(Me.Height < 500, "500", Me.Height).ToString()
+                INI.AddSection(INI_Settings).AddKey(INI_Size).Value = If(Me.Left < 0, "0", Me.Left.ToString()) & ";" & If(Me.Top < 0, "0", Me.Top.ToString()) & ";" & If(Me.Width < 700, "700", Me.Width.ToString()) & ";" & If(Me.Height < 500, "500", Me.Height.ToString())
             End If
             'Last FoldingBrowser version. Used for updating old settings, if needed, for upgrading versions
             INI.AddSection(INI_Settings).AddKey(INI_LastBrowserVersion).Value = My.Application.Info.Version.Major.ToString
@@ -616,7 +650,7 @@
     Private Sub ResizeControlsAndFormLayout()
         Try
             If m_iCurrentDPI > 0 Then
-                'This scale factor is also ued for loading any child forms later
+                'This scale factor is also used for loading any child forms later
                 g_sScaleFactor = CSng(m_iCurrentDPI / i96)
 
                 'Set the new font scalar to resize the form (Only after a DPI change)
@@ -692,7 +726,7 @@
                 'Button Link Panel: Initially show minimized
                 Me.pnlBtnLinks.Height = m_iMinPanelHeight
 
-                'Resize the toolbar and browser window. On Win10 at 175%, the right anchors weren't resizing to the window size
+                'Resize the tool bar and browser window. On Win10 at 175%, the right anchors weren't resizing to the window size
                 Me.pnlURL.Width = Me.ClientSize.Width
                 Me.ToolStripContainer1.Width = Me.ClientSize.Width + (SystemInformation.BorderSize.Width * 2)
                 'Set other important positions that Windows might not adjust correctly
@@ -747,7 +781,7 @@
         Select Case m.Msg
             Case WM_DPICHANGED
                 Try
-                    'Save the previous DPI value before updatating
+                    'Save the previous DPI value before updating
                     m_iOldDPI = m_iCurrentDPI
                     'Only use the low word of this integer
                     m_iCurrentDPI = CInt(m.WParam)
@@ -755,7 +789,7 @@
                     'Dim shtLowWord As Short = BitConverter.ToInt16(bytes, 0)
                     'Dim shtHighWord As Short = BitConverter.ToInt16(bytes, 2)
                     m_iCurrentDPI = BitConverter.ToInt16(bytes, 0)
-                    'Only update if the DPI chages
+                    'Only update if the DPI changes
                     If m_iCurrentDPI <> m_iOldDPI Then
                         If m_bFormMoving = True Then
                             'Set the flag to update for DPI scaling change
@@ -849,7 +883,7 @@
         End Try
 
         Try
-            'Try up to 2 differnt URLs. This shouldn't be needed anymore
+            'Try up to 2 different URLs. This shouldn't be needed anymore
             Do Until bFAH_PageLoaded = True OrElse g_bCancelNav = True OrElse iPageReloads > 2
                 'WORKAROUND: The FAH Web Control doesn't always load during the 30 second count down. Bypass it, and load the unique URL directly with a Refresh 'ignoring browser cache' to avoid the CORS infinite loop web page error
                 iPageReloads += 1
@@ -907,7 +941,7 @@
         End Try
 
         Try
-            'No UserId, but if you have the FAH Username stored, then go look up the Id on EOC (the 3 attempts is for new users who's username won't be searchable for the first ~24 hours: Hopefully this will let them retry some other day)
+            'No UserId, but if you have the FAH Username stored, then go look up the Id on EOC (the 3 attempts is for new users who's username won't be search-able for the first ~24 hours: Hopefully this will let them retry some other day)
             If iUserId < 4 Then
                 'Just load the CureCoin stats for something to look at
                 Await OpenURL(URL_CureCoin_EOC, False)
@@ -1035,7 +1069,7 @@
             'Normal: Load User's Stats
             OpenURL(URL_FoldingCoinStats & URL_FoldingCoinStatsUser & strUsername, False)
         Else
-            'Not a vailid FLDC username. Just go to the main FLDC Stats page
+            'Not a valid FLDC username. Just go to the main FLDC Stats page
             OpenURL(URL_FoldingCoinStats, False)
         End If
 #Enable Warning BC42358
@@ -1361,21 +1395,26 @@
         DlgDisplaySavedData.StartPosition = FormStartPosition.CenterScreen
         DlgDisplaySavedData.Show(Me)
     End Sub
+
+    Private Sub lblHoverURL_Click(sender As Object, e As EventArgs) Handles lblHoverURL.Click
+        'Hide the info text, if it got left shown (Like: sliding FAH web control power slider. Clicking on the web page would have also hidden this)
+        Me.lblHoverURL.Visible = False
+        Me.lblHoverURL.Text = ""
+    End Sub
 #End Region
 
 #Region "Auto-Wallet Login"
-    'Main CounterWallet server is up: m_iCounterWalletServerUp = 1. If set to 2, then use the secondary mirror server.
-    Private m_iCounterWalletServerUp As Integer = 0
+    'Get CounterWallet server status to make sure it is up. Sets return m_iCounterWalletServerUp: {main site = 1, or mirror site = 2} was up, otherwise = 0
     Private Async Function IsCounterwalletUp() As Threading.Tasks.Task
         Dim OkMsg As New MsgBoxDialog
+        Dim strResponse1 As String
+        Dim strResponse2 As String
+        m_iCounterWalletServerUp = 0
+
         Try
-            'Get CounterWallet server status to make sure it is up. Use the main site as the default
-            Dim strResponse1 As String = ""
-            Dim strResponse2 As String = ""
-            Msg("Getting CounterWallet server status from: " & URL_Counterwallet & CounterwalletAPI)
             'Display status
             OkMsg.Text = "Checking CounterWallet Server Status"
-            OkMsg.MsgText.Text = OkMsg.Text & vbNewLine & vbNewLine & "1. " & URL_Counterwallet & CounterwalletAPI & vbNewLine & "(Can take 40 seconds)"
+            OkMsg.MsgText.Text = OkMsg.Text & vbNewLine & vbNewLine & If(g_bRevCWServers = True, 2, 1).ToString & ". " & If(g_bRevCWServers = True, URL_CoinDaddyCounterwallet, URL_Counterwallet) & CounterwalletAPI & vbNewLine & "(Can take 40 seconds)"
             OkMsg.MsgText.Left = 70
             OkMsg.MsgText.Top = 70
             OkMsg.Width = (OkMsg.MsgText.Left * 2) + OkMsg.MsgText.Width + 20
@@ -1385,46 +1424,41 @@
             OkMsg.BackColor = Color.Gold
             OkMsg.Show(Me)
 
-            'Get CounterWallet status from server
-            Await OpenURL(URL_Counterwallet & CounterwalletAPI, False)
-            Await PageTitleWait(NameCounterwallet)
-            Await Wait(50)
-
-            'Find status data in web page
-            For i As Integer = 0 To 1
-                'Example text: ...3927775, "counterparty-server": "OK", "counterblock_last_message_index": 757169, "counterblock": "NOT OK", "cou...
-                If FindTextInDoc("""counterparty-server"": ""*K""", """counterblock"": ""*K""", strResponse1, strResponse2, True, "") = True AndAlso strResponse1.Length > 0 AndAlso strResponse2.Length > 0 Then
-                    'Search for: "O"K, or "NOT O"K. If OK, then set the flag for OK.
-                    If strResponse1 = "O" AndAlso strResponse2 = "O" Then m_iCounterWalletServerUp = 1
-                    Exit For
-                End If
-                Await Wait(700)
-            Next
-
-            'Use the mirror CounterWallet site as the backup
-            If m_iCounterWalletServerUp <> 1 Then
-                Msg("Getting CounterWallet server status from: " & URL_CoinDaddyCounterwallet & CounterwalletAPI)
+            For j As Integer = 0 To 1
                 'Display status
-                OkMsg.BackColor = Color.Orange
-                OkMsg.MsgText.Text = OkMsg.Text & vbNewLine & vbNewLine & "2. " & URL_CoinDaddyCounterwallet & CounterwalletAPI & vbNewLine & "(Can take 40 seconds)"
+                Msg("Getting CounterWallet server status from: " & If(g_bRevCWServers = True, URL_CoinDaddyCounterwallet, URL_Counterwallet) & CounterwalletAPI)
+                If j > 0 Then
+                    OkMsg.MsgText.Text = OkMsg.Text & vbNewLine & vbNewLine & If(g_bRevCWServers = True, 2, 1).ToString & ". " & If(g_bRevCWServers = True, URL_CoinDaddyCounterwallet, URL_Counterwallet) & CounterwalletAPI & vbNewLine & "(Can take 40 seconds)"
+                    OkMsg.BackColor = Color.Orange
+                End If
 
                 'Get CounterWallet status from server
-                Await OpenURL(URL_CoinDaddyCounterwallet & CounterwalletAPI, False)
+                Await OpenURL(If(g_bRevCWServers = True, URL_CoinDaddyCounterwallet, URL_Counterwallet) & CounterwalletAPI, False)
                 Await PageTitleWait(NameCounterwallet)
-                Await Wait(50)
+                System.Windows.Forms.Application.DoEvents()
+                Await Wait(100)
 
                 'Find status data in web page
                 For i As Integer = 0 To 1
+                    strResponse1 = ""
+                    strResponse2 = ""
                     If FindTextInDoc("""counterparty-server"": ""*K""", """counterblock"": ""*K""", strResponse1, strResponse2, True, "") = True AndAlso strResponse1.Length > 0 AndAlso strResponse2.Length > 0 Then
                         'Search for: "O"K, or "NOT O"K. If OK, then set the flag for OK
-                        If strResponse1 = "O" AndAlso strResponse2 = "O" Then m_iCounterWalletServerUp = 2
-                        Exit For
+                        If strResponse1 = "O" AndAlso strResponse2 = "O" Then
+                            m_iCounterWalletServerUp = If(g_bRevCWServers = True, If(j = 0, 2, 1), If(j = 0, 1, 2))
+                            Exit For
+                        End If
                     End If
                     Await Wait(700)
                 Next
-            End If
 
-            Msg("Using CounterWallet server: #" & m_iCounterWalletServerUp)
+                'If server was up, then exit server retry loop
+                If m_iCounterWalletServerUp > 0 Then
+                    Exit For
+                End If
+            Next
+
+            Msg("CounterWallet server #" & m_iCounterWalletServerUp & " is up")
 
         Catch ex As Exception
             Msg("CounterWallet Status error:" & ex.ToString)
@@ -1503,7 +1537,7 @@
             If bSaved12W = True Then
                 'Display status
                 OkMsg.Text = "Login to wallet"
-                OkMsg.MsgText.Text = OkMsg.Text & vbNewLine & vbNewLine & "1. " & If(m_iCounterWalletServerUp = 2, URL_CoinDaddyCounterwallet, URL_Counterwallet) & vbNewLine & "(Can take 60 seconds)"
+                OkMsg.MsgText.Text = OkMsg.Text & vbNewLine & vbNewLine & "1. " & If(m_iCounterWalletServerUp = 2, URL_CoinDaddyCounterwallet, URL_Counterwallet) & vbNewLine & "Retry in 60s (Can take 60 seconds)"
                 OkMsg.MsgText.Left = 70
                 OkMsg.MsgText.Top = 70
                 OkMsg.Width = (OkMsg.MsgText.Left * 2) + OkMsg.MsgText.Width + 20
@@ -1518,25 +1552,28 @@
                 bFAH_PageLoaded = False
                 Do Until bFAH_PageLoaded = True OrElse g_bCancelNav = True OrElse i > 40
                     i += 1
+                    If i < 20 Then
+                        OkMsg.MsgText.Text = OkMsg.Text & vbNewLine & vbNewLine & "1. " & If(m_iCounterWalletServerUp = 2, URL_CoinDaddyCounterwallet, URL_Counterwallet) & vbNewLine & "Retry in " & (60 - (i * 3)).ToString & "s (Can take 60 seconds)"
+                    ElseIf i >= 20 Then
+                        OkMsg.MsgText.Text = OkMsg.Text & vbNewLine & vbNewLine & "2. " & If(m_iCounterWalletServerUp = 2, URL_Counterwallet, URL_CoinDaddyCounterwallet) & vbNewLine & "Waited  " & (120 - (i * 3)).ToString & "s (Can take 60 seconds)"
+                    End If
+
                     If i = 1 OrElse i = 20 Then
                         If i = 1 Then
                             'CounterWallet web page (Use the mirror site as the default)
                             Await OpenURL(If(m_iCounterWalletServerUp = 2, URL_CoinDaddyCounterwallet, URL_Counterwallet), False)
                         ElseIf i = 20 Then
                             'If still not loaded, try the other site
-                            OkMsg.BackColor = Color.LightSkyBlue
-                            OkMsg.MsgText.Text = OkMsg.Text & vbNewLine & vbNewLine & "2. " & If(m_iCounterWalletServerUp = 2, URL_Counterwallet, URL_CoinDaddyCounterwallet) & vbNewLine & "(Can take 60 seconds)"
-
-                            'If still not loaded, try the other site
                             Await OpenURL(If(m_iCounterWalletServerUp = 2, URL_Counterwallet, URL_CoinDaddyCounterwallet), False)
+                            OkMsg.BackColor = Color.LightSkyBlue
                         End If
                         Await PageTitleWait(NameCounterwallet)
+                        System.Windows.Forms.Application.DoEvents()
                         Await Wait(700)
 
                         'Enter 12-word Passphrase to login
                         EnterTextById("password", DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_CP12Words).GetValue())
                         Await Wait(50)
-                        DAT = Nothing
 
                         'Trigger event to enable the Login button, since there was no keystroke event to enable the button
                         Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("ko.utils.triggerEvent(document.getElementById('password'), 'input');")
@@ -1561,9 +1598,9 @@
 
         Catch ex As Exception
             Msg("Auto-Wallet Login error:" & ex.ToString)
-            If DAT IsNot Nothing Then DAT = Nothing
         End Try
 
+        If DAT IsNot Nothing Then DAT = Nothing
         'Close the informational message
         OkMsg.Close()
         OkMsg.Dispose()
@@ -1599,7 +1636,7 @@
 
                 'Determine if this is a first-time setup or not: Look for the Discord Login Email in the saved settings
                 If DAT.GetSection(Id & Me.cbxToolsWalletId.Text) Is Nothing OrElse DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_DiscordEmail) Is Nothing Then
-                    'Fix missing values. Ask for email and passowrd to sign in
+                    'Fix missing values. Ask for email and password to sign in
                     Dim DiscordDlg As New UserPwdDialog
                     'Suggest the Email from the saved settings, if available
                     If DAT.GetSection(Id & Me.cbxToolsWalletId.Text) IsNot Nothing AndAlso DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_Email) IsNot Nothing Then
@@ -1719,7 +1756,7 @@
                     System.Windows.Forms.Application.DoEvents()
                     Await Wait(2000)
 
-                    'Skip asking for this in the future, if originally cancelled - Don't store info
+                    'Skip asking for this in the future, if originally canceled - Don't store info
                     Dim strEmail As String = DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_DiscordEmail).GetValue()
                     If strEmail <> SkipSavingDataFlag Then
                         'Don't try to login again if you're already logged in (pressing the button again or switching between FoldingCoin and CureCoin)
@@ -1848,7 +1885,7 @@
 
             'Display status
             OkMsg.Text = "Getting wallet address"
-            OkMsg.MsgText.Text = OkMsg.Text & vbNewLine & vbNewLine & "1. " & If(m_iCounterWalletServerUp = 2, URL_CoinDaddyCounterwallet, URL_Counterwallet) & vbNewLine & "(Can take 60 seconds)"
+            OkMsg.MsgText.Text = OkMsg.Text & vbNewLine & vbNewLine & "1. " & If(m_iCounterWalletServerUp = 2, URL_CoinDaddyCounterwallet, URL_Counterwallet) & vbNewLine & "Retry in 60s (Can take 60 seconds)"
             OkMsg.MsgText.Left = 70
             OkMsg.MsgText.Top = 70
             OkMsg.Width = (OkMsg.MsgText.Left * 2) + OkMsg.MsgText.Width + 20
@@ -1858,7 +1895,7 @@
             OkMsg.BackColor = Color.PaleGreen
             OkMsg.Show(Me)
 
-            'Try up to 2 differnt URLs
+            'Try up to 2 different URLs
             Do Until bFAH_PageLoaded = True OrElse g_bCancelNav = True OrElse iPageReloads > 2
                 iPageReloads += 1
                 If iPageReloads = 1 Then
@@ -1866,8 +1903,8 @@
                     Await OpenURL(If(m_iCounterWalletServerUp = 2, URL_CoinDaddyCounterwallet, URL_Counterwallet), False)
                 Else
                     'If still not loaded, try the other site
-                    OkMsg.BackColor = Color.LightSkyBlue
                     OkMsg.MsgText.Text = OkMsg.Text & vbNewLine & vbNewLine & "2. " & If(m_iCounterWalletServerUp = 2, URL_Counterwallet, URL_CoinDaddyCounterwallet) & vbNewLine & "(Can take 60 seconds)"
+                    OkMsg.BackColor = Color.LightSkyBlue
 
                     Await OpenURL(If(m_iCounterWalletServerUp = 2, URL_Counterwallet, URL_CoinDaddyCounterwallet), False)
                 End If
@@ -1890,11 +1927,11 @@
                 Dim str12W As String = ""
                 Dim strBTCAddr As String = ""
 
-                For i = 0 To 10
+                For i = 0 To 7
                     If FindTextInDoc("generatedPassphrase"">*</span>", "", str12W, "", False, "") = True AndAlso str12W.Length > 24 Then
                         Exit For
                     End If
-                    Await Wait(400)
+                    Await Wait(500)
                 Next
 
                 If str12W.Length > 24 Then
@@ -1924,8 +1961,14 @@
                     i = 0
                     bFAH_PageLoaded = False
                     Do Until bFAH_PageLoaded = True OrElse g_bCancelNav = True OrElse i > 20
-                        i += 1
+                        'Wait for login to complete (if server says it's OK, but it isn't, the login will hang. Try other server, if it does)
+                        If iPageReloads = 1 Then
+                            OkMsg.MsgText.Text = OkMsg.Text & vbNewLine & vbNewLine & "1. " & If(m_iCounterWalletServerUp = 2, URL_CoinDaddyCounterwallet, URL_Counterwallet) & vbNewLine & "Retry in " & (60 - (i * 3)).ToString & "s (Can take 60 seconds)"
+                        Else
+                            OkMsg.MsgText.Text = OkMsg.Text & vbNewLine & vbNewLine & "2. " & If(m_iCounterWalletServerUp = 2, URL_Counterwallet, URL_CoinDaddyCounterwallet) & vbNewLine & "Waited  " & (i * 3).ToString & "s (Can take 60 seconds)"
+                        End If
 
+                        i += 1
                         'If 1.2 second wait wasn't long enough, retry at 12 seconds
                         If i = 1 OrElse i = 4 Then
                             'First login, accept terms. ('btn btn-success') 2nd instance for the Accept button:
@@ -2156,7 +2199,7 @@
         Dim DAT As New IniFile
 
         Try
-            'Try to make the window tall enough to see the captcha at the botttom of the screen
+            'Try to make the window tall enough to see the captcha at the bottom of the screen
             If Me.Height < 975 Then Me.Height = 975
 
             'Go to the CureCoin folding pool (CryptoBullionPools) website
@@ -2197,7 +2240,7 @@
 
                     If bRunning = False Then
                         Msg("CureCoin Wallet not running")
-                        'Make sure the config file ('curecoin.conf.example') is availible
+                        'Make sure the config file ('curecoin.conf.example') is available
                         Dim strCureCoinConfigPath As String = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "curecoin", "curecoin.conf.example")
                         Dim strCureCoinEXEPath As String = ""
                         If Environment.Is64BitOperatingSystem = True Then
@@ -2937,6 +2980,7 @@
                       If args.Value.Length = 0 Then
                           'Hide the info text
                           Me.lblHoverURL.Visible = False
+                          Me.lblHoverURL.Text = ""
                       Else
                           'Display the info
                           Me.lblHoverURL.Text = args.Value
@@ -3306,7 +3350,7 @@
         Return False
     End Function
 
-    Private Async Sub pnlBtnLinks_MouseEnter(sender As Object, e As EventArgs) Handles pnlBtnLinks.MouseEnter
+    Private Async Sub pnlBtnLinks_MouseEnter(sender As Object, e As EventArgs) Handles pnlBtnLinks.MouseEnter, pbMolecule.MouseEnter
         'Skip, if already expanded
         If Me.pnlBtnLinks.Height <= m_iMinPanelHeight Then
             'Skip, if set in the options

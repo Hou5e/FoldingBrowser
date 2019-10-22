@@ -107,6 +107,7 @@ Public Module GlobalRefs
     Public Const INI_Homepage As String = "Homepage"
     Public Const INI_ShowPanelOnMouseEnter As String = "ShowPanelOnMouseEnter"
     Public Const INI_DarkThemeUI As String = "DarkThemeUI"
+    Public Const INI_RevCWServers As String = "RevCWServers"
 
     'Wallet Id specific
     Public Const INI_EOC_ID As String = "ExtremeOverclockingUserId"
@@ -148,6 +149,8 @@ Public Module GlobalRefs
     Public g_bAskDownloadLocation As Boolean = True
     'Holds on to the last downloaded file path, when the download completes
     Public g_strDownloadedFilePath As String = ""
+    'CounterWallet
+    Public g_bRevCWServers As Boolean = True
 
     'Option to Show the Web Link Panel On MouseEnter Event
     Public g_bShowWebLinkPanelOnMouseEnterEvent As Boolean = True

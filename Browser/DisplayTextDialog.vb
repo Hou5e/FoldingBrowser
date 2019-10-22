@@ -24,7 +24,7 @@
                 Me.cbxWalletId.Text = g_Main.cbxToolsWalletId.Text
             End If
 
-            'Start with the textboxes instead of the raw data that is hard to look at
+            'Start with the text boxes instead of the raw data that is hard to look at
             chkShowRawData_CheckedChanged(Nothing, Nothing)
             chkShowPW_CheckedChanged(Nothing, Nothing)
 
@@ -46,7 +46,7 @@
 
     Private Sub chkShowRawData_CheckedChanged(sender As Object, e As EventArgs) Handles chkShowRawData.CheckedChanged
         If Me.chkShowRawData.Checked = False Then
-            'Use the individual textboxes
+            'Use the individual text boxes
             Me.SplitContainer1.Panel1Collapsed = False
             Me.SplitContainer1.Panel2Collapsed = True
             Me.chkShowPW.Visible = True
@@ -85,7 +85,7 @@
 
     Private Sub btnSaveChanges_Click(sender As Object, e As EventArgs) Handles btnSaveChanges.Click
         If Me.chkShowRawData.Checked = False Then
-            'Use the individual textboxes
+            'Use the individual text boxes
             Dim DAT As New IniFile
             'Build the new DAT file
             If System.IO.File.Exists(DatFilePath) = True Then
@@ -116,7 +116,7 @@
             Me.txtExtremeOverclockingId.Text = Me.txtExtremeOverclockingId.Text.Trim
 
 
-            'Save textboxes with DAT data for the Wallet Id...
+            'Save text boxes with DAT data for the Wallet Id...
             DAT.AddSection(Id & Me.cbxWalletId.Text)
             If Me.txtFAHUsername.Text.Length <> 0 Then
                 DAT.AddSection(Id & Me.cbxWalletId.Text).AddKey(DAT_FAH_Username).Value = Me.txtFAHUsername.Text
@@ -177,7 +177,7 @@
 
             DAT = Nothing
         Else
-            'Large single textbox with the Raw INI data: Set a flag to reload the textboxes so they don't get out of sync
+            'Large single textbox with the Raw INI data: Set a flag to reload the text boxes so they don't get out of sync
             m_bRawDataSaved = True
         End If
 
@@ -343,7 +343,7 @@
                 Me.txtDisplayText.Select(Me.txtDisplayText.Text.Length, 0)
 
 
-                'Load textboxes with DAT data for the Wallet Id...
+                'Load text boxes with DAT data for the Wallet Id...
                 If DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FAH_Username) IsNot Nothing Then
                     Me.txtFAHUsername.Text = DAT.GetSection(Id & Me.cbxWalletId.Text).GetKey(DAT_FAH_Username).GetValue()
                 End If

@@ -16,7 +16,7 @@
             'Load the pull-down menu from the constants
             Me.cbxHomepage.Items.AddRange({HpgDefault, HpgTopBottom, HpgSideBySide, HpgFoldingCoin, HpgFoldingCoinTeamStats, HpgFoldingCoinMyStats, HpgCureCoin, HpgCureCoinTeamStatsEOC, HpgMyStatsEOC, HpgFAH, HpgBlank})
 
-            'Start with the textboxes instead of the raw data that is hard to look at
+            'Start with the text boxes instead of the raw data that is hard to look at
             chkShowRawData_CheckedChanged(Nothing, Nothing)
 
             'Make sure the INI key/value exists
@@ -44,6 +44,14 @@
                 INI.AddSection(INI_Settings).AddKey(INI_DarkThemeUI).Value = Me.chkDarkTheme.Checked.ToString
             End If
 
+            If INI.GetSection(INI_Settings).GetKey(INI_RevCWServers) IsNot Nothing Then
+                'Load option
+                Me.chkRevCWServers.Checked = CBool(INI.GetSection(INI_Settings).GetKey(INI_RevCWServers).GetValue())
+            Else
+                'Add, if it doesn't exist
+                INI.AddSection(INI_Settings).AddKey(INI_RevCWServers).Value = Me.chkRevCWServers.Checked.ToString
+            End If
+
             'Display the INI data in the main raw data textbox
             Me.txtDisplayText.Text = INI.SaveToString
             Me.txtDisplayText.Select(Me.txtDisplayText.Text.Length, 0)
@@ -60,13 +68,18 @@
     End Sub
 
     Private Sub DisplayOptionsDialog_Closing(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles Me.Closing
+        If INI.GetSection(INI_Settings).GetKey(INI_DarkThemeUI) IsNot Nothing Then
+            'Load option
+            Me.chkDarkTheme.Checked = CBool(INI.GetSection(INI_Settings).GetKey(INI_DarkThemeUI).GetValue())
+        End If
+
         'Clear out the displayed text
         Me.txtDisplayText.Text = String.Empty
     End Sub
 
     Private Sub chkShowRawData_CheckedChanged(sender As Object, e As EventArgs) Handles chkShowRawData.CheckedChanged
         If Me.chkShowRawData.Checked = False Then
-            'Use the individual textboxes
+            'Use the individual text boxes
             Me.SplitContainer1.Panel1Collapsed = False
             Me.SplitContainer1.Panel2Collapsed = True
             Me.btnSaveChanges.Visible = True
@@ -92,6 +105,9 @@
             INI.AddSection(INI_Settings).AddKey(INI_ShowPanelOnMouseEnter).Value = g_bShowWebLinkPanelOnMouseEnterEvent.ToString
 
             INI.AddSection(INI_Settings).AddKey(INI_DarkThemeUI).Value = Me.chkDarkTheme.Checked.ToString
+
+            g_bRevCWServers = Me.chkRevCWServers.Checked
+            INI.AddSection(INI_Settings).AddKey(INI_RevCWServers).Value = Me.chkRevCWServers.Checked.ToString
             INI.Save(IniFilePath)
 
             'Display the INI data in the main raw data textbox
@@ -128,9 +144,14 @@
 
     'If any of the options are changed, then enable the Save Changes button
     Private Sub chkDarkTheme_CheckedChanged(sender As Object, e As EventArgs) Handles chkDarkTheme.CheckedChanged
-        'Update the UI
+        'Update the UI immediately to preview the changes
         g_Main.ThemeColorUI(Me.chkDarkTheme.Checked)
 
+        Me.btnSaveChanges.Enabled = True
+    End Sub
+
+    'If any of the options are changed, then enable the Save Changes button
+    Private Sub chkRevCWServers_CheckedChanged(sender As Object, e As EventArgs) Handles chkRevCWServers.CheckedChanged
         Me.btnSaveChanges.Enabled = True
     End Sub
 End Class

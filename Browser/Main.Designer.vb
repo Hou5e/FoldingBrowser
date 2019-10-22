@@ -28,6 +28,7 @@ Partial Class Main
         Me.btnGo = New System.Windows.Forms.Button()
         Me.lblURL = New System.Windows.Forms.Label()
         Me.ToolStripContainer1 = New System.Windows.Forms.ToolStripContainer()
+        Me.lblHoverURL = New System.Windows.Forms.Label()
         Me.btnToolsGetWallet = New System.Windows.Forms.Button()
         Me.btnMyWallet = New System.Windows.Forms.Button()
         Me.btnToolsGetFAH = New System.Windows.Forms.Button()
@@ -84,7 +85,6 @@ Partial Class Main
         Me.pnlBtnLinksDividerTop = New System.Windows.Forms.Panel()
         Me.pbMolecule = New System.Windows.Forms.PictureBox()
         Me.pnlURL = New System.Windows.Forms.Panel()
-        Me.lblHoverURL = New System.Windows.Forms.Label()
         Me.ToolStripContainer1.ContentPanel.SuspendLayout()
         Me.ToolStripContainer1.SuspendLayout()
         Me.gbxTools.SuspendLayout()
@@ -177,6 +177,20 @@ Partial Class Main
         Me.ToolStripContainer1.TabIndex = 5
         Me.ToolStripContainer1.Text = "ToolStripContainer1"
         Me.ToolStripContainer1.TopToolStripPanelVisible = False
+        '
+        'lblHoverURL
+        '
+        Me.lblHoverURL.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.lblHoverURL.AutoSize = True
+        Me.lblHoverURL.BackColor = System.Drawing.Color.White
+        Me.lblHoverURL.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lblHoverURL.ForeColor = System.Drawing.Color.DimGray
+        Me.lblHoverURL.Location = New System.Drawing.Point(-1, 676)
+        Me.lblHoverURL.Name = "lblHoverURL"
+        Me.lblHoverURL.Size = New System.Drawing.Size(37, 18)
+        Me.lblHoverURL.TabIndex = 0
+        Me.lblHoverURL.Text = "URL"
+        Me.lblHoverURL.Visible = False
         '
         'btnToolsGetWallet
         '
@@ -834,6 +848,7 @@ Partial Class Main
         '
         'gbxDownload
         '
+        Me.gbxDownload.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.gbxDownload.BackColor = System.Drawing.Color.LemonChiffon
         Me.gbxDownload.Controls.Add(Me.lblDownloadText)
         Me.gbxDownload.Controls.Add(Me.lblPercent)
@@ -1035,9 +1050,9 @@ Partial Class Main
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.pnlURL.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
         Me.pnlURL.BackColor = System.Drawing.Color.LightGray
+        Me.pnlURL.Controls.Add(Me.gbxDownload)
         Me.pnlURL.Controls.Add(Me.btnGo)
         Me.pnlURL.Controls.Add(Me.chkToolsShow)
-        Me.pnlURL.Controls.Add(Me.gbxDownload)
         Me.pnlURL.Controls.Add(Me.btnFwd)
         Me.pnlURL.Controls.Add(Me.lblURL)
         Me.pnlURL.Controls.Add(Me.txtURL)
@@ -1050,20 +1065,6 @@ Partial Class Main
         Me.pnlURL.Name = "pnlURL"
         Me.pnlURL.Size = New System.Drawing.Size(1269, 39)
         Me.pnlURL.TabIndex = 0
-        '
-        'lblHoverURL
-        '
-        Me.lblHoverURL.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.lblHoverURL.AutoSize = True
-        Me.lblHoverURL.BackColor = System.Drawing.Color.White
-        Me.lblHoverURL.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lblHoverURL.ForeColor = System.Drawing.Color.DimGray
-        Me.lblHoverURL.Location = New System.Drawing.Point(-1, 676)
-        Me.lblHoverURL.Name = "lblHoverURL"
-        Me.lblHoverURL.Size = New System.Drawing.Size(37, 18)
-        Me.lblHoverURL.TabIndex = 0
-        Me.lblHoverURL.Text = "URL"
-        Me.lblHoverURL.Visible = False
         '
         'Main
         '
