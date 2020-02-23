@@ -11,7 +11,7 @@
     Private m_iMinPanelHeight As Integer = 8
     Private m_iNormPanelHeight As Integer = 260
     Private m_iMaxPanelHeight As Integer = 360
-    Private m_iTempHeight As Integer = 20
+    Private m_iTempHeight As Integer = 0
     Private m_iTargetExpandedPanelHeight As Integer = 8
     'DPI for Scaling
     Private m_iOldDPI As Integer = 0
@@ -1537,7 +1537,7 @@
             If bSaved12W = True Then
                 'Display status
                 OkMsg.Text = "Login to wallet"
-                OkMsg.MsgText.Text = OkMsg.Text & vbNewLine & vbNewLine & "1. " & If(m_iCounterWalletServerUp = 2, URL_CoinDaddyCounterwallet, URL_Counterwallet) & vbNewLine & "Retry in 60s (Can take 60 seconds)"
+                OkMsg.MsgText.Text = OkMsg.Text & vbNewLine & vbNewLine & "1. " & If(m_iCounterWalletServerUp = 2, URL_CoinDaddyCounterwallet, URL_Counterwallet) & vbNewLine & "Retry in 90s (Can take 90 seconds)"
                 OkMsg.MsgText.Left = 70
                 OkMsg.MsgText.Top = 70
                 OkMsg.Width = (OkMsg.MsgText.Left * 2) + OkMsg.MsgText.Width + 20
@@ -1550,19 +1550,19 @@
                 'Wait up to ~1 minute for trying to login on either the mirror site or the main site (3 seconds each iteration)
                 i = 0
                 bFAH_PageLoaded = False
-                Do Until bFAH_PageLoaded = True OrElse g_bCancelNav = True OrElse i > 40
+                Do Until bFAH_PageLoaded = True OrElse g_bCancelNav = True OrElse i > 60
                     i += 1
-                    If i < 20 Then
-                        OkMsg.MsgText.Text = OkMsg.Text & vbNewLine & vbNewLine & "1. " & If(m_iCounterWalletServerUp = 2, URL_CoinDaddyCounterwallet, URL_Counterwallet) & vbNewLine & "Retry in " & (60 - (i * 3)).ToString & "s (Can take 60 seconds)"
-                    ElseIf i >= 20 Then
-                        OkMsg.MsgText.Text = OkMsg.Text & vbNewLine & vbNewLine & "2. " & If(m_iCounterWalletServerUp = 2, URL_Counterwallet, URL_CoinDaddyCounterwallet) & vbNewLine & "Waited  " & (120 - (i * 3)).ToString & "s (Can take 60 seconds)"
+                    If i < 30 Then
+                        OkMsg.MsgText.Text = OkMsg.Text & vbNewLine & vbNewLine & "1. " & If(m_iCounterWalletServerUp = 2, URL_CoinDaddyCounterwallet, URL_Counterwallet) & vbNewLine & "Retry in " & (89 - (i * 3)).ToString & "s (Can take 90 seconds)"
+                    ElseIf i >= 30 Then
+                        OkMsg.MsgText.Text = OkMsg.Text & vbNewLine & vbNewLine & "2. " & If(m_iCounterWalletServerUp = 2, URL_Counterwallet, URL_CoinDaddyCounterwallet) & vbNewLine & "Waited  " & (179 - (i * 3)).ToString & "s (Can take 90 seconds)"
                     End If
 
-                    If i = 1 OrElse i = 20 Then
+                    If i = 1 OrElse i = 30 Then
                         If i = 1 Then
                             'CounterWallet web page (Use the mirror site as the default)
                             Await OpenURL(If(m_iCounterWalletServerUp = 2, URL_CoinDaddyCounterwallet, URL_Counterwallet), False)
-                        ElseIf i = 20 Then
+                        ElseIf i = 30 Then
                             'If still not loaded, try the other site
                             Await OpenURL(If(m_iCounterWalletServerUp = 2, URL_Counterwallet, URL_CoinDaddyCounterwallet), False)
                             OkMsg.BackColor = Color.LightSkyBlue
@@ -3356,9 +3356,9 @@
             'Skip, if set in the options
             If g_bShowWebLinkPanelOnMouseEnterEvent = True Then
                 'Button Link list: Mouse-over effect to expand area
-                For m_iTempHeight = 40 To m_iTargetExpandedPanelHeight Step 40
+                For m_iTempHeight = 60 To m_iTargetExpandedPanelHeight Step 60
                     Me.pnlBtnLinks.Height = m_iTempHeight
-                    Await Wait(5)
+                    Await Wait(1)
                 Next
                 'Set to desired size, if it's not an exact multiple
                 Me.pnlBtnLinks.Height = m_iTargetExpandedPanelHeight
@@ -3369,9 +3369,9 @@
     Private Async Sub pnlBtnLinks_Click(sender As Object, e As EventArgs) Handles pnlBtnLinks.Click, pnlBtnLinksDividerTop.Click, pbMolecule.Click
         If Me.pnlBtnLinks.Height <= m_iMinPanelHeight Then
             'Button Link list: Mouse-over effect to expand area
-            For m_iTempHeight = 40 To m_iTargetExpandedPanelHeight Step 40
+            For m_iTempHeight = 60 To m_iTargetExpandedPanelHeight Step 60
                 Me.pnlBtnLinks.Height = m_iTempHeight
-                Await Wait(5)
+                Await Wait(1)
             Next
             'Set to desired size, if it's not an exact multiple
             Me.pnlBtnLinks.Height = m_iTargetExpandedPanelHeight

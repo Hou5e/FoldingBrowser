@@ -191,37 +191,45 @@ Partial Class DisplayTextDialog
         '
         'txtCureCoinPoolPin
         '
+        Me.txtCureCoinPoolPin.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtCureCoinPoolPin.Location = New System.Drawing.Point(220, 266)
         Me.txtCureCoinPoolPin.Margin = New System.Windows.Forms.Padding(4)
         Me.txtCureCoinPoolPin.Name = "txtCureCoinPoolPin"
-        Me.txtCureCoinPoolPin.Size = New System.Drawing.Size(411, 22)
+        Me.txtCureCoinPoolPin.Size = New System.Drawing.Size(428, 22)
         Me.txtCureCoinPoolPin.TabIndex = 10
         Me.ToolTip1.SetToolTip(Me.txtCureCoinPoolPin, "Pin number needed to make any changes to the pool information")
         '
         'txtExtremeOverclockingId
         '
+        Me.txtExtremeOverclockingId.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtExtremeOverclockingId.Location = New System.Drawing.Point(220, 364)
         Me.txtExtremeOverclockingId.Margin = New System.Windows.Forms.Padding(4)
         Me.txtExtremeOverclockingId.Name = "txtExtremeOverclockingId"
-        Me.txtExtremeOverclockingId.Size = New System.Drawing.Size(411, 22)
+        Me.txtExtremeOverclockingId.Size = New System.Drawing.Size(428, 22)
         Me.txtExtremeOverclockingId.TabIndex = 13
         Me.ToolTip1.SetToolTip(Me.txtExtremeOverclockingId, "Extreme Overclocking Id from your EOC stats URL")
         '
         'txtDiscordPassword
         '
+        Me.txtDiscordPassword.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtDiscordPassword.Location = New System.Drawing.Point(220, 328)
         Me.txtDiscordPassword.Margin = New System.Windows.Forms.Padding(4)
         Me.txtDiscordPassword.Name = "txtDiscordPassword"
-        Me.txtDiscordPassword.Size = New System.Drawing.Size(411, 22)
+        Me.txtDiscordPassword.Size = New System.Drawing.Size(428, 22)
         Me.txtDiscordPassword.TabIndex = 12
         Me.ToolTip1.SetToolTip(Me.txtDiscordPassword, "Password used for Discord Login")
         '
         'txtDiscordEmail
         '
+        Me.txtDiscordEmail.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtDiscordEmail.Location = New System.Drawing.Point(220, 302)
         Me.txtDiscordEmail.Margin = New System.Windows.Forms.Padding(4)
         Me.txtDiscordEmail.Name = "txtDiscordEmail"
-        Me.txtDiscordEmail.Size = New System.Drawing.Size(411, 22)
+        Me.txtDiscordEmail.Size = New System.Drawing.Size(428, 22)
         Me.txtDiscordEmail.TabIndex = 11
         Me.ToolTip1.SetToolTip(Me.txtDiscordEmail, "Email used for Discord Login")
         '
@@ -321,10 +329,12 @@ Partial Class DisplayTextDialog
         '
         'txtCureCoinPoolPassword
         '
+        Me.txtCureCoinPoolPassword.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtCureCoinPoolPassword.Location = New System.Drawing.Point(220, 240)
         Me.txtCureCoinPoolPassword.Margin = New System.Windows.Forms.Padding(4)
         Me.txtCureCoinPoolPassword.Name = "txtCureCoinPoolPassword"
-        Me.txtCureCoinPoolPassword.Size = New System.Drawing.Size(411, 22)
+        Me.txtCureCoinPoolPassword.Size = New System.Drawing.Size(428, 22)
         Me.txtCureCoinPoolPassword.TabIndex = 9
         '
         'lblCureCoinPoolPassword
@@ -339,10 +349,12 @@ Partial Class DisplayTextDialog
         '
         'txtCureCoinAddress
         '
+        Me.txtCureCoinAddress.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtCureCoinAddress.Location = New System.Drawing.Point(220, 214)
         Me.txtCureCoinAddress.Margin = New System.Windows.Forms.Padding(4)
         Me.txtCureCoinAddress.Name = "txtCureCoinAddress"
-        Me.txtCureCoinAddress.Size = New System.Drawing.Size(411, 22)
+        Me.txtCureCoinAddress.Size = New System.Drawing.Size(428, 22)
         Me.txtCureCoinAddress.TabIndex = 8
         '
         'lblCureCoinAddress
@@ -357,10 +369,12 @@ Partial Class DisplayTextDialog
         '
         'txtCounterParty12WordPassphrase
         '
+        Me.txtCounterParty12WordPassphrase.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtCounterParty12WordPassphrase.Location = New System.Drawing.Point(220, 179)
         Me.txtCounterParty12WordPassphrase.Margin = New System.Windows.Forms.Padding(4)
         Me.txtCounterParty12WordPassphrase.Name = "txtCounterParty12WordPassphrase"
-        Me.txtCounterParty12WordPassphrase.Size = New System.Drawing.Size(411, 22)
+        Me.txtCounterParty12WordPassphrase.Size = New System.Drawing.Size(428, 22)
         Me.txtCounterParty12WordPassphrase.TabIndex = 7
         '
         'lblCounterParty12WordPassphrase
@@ -375,10 +389,12 @@ Partial Class DisplayTextDialog
         '
         'txtBTCAddress
         '
+        Me.txtBTCAddress.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtBTCAddress.Location = New System.Drawing.Point(220, 153)
         Me.txtBTCAddress.Margin = New System.Windows.Forms.Padding(4)
         Me.txtBTCAddress.Name = "txtBTCAddress"
-        Me.txtBTCAddress.Size = New System.Drawing.Size(411, 22)
+        Me.txtBTCAddress.Size = New System.Drawing.Size(428, 22)
         Me.txtBTCAddress.TabIndex = 6
         '
         'lblBTCAddress
@@ -403,10 +419,12 @@ Partial Class DisplayTextDialog
         '
         'txtEmail
         '
+        Me.txtEmail.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtEmail.Location = New System.Drawing.Point(220, 118)
         Me.txtEmail.Margin = New System.Windows.Forms.Padding(4)
         Me.txtEmail.Name = "txtEmail"
-        Me.txtEmail.Size = New System.Drawing.Size(411, 22)
+        Me.txtEmail.Size = New System.Drawing.Size(428, 22)
         Me.txtEmail.TabIndex = 5
         '
         'lblEmail
@@ -421,10 +439,12 @@ Partial Class DisplayTextDialog
         '
         'txtFAHPasskey
         '
+        Me.txtFAHPasskey.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtFAHPasskey.Location = New System.Drawing.Point(220, 92)
         Me.txtFAHPasskey.Margin = New System.Windows.Forms.Padding(4)
         Me.txtFAHPasskey.Name = "txtFAHPasskey"
-        Me.txtFAHPasskey.Size = New System.Drawing.Size(411, 22)
+        Me.txtFAHPasskey.Size = New System.Drawing.Size(428, 22)
         Me.txtFAHPasskey.TabIndex = 4
         '
         'lblFAHPasskey
@@ -439,10 +459,12 @@ Partial Class DisplayTextDialog
         '
         'txtFAHTeam
         '
+        Me.txtFAHTeam.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtFAHTeam.Location = New System.Drawing.Point(220, 66)
         Me.txtFAHTeam.Margin = New System.Windows.Forms.Padding(4)
         Me.txtFAHTeam.Name = "txtFAHTeam"
-        Me.txtFAHTeam.Size = New System.Drawing.Size(411, 22)
+        Me.txtFAHTeam.Size = New System.Drawing.Size(428, 22)
         Me.txtFAHTeam.TabIndex = 3
         '
         'lblFAHTeam
@@ -457,10 +479,12 @@ Partial Class DisplayTextDialog
         '
         'txtFAHUsername
         '
+        Me.txtFAHUsername.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtFAHUsername.Location = New System.Drawing.Point(220, 40)
         Me.txtFAHUsername.Margin = New System.Windows.Forms.Padding(4)
         Me.txtFAHUsername.Name = "txtFAHUsername"
-        Me.txtFAHUsername.Size = New System.Drawing.Size(411, 22)
+        Me.txtFAHUsername.Size = New System.Drawing.Size(428, 22)
         Me.txtFAHUsername.TabIndex = 2
         '
         'lblFAHUsername
