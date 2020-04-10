@@ -3243,16 +3243,36 @@
         Me.browser.GetBrowser.GoForward()
     End Sub
 
-    'URL bar only: Open the URL if 'Enter' is pressed
+    'URL bar only: Open the URL if 'Enter' is pressed. Select All with CTRL+A
     Private Sub txtURL_KeyDown(sender As Object, e As KeyEventArgs) Handles txtURL.KeyDown
-        If e.KeyCode = Keys.Enter Then
+        Select Case e.KeyCode
+            Case Keys.Enter
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
-            OpenURL(Me.txtURL.Text, True)
+                OpenURL(Me.txtURL.Text, True)
 #Enable Warning BC42358
-            e.SuppressKeyPress = True
-        Else
-            'See if there are other keystroke events that need to be handled
-            FormKeyDownEvents(e)
+                e.SuppressKeyPress = True
+
+            Case Keys.A
+                If e.Modifiers = Keys.Control Then
+                    'Select all text
+                    Me.txtURL.SelectAll()
+                    e.SuppressKeyPress = True
+                End If
+
+            Case Else
+                'See if there are other keystroke events that need to be handled
+                FormKeyDownEvents(e)
+        End Select
+    End Sub
+
+    'Select All with CTRL+A
+    Private Sub txtMsg_KeyDown(sender As Object, e As KeyEventArgs) Handles txtMsg.KeyDown
+        If e.KeyCode = Keys.A Then
+            If e.Modifiers = Keys.Control Then
+                'Select all text
+                Me.txtMsg.SelectAll()
+                e.SuppressKeyPress = True
+            End If
         End If
     End Sub
 

@@ -1,6 +1,7 @@
 ﻿Public Class DisplayTextDialog
     Private m_bRawDataSaved As Boolean = False
 
+#Region "Form Events - New, Closing"
     Public Sub New()
         Try
             InitializeComponent()
@@ -43,7 +44,9 @@
         'Clear out the displayed text
         Me.txtDisplayText.Text = String.Empty
     End Sub
+#End Region
 
+#Region "Control Events - Buttons, Checkboxes"
     Private Sub chkShowRawData_CheckedChanged(sender As Object, e As EventArgs) Handles chkShowRawData.CheckedChanged
         If Me.chkShowRawData.Checked = False Then
             'Use the individual text boxes
@@ -304,7 +307,9 @@
         'The Closing event clears out the displayed text
         Me.Close()
     End Sub
+#End Region
 
+#Region "Control Events - Comboboxes"
     Public Sub cbxWalletId_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbxWalletId.SelectedIndexChanged
         Me.txtFAHUsername.Text = ""
         Me.txtFAHTeam.Text = ""
@@ -399,7 +404,9 @@
             Me.txtWalletName.Text = NotUsed
         End If
     End Sub
+#End Region
 
+#Region "Control Events - Text boxes"
     Private Sub txtDisplayText_TextChanged(sender As Object, e As EventArgs) Handles txtDisplayText.TextChanged
         Me.btnSaveChanges.Enabled = True
     End Sub
@@ -444,6 +451,28 @@
     Private Sub txtExtremeOverclockingId_TextChanged(sender As Object, e As EventArgs) Handles txtExtremeOverclockingId.TextChanged
         Me.btnSaveChanges.Enabled = True
     End Sub
+#End Region
+
+#Region "Control Events - Keystrokes"
+    Private Sub txtDisplayText_KeyDown(sender As Object, e As KeyEventArgs) Handles txtDisplayText.KeyDown
+        If e.KeyCode = Keys.A Then
+            If e.Modifiers = Keys.Control Then
+                'Select all text
+                Me.txtDisplayText.SelectAll()
+                e.SuppressKeyPress = True
+            End If
+        End If
+    End Sub
+
+    Private Sub txtWarningMessage_KeyDown(sender As Object, e As KeyEventArgs) Handles txtWarningMessage.KeyDown
+        If e.KeyCode = Keys.A Then
+            If e.Modifiers = Keys.Control Then
+                'Select all text
+                Me.txtWarningMessage.SelectAll()
+                e.SuppressKeyPress = True
+            End If
+        End If
+    End Sub
 
     Private Sub txtWalletName_KeyDown(sender As Object, e As KeyEventArgs) Handles txtWalletName.KeyDown
         'Change wallet name when text is changed and <enter> is pressed
@@ -462,4 +491,5 @@
             Me.Close()
         End If
     End Sub
+#End Region
 End Class

@@ -7,9 +7,14 @@ Immediate Need /  Short-Term Goals:
 -----------------------------------
 
 -Evaluate upgrading to CefSharp/Chrome v81 (VC++2015) when released here: https://github.com/cefsharp/CefSharp/releases
--CureCoin installer: Update blockchain files and 'peers.dat' file in the installer to be current.
--Support other wallets, for pressing the 'FLDC Wallet' button, with option for:  https://freewallet.io/     Other alternatives (ignore for now): https://wallet.indiesquare.me/     also: rarepepewallet.com (Not updated enough? security risks?)     (Not yet) https://tokenpockets.com/ (You cannot use tokenpockets currently. It is not compatible with existing passphrases from CounterWallet. If you want to use it, you will have to make a new address first)
 -On installation, see if FAH is running and show the web control if it is, instead of a blank page (mostly for upgrade installs)
+-Update video on website. It's pretty stale now
+-Can't wipe-out saved data to be blank (can do it from the raw data view)
+-Make saved data changes prompt you to: 'Save changes?' when changing wallet numbers, or auto-save?
+-Start with Wallet #1 instead of #0, as the default wallet used for initial setup?
+-Make a simple setup: Do you want FLDC? Do you want Cure? Pick username (hide stuff that doesn't apply) (Add CureCoin folding pool rules: more than 3? chars, no special chars). Have a checkbox for advanced (normally, hide the advanced setup)
+-Add CTRL+A to: Options Raw data view, to select all
+-Test and update any URL buttons to be current
 
 ----------------------------------------------------
 Other Ideas, Improvements, Tasks, Longer-Term Goals:
@@ -63,14 +68,19 @@ Other Ideas, Improvements, Tasks, Longer-Term Goals:
 -Support SegWit addresses for FLDC (start with 'bc1' and are about 9 characters longer). Probably should get both addresses (Legacy and SegWit) from CounterWallet, and offer a pull-down list selection. Might need to get the 50 character CureCoin folding pool username limit raised.
 -Installer: Change to a language selection page, instead of the pre-installer dialog box?
 -Have a button to try and get a new CounterParty Bitcoin Address, if it's blank (with a timeout & retry for the mirror Counterwallet site). Or, message to run button #2 to get an address?
+-Support other wallets, for pressing the 'FLDC Wallet' button, with option for:  https://freewallet.io/   Possibly include FreeWallet installer.    Other alternatives (ignore for now): https://wallet.indiesquare.me/     also: rarepepewallet.com (Not updated enough? security risks?)     (Not yet) https://tokenpockets.com/ (You cannot use tokenpockets currently. It is not compatible with existing passphrases from CounterWallet. If you want to use it, you will have to make a new address first)
+-Informational: List keystrokes implemented on Settings/options page
 
 
 ======================================================================================================
 Change Log - Release Notes - Tasks completed:
 ======================================================================================================
 
-v22 Release (2020-0?-??)
-
+v22 Release (2020-04-10)
+[DONE] -Update instructions for changing the PW on the main PW storage
+[DONE] -Add CTRL+A to: URL bar and Debug info, to select all
+[DONE] -Add CTRL+A to: Saved Data Raw data view and warning info, to select all
+[DONE] -CureCoin installer: Update 'peers.dat' file in the installer to be current
 [DONE] -Evaluate upgrading to CefSharp/Chrome v79 (VC++2015) when released
 [DONE] -Increased the speed of the fly-down menu
 [DONE] -Wait up to 90 seconds (instead of 60 seconds) for CounterWallet to load

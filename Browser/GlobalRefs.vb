@@ -18,7 +18,7 @@ Public Module GlobalRefs
     Public Const URL_FLDC_DefaultBlockchain As String = "https://xchain.io/asset/FLDC"
     Public Const URL_FLDC_AddressBlockchain As String = "https://xchain.io/address/"
     Public Const URL_BTC_Blockchain As String = "https://www.blockchain.com/"
-    Public Const URL_FLDC_Distro As String = "https://mergedfolding.net/official-distributions"
+    Public Const URL_FLDC_Distro As String = "https://mergedfolding.net/distributions"
     Public Const URL_FoldingCoinDiscordInvite As String = "https://discord.gg/CvZ7gAs"
     Public Const URL_FoldingCoinDiscordRegister As String = "https://discordapp.com/register?redirect_to=%2Finvite%2FCvZ7gAs"
     Public Const URL_FoldingCoinDiscord As String = "https://discordapp.com/channels/379168590626029568/379168590626029571"
