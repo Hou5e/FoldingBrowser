@@ -6,7 +6,7 @@ FoldingBrowser All-in-One Installer:
 Immediate Need /  Short-Term Goals:
 -----------------------------------
 
--Evaluate upgrading to CefSharp/Chrome v81 (VC++2015) when released here: https://github.com/cefsharp/CefSharp/releases
+-Evaluate upgrading to CefSharp/Chrome v93 (VC++2015) when released here: https://github.com/cefsharp/CefSharp/releases
 -On installation, see if FAH is running and show the web control if it is, instead of a blank page (mostly for upgrade installs)
 -Update video on website. It's pretty stale now
 -Can't wipe-out saved data to be blank (can do it from the raw data view)
@@ -34,7 +34,7 @@ Other Ideas, Improvements, Tasks, Longer-Term Goals:
   -Port to and start from an existing MonoDevelop project that can already be compiled for Linux and Mac?
   -Create a separate Electron.NET App for Mac and Linux? -Try the FLDC Bar Electron app as a possible starting point?
   -Can the FoldingBrowser run on Wine in Linux? And, then update the FoldingBrowser to use the appropriate files and paths for Linux?
-  -.NET Core simple project for Linux and Mac? (No, CefSharp isn't compatible with other OS's)
+  -Convert to .NET 5 for Linux and Mac?
   -Create a simple encrypted dat file viewer for Linux and Mac (and include those files with making a backup, for going from Windows to Linux)?
 -Improve the portal web page (eliminate some buttons in the browser UI, and replace with web page buttons? probably not since they would be more difficult to get back to without having a menu frame)
 -Add FLDC & CURE Ticker info (from Coin Market Cap API?) (or pull from exchanges?). Update hourly? Do as notify icon? Might not be worth it, if the FLDC homepage gets it. See:  https://coinmarketcap.com/api/    https://api.coinmarketcap.com/v1/ticker/CureCoin/
@@ -70,12 +70,19 @@ Other Ideas, Improvements, Tasks, Longer-Term Goals:
 -Have a button to try and get a new CounterParty Bitcoin Address, if it's blank (with a timeout & retry for the mirror Counterwallet site). Or, message to run button #2 to get an address?
 -Support other wallets, for pressing the 'FLDC Wallet' button, with option for:  https://freewallet.io/   Possibly include FreeWallet installer.    Other alternatives (ignore for now): https://wallet.indiesquare.me/     also: rarepepewallet.com (Not updated enough? security risks?)     (Not yet) https://tokenpockets.com/ (You cannot use tokenpockets currently. It is not compatible with existing passphrases from CounterWallet. If you want to use it, you will have to make a new address first)
 -Informational: List keystrokes implemented on Settings/options page
+-Add saving BTC private key with 12w password for new FLDC blockchain?
 
 
 ======================================================================================================
 Change Log - Release Notes - Tasks completed:
 ======================================================================================================
 
+v23 Release (2021-09-??)
+-Remove buttons: FLDC Stats (next to EOC at top)? FLDC Distributions? FLDC Team Stats?
+-Get and update for new code signing certificate
+[DONE] -Evaluate upgrading to CefSharp/Chrome v92 (VC++2015) when released
+[DONE] -Fix/update alternate CounterWallet mirror site(s)
+[DONE] -Evaluate upgrading to CefSharp/Chrome v88 (VC++2015) when released
 v22 Release (2020-04-10)
 [DONE] -Update instructions for changing the PW on the main PW storage
 [DONE] -Add CTRL+A to: URL bar and Debug info, to select all

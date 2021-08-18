@@ -1,12 +1,12 @@
 ; Edit this installer script with HM NIS Edit.
 ; Requires that NSIS (Nullsoft Scriptable Install System) compiler be installed.
-; Copyright © 2020 CureCoin
+; Copyright © 2021 CureCoin
 
 ;---- Helper defines / constants ----
 !define PRODUCT_VERSION "2.0.0.2"  ;Match the displayed version in the program title. Example: 1.2.3
 !define PRODUCT_4_VALUE_VERSION "2.0.0.2"  ;Match the executable version: Right-click the program executable file | Properties | Version. Example: 1.2.3.4
 !define PRODUCT_UPDATED "2020-04-10"
-!define PRODUCT_YEAR "2020"
+!define PRODUCT_YEAR "2021"
 !define PRODUCT_NAME "CureCoin"
 !define PRODUCT_EXE_NAME "curecoin-qt"  ;Executable name without extension
 !define PRODUCT_PUBLISHER "CureCoin"

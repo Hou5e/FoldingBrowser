@@ -10,7 +10,7 @@ Public Module GlobalRefs
     Public Const URL_Homepage_TopAndBottom As String = "data:home"
     Public Const URL_Homepage_SideBySide As String = "data:local"
     Public Const URL_Counterwallet As String = "https://wallet.counterwallet.io/"
-    Public Const URL_CoinDaddyCounterwallet As String = "https://counterwallet.coindaddy.io/"
+    Public Const URL_Alt1Counterwallet As String = "https://eds.counterwallet.io/"
     Public Const CounterwalletAPI As String = "_api/"
 
     Public Const URL_FoldingCoin As String = "http://foldingcoin.net/"

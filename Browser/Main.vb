@@ -51,58 +51,57 @@
                 End If
             End If
 
-            Using settings As New CefSharp.WinForms.CefSettings()
-                'Set the Cache path to the user's appdata roaming folder
-                settings.CachePath = System.IO.Path.Combine(UserProfileDir, "Cache")
-                settings.UserDataPath = settings.CachePath
-                settings.LogFile = System.IO.Path.Combine(settings.CachePath, "debug.log")
-                settings.LocalesDirPath = System.IO.Path.Combine(My.Application.Info.DirectoryPath, "locales")
-                settings.Locale = "en-US"
-                settings.AcceptLanguageList = settings.Locale & "," & settings.Locale.Substring(0, 2)
+            Dim settings As New CefSharp.WinForms.CefSettings()
+            'Set the Cache path to the user's appdata roaming folder
+            settings.CachePath = System.IO.Path.Combine(UserProfileDir, "Cache")
+            settings.UserDataPath = settings.CachePath
+            settings.LogFile = System.IO.Path.Combine(settings.CachePath, "debug.log")
+            settings.LocalesDirPath = System.IO.Path.Combine(My.Application.Info.DirectoryPath, "locales")
+            settings.Locale = "en-US"
+            settings.AcceptLanguageList = settings.Locale & "," & settings.Locale.Substring(0, 2)
 
-                'For Debugging, to log everything, use: Verbose. Can cause older versions of Cef.Shutdown() to hang
-                'settings.LogSeverity = CefSharp.LogSeverity.Verbose
-                settings.LogSeverity = CefSharp.LogSeverity.Info
+            'For Debugging, to log everything, use: Verbose. Can cause older versions of Cef.Shutdown() to hang
+            'settings.LogSeverity = CefSharp.LogSeverity.Verbose
+            settings.LogSeverity = CefSharp.LogSeverity.Info
 
-                Try
-                    'The log file gets appended to each time, so delete it (or else it can get large over time)
-                    If System.IO.File.Exists(settings.LogFile) = True Then
-                        System.IO.File.Delete(settings.LogFile)
-                        Threading.Thread.Sleep(50)
-                    End If
-                Catch ex As Exception
-                    Msg("Error: deleting temp file " & settings.LogFile & ": " & ex.ToString)
-                End Try
-
-                'Load the INI data before loading the Homepage (which is based on the user's options in the INI file). Fix the INI file, if needed
-                LoadINISettings()
-
-                CefSharp.Cef.EnableHighDPISupport()
-                If CefSharp.Cef.Initialize(settings) = True Then
-                    Me.browser = New CefSharp.WinForms.ChromiumWebBrowser(URL_BLANK)
-                    'Add browser event handlers to pass events back to the main UI
-                    AddHandler Me.browser.FrameLoadEnd, AddressOf OnBrowserFrameLoadEnd
-                    AddHandler Me.browser.ConsoleMessage, AddressOf OnBrowserConsoleMessage
-                    AddHandler Me.browser.StatusMessage, AddressOf OnBrowserStatusMessage
-                    AddHandler Me.browser.LoadingStateChanged, AddressOf OnBrowserLoadingStateChanged
-                    AddHandler Me.browser.TitleChanged, AddressOf OnBrowserTitleChanged
-                    AddHandler Me.browser.AddressChanged, AddressOf OnBrowserAddressChanged
-                    'Add keypress handler: ESC to cancel Navigation, F5 to Refresh, CTRL+F for Find, ...
-                    Me.browser.KeyboardHandler = New KeyboardHandler()
-                    'Add download handler
-                    Me.browser.DownloadHandler = New DownloadHandler()
-                    'Add to a UI container
-                    Me.ToolStripContainer1.ContentPanel.Controls.Add(browser)
-
-                    'On initial install only, skip loading the homepage (skips message saying to load the FAH control because it's not installed yet)
-                    If m_bInitialInstall = False Then
-#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
-                        'Load the Homepage based on the user's options in the INI file (call after loading the INI settings)
-                        LoadHomepage()
-#Enable Warning BC42358
-                    End If
+            Try
+                'The log file gets appended to each time, so delete it (or else it can get large over time)
+                If System.IO.File.Exists(settings.LogFile) = True Then
+                    System.IO.File.Delete(settings.LogFile)
+                    Threading.Thread.Sleep(50)
                 End If
-            End Using
+            Catch ex As Exception
+                Msg("Error: deleting temp file " & settings.LogFile & ": " & ex.ToString)
+            End Try
+
+            'Load the INI data before loading the Homepage (which is based on the user's options in the INI file). Fix the INI file, if needed
+            LoadINISettings()
+
+            CefSharp.Cef.EnableHighDPISupport()
+            If CefSharp.Cef.Initialize(settings) = True Then
+                Me.browser = New CefSharp.WinForms.ChromiumWebBrowser(URL_BLANK)
+                'Add browser event handlers to pass events back to the main UI
+                AddHandler Me.browser.FrameLoadEnd, AddressOf OnBrowserFrameLoadEnd
+                AddHandler Me.browser.ConsoleMessage, AddressOf OnBrowserConsoleMessage
+                AddHandler Me.browser.StatusMessage, AddressOf OnBrowserStatusMessage
+                AddHandler Me.browser.LoadingStateChanged, AddressOf OnBrowserLoadingStateChanged
+                AddHandler Me.browser.TitleChanged, AddressOf OnBrowserTitleChanged
+                AddHandler Me.browser.AddressChanged, AddressOf OnBrowserAddressChanged
+                'Add keypress handler: ESC to cancel Navigation, F5 to Refresh, CTRL+F for Find, ...
+                Me.browser.KeyboardHandler = New KeyboardHandler()
+                'Add download handler
+                Me.browser.DownloadHandler = New DownloadHandler()
+                'Add to a UI container
+                Me.ToolStripContainer1.ContentPanel.Controls.Add(browser)
+
+                'On initial install only, skip loading the homepage (skips message saying to load the FAH control because it's not installed yet)
+                If m_bInitialInstall = False Then
+#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
+                    'Load the Homepage based on the user's options in the INI file (call after loading the INI settings)
+                    LoadHomepage()
+#Enable Warning BC42358
+                End If
+            End If
 
             'Global reference to this form
             g_Main = Me
@@ -1414,7 +1413,7 @@
         Try
             'Display status
             OkMsg.Text = "Checking CounterWallet Server Status"
-            OkMsg.MsgText.Text = OkMsg.Text & vbNewLine & vbNewLine & If(g_bRevCWServers = True, 2, 1).ToString & ". " & If(g_bRevCWServers = True, URL_CoinDaddyCounterwallet, URL_Counterwallet) & CounterwalletAPI & vbNewLine & "(Can take 40 seconds)"
+            OkMsg.MsgText.Text = OkMsg.Text & vbNewLine & vbNewLine & If(g_bRevCWServers = True, 2, 1).ToString & ". " & If(g_bRevCWServers = True, URL_Alt1Counterwallet, URL_Counterwallet) & CounterwalletAPI & vbNewLine & "(Can take 40 seconds)"
             OkMsg.MsgText.Left = 70
             OkMsg.MsgText.Top = 70
             OkMsg.Width = (OkMsg.MsgText.Left * 2) + OkMsg.MsgText.Width + 20
@@ -1426,14 +1425,14 @@
 
             For j As Integer = 0 To 1
                 'Display status
-                Msg("Getting CounterWallet server status from: " & If(g_bRevCWServers = True, URL_CoinDaddyCounterwallet, URL_Counterwallet) & CounterwalletAPI)
+                Msg("Getting CounterWallet server status from: " & If(g_bRevCWServers = True, URL_Alt1Counterwallet, URL_Counterwallet) & CounterwalletAPI)
                 If j > 0 Then
-                    OkMsg.MsgText.Text = OkMsg.Text & vbNewLine & vbNewLine & If(g_bRevCWServers = True, 2, 1).ToString & ". " & If(g_bRevCWServers = True, URL_CoinDaddyCounterwallet, URL_Counterwallet) & CounterwalletAPI & vbNewLine & "(Can take 40 seconds)"
+                    OkMsg.MsgText.Text = OkMsg.Text & vbNewLine & vbNewLine & If(g_bRevCWServers = True, 2, 1).ToString & ". " & If(g_bRevCWServers = True, URL_Alt1Counterwallet, URL_Counterwallet) & CounterwalletAPI & vbNewLine & "(Can take 40 seconds)"
                     OkMsg.BackColor = Color.Orange
                 End If
 
                 'Get CounterWallet status from server
-                Await OpenURL(If(g_bRevCWServers = True, URL_CoinDaddyCounterwallet, URL_Counterwallet) & CounterwalletAPI, False)
+                Await OpenURL(If(g_bRevCWServers = True, URL_Alt1Counterwallet, URL_Counterwallet) & CounterwalletAPI, False)
                 Await PageTitleWait(NameCounterwallet)
                 System.Windows.Forms.Application.DoEvents()
                 Await Wait(100)
@@ -1537,7 +1536,7 @@
             If bSaved12W = True Then
                 'Display status
                 OkMsg.Text = "Login to wallet"
-                OkMsg.MsgText.Text = OkMsg.Text & vbNewLine & vbNewLine & "1. " & If(m_iCounterWalletServerUp = 2, URL_CoinDaddyCounterwallet, URL_Counterwallet) & vbNewLine & "Retry in 90s (Can take 90 seconds)"
+                OkMsg.MsgText.Text = OkMsg.Text & vbNewLine & vbNewLine & "1. " & If(m_iCounterWalletServerUp = 2, URL_Alt1Counterwallet, URL_Counterwallet) & vbNewLine & "Retry in 90s (Can take 90 seconds)"
                 OkMsg.MsgText.Left = 70
                 OkMsg.MsgText.Top = 70
                 OkMsg.Width = (OkMsg.MsgText.Left * 2) + OkMsg.MsgText.Width + 20
@@ -1553,18 +1552,18 @@
                 Do Until bFAH_PageLoaded = True OrElse g_bCancelNav = True OrElse i > 60
                     i += 1
                     If i < 30 Then
-                        OkMsg.MsgText.Text = OkMsg.Text & vbNewLine & vbNewLine & "1. " & If(m_iCounterWalletServerUp = 2, URL_CoinDaddyCounterwallet, URL_Counterwallet) & vbNewLine & "Retry in " & (89 - (i * 3)).ToString & "s (Can take 90 seconds)"
+                        OkMsg.MsgText.Text = OkMsg.Text & vbNewLine & vbNewLine & "1. " & If(m_iCounterWalletServerUp = 2, URL_Alt1Counterwallet, URL_Counterwallet) & vbNewLine & "Retry in " & (89 - (i * 3)).ToString & "s (Can take 90 seconds)"
                     ElseIf i >= 30 Then
-                        OkMsg.MsgText.Text = OkMsg.Text & vbNewLine & vbNewLine & "2. " & If(m_iCounterWalletServerUp = 2, URL_Counterwallet, URL_CoinDaddyCounterwallet) & vbNewLine & "Waited  " & (179 - (i * 3)).ToString & "s (Can take 90 seconds)"
+                        OkMsg.MsgText.Text = OkMsg.Text & vbNewLine & vbNewLine & "2. " & If(m_iCounterWalletServerUp = 2, URL_Counterwallet, URL_Alt1Counterwallet) & vbNewLine & "Waited  " & (179 - (i * 3)).ToString & "s (Can take 90 seconds)"
                     End If
 
                     If i = 1 OrElse i = 30 Then
                         If i = 1 Then
                             'CounterWallet web page (Use the mirror site as the default)
-                            Await OpenURL(If(m_iCounterWalletServerUp = 2, URL_CoinDaddyCounterwallet, URL_Counterwallet), False)
+                            Await OpenURL(If(m_iCounterWalletServerUp = 2, URL_Alt1Counterwallet, URL_Counterwallet), False)
                         ElseIf i = 30 Then
                             'If still not loaded, try the other site
-                            Await OpenURL(If(m_iCounterWalletServerUp = 2, URL_Counterwallet, URL_CoinDaddyCounterwallet), False)
+                            Await OpenURL(If(m_iCounterWalletServerUp = 2, URL_Counterwallet, URL_Alt1Counterwallet), False)
                             OkMsg.BackColor = Color.LightSkyBlue
                         End If
                         Await PageTitleWait(NameCounterwallet)
@@ -1885,7 +1884,7 @@
 
             'Display status
             OkMsg.Text = "Getting wallet address"
-            OkMsg.MsgText.Text = OkMsg.Text & vbNewLine & vbNewLine & "1. " & If(m_iCounterWalletServerUp = 2, URL_CoinDaddyCounterwallet, URL_Counterwallet) & vbNewLine & "Retry in 60s (Can take 60 seconds)"
+            OkMsg.MsgText.Text = OkMsg.Text & vbNewLine & vbNewLine & "1. " & If(m_iCounterWalletServerUp = 2, URL_Alt1Counterwallet, URL_Counterwallet) & vbNewLine & "Retry in 60s (Can take 60 seconds)"
             OkMsg.MsgText.Left = 70
             OkMsg.MsgText.Top = 70
             OkMsg.Width = (OkMsg.MsgText.Left * 2) + OkMsg.MsgText.Width + 20
@@ -1900,13 +1899,13 @@
                 iPageReloads += 1
                 If iPageReloads = 1 Then
                     'CounterWallet web page (Use the mirror site as the default)
-                    Await OpenURL(If(m_iCounterWalletServerUp = 2, URL_CoinDaddyCounterwallet, URL_Counterwallet), False)
+                    Await OpenURL(If(m_iCounterWalletServerUp = 2, URL_Alt1Counterwallet, URL_Counterwallet), False)
                 Else
                     'If still not loaded, try the other site
-                    OkMsg.MsgText.Text = OkMsg.Text & vbNewLine & vbNewLine & "2. " & If(m_iCounterWalletServerUp = 2, URL_Counterwallet, URL_CoinDaddyCounterwallet) & vbNewLine & "(Can take 60 seconds)"
+                    OkMsg.MsgText.Text = OkMsg.Text & vbNewLine & vbNewLine & "2. " & If(m_iCounterWalletServerUp = 2, URL_Counterwallet, URL_Alt1Counterwallet) & vbNewLine & "(Can take 60 seconds)"
                     OkMsg.BackColor = Color.LightSkyBlue
 
-                    Await OpenURL(If(m_iCounterWalletServerUp = 2, URL_Counterwallet, URL_CoinDaddyCounterwallet), False)
+                    Await OpenURL(If(m_iCounterWalletServerUp = 2, URL_Counterwallet, URL_Alt1Counterwallet), False)
                 End If
 
                 'Wait up to ~1 minute total for each page to load (3 seconds each iteration)
@@ -1963,9 +1962,9 @@
                     Do Until bFAH_PageLoaded = True OrElse g_bCancelNav = True OrElse i > 20
                         'Wait for login to complete (if server says it's OK, but it isn't, the login will hang. Try other server, if it does)
                         If iPageReloads = 1 Then
-                            OkMsg.MsgText.Text = OkMsg.Text & vbNewLine & vbNewLine & "1. " & If(m_iCounterWalletServerUp = 2, URL_CoinDaddyCounterwallet, URL_Counterwallet) & vbNewLine & "Retry in " & (60 - (i * 3)).ToString & "s (Can take 60 seconds)"
+                            OkMsg.MsgText.Text = OkMsg.Text & vbNewLine & vbNewLine & "1. " & If(m_iCounterWalletServerUp = 2, URL_Alt1Counterwallet, URL_Counterwallet) & vbNewLine & "Retry in " & (60 - (i * 3)).ToString & "s (Can take 60 seconds)"
                         Else
-                            OkMsg.MsgText.Text = OkMsg.Text & vbNewLine & vbNewLine & "2. " & If(m_iCounterWalletServerUp = 2, URL_Counterwallet, URL_CoinDaddyCounterwallet) & vbNewLine & "Waited  " & (i * 3).ToString & "s (Can take 60 seconds)"
+                            OkMsg.MsgText.Text = OkMsg.Text & vbNewLine & vbNewLine & "2. " & If(m_iCounterWalletServerUp = 2, URL_Counterwallet, URL_Alt1Counterwallet) & vbNewLine & "Waited  " & (i * 3).ToString & "s (Can take 60 seconds)"
                         End If
 
                         i += 1

@@ -1,12 +1,12 @@
 ; Edit this installer script with HM NIS Edit.
 ; Requires that NSIS (Nullsoft Scriptable Install System) compiler be installed.
-; Copyright © 2020 FoldingCoin, CureCoin
+; Copyright © 2021 FoldingCoin, CureCoin
 
 
 ;---- Helper defines / constants ----
-!define PRODUCT_VERSION "22"  ;Match the displayed version in the program title. Example: 1.2.3
-!define PRODUCT_4_VALUE_VERSION "22.0.0.0"  ;Match the executable version: Right-click the program executable file | Properties | Version. Example: 1.2.3.4
-!define PRODUCT_YEAR "2020"
+!define PRODUCT_VERSION "23"  ;Match the displayed version in the program title. Example: 1.2.3
+!define PRODUCT_4_VALUE_VERSION "23.0.0.0"  ;Match the executable version: Right-click the program executable file | Properties | Version. Example: 1.2.3.4
+!define PRODUCT_YEAR "2021"
 !define PRODUCT_NAME "FoldingBrowser"
 !define PRODUCT_EXE_NAME "FoldingBrowser"  ;Executable name without extension
 !define PRODUCT_PUBLISHER "FoldingBrowser"
