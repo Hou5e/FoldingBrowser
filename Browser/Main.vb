@@ -59,6 +59,8 @@
             settings.LocalesDirPath = System.IO.Path.Combine(My.Application.Info.DirectoryPath, "locales")
             settings.Locale = "en-US"
             settings.AcceptLanguageList = settings.Locale & "," & settings.Locale.Substring(0, 2)
+            'Use the commandline instead of this (not working since v75): settings.IgnoreCertificateErrors = True 
+            settings.CefCommandLineArgs.Add("ignore-certificate-errors")
 
             'For Debugging, to log everything, use: Verbose. Can cause older versions of Cef.Shutdown() to hang
             'settings.LogSeverity = CefSharp.LogSeverity.Verbose
@@ -79,14 +81,17 @@
 
             CefSharp.Cef.EnableHighDPISupport()
             If CefSharp.Cef.Initialize(settings) = True Then
-                Me.browser = New CefSharp.WinForms.ChromiumWebBrowser(URL_BLANK)
+                Me.browser = New CefSharp.WinForms.ChromiumWebBrowser(String.Empty)
                 'Add browser event handlers to pass events back to the main UI
                 AddHandler Me.browser.FrameLoadEnd, AddressOf OnBrowserFrameLoadEnd
                 AddHandler Me.browser.ConsoleMessage, AddressOf OnBrowserConsoleMessage
+                AddHandler Me.browser.LoadError, AddressOf OnBrowserLoadError
                 AddHandler Me.browser.StatusMessage, AddressOf OnBrowserStatusMessage
                 AddHandler Me.browser.LoadingStateChanged, AddressOf OnBrowserLoadingStateChanged
                 AddHandler Me.browser.TitleChanged, AddressOf OnBrowserTitleChanged
                 AddHandler Me.browser.AddressChanged, AddressOf OnBrowserAddressChanged
+                'Add Authentication / Login Credentials handler
+                Me.browser.RequestHandler = New MyRequestHandler()
                 'Add keypress handler: ESC to cancel Navigation, F5 to Refresh, CTRL+F for Find, ...
                 Me.browser.KeyboardHandler = New KeyboardHandler()
                 'Add download handler
@@ -613,18 +618,20 @@
             'Keep this before CefSharp.Cef.Shutdown() to avoid the browser hanging (CefSharp v53.0.1): when exiting the wallet & click yes, then close the Browser (like the javascript running causes the hang)
             'StopNavigaion()  'In v55, this appears to cause: Exception thrown: 'System.Exception' in CefSharp.dll
             g_bCancelNav = True
-            ClearWebpage()
-            'Added in v63.0.3. Exiting the FAH Web control was hanging the Cef.Shutdown(). On shutdown, the FAH Web control error was happening, and reloading w/o cache when closing. 'Verbose' debug logging was getting cutoff too, and changing logging to 'info' helped fix it
-            g_bCancelNav = True
-            Delay(200)
-
             If Me.browser IsNot Nothing Then
+                ClearWebpage()
+                'Added in v63.0.3. Exiting the FAH Web control was hanging the Cef.Shutdown(). On shutdown, the FAH Web control error was happening, and reloading w/o cache when closing. 'Verbose' debug logging was getting cutoff too, and changing logging to 'info' helped fix it
+                g_bCancelNav = True
+                Delay(200)
+
                 RemoveHandler Me.browser.FrameLoadEnd, AddressOf OnBrowserFrameLoadEnd
                 RemoveHandler Me.browser.ConsoleMessage, AddressOf OnBrowserConsoleMessage
+                RemoveHandler Me.browser.LoadError, AddressOf OnBrowserLoadError
                 RemoveHandler Me.browser.StatusMessage, AddressOf OnBrowserStatusMessage
                 RemoveHandler Me.browser.LoadingStateChanged, AddressOf OnBrowserLoadingStateChanged
                 RemoveHandler Me.browser.TitleChanged, AddressOf OnBrowserTitleChanged
                 RemoveHandler Me.browser.AddressChanged, AddressOf OnBrowserAddressChanged
+                Me.browser.RequestHandler = Nothing
                 Me.browser.KeyboardHandler = Nothing
                 Me.browser.DownloadHandler = Nothing
 
@@ -2974,23 +2981,33 @@
         End If
     End Sub
 
-    Private Sub OnBrowserStatusMessage(sender As Object, args As CefSharp.StatusMessageEventArgs)
+    Private Sub OnBrowserLoadError(sender As Object, e As CefSharp.LoadErrorEventArgs)
         Me.Invoke(Sub()
-                      If args.Value.Length = 0 Then
+                      'Display the info
+                      Dim strErrorMsg As String = "Error: " & e.ErrorText & ", URL: " & e.FailedUrl
+                      Me.lblHoverURL.Text = strErrorMsg
+                      Me.lblHoverURL.Visible = True
+                      Me.txtMsg.AppendText("[" & Now.ToString(LogDateTimeFormat) & "] " & strErrorMsg & vbNewLine)
+                  End Sub)
+    End Sub
+
+    Private Sub OnBrowserStatusMessage(sender As Object, e As CefSharp.StatusMessageEventArgs)
+        Me.Invoke(Sub()
+                      If e.Value.Length = 0 Then
                           'Hide the info text
                           Me.lblHoverURL.Visible = False
                           Me.lblHoverURL.Text = ""
                       Else
                           'Display the info
-                          Me.lblHoverURL.Text = args.Value
+                          Me.lblHoverURL.Text = e.Value
                           Me.lblHoverURL.Visible = True
-                          Me.txtMsg.AppendText("[" & Now.ToString(LogDateTimeFormat) & "] " & args.Value & vbNewLine)
+                          Me.txtMsg.AppendText("[" & Now.ToString(LogDateTimeFormat) & "] " & e.Value & vbNewLine)
                       End If
                   End Sub)
     End Sub
 
-    Private Sub OnBrowserLoadingStateChanged(sender As Object, args As CefSharp.LoadingStateChangedEventArgs)
-        enableButtons(args.CanGoForward, args.CanGoBack, Not args.CanReload)
+    Private Sub OnBrowserLoadingStateChanged(sender As Object, e As CefSharp.LoadingStateChangedEventArgs)
+        enableButtons(e.CanGoForward, e.CanGoBack, Not e.CanReload)
     End Sub
     Private Sub enableButtons(bForward As Boolean, bBack As Boolean, bLoading As Boolean)
         Me.Invoke(Sub()
@@ -3003,8 +3020,8 @@
                   End Sub)
     End Sub
 
-    Private Sub OnBrowserTitleChanged(sender As Object, args As CefSharp.TitleChangedEventArgs)
-        updateTitle(args.Title)
+    Private Sub OnBrowserTitleChanged(sender As Object, e As CefSharp.TitleChangedEventArgs)
+        updateTitle(e.Title)
     End Sub
     Private Sub updateTitle(strTitle As String)
         Me.Invoke(Sub()
@@ -3012,8 +3029,8 @@
                   End Sub)
     End Sub
 
-    Private Sub OnBrowserAddressChanged(sender As Object, args As CefSharp.AddressChangedEventArgs)
-        updateURL(args.Address)
+    Private Sub OnBrowserAddressChanged(sender As Object, e As CefSharp.AddressChangedEventArgs)
+        updateURL(e.Address)
     End Sub
     Private Sub updateURL(strURL As String)
         Me.Invoke(Sub()
@@ -3281,7 +3298,7 @@
 #Enable Warning BC42358
     End Sub
 
-    Private Sub btnStopNavigation_Click(sender As System.Object, e As System.EventArgs) Handles btnStopNav.Click
+    Private Sub btnStopNav_Click(sender As System.Object, e As System.EventArgs) Handles btnStopNav.Click
         StopNavigaion()
     End Sub
 
@@ -3464,7 +3481,9 @@
         m_strFindText = ""
         Me.pnlFind.Visible = False
     End Sub
+#End Region
 
+#Region "Browser - Open URL"
     'Open URL with the specified settings
     Public Async Function OpenURL(sURL As String, Optional bShowErrorDialogBoxes As Boolean = False) As Threading.Tasks.Task(Of Boolean)
         Try
@@ -3475,17 +3494,14 @@
                 'Update to the displayed text to the new URL
                 Me.txtURL.Text = sURL
 
-                'Accept Certs to avoid annoying prompts
-                System.Net.ServicePointManager.ServerCertificateValidationCallback = New Net.Security.RemoteCertificateValidationCallback(AddressOf ValidateCertificate)
-
                 'Focus the URL text box so the KeyPress events work for Enter / ESC.
                 Me.txtURL.BackColor = Color.FromKnownColor(KnownColor.Window)
                 Me.txtURL.Focus()
                 Me.txtURL.Select(Me.txtURL.Text.Length, 0)
                 'Reset flag
                 m_bPageLoaded = False
-                m_strPageURL = Me.txtURL.Text
-                Me.browser.Load(Me.txtURL.Text)
+                m_strPageURL = sURL
+                Me.browser.Load(sURL)
                 'Wait for the web page or 30 seconds
                 Await PageLoadWait()
 
@@ -3564,11 +3580,6 @@
         End Try
 
         Return False
-    End Function
-
-    Public Function ValidateCertificate(sender As Object, certificate As Security.Cryptography.X509Certificates.X509Certificate, chain As Security.Cryptography.X509Certificates.X509Chain, sslPolicyErrors As Net.Security.SslPolicyErrors) As Boolean
-        'Return True to force the certificate to be accepted.
-        Return True
     End Function
 
     'Clear Web page

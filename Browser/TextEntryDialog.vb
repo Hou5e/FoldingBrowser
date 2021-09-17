@@ -20,7 +20,6 @@
                 Me.btnOK.PerformClick()
             End If
         End If
-
     End Sub
 
     Private Sub TextEnteredLower_KeyPress(sender As Object, e As KeyPressEventArgs) Handles TextEnteredLower.KeyPress

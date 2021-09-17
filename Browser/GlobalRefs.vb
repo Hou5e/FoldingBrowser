@@ -204,6 +204,83 @@ Public Module GlobalRefs
 End Module
 
 
+'Authentication / Login Credentials, See: https://github.com/cefsharp/CefSharp/blob/master/CefSharp.Example/RequestEventHandler/RequestEventHandler.cs
+<CLSCompliant(False)> Public Class MyRequestHandler
+    Inherits CefSharp.Handler.RequestHandler
+
+    Public m_strUser As String = String.Empty
+    Public m_strPwd As String = String.Empty
+    Public m_bPropmtForCredentials As Boolean = True
+
+    'Login Credentials needed from the user. Return true to continue the request, get credentials if needed, then call callback.Continue(Username, Password). Return false to cancel the request.
+    Protected Overrides Function GetAuthCredentials(chromiumWebBrowser As CefSharp.IWebBrowser, browser As CefSharp.IBrowser, originUrl As String, isProxy As Boolean, host As String, port As Integer, realm As String, scheme As String, callback As CefSharp.IAuthCallback) As Boolean
+        Dim bReturn As Boolean = False
+
+        'Manual browsing (not automated). Preload the message box defaults with the username and password before calling this
+        If m_bPropmtForCredentials = True Then
+            'Message box prompt to get credentials
+            Dim TxtEntry As New TextEntryDialog
+            TxtEntry.Text = "Enter User/PW"
+            TxtEntry.MsgTextUpper.Text = "Enter Username (Top text box):"
+            TxtEntry.MsgTextLower.Text = "And Password (Bottom text box):"
+
+            TxtEntry.TextEnteredUpper.TextAlign = HorizontalAlignment.Center
+            TxtEntry.TextEnteredLower.TextAlign = HorizontalAlignment.Center
+            'Setup password text box
+            TxtEntry.TextEnteredLower.Visible = True
+            TxtEntry.TextEnteredLower.PasswordChar = "*"c
+            'Set default values
+            TxtEntry.TextEnteredUpper.Text = m_strUser
+            TxtEntry.TextEnteredLower.Text = m_strPwd
+            'Adjust the width of the dialog box
+            TxtEntry.Width = (TxtEntry.MsgTextLower.Left * 2) + TxtEntry.MsgTextLower.Width + 50
+            TxtEntry.TextEnteredLower.Visible = True
+            TxtEntry.MsgTextExtraBottomNote.Visible = False
+            TxtEntry.ActiveControl = TxtEntry.TextEnteredUpper
+            TxtEntry.StartPosition = FormStartPosition.CenterScreen
+
+            'Show modal dialog box
+            If TxtEntry.ShowDialog() = DialogResult.OK Then
+                m_strUser = TxtEntry.TextEnteredUpper.Text
+                m_strPwd = TxtEntry.TextEnteredLower.Text
+
+                'Send credentials to load the web page
+                callback.Continue(m_strUser, m_strPwd)
+                'Reset value
+                m_strPwd = String.Empty
+                'Good
+                bReturn = True
+            Else
+                'Invalid credentials
+                g_Main.Msg("Error: Invalid credentials: Dialog canceled")
+                bReturn = False
+            End If
+            TxtEntry.Dispose()
+
+        Else
+            'Automated: Set m_bPropmtForCredentials = false, and the username and password before loading the URL
+            If m_strUser.Length > 0 AndAlso m_strPwd.Length > 0 Then
+                callback.Continue(m_strUser, m_strPwd)
+                'Good
+                bReturn = True
+            Else
+                'Invalid credentials
+                g_Main.Msg("Error:Invalid credentials: Username or password were blank")
+                bReturn = False
+            End If
+        End If
+
+        Return bReturn
+    End Function
+
+    'Not used. Instead using the browser initialization: settings.CefCommandLineArgs.Add("ignore-certificate-errors")
+    ''Handles requests for URLs with an invalid SSL certificate.  Return true and call CefSharp.IRequestCallback.Continue(System.Boolean) either in this method or at a later time to continue or cancel the request. If "ignore-certificate-errors" is used, then all invalid certificates will be accepted without calling this.
+    'Protected Overrides Function OnCertificateError(ByVal browserControl As CefSharp.IWebBrowser, ByVal browser As CefSharp.IBrowser, ByVal errorCode As CefSharp.CefErrorCode, ByVal requestUrl As String, ByVal sslInfo As CefSharp.ISslInfo, ByVal callback As CefSharp.IRequestCallback) As Boolean
+    '    Return True
+    'End Function
+End Class
+
+
 'File download, see: https://github.com/cefsharp/CefSharp/blob/master/CefSharp.Example/DownloadHandler.cs
 Public Class DownloadHandler
     Implements CefSharp.IDownloadHandler
