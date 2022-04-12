@@ -38,7 +38,7 @@ Partial Class Main
         Me.btnCureCoinWebsite = New System.Windows.Forms.Button()
         Me.btnReload = New System.Windows.Forms.Button()
         Me.btnBack = New System.Windows.Forms.Button()
-        Me.btnFwd = New System.Windows.Forms.Button()
+        Me.btnForward = New System.Windows.Forms.Button()
         Me.gbxTools = New System.Windows.Forms.GroupBox()
         Me.btnToolsCureCoinSetup = New System.Windows.Forms.Button()
         Me.btnToolsFAHConfig = New System.Windows.Forms.Button()
@@ -341,19 +341,19 @@ Partial Class Main
         '
         'btnFwd
         '
-        Me.btnFwd.BackColor = System.Drawing.Color.Transparent
-        Me.btnFwd.FlatAppearance.BorderSize = 0
-        Me.btnFwd.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.GradientActiveCaption
-        Me.btnFwd.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.GradientInactiveCaption
-        Me.btnFwd.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnFwd.Location = New System.Drawing.Point(45, 2)
-        Me.btnFwd.Margin = New System.Windows.Forms.Padding(4)
-        Me.btnFwd.Name = "btnFwd"
-        Me.btnFwd.Size = New System.Drawing.Size(31, 30)
-        Me.btnFwd.TabIndex = 0
-        Me.btnFwd.Text = "F"
-        Me.ToolTip1.SetToolTip(Me.btnFwd, "Go forward one page:   ALT+<Right>")
-        Me.btnFwd.UseVisualStyleBackColor = False
+        Me.btnForward.BackColor = System.Drawing.Color.Transparent
+        Me.btnForward.FlatAppearance.BorderSize = 0
+        Me.btnForward.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.GradientActiveCaption
+        Me.btnForward.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.GradientInactiveCaption
+        Me.btnForward.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnForward.Location = New System.Drawing.Point(45, 2)
+        Me.btnForward.Margin = New System.Windows.Forms.Padding(4)
+        Me.btnForward.Name = "btnFwd"
+        Me.btnForward.Size = New System.Drawing.Size(31, 30)
+        Me.btnForward.TabIndex = 0
+        Me.btnForward.Text = "F"
+        Me.ToolTip1.SetToolTip(Me.btnForward, "Go forward one page:   ALT+<Right>")
+        Me.btnForward.UseVisualStyleBackColor = False
         '
         'gbxTools
         '
@@ -1053,7 +1053,7 @@ Partial Class Main
         Me.pnlURL.Controls.Add(Me.gbxDownload)
         Me.pnlURL.Controls.Add(Me.btnGo)
         Me.pnlURL.Controls.Add(Me.chkToolsShow)
-        Me.pnlURL.Controls.Add(Me.btnFwd)
+        Me.pnlURL.Controls.Add(Me.btnForward)
         Me.pnlURL.Controls.Add(Me.lblURL)
         Me.pnlURL.Controls.Add(Me.txtURL)
         Me.pnlURL.Controls.Add(Me.btnStopNav)
@@ -1117,7 +1117,7 @@ Partial Class Main
     Friend WithEvents btnCureCoinWebsite As System.Windows.Forms.Button
     Friend WithEvents btnReload As System.Windows.Forms.Button
     Friend WithEvents btnBack As System.Windows.Forms.Button
-    Friend WithEvents btnFwd As System.Windows.Forms.Button
+    Friend WithEvents btnForward As System.Windows.Forms.Button
     Friend WithEvents gbxTools As System.Windows.Forms.GroupBox
     Friend WithEvents chkToolsShow As System.Windows.Forms.CheckBox
     Friend WithEvents ToolTip1 As System.Windows.Forms.ToolTip

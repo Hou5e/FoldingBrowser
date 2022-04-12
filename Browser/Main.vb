@@ -669,8 +669,8 @@
                 'Setup Browser buttons
                 Me.btnBack.Text = ""
                 Me.btnBack.Image = GetResizedImage(My.Resources.TB_Back_96, CInt(i24 * g_sScaleFactor))
-                Me.btnFwd.Text = ""
-                Me.btnFwd.Image = GetResizedImage(My.Resources.TB_Fwd_96, CInt(i24 * g_sScaleFactor))
+                Me.btnForward.Text = ""
+                Me.btnForward.Image = GetResizedImage(My.Resources.TB_Fwd_96, CInt(i24 * g_sScaleFactor))
                 Me.btnGo.Text = ""
                 Me.btnGo.Image = GetResizedImage(My.Resources.TB_Go_64, CInt(i16 * g_sScaleFactor), Drawing2D.InterpolationMode.HighQualityBicubic)
                 Me.btnStopNav.Text = ""
@@ -2723,243 +2723,6 @@
     End Sub
 #End Region
 
-#Region "Browser Commands"
-    'Specify text box {Object Id}, and text to enter in to the text box
-    Private Function EnterTextById(sId As String, sText As String) As Boolean
-        EnterTextById = False
-
-        Try
-            If sId.Length > 0 Then
-                Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementById('" & sId & "').value = '" & sText & "';")
-                EnterTextById = True
-            End If
-        Catch ex As Exception
-            Msg("Enter Text by Id error: " & Err.Description)
-        End Try
-    End Function
-
-    'Specify text box {Object Name} and array index (0-based), and text to enter in to the text box
-    Private Function EnterTextByName(sName As String, iIndex As Integer, sText As String) As Boolean
-        EnterTextByName = False
-
-        Try
-            If sName.Length > 0 Then
-                Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementsByName('" & sName & "')[" & iIndex.ToString & "].value = '" & sText & "';")
-                EnterTextByName = True
-            End If
-        Catch ex As Exception
-            Msg("Enter Text by Name error: " & Err.Description)
-        End Try
-    End Function
-
-    ''Specify text box {Class Name} and array index (0-based), and text to enter in to the text box
-    'Private Function EnterTextByClass(sName As String, iIndex As Integer, sText As String) As Boolean
-    '    EnterTextByClass = False
-
-    '    Try
-    '        If sName.Length > 0 Then
-    '            Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementsByClassName('" & sName & "')[" & iIndex.ToString & "].value = '" & sText & "';")
-    '            EnterTextByClass = True
-    '        End If
-    '    Catch ex As Exception
-    '        Msg("Enter Text by Class error: " & Err.Description)
-    '    End Try
-    'End Function
-
-    ''Specify text box {Tag Name} and array index (0-based), and text to enter in to the text box
-    'Private Function EnterTextByTag(sName As String, iIndex As Integer, sText As String) As Boolean
-    '    EnterTextByTag = False
-
-    '    Try
-    '        If sName.Length > 0 Then
-    '            Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementsByTagName('" & sName & "')[" & iIndex.ToString & "].value = '" & sText & "';")
-    '            EnterTextByTag = True
-    '        End If
-    '    Catch ex As Exception
-    '        Msg("Enter Text by Tag error: " & Err.Description)
-    '    End Try
-    'End Function
-
-    'Specify object {Object Id} to click, and if you wait for the page to load or not
-    Private Async Function ClickById(sId As String, bWait As Boolean) As Threading.Tasks.Task(Of Boolean)
-        Try
-            If sId.Length > 0 Then
-                Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementById('" & sId & "').click();")
-
-                'Wait for the page, if specified
-                If bWait = True Then
-                    If Await PageLoadWait() = True Then Return True Else Return False
-                Else
-                    Return True
-                End If
-            End If
-
-        Catch ex As Exception
-            Msg("Click by Id error: " & Err.Description)
-        End Try
-
-        Return False
-    End Function
-
-    'Specify object {Class Name} to click, and if you wait for the page to load or not
-    Private Async Function ClickByClass(sName As String, iIndex As Integer, bWait As Boolean) As Threading.Tasks.Task(Of Boolean)
-        Try
-            If sName.Length > 0 Then
-                'Click it
-                Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementsByClassName('" & sName & "')[" & iIndex.ToString & "].click();")
-                'Wait for the page, if specified
-                If bWait = True Then
-                    If Await PageLoadWait() = True Then Return True Else Return False
-                Else
-                    Return True
-                End If
-            End If
-
-        Catch ex As Exception
-            Msg("Click by Class error: " & Err.Description)
-        End Try
-
-        Return False
-    End Function
-
-    'Specify object {Object Name} to click, and if you wait for the page to load or not
-    Private Async Function ClickByName(sName As String, iIndex As Integer, bWait As Boolean) As Threading.Tasks.Task(Of Boolean)
-        Try
-            If sName.Length > 0 Then
-                Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementsByName('" & sName & "')[" & iIndex.ToString & "].click();")
-                'Wait for the page, if specified
-                If bWait = True Then
-                    If Await PageLoadWait() = True Then Return True Else Return False
-                Else
-                    Return True
-                End If
-            End If
-
-        Catch ex As Exception
-            Msg("Click by Name error: " & Err.Description)
-        End Try
-
-        Return False
-    End Function
-
-    'Specify object {Tag Name} to click, and if you wait for the page to load or not
-    Public Async Function ClickByTag(sName As String, iIndex As Integer, bWait As Boolean) As Threading.Tasks.Task(Of Boolean)
-        Try
-            If sName.Length > 0 Then
-                Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementsByTagName('" & sName & "')[" & iIndex.ToString & "].click();")
-                'Wait for the page, if specified
-                If bWait = True Then
-                    If Await PageLoadWait() = True Then Return True Else Return False
-                Else
-                    Return True
-                End If
-            End If
-
-        Catch ex As Exception
-            Msg("Click by Tag error: " & Err.Description)
-        End Try
-
-        Return False
-    End Function
-
-    'Specify text to find in HTML document, or supplied text
-    Private m_bRunningFind As Boolean = False
-    Private Function FindTextInDoc(strFind As String, str2ndFind As String, ByRef strReturnText1 As String, ByRef strReturnText2 As String, bFindBoth As Boolean, strSearchThisSuppliedTextInstead As String) As Boolean
-        FindTextInDoc = False
-        Dim sText As String() = Nothing
-        Dim sMask As String() = Nothing
-
-        Try
-            If strFind.Length > 0 Then
-                If strSearchThisSuppliedTextInstead.Length = 0 Then
-                    If m_bRunningFind = True Then Exit Try
-                    m_bRunningFind = True
-                    'Try to avoid running this multiple times at once. CefSharp v49 hangs when that happens. Probably from the Wait using: Threading.Thread.Sleep
-                    Dim sTempStr As String = browser.GetBrowser.MainFrame.GetSourceAsync.Result
-                    m_bRunningFind = False
-                    sText = sTempStr.Split(vbNewLine.ToCharArray)
-                Else
-                    sText = strSearchThisSuppliedTextInstead.Split(vbNewLine.ToCharArray)
-                End If
-
-                If sText IsNot Nothing Then
-                    For l As Integer = 1 To 2
-                        'Search for wild-card (*) data or not
-                        If strFind.Contains("*") = False Then
-                            'No wild-card, just return the line of text that contains the search text
-                            For Each sLineOfText As String In sText
-                                If sLineOfText.Contains(strFind) = True Then
-                                    'Return the line of text that contains the search text
-                                    If bFindBoth = True Then
-                                        If l = 1 Then
-                                            strReturnText1 = Trim(sLineOfText)
-                                            'Update the return value
-                                            FindTextInDoc = True
-                                            Exit For
-                                        Else
-                                            strReturnText2 = Trim(sLineOfText)
-                                            sText = Nothing
-                                            Return True
-                                        End If
-                                    Else
-                                        strReturnText1 = Trim(sLineOfText)
-                                        sText = Nothing
-                                        Return True
-                                    End If
-                                End If
-                            Next
-                        Else
-                            'Create the mask to find the wild-card (*) data
-                            sMask = strFind.Split("*".ToCharArray, 2)
-                            For Each sLineOfText As String In sText
-                                'Search through the HTML to find the first part
-                                If sLineOfText.Contains(sMask(0)) = True Then
-                                    'Find the second part in the same line
-                                    If sLineOfText.Contains(sMask(1)) = True Then
-                                        Dim iPos1 As Integer = sMask(0).Length + sLineOfText.IndexOf(sMask(0))
-                                        Dim iPos2 As Integer = sLineOfText.IndexOf(sMask(1), iPos1)
-                                        If iPos1 <= iPos2 Then
-                                            If bFindBoth = True Then
-                                                If l = 1 Then
-                                                    strReturnText1 = Trim(sLineOfText.Substring(iPos1, iPos2 - iPos1))
-                                                    'Update the return value
-                                                    FindTextInDoc = True
-                                                    Exit For
-                                                Else
-                                                    strReturnText2 = Trim(sLineOfText.Substring(iPos1, iPos2 - iPos1))
-                                                    sText = Nothing
-                                                    Return True
-                                                End If
-                                            Else
-                                                strReturnText1 = Trim(sLineOfText.Substring(iPos1, iPos2 - iPos1))
-                                                sText = Nothing
-                                                Return True
-                                            End If
-                                        End If
-                                    End If
-                                End If
-                            Next
-                        End If
-
-                        If str2ndFind.Length = 0 Then
-                            Exit For
-                        Else
-                            'Update the text to search for with the Alternate 2nd text to find, and repeat the process once more (done to minimize reloading the web page to search for multiple texts)
-                            strFind = str2ndFind
-                            str2ndFind = ""
-                        End If
-                    Next
-                End If
-            End If
-
-        Catch ex As Exception
-            Msg("Find Text In HTML error: " & Err.Description)
-            'Reset flag for an error
-            m_bRunningFind = False
-        End Try
-    End Function
-#End Region
-
 #Region "Browser Control Event Handlers"
     Private Sub OnBrowserFrameLoadEnd(sender As Object, e As CefSharp.FrameLoadEndEventArgs)
         'Set a flag to indicate the web page has finished loading. This event is fired for each frame that loads, so compare URLs before setting the flag as loaded (NOTE: Me.browser.IsLoading = True, doesn't work)
@@ -2984,7 +2747,7 @@
     Private Sub OnBrowserLoadError(sender As Object, e As CefSharp.LoadErrorEventArgs)
         Me.Invoke(Sub()
                       'Display the info
-                      Dim strErrorMsg As String = "Error: " & e.ErrorText & ", URL: " & e.FailedUrl
+                      Dim strErrorMsg As String = "Error: " & e.ErrorText & ", Code: " & e.ErrorCode.ToString & ", URL: " & e.FailedUrl
                       Me.lblHoverURL.Text = strErrorMsg
                       Me.lblHoverURL.Visible = True
                       Me.txtMsg.AppendText("[" & Now.ToString(LogDateTimeFormat) & "] " & strErrorMsg & vbNewLine)
@@ -3012,7 +2775,7 @@
     Private Sub enableButtons(bForward As Boolean, bBack As Boolean, bLoading As Boolean)
         Me.Invoke(Sub()
                       Me.btnBack.Enabled = bBack
-                      Me.btnFwd.Enabled = bForward
+                      Me.btnForward.Enabled = bForward
                       Me.btnStopNav.Enabled = bLoading
                       Me.btnGo.Enabled = Not bLoading
                       'Set focus back to the browser control window instead of the buttons
@@ -3209,7 +2972,7 @@
 
     'Mouse Forward and Back: Works where mouse location is. Works for the main form window (but not over the browser control area) when using the extra mouse programmable 4th and 5th buttons on the mouse
     Private Sub Main_MouseDown(sender As Object, e As MouseEventArgs) Handles Me.MouseDown,
-            pnlURL.MouseDown, lblURL.MouseDown, txtURL.MouseDown, btnBack.MouseDown, btnFwd.MouseDown, btnGo.MouseDown, btnHome.MouseDown, btnReload.MouseDown, btnStopNav.MouseDown,
+            pnlURL.MouseDown, lblURL.MouseDown, txtURL.MouseDown, btnBack.MouseDown, btnForward.MouseDown, btnGo.MouseDown, btnHome.MouseDown, btnReload.MouseDown, btnStopNav.MouseDown,
             pnlFind.MouseDown, txtFind.MouseDown, btnFindPrevious.MouseDown, btnFindNext.MouseDown, btnFindClose.MouseDown, pnlFindDivider.MouseDown, pnlBtnLinks.MouseDown, pnlBtnLinksDividerTop.MouseDown,
             btnFAHWebControl.MouseDown, btnFAHTwitter.MouseDown, btnFAHNews.MouseDown, btnFoldingCoinUserStats.MouseDown, btnEOC_UserStats.MouseDown, pbMolecule.MouseDown, pbProgIcon.MouseDown,
             btnFoldingCoinWebsite.MouseDown, btnFoldingCoinTwitter.MouseDown, btnFoldingCoinDiscord.MouseDown, btnMyWallet.MouseDown, btnFoldingCoinBlockchain.MouseDown, btnBTCBlockchain.MouseDown, btnFoldingCoinDistribution.MouseDown, btnFoldingCoinTeamStats.MouseDown,
@@ -3234,7 +2997,7 @@
     End Sub
 
     Private Sub Main_MouseUp(sender As Object, e As MouseEventArgs) Handles Me.MouseUp,
-            pnlURL.MouseUp, lblURL.MouseUp, txtURL.MouseUp, btnBack.MouseUp, btnFwd.MouseUp, btnGo.MouseUp, btnHome.MouseUp, btnReload.MouseUp, btnStopNav.MouseUp,
+            pnlURL.MouseUp, lblURL.MouseUp, txtURL.MouseUp, btnBack.MouseUp, btnForward.MouseUp, btnGo.MouseUp, btnHome.MouseUp, btnReload.MouseUp, btnStopNav.MouseUp,
             pnlFind.MouseUp, txtFind.MouseUp, btnFindPrevious.MouseUp, btnFindNext.MouseUp, btnFindClose.MouseUp, pnlFindDivider.MouseUp,
             btnFAHWebControl.MouseUp, btnFAHTwitter.MouseUp, btnFAHNews.MouseUp, btnFoldingCoinUserStats.MouseUp, btnEOC_UserStats.MouseUp, pbMolecule.MouseUp, pbProgIcon.MouseUp,
             btnFoldingCoinWebsite.MouseUp, btnFoldingCoinTwitter.MouseUp, btnFoldingCoinDiscord.MouseUp, btnMyWallet.MouseUp, btnFoldingCoinBlockchain.MouseUp, btnBTCBlockchain.MouseUp, btnFoldingCoinDistribution.MouseUp, btnFoldingCoinTeamStats.MouseUp,
@@ -3255,7 +3018,7 @@
         Me.browser.GetBrowser.GoBack()
     End Sub
 
-    Private Sub btnFwd_Click(sender As System.Object, e As System.EventArgs) Handles btnFwd.Click
+    Private Sub btnForward_Click(sender As System.Object, e As System.EventArgs) Handles btnForward.Click
         Me.browser.GetBrowser.GoForward()
     End Sub
 
@@ -3483,7 +3246,7 @@
     End Sub
 #End Region
 
-#Region "Browser - Open URL"
+#Region "Browser - Open URL, Page Load Waits"
     'Open URL with the specified settings
     Public Async Function OpenURL(sURL As String, Optional bShowErrorDialogBoxes As Boolean = False) As Threading.Tasks.Task(Of Boolean)
         Try
@@ -3504,7 +3267,6 @@
                 Me.browser.Load(sURL)
                 'Wait for the web page or 30 seconds
                 Await PageLoadWait()
-
                 Return True
 
             Else
@@ -3593,6 +3355,245 @@
 
         Catch ex As Exception
             Msg("Opening URL error: " & Err.Description)
+        End Try
+    End Function
+#End Region
+
+#Region "Browser Commands - Enter Text, Click Objects, Find Page Text"
+    'Specify text box {Object Id}, and text to enter in to the text box
+    Private Function EnterTextById(sId As String, sText As String) As Boolean
+        EnterTextById = False
+
+        Try
+            If sId.Length > 0 Then
+                Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementById('" & sId & "').value = '" & sText & "';")
+                EnterTextById = True
+            End If
+
+        Catch ex As Exception
+            Msg("Enter Text by Id error: " & Err.Description)
+        End Try
+    End Function
+
+    'Specify text box {Object Name} and array index (0-based), and text to enter in to the text box
+    Private Function EnterTextByName(sName As String, iIndex As Integer, sText As String) As Boolean
+        EnterTextByName = False
+
+        Try
+            If sName.Length > 0 Then
+                Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementsByName('" & sName & "')[" & iIndex.ToString & "].value = '" & sText & "';")
+                EnterTextByName = True
+            End If
+
+        Catch ex As Exception
+            Msg("Enter Text by Name error: " & Err.Description)
+        End Try
+    End Function
+
+    ''Specify text box {Class Name} and array index (0-based), and text to enter in to the text box
+    'Private Function EnterTextByClass(sName As String, iIndex As Integer, sText As String) As Boolean
+    '    EnterTextByClass = False
+
+    '    Try
+    '        If sName.Length > 0 Then
+    '            Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementsByClassName('" & sName & "')[" & iIndex.ToString & "].value = '" & sText & "';")
+    '            EnterTextByClass = True
+    '        End If
+    '    Catch ex As Exception
+    '        Msg("Enter Text by Class error: " & Err.Description)
+    '    End Try
+    'End Function
+
+    ''Specify text box {Tag Name} and array index (0-based), and text to enter in to the text box
+    'Private Function EnterTextByTag(sName As String, iIndex As Integer, sText As String) As Boolean
+    '    EnterTextByTag = False
+
+    '    Try
+    '        If sName.Length > 0 Then
+    '            Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementsByTagName('" & sName & "')[" & iIndex.ToString & "].value = '" & sText & "';")
+    '            EnterTextByTag = True
+    '        End If
+    '    Catch ex As Exception
+    '        Msg("Enter Text by Tag error: " & Err.Description)
+    '    End Try
+    'End Function
+
+    'Specify object {Object Id} to click, and if you wait for the page to load or not
+    Private Async Function ClickById(sId As String, bWait As Boolean) As Threading.Tasks.Task(Of Boolean)
+        Try
+            If sId.Length > 0 Then
+                Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementById('" & sId & "').click();")
+
+                'Wait for the page, if specified
+                If bWait = True Then
+                    If Await PageLoadWait() = True Then Return True Else Return False
+                Else
+                    Return True
+                End If
+            End If
+
+        Catch ex As Exception
+            Msg("Click by Id error: " & Err.Description)
+        End Try
+
+        Return False
+    End Function
+
+    'Specify object {Class Name} to click, and if you wait for the page to load or not
+    Private Async Function ClickByClass(sName As String, iIndex As Integer, bWait As Boolean) As Threading.Tasks.Task(Of Boolean)
+        Try
+            If sName.Length > 0 Then
+                'Click it
+                Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementsByClassName('" & sName & "')[" & iIndex.ToString & "].click();")
+                'Wait for the page, if specified
+                If bWait = True Then
+                    If Await PageLoadWait() = True Then Return True Else Return False
+                Else
+                    Return True
+                End If
+            End If
+
+        Catch ex As Exception
+            Msg("Click by Class error: " & Err.Description)
+        End Try
+
+        Return False
+    End Function
+
+    'Specify object {Object Name} to click, and if you wait for the page to load or not
+    Private Async Function ClickByName(sName As String, iIndex As Integer, bWait As Boolean) As Threading.Tasks.Task(Of Boolean)
+        Try
+            If sName.Length > 0 Then
+                Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementsByName('" & sName & "')[" & iIndex.ToString & "].click();")
+                'Wait for the page, if specified
+                If bWait = True Then
+                    If Await PageLoadWait() = True Then Return True Else Return False
+                Else
+                    Return True
+                End If
+            End If
+
+        Catch ex As Exception
+            Msg("Click by Name error: " & Err.Description)
+        End Try
+
+        Return False
+    End Function
+
+    'Specify object {Tag Name} to click, and if you wait for the page to load or not
+    Public Async Function ClickByTag(sName As String, iIndex As Integer, bWait As Boolean) As Threading.Tasks.Task(Of Boolean)
+        Try
+            If sName.Length > 0 Then
+                Me.browser.GetBrowser.MainFrame.ExecuteJavaScriptAsync("document.getElementsByTagName('" & sName & "')[" & iIndex.ToString & "].click();")
+                'Wait for the page, if specified
+                If bWait = True Then
+                    If Await PageLoadWait() = True Then Return True Else Return False
+                Else
+                    Return True
+                End If
+            End If
+
+        Catch ex As Exception
+            Msg("Click by Tag error: " & Err.Description)
+        End Try
+
+        Return False
+    End Function
+
+    'Specify text to find in HTML document, or supplied text
+    Private m_bRunningFind As Boolean = False
+    Private Function FindTextInDoc(strFind As String, str2ndFind As String, ByRef strReturnText1 As String, ByRef strReturnText2 As String, bFindBoth As Boolean, strSearchThisSuppliedTextInstead As String) As Boolean
+        FindTextInDoc = False
+        Dim sText As String() = Nothing
+        Dim sMask As String() = Nothing
+
+        Try
+            If strFind.Length > 0 Then
+                If strSearchThisSuppliedTextInstead.Length = 0 Then
+                    If m_bRunningFind = True Then Exit Try
+                    m_bRunningFind = True
+                    'Try to avoid running this multiple times at once. CefSharp v49 hangs when that happens. Probably from the Wait using: Threading.Thread.Sleep
+                    Dim strTemp As String = browser.GetBrowser.MainFrame.GetSourceAsync.Result
+                    m_bRunningFind = False
+                    sText = strTemp.Split(vbNewLine.ToCharArray)
+                Else
+                    sText = strSearchThisSuppliedTextInstead.Split(vbNewLine.ToCharArray)
+                End If
+
+                If sText IsNot Nothing Then
+                    For l As Integer = 1 To 2
+                        'Search for wild-card (*) data or not
+                        If strFind.Contains("*") = False Then
+                            'No wild-card, just return the line of text that contains the search text
+                            For Each sLineOfText As String In sText
+                                If sLineOfText.Contains(strFind) = True Then
+                                    'Return the line of text that contains the search text
+                                    If bFindBoth = True Then
+                                        If l = 1 Then
+                                            strReturnText1 = Trim(sLineOfText)
+                                            'Update the return value
+                                            FindTextInDoc = True
+                                            Exit For
+                                        Else
+                                            strReturnText2 = Trim(sLineOfText)
+                                            sText = Nothing
+                                            Return True
+                                        End If
+                                    Else
+                                        strReturnText1 = Trim(sLineOfText)
+                                        sText = Nothing
+                                        Return True
+                                    End If
+                                End If
+                            Next
+                        Else
+                            'Create the mask to find the wild-card (*) data
+                            sMask = strFind.Split("*".ToCharArray, 2)
+                            For Each sLineOfText As String In sText
+                                'Search through the HTML to find the first part
+                                If sLineOfText.Contains(sMask(0)) = True Then
+                                    'Find the second part in the same line
+                                    If sLineOfText.Contains(sMask(1)) = True Then
+                                        Dim iPos1 As Integer = sMask(0).Length + sLineOfText.IndexOf(sMask(0))
+                                        Dim iPos2 As Integer = sLineOfText.IndexOf(sMask(1), iPos1)
+                                        If iPos1 <= iPos2 Then
+                                            If bFindBoth = True Then
+                                                If l = 1 Then
+                                                    strReturnText1 = Trim(sLineOfText.Substring(iPos1, iPos2 - iPos1))
+                                                    'Update the return value
+                                                    FindTextInDoc = True
+                                                    Exit For
+                                                Else
+                                                    strReturnText2 = Trim(sLineOfText.Substring(iPos1, iPos2 - iPos1))
+                                                    sText = Nothing
+                                                    Return True
+                                                End If
+                                            Else
+                                                strReturnText1 = Trim(sLineOfText.Substring(iPos1, iPos2 - iPos1))
+                                                sText = Nothing
+                                                Return True
+                                            End If
+                                        End If
+                                    End If
+                                End If
+                            Next
+                        End If
+
+                        If str2ndFind.Length = 0 Then
+                            Exit For
+                        Else
+                            'Update the text to search for with the Alternate 2nd text to find, and repeat the process once more (done to minimize reloading the web page to search for multiple texts)
+                            strFind = str2ndFind
+                            str2ndFind = ""
+                        End If
+                    Next
+                End If
+            End If
+
+        Catch ex As Exception
+            Msg("Find Text In HTML error: " & Err.Description)
+            'Reset flag for an error
+            m_bRunningFind = False
         End Try
     End Function
 #End Region
