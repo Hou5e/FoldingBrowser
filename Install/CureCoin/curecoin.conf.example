@@ -1,5 +1,13 @@
 server=1
 port=9911
+addnode=134.195.84.253
+addnode=138.197.211.36
+addnode=138.199.7.135
+addnode=138.88.234.241
+addnode=142.93.157.120
+addnode=144.76.87.212
+addnode=161.35.115.185
+addnode=165.16.127.1
 rpcuser=username
 rpcpassword=password
 rpcport=18512

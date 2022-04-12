@@ -34,7 +34,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ===================
 CureCoin QT Wallet:
 ===================
-Copyright (c) 2013-2019 CureCoin Developers
+Copyright (c) 2013-2022 CureCoin Developers
 Copyright (c) 2011-2012 PPCoin Developers
 Copyright (c) 2009-2012 Bitcoin Developers
 
