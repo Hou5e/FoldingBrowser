@@ -1,12 +1,12 @@
 ; Edit this installer script with HM NIS Edit.
 ; Requires that NSIS (Nullsoft Scriptable Install System) compiler be installed.
-; Copyright © 2021 FoldingCoin, CureCoin
+; Copyright © 2023 FoldingCoin Developers, CureCoin Developers
 
 
 ;---- Helper defines / constants ----
 !define PRODUCT_VERSION "23"  ;Match the displayed version in the program title. Example: 1.2.3
 !define PRODUCT_4_VALUE_VERSION "23.0.0.0"  ;Match the executable version: Right-click the program executable file | Properties | Version. Example: 1.2.3.4
-!define PRODUCT_YEAR "2021"
+!define PRODUCT_YEAR "2023"
 !define PRODUCT_NAME "FoldingBrowser"
 !define PRODUCT_EXE_NAME "FoldingBrowser"  ;Executable name without extension
 !define PRODUCT_PUBLISHER "FoldingBrowser"
@@ -16,13 +16,16 @@
 !define PRODUCT_UNINST_EXE_NAME "Uninstall_${PRODUCT_EXE_NAME}"  ;Executable name without extension
 
 ;This constant must match the CureCoin installer version
-!define CURECOIN_VERSION "2.0.0.2"
+!define CURECOIN_VERSION "2.1.0.1"
 
 !define REQUIRED_MS_DOT_NET_VERSION "4.0*"
 
-SetCompressor lzma  ;Set compression method
+SetCompressor /SOLID lzma
+SetCompressorDictSize 16
 Var RunFoldingBrowser
 Unicode true   ;For all languages to display properly (Installer won't run on Win95/98/ME)
+!addincludedir "Include"
+!addplugindir "Plugins\x86-unicode"
 
 !define MULTIUSER_EXECUTIONLEVEL admin  ;Set the execution level for 'MultiUser.nsh'
 !include MultiUser.nsh  ;Used for testing execution level. Does the installee have admin rights?
@@ -39,9 +42,11 @@ Unicode true   ;For all languages to display properly (Installer won't run on Wi
 !define MUI_ABORTWARNING
 ;Language page settings
 !define MUI_LANGDLL_ALLLANGUAGES   ;Show all languages (Don't filter based on codepage)
+!define MUI_LANGDLL_ALWAYSSHOW
 !define MUI_LANGDLL_REGISTRY_ROOT "HKLM"
 !define MUI_LANGDLL_REGISTRY_KEY "${PRODUCT_DIR_REGKEY}"
 !define MUI_LANGDLL_REGISTRY_VALUENAME "Installer Language"
+
 ;Installer settings
 !define MUI_WELCOMEFINISHPAGE_BITMAP "Resources\Side-164x314.bmp"
 !define MUI_ICON "Resources\L-cysteine-3D-16_32_48.ico"
@@ -49,6 +54,7 @@ Unicode true   ;For all languages to display properly (Installer won't run on Wi
 !define MUI_HEADERIMAGE_RIGHT
 !define MUI_HEADERIMAGE_BITMAP "Resources\Header-150x57.bmp"
 !define MUI_COMPONENTSPAGE_SMALLDESC   ;properties for the Components page. Without this, the description field is larger.
+;!define MUI_COMPONENTSPAGE   ;Fix warning for unused language string for ${LANG_ASTURIAN}
 ;Uninstaller settings
 !define MUI_UNWELCOMEFINISHPAGE_BITMAP "Resources\Side-164x314.bmp"
 !define MUI_UNICON "Resources\Uninstaller-16_32_48.ico"
@@ -73,7 +79,7 @@ Unicode true   ;For all languages to display properly (Installer won't run on Wi
 
 ;Finish page
 ;Enable for debugging to see where files get installed.
-;!define MUI_FINISHPAGE_NOAUTOCLOSE  
+;!define MUI_FINISHPAGE_NOAUTOCLOSE
 ;!define MUI_FINISHPAGE_RUN "$INSTDIR\${PRODUCT_EXE_NAME}.exe"
 ;!define MUI_FINISHPAGE_RUN_NOTCHECKED
 ;!insertmacro MUI_PAGE_FINISH
@@ -144,10 +150,14 @@ Unicode true   ;For all languages to display properly (Installer won't run on Wi
 !insertmacro MUI_LANGUAGE "Asturian"
 !insertmacro MUI_LANGUAGE "Basque"
 !insertmacro MUI_LANGUAGE "Pashto"
+!insertmacro MUI_LANGUAGE "ScotsGaelic"
 !insertmacro MUI_LANGUAGE "Georgian"
 !insertmacro MUI_LANGUAGE "Vietnamese"
 !insertmacro MUI_LANGUAGE "Welsh"
 !insertmacro MUI_LANGUAGE "Armenian"
+!insertmacro MUI_LANGUAGE "Corsican"
+!insertmacro MUI_LANGUAGE "Tatar"
+!insertmacro MUI_LANGUAGE "Hindi"
 !insertmacro MUI_RESERVEFILE_LANGDLL
 ;---- MUI section end ----
 
@@ -170,8 +180,8 @@ SilentInstall normal  ;Silent install or uninstall: run from the command line wi
   VIProductVersion "${PRODUCT_4_VALUE_VERSION}"
   VIAddVersionKey /LANG=${LANG_ENGLISH} "ProductName" "${PRODUCT_NAME} v${PRODUCT_VERSION}"
   VIAddVersionKey /LANG=${LANG_ENGLISH} "Comments" "${PRODUCT_NAME} v${PRODUCT_VERSION} Installer"
-  VIAddVersionKey /LANG=${LANG_ENGLISH} "CompanyName" "${PRODUCT_PUBLISHER}"
-  VIAddVersionKey /LANG=${LANG_ENGLISH} "LegalCopyright" "Copyright © ${PRODUCT_YEAR} ${PRODUCT_PUBLISHER}"
+  VIAddVersionKey /LANG=${LANG_ENGLISH} "CompanyName" "FoldingCoin Developers, CureCoin Developers"
+  VIAddVersionKey /LANG=${LANG_ENGLISH} "LegalCopyright" "Copyright © ${PRODUCT_YEAR} FoldingCoin Developers, CureCoin Developers"
   VIAddVersionKey /LANG=${LANG_ENGLISH} "FileDescription" "${PRODUCT_NAME} v${PRODUCT_VERSION} Installer"
   VIAddVersionKey /LANG=${LANG_ENGLISH} "FileVersion" "${PRODUCT_VERSION}"
 
@@ -223,7 +233,7 @@ SectionEnd
 
 Section "CureCoin Qt Wallet v${CURECOIN_VERSION}" SEC02
   SetOverwrite on
-  AddSize 22500
+  AddSize 22800
   SectionIn 1
   ;If the CureCoin Wallet is running, then close it
   Call CloseCureCoin
@@ -291,13 +301,13 @@ UninstallFinished:
   Abort
 NETFrameworkInstalled:
 
-  ;Test if the Microsoft Visual C++ 2015 (x86) Redistributable is installed, and try to install it if it's not. Required by the CefSharp component
+  ;Test if the Microsoft Visual C++ 2019 (x86) Redistributable is installed, and try to install it if it's not. Required by the CefSharp component
   ReadRegStr $3 HKLM "SOFTWARE\Wow6432Node\Microsoft\VisualStudio\14.0\VC\Runtimes\x86" "Installed"
   StrCmp $3 1 VCRedistributableInstalled
   ReadRegStr $3 HKLM "SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x86" "Installed"
   StrCmp $3 1 VCRedistributableInstalled
 
-  MessageBox MB_OK "Installing the missing Microsoft Visual C++ 2015 (x86) Redistributable may take about 1 minute."
+  MessageBox MB_OK "Installing the missing Microsoft Visual C++ 2019 (x86) Redistributable may take about 1 minute."
   ;Destination: $PLUGINSDIR is a temporary folder that is automatically deleted when the installer exits
   SetOutPath "$PLUGINSDIR"
   File "VCx86Redist\vc_redist.x86.exe"
@@ -305,20 +315,20 @@ NETFrameworkInstalled:
   ;Initializes the plugins directory ($PLUGINSDIR) if it's not already initialized.
   InitPluginsDir
 
-  ;Run the VC++ 2015 (x86) Redist. installer. For silent install use: /install /quiet /norestart
+  ;Run the VC++ 2019 (x86) Redist. installer. For silent install use: /install /quiet /norestart
   ExecWait '"$PLUGINSDIR\vc_redist.x86.exe" /install /quiet /norestart' $4
   IntCmp $4 0 MsVCInstEnd  ;Skip error message if the installation was OK
-  StrCpy $5 "MS VC++ 2015 (x86) Redist install error: $4 (undefined = error running exe, 0 = no error, 1 = cancel button, 2 = aborted by script)"
+  StrCpy $5 "MS VC++ 2019 (x86) Redist install error: $4 (undefined = error running exe, 0 = no error, 1 = cancel button, 2 = aborted by script)"
   MessageBox MB_OK "$5" /SD IDOK
   DetailPrint $5
 MsVCInstEnd:
 
-  ;Test if the Microsoft Visual C++ 2015 (x86) Redistributable is installed, and popup a message if it's not. Required by the CefSharp component
+  ;Test if the Microsoft Visual C++ 2019 (x86) Redistributable is installed, and popup a message if it's not. Required by the CefSharp component
   ReadRegStr $3 HKLM "SOFTWARE\Wow6432Node\Microsoft\VisualStudio\14.0\VC\Runtimes\x86" "Installed"
   StrCmp $3 1 VCRedistributableInstalled
   ReadRegStr $3 HKLM "SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x86" "Installed"
   StrCmp $3 1 VCRedistributableInstalled
-  MessageBox MB_YESNO|MB_ICONEXCLAMATION "Please install the Microsoft Visual C++ 2015 (x86) Redistributable.$\r$\n${PRODUCT_NAME} v${PRODUCT_VERSION} will not run without it.$\r$\n$\r$\nContinue installing ${PRODUCT_NAME} v${PRODUCT_VERSION}?" /SD IDYES IDYES VCRedistributableInstalled IDNO 0
+  MessageBox MB_YESNO|MB_ICONEXCLAMATION "Please install the Microsoft Visual C++ 2019 (x86) Redistributable.$\r$\n${PRODUCT_NAME} v${PRODUCT_VERSION} will not run without it.$\r$\n$\r$\nContinue installing ${PRODUCT_NAME} v${PRODUCT_VERSION}?" /SD IDYES IDYES VCRedistributableInstalled IDNO 0
   Abort
 VCRedistributableInstalled:
 FunctionEnd

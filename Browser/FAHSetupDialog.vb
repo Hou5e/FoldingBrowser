@@ -3,6 +3,10 @@
     Private m_bSkipUpdating As Boolean = True
     Public m_bInitialInstall As Boolean = False
 
+    Private Const c_EarnTypeBoth As String = "Both: CureCoin, and FoldingCoin (not currently distributed)"
+    Private Const c_EarnTypeCURE As String = "CureCoin Only"
+    Private Const c_EarnTypeFLDC As String = "FoldingCoin only (not currently distributed)"
+
     Private Const PATH_FAH_ALL_USER_CFG As String = "C:\ProgramData\FAHClient\config.xml"
     Private Const PAUSE_FAH As String = "options idle=true open-web-control=false"  'Disabling the web control pop-up doesn't happen soon enough to stop it
     Private Path_FAH_CurrentUserCfg As String = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "FAHClient\config.xml")
@@ -31,6 +35,8 @@
         Me.lbl2.Font = Me.lbl1.Font
         Me.lbl3.Font = Me.lbl1.Font
         Me.lbl4.Font = Me.lbl1.Font
+
+        Me.cbxUsernameEarnSelect.Items.AddRange({c_EarnTypeBoth, c_EarnTypeCURE, c_EarnTypeFLDC})
 
         'Hide the form while it's being adjusted
         Me.WindowState = FormWindowState.Minimized
@@ -210,6 +216,25 @@
 #End Region
 
 #Region "Username Auto-Update"
+    Private Sub cbxUsernameEarnSelect_TextChanged(sender As Object, e As EventArgs) Handles cbxUsernameEarnSelect.TextChanged
+        Select Case Me.cbxUsernameEarnSelect.Text
+            Case c_EarnTypeBoth, c_EarnTypeFLDC
+                Me.txtBitcoinAddress.Visible = True
+                Me.cbxSeparator.Visible = True
+                Me.lblSeparator.Visible = True
+                Me.lblBitcoinAddress.Visible = True
+            Case c_EarnTypeCURE
+                Me.txtBitcoinAddress.Visible = False
+                Me.cbxSeparator.Visible = False
+                Me.lblSeparator.Visible = False
+                Me.lblBitcoinAddress.Visible = False
+            Case Else
+                'Fix bad entry
+                Me.cbxUsernameEarnSelect.Text = c_EarnTypeBoth
+        End Select
+        CreateFAHUserName()
+    End Sub
+
     'Preview Username
     Private Sub txtUsername_TextChanged(sender As Object, e As EventArgs) Handles txtUsername.TextChanged
         CreateFAHUserName()
@@ -226,6 +251,7 @@
             'Reset errors, and colors to be good
             Me.rbnFoldingCoin.BackColor = Color.FromKnownColor(KnownColor.Window)
             Me.rbnCureCoin.BackColor = Color.FromKnownColor(KnownColor.Window)
+            Me.lblErrorNote.BackColor = Color.Tomato
             Me.lblErrorNote.Visible = False
             Me.lblUsernamePreview.BackColor = Color.FromKnownColor(KnownColor.Window)
             Me.txtUsername.BackColor = Color.FromKnownColor(KnownColor.Window)
@@ -268,18 +294,8 @@
                 Me.txtBitcoinAddress.Refresh()
             End If
 
-            'Create the preview
-            Me.lblUsernamePreview.Text = Me.txtUsername.Text & Me.cbxSeparator.Text & Me.txtBitcoinAddress.Text
-
-            'If team CureCoin, then make sure the Username is 50 characters or less
-            If Me.rbnCureCoin.Checked = True Then
-                If Me.lblUsernamePreview.Text.Length > 50 Then
-                    Me.txtUsername.BackColor = Color.Yellow
-                    Me.lblUsernamePreview.BackColor = Color.Yellow
-                    Me.lblErrorNote.Text = "NOTE: Over 50 character Username limit to earn CURE"
-                    Me.lblErrorNote.Visible = True
-                End If
-            End If
+            'Create the Username preview text
+            Me.lblUsernamePreview.Text = Me.txtUsername.Text & If(Me.txtBitcoinAddress.Visible = False AndAlso Me.cbxSeparator.Visible = False, "", Me.cbxSeparator.Text & Me.txtBitcoinAddress.Text)
 
             'Bitcoin address info 'bc1' Segwit bech32 format: https://github.com/bitcoin/bips/blob/master/bip-0173.mediawiki
             If Me.txtBitcoinAddress.Text.StartsWith("bc1") = True AndAlso Me.txtBitcoinAddress.Text.Length <= 90 Then
@@ -350,15 +366,15 @@
             'Check for number of underscores: 0 = Old format, and must be on the FoldingCoin team. 1 = New format, not ready yet. 3+ = Makes a username not work with the current parsing engine (may be able to remove this in the future)
             Select Case Me.lblUsernamePreview.Text.Count(Function(c) c = "_"c)
                 Case 0
-                    If Me.txtBitcoinAddress.Text.Length = 0 AndAlso Me.cbxSeparator.Text.Length = 0 Then
+                    If (Me.txtBitcoinAddress.Text.Length = 0 AndAlso Me.cbxSeparator.Text.Length = 0) OrElse (Me.txtBitcoinAddress.Visible = False AndAlso Me.cbxSeparator.Visible = False) Then
                         '0 underscores = Old format: Allow CureCoin only (no FLDC) username with: no separator, and no Bitcoin address. Must be on the CureCoin team
                         If Me.rbnCureCoin.Checked = True Then
                             Me.lblUsernamePreview.BackColor = Color.Yellow
                             'Reset these error messages to allow this case, for CureCoin setup only
-                            Me.txtUsername.BackColor = Color.FromKnownColor(KnownColor.Window)
                             Me.cbxSeparator.BackColor = Color.FromKnownColor(KnownColor.Window)
                             Me.txtBitcoinAddress.BackColor = Color.FromKnownColor(KnownColor.Window)
-                            Me.lblErrorNote.Text = "NOTE: This username format can't earn FLDC"
+                            Me.lblErrorNote.BackColor = Color.Orange
+                            Me.lblErrorNote.Text = "NOTE: For earning CURE only. This username format can't earn FLDC"
                             Me.lblErrorNote.Visible = True
                         Else
                             Me.rbnCureCoin.BackColor = Color.Tomato
@@ -408,6 +424,22 @@
                     Me.lblErrorNote.Text = "Cannot contain: additional underscores"
                     Me.lblErrorNote.Visible = True
             End Select
+
+            'If team CureCoin, then make sure the Username is 50 characters or less
+            If Me.rbnCureCoin.Checked = True Then
+                If Me.lblUsernamePreview.Text.Length > 50 AndAlso Me.txtUsername.BackColor <> Color.Tomato Then
+                    Select Case Me.cbxUsernameEarnSelect.Text
+                        Case c_EarnTypeBoth, c_EarnTypeCURE
+                            Me.txtUsername.BackColor = Color.Tomato
+                            Me.lblUsernamePreview.BackColor = Color.Tomato
+                        Case c_EarnTypeFLDC
+                            Me.txtUsername.BackColor = Color.Yellow
+                            Me.lblUsernamePreview.BackColor = Color.Yellow
+                    End Select
+                    Me.lblErrorNote.Text = "NOTE: Over 50 character Username limit to earn CURE"
+                    Me.lblErrorNote.Visible = True
+                End If
+            End If
 
             'Passkey check: Must be 32 hexadecimal characters
             If Me.txtPasskey.Text.Length = 32 OrElse Me.txtPasskey.Text.Length = 0 Then

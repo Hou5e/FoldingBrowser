@@ -1,12 +1,12 @@
 ; Edit this installer script with HM NIS Edit.
 ; Requires that NSIS (Nullsoft Scriptable Install System) compiler be installed.
-; Copyright © 2022 CureCoin
+; Copyright © 2023 CureCoin Developers
 
 ;---- Helper defines / constants ----
 !define PRODUCT_VERSION "2.1.0.1"  ;Match the displayed version in the program title. Example: 1.2.3
 !define PRODUCT_4_VALUE_VERSION "2.1.0.1"  ;Match the executable version: Right-click the program executable file | Properties | Version. Example: 1.2.3.4
-!define PRODUCT_UPDATED "2022-04-11"
-!define PRODUCT_YEAR "2022"
+!define PRODUCT_UPDATED "2023-02-14"
+!define PRODUCT_YEAR "2023"
 !define PRODUCT_NAME "CureCoin"
 !define PRODUCT_EXE_NAME "curecoin-qt"  ;Executable name without extension
 !define PRODUCT_PUBLISHER "CureCoin"
@@ -15,8 +15,11 @@
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_EXE_NAME "Uninstall_${PRODUCT_EXE_NAME}"  ;Executable name without extension
 
-SetCompressor lzma  ;Set compression method
+SetCompressor /SOLID lzma
+SetCompressorDictSize 99
 Unicode true   ;For all languages to display properly (Installer won't run on Win95/98/ME)
+!addincludedir "Include"
+!addplugindir "Plugins\x86-unicode"
 
 !define MULTIUSER_EXECUTIONLEVEL admin  ;Set the execution level for 'MultiUser.nsh'
 !include MultiUser.nsh  ;Used for testing execution level. Does the installee have admin rights?
@@ -29,8 +32,14 @@ Unicode true   ;For all languages to display properly (Installer won't run on Wi
 
 ;---- Modern UI section ----
 !include MUI2.nsh
+;Language page settings
+!define MUI_LANGDLL_ALLLANGUAGES   ;Show all languages (Don't filter based on codepage)
+!define MUI_LANGDLL_ALWAYSSHOW
+!define MUI_LANGDLL_REGISTRY_ROOT "HKLM"
+!define MUI_LANGDLL_REGISTRY_KEY "${PRODUCT_DIR_REGKEY}"
+!define MUI_LANGDLL_REGISTRY_VALUENAME "Installer Language"
 
-;MUI Settings
+;Installer settings
 !define MUI_ABORTWARNING
 !define MUI_WELCOMEFINISHPAGE_BITMAP "Resources\CURE - Side-164x314.bmp"
 !define MUI_ICON "Resources\CureCoinLogo-16_32_48.ico"
@@ -54,7 +63,7 @@ Unicode true   ;For all languages to display properly (Installer won't run on Wi
 
 ;Finish page
 ;Enable for debugging to see where files get installed.
-;!define MUI_FINISHPAGE_NOAUTOCLOSE  
+;!define MUI_FINISHPAGE_NOAUTOCLOSE
 ;!define MUI_FINISHPAGE_RUN "$INSTDIR\${PRODUCT_EXE_NAME}.exe"
 ;!define MUI_FINISHPAGE_RUN_NOTCHECKED
 ;!insertmacro MUI_PAGE_FINISH
@@ -122,10 +131,14 @@ Unicode true   ;For all languages to display properly (Installer won't run on Wi
 !insertmacro MUI_LANGUAGE "Asturian"
 !insertmacro MUI_LANGUAGE "Basque"
 !insertmacro MUI_LANGUAGE "Pashto"
+!insertmacro MUI_LANGUAGE "ScotsGaelic"
 !insertmacro MUI_LANGUAGE "Georgian"
 !insertmacro MUI_LANGUAGE "Vietnamese"
 !insertmacro MUI_LANGUAGE "Welsh"
 !insertmacro MUI_LANGUAGE "Armenian"
+!insertmacro MUI_LANGUAGE "Corsican"
+!insertmacro MUI_LANGUAGE "Tatar"
+!insertmacro MUI_LANGUAGE "Hindi"
 !insertmacro MUI_RESERVEFILE_LANGDLL
 ;---- MUI section end ----
 
@@ -149,7 +162,7 @@ SilentInstall normal  ;Silent install or uninstall: run from the command line wi
   VIAddVersionKey /LANG=${LANG_ENGLISH} "ProductName" "${PRODUCT_NAME} v${PRODUCT_VERSION}"
   VIAddVersionKey /LANG=${LANG_ENGLISH} "Comments" "${PRODUCT_NAME} v${PRODUCT_VERSION} Installer"
   VIAddVersionKey /LANG=${LANG_ENGLISH} "CompanyName" "${PRODUCT_PUBLISHER}"
-  VIAddVersionKey /LANG=${LANG_ENGLISH} "LegalCopyright" "Copyright © ${PRODUCT_YEAR} ${PRODUCT_PUBLISHER}"
+  VIAddVersionKey /LANG=${LANG_ENGLISH} "LegalCopyright" "Copyright © ${PRODUCT_YEAR} CureCoin Developers"
   VIAddVersionKey /LANG=${LANG_ENGLISH} "FileDescription" "${PRODUCT_NAME} v${PRODUCT_VERSION} Installer: ${PRODUCT_UPDATED} Update"
   VIAddVersionKey /LANG=${LANG_ENGLISH} "FileVersion" "${PRODUCT_VERSION}"
 
@@ -173,7 +186,7 @@ Section "!Main Program Installation" SEC01
   ;Delete the anything in the database folder
   Delete "$APPDATA\curecoin\database\*"
   ;Update folder with the current blockchain file
-  File "CureCoin\log.0000000072"
+  File "CureCoin\log.0000000274"
 
   SetOutPath "$APPDATA\curecoin"
   ;Add or update other Curecoin Blockchain files
@@ -212,6 +225,9 @@ SectionEnd
 Function .onInit
   ;On install startup, ensure Admin user privilege level
   !insertmacro MULTIUSER_INIT
+
+  ;Language selection page
+  !insertmacro MUI_LANGDLL_DISPLAY
 FunctionEnd
 
 Function .oninstsuccess

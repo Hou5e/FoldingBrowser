@@ -2,7 +2,7 @@ FoldingBrowser is BSD 3-Clause licensed, and the CureCoin QT Wallet is MIT Licen
 ====================================================
 BSD 3-Clause License
 
-Copyright (c) 2020, FoldingCoin, CureCoin
+Copyright (c) 2023, FoldingCoin Developers, CureCoin Developers
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without

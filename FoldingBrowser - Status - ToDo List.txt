@@ -6,9 +6,14 @@ FoldingBrowser All-in-One Installer:
 Immediate Need /  Short-Term Goals:
 -----------------------------------
 
--Evaluate upgrading to CefSharp/Chrome v101, when available: https://github.com/cefsharp/CefSharp/releases
+-Try new VS and update browser component?
+-Evaluate upgrading to CefSharp/Chrome v111, when available: https://github.com/cefsharp/CefSharp/releases
+-Update FoldingBrowserTitle.gif so it doesn't look blank when not auto-playing in GitHub
 -On installation, see if FAH is running and show the web control if it is, instead of a blank page (mostly for upgrade installs)
 -Update video on website. It's pretty stale now
+-Possibly add options for Gridcoin + CureCoin sign up
+-Detect FAH v8 and use different FAH web control URL: https://app.foldingathome.org/  instead of FAH v7: http://127.0.0.1:7396/?nocache=0.###
+-Start planning about FAH v8, or making a striped down version that is faster, less overhead, and compatible?
 -Can't wipe-out saved data to be blank (can do it from the raw data view)
 -Make saved data changes prompt you to: 'Save changes?' when changing wallet numbers, or auto-save?
 -Start with Wallet #1 instead of #0, as the default wallet used for initial setup?
@@ -35,7 +40,7 @@ Other Ideas, Improvements, Tasks, Longer-Term Goals:
   -Port to and start from an existing MonoDevelop project that can already be compiled for Linux and Mac?
   -Create a separate Electron.NET App for Mac and Linux? -Try the FLDC Bar Electron app as a possible starting point?
   -Can the FoldingBrowser run on Wine in Linux? And, then update the FoldingBrowser to use the appropriate files and paths for Linux?
-  -Convert to .NET 5 for Linux and Mac?
+  -Convert to .NET 6 for Linux and Mac?
   -Create a simple encrypted dat file viewer for Linux and Mac (and include those files with making a backup, for going from Windows to Linux)?
 -Improve the portal web page (eliminate some buttons in the browser UI, and replace with web page buttons? probably not since they would be more difficult to get back to without having a menu frame)
 -Add FLDC & CURE Ticker info (from Coin Market Cap API?) (or pull from exchanges?). Update hourly? Do as notify icon? Might not be worth it, if the FLDC homepage gets it. See:  https://coinmarketcap.com/api/    https://api.coinmarketcap.com/v1/ticker/CureCoin/
@@ -77,10 +82,12 @@ Other Ideas, Improvements, Tasks, Longer-Term Goals:
 Change Log - Release Notes - Tasks completed:
 ======================================================================================================
 
-v23 Release (2022-04-??)
--Fix/update alternate CounterWallet mirror site(s)
--Make 'CureCoin only' dialog easier (see above)
--Remove buttons: FLDC Stats (next to EOC at top)? FLDC Distributions? FLDC Team Stats?
+v23 Release (2023-02-16)
+[DONE] -Make 'CureCoin only' dialog easier (see above)
+[DONE] -Update blockchain installer to be up to date: 2023-02-14, Block 793824
+[DONE] -Change the default homepage to be CureCoin for now, instead of the FAH web control (that is different in v8, or may not be running all the time)?
+[DONE] -Updates for CureCoin Research Core website registration page: https://researchcore.curecoin.net/register
+[DONE] -Remove / Hide buttons: FLDC Stats (next to EOC at top)? [Hidden] FLDC Distributions? [Hidden] FLDC Team Stats? [Hidden]
 [DONE] -Evaluate upgrading to CefSharp/Chrome v98 (VC++2019) when released
 [DONE] -Update CureCoin installer to v2.1.0.1
 [DONE] -Get and update for new code signing certificate

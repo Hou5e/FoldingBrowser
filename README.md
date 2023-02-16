@@ -1,6 +1,6 @@
 # FoldingBrowser
 
-![FoldingBrowser Logo](FoldingBrowserTitle.gif)
+![FoldingBrowser Logo](FoldingBrowserTitle.png)
 
 [FoldingCoin](http://foldingcoin.net/) & [CureCoin](http://curecoin.net/) All-In-One Installer
 
@@ -9,9 +9,9 @@
 - **See [FoldingBrowser Releases](https://github.com/Hou5e/FoldingBrowser/releases) for the Windows installer**
 - **FoldingBrowser [Screenshot #1](Screenshot.jpg), [Screenshot #2](Screenshot-LinksMenu.jpg), and [Setup Video](https://www.youtube.com/playlist?list=PLMWSISjQe0XFz9bFy5KXLq4hrgFH-94eI).**
   - **Please ask questions on the Discord Contact links below**
-- FoldingBrowser is written in VB.NET, compiled with VS2015, targeting the .NET Framework v4.5.2
-- Currently based on [cefsharp/79](https://github.com/cefsharp/CefSharp/tree/cefsharp/79) Chrome / Chromium Embedded Framework (CEF)
-  - Requires: [VC++ 2015 x86 Redist](https://download.microsoft.com/download/9/3/F/93FCF1E7-E6A4-478B-96E7-D4B285925B00/vc_redist.x86.exe) & [.NET v4.5.2](https://www.microsoft.com/en-us/download/details.aspx?id=42643)
+- FoldingBrowser is written in VB.NET, compiled with VS2015, targeting the .NET Framework v4.6.1
+- Currently based on [cefsharp/98](https://github.com/cefsharp/CefSharp/tree/cefsharp/98) Chrome / Chromium Embedded Framework (CEF)
+  - Requires: [VC++ 2019 x86 Redist](https://aka.ms/vs/17/release/vc_redist.x86.exe) & [.NET v4.6.1](https://www.microsoft.com/en-us/download/details.aspx?id=49982)
 - [Status, release notes, & ideas for future development](FoldingBrowser%20-%20Status%20-%20ToDo%20List.txt)
 
 ## Browser Hotkeys

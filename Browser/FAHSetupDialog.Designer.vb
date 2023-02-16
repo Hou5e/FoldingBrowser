@@ -45,6 +45,9 @@ Partial Class FAHSetupDialog
         Me.lblBitcoinAddress = New System.Windows.Forms.Label()
         Me.lblPasskeyNotes = New System.Windows.Forms.Label()
         Me.gbxUsername = New System.Windows.Forms.GroupBox()
+        Me.pnlUsernameSelect = New System.Windows.Forms.Panel()
+        Me.cbxUsernameEarnSelect = New System.Windows.Forms.ComboBox()
+        Me.lblUsernameEarnSelect = New System.Windows.Forms.Label()
         Me.pnlDivider = New System.Windows.Forms.Panel()
         Me.cbxSeparator = New System.Windows.Forms.ComboBox()
         Me.lblErrorNote = New System.Windows.Forms.Label()
@@ -76,6 +79,7 @@ Partial Class FAHSetupDialog
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.gbxTeamSelection.SuspendLayout()
         Me.gbxUsername.SuspendLayout()
+        Me.pnlUsernameSelect.SuspendLayout()
         Me.gbxPasskey.SuspendLayout()
         Me.gbxConfigPreview.SuspendLayout()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -91,7 +95,7 @@ Partial Class FAHSetupDialog
         '
         'txtUsername
         '
-        Me.txtUsername.Location = New System.Drawing.Point(7, 83)
+        Me.txtUsername.Location = New System.Drawing.Point(7, 114)
         Me.txtUsername.Margin = New System.Windows.Forms.Padding(4)
         Me.txtUsername.Name = "txtUsername"
         Me.txtUsername.Size = New System.Drawing.Size(142, 22)
@@ -115,7 +119,7 @@ Partial Class FAHSetupDialog
         Me.btnCancel.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.GradientActiveCaption
         Me.btnCancel.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.GradientInactiveCaption
         Me.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnCancel.Location = New System.Drawing.Point(487, 526)
+        Me.btnCancel.Location = New System.Drawing.Point(487, 555)
         Me.btnCancel.Margin = New System.Windows.Forms.Padding(4)
         Me.btnCancel.Name = "btnCancel"
         Me.btnCancel.Size = New System.Drawing.Size(90, 34)
@@ -129,7 +133,7 @@ Partial Class FAHSetupDialog
         Me.btnOK.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.GradientActiveCaption
         Me.btnOK.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.GradientInactiveCaption
         Me.btnOK.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnOK.Location = New System.Drawing.Point(389, 526)
+        Me.btnOK.Location = New System.Drawing.Point(389, 555)
         Me.btnOK.Margin = New System.Windows.Forms.Padding(4)
         Me.btnOK.Name = "btnOK"
         Me.btnOK.Size = New System.Drawing.Size(90, 34)
@@ -141,7 +145,7 @@ Partial Class FAHSetupDialog
         '
         Me.lblUsernamePreview.AutoSize = True
         Me.lblUsernamePreview.BackColor = System.Drawing.Color.White
-        Me.lblUsernamePreview.Location = New System.Drawing.Point(25, 36)
+        Me.lblUsernamePreview.Location = New System.Drawing.Point(25, 67)
         Me.lblUsernamePreview.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblUsernamePreview.Name = "lblUsernamePreview"
         Me.lblUsernamePreview.Size = New System.Drawing.Size(119, 16)
@@ -215,7 +219,7 @@ Partial Class FAHSetupDialog
         Me.gbxTeamSelection.Controls.Add(Me.rbnFoldingCoin)
         Me.gbxTeamSelection.Controls.Add(Me.txtOtherTeam)
         Me.gbxTeamSelection.Controls.Add(Me.rbnOtherTeam)
-        Me.gbxTeamSelection.Location = New System.Drawing.Point(44, 129)
+        Me.gbxTeamSelection.Location = New System.Drawing.Point(44, 158)
         Me.gbxTeamSelection.Margin = New System.Windows.Forms.Padding(4)
         Me.gbxTeamSelection.Name = "gbxTeamSelection"
         Me.gbxTeamSelection.Padding = New System.Windows.Forms.Padding(4)
@@ -253,10 +257,10 @@ Partial Class FAHSetupDialog
         Me.lllTeamNumbersLink.Location = New System.Drawing.Point(78, 131)
         Me.lllTeamNumbersLink.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lllTeamNumbersLink.Name = "lllTeamNumbersLink"
-        Me.lllTeamNumbersLink.Size = New System.Drawing.Size(227, 16)
+        Me.lllTeamNumbersLink.Size = New System.Drawing.Size(220, 16)
         Me.lllTeamNumbersLink.TabIndex = 5
         Me.lllTeamNumbersLink.TabStop = True
-        Me.lllTeamNumbersLink.Text = "https://stats.foldingathome.org/teams"
+        Me.lllTeamNumbersLink.Text = "https://stats.foldingathome.org/team"
         '
         'lblTeamNotes
         '
@@ -285,7 +289,7 @@ Partial Class FAHSetupDialog
         'lblUsername
         '
         Me.lblUsername.AutoSize = True
-        Me.lblUsername.Location = New System.Drawing.Point(42, 65)
+        Me.lblUsername.Location = New System.Drawing.Point(42, 96)
         Me.lblUsername.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblUsername.Name = "lblUsername"
         Me.lblUsername.Size = New System.Drawing.Size(71, 16)
@@ -295,7 +299,7 @@ Partial Class FAHSetupDialog
         'lblSeparator
         '
         Me.lblSeparator.AutoSize = True
-        Me.lblSeparator.Location = New System.Drawing.Point(151, 65)
+        Me.lblSeparator.Location = New System.Drawing.Point(151, 96)
         Me.lblSeparator.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblSeparator.Name = "lblSeparator"
         Me.lblSeparator.Size = New System.Drawing.Size(68, 16)
@@ -304,7 +308,7 @@ Partial Class FAHSetupDialog
         '
         'txtBitcoinAddress
         '
-        Me.txtBitcoinAddress.Location = New System.Drawing.Point(223, 83)
+        Me.txtBitcoinAddress.Location = New System.Drawing.Point(223, 114)
         Me.txtBitcoinAddress.Margin = New System.Windows.Forms.Padding(4)
         Me.txtBitcoinAddress.Name = "txtBitcoinAddress"
         Me.txtBitcoinAddress.Size = New System.Drawing.Size(303, 22)
@@ -316,7 +320,7 @@ Partial Class FAHSetupDialog
         'lblBitcoinAddress
         '
         Me.lblBitcoinAddress.AutoSize = True
-        Me.lblBitcoinAddress.Location = New System.Drawing.Point(279, 65)
+        Me.lblBitcoinAddress.Location = New System.Drawing.Point(279, 96)
         Me.lblBitcoinAddress.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblBitcoinAddress.Name = "lblBitcoinAddress"
         Me.lblBitcoinAddress.Size = New System.Drawing.Size(181, 16)
@@ -335,6 +339,7 @@ Partial Class FAHSetupDialog
         '
         'gbxUsername
         '
+        Me.gbxUsername.Controls.Add(Me.pnlUsernameSelect)
         Me.gbxUsername.Controls.Add(Me.pnlDivider)
         Me.gbxUsername.Controls.Add(Me.cbxSeparator)
         Me.gbxUsername.Controls.Add(Me.lblUsernamePreview)
@@ -348,16 +353,45 @@ Partial Class FAHSetupDialog
         Me.gbxUsername.Margin = New System.Windows.Forms.Padding(4)
         Me.gbxUsername.Name = "gbxUsername"
         Me.gbxUsername.Padding = New System.Windows.Forms.Padding(4)
-        Me.gbxUsername.Size = New System.Drawing.Size(533, 117)
+        Me.gbxUsername.Size = New System.Drawing.Size(533, 146)
         Me.gbxUsername.TabIndex = 10
         Me.gbxUsername.TabStop = False
         Me.gbxUsername.Text = "Username (Case Sensitive)"
+        '
+        'pnlUsernameSelect
+        '
+        Me.pnlUsernameSelect.BackColor = System.Drawing.SystemColors.Info
+        Me.pnlUsernameSelect.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pnlUsernameSelect.Controls.Add(Me.cbxUsernameEarnSelect)
+        Me.pnlUsernameSelect.Controls.Add(Me.lblUsernameEarnSelect)
+        Me.pnlUsernameSelect.Location = New System.Drawing.Point(7, 17)
+        Me.pnlUsernameSelect.Name = "pnlUsernameSelect"
+        Me.pnlUsernameSelect.Size = New System.Drawing.Size(519, 30)
+        Me.pnlUsernameSelect.TabIndex = 12
+        '
+        'cbxUsernameEarnSelect
+        '
+        Me.cbxUsernameEarnSelect.FormattingEnabled = True
+        Me.cbxUsernameEarnSelect.Location = New System.Drawing.Point(102, 2)
+        Me.cbxUsernameEarnSelect.Name = "cbxUsernameEarnSelect"
+        Me.cbxUsernameEarnSelect.Size = New System.Drawing.Size(373, 24)
+        Me.cbxUsernameEarnSelect.TabIndex = 12
+        Me.cbxUsernameEarnSelect.Text = "Both: CureCoin, and FoldingCoin (not currently distributed)"
+        '
+        'lblUsernameEarnSelect
+        '
+        Me.lblUsernameEarnSelect.AutoSize = True
+        Me.lblUsernameEarnSelect.Location = New System.Drawing.Point(14, 5)
+        Me.lblUsernameEarnSelect.Name = "lblUsernameEarnSelect"
+        Me.lblUsernameEarnSelect.Size = New System.Drawing.Size(88, 16)
+        Me.lblUsernameEarnSelect.TabIndex = 11
+        Me.lblUsernameEarnSelect.Text = "I want to earn:"
         '
         'pnlDivider
         '
         Me.pnlDivider.BackColor = System.Drawing.SystemColors.GradientActiveCaption
         Me.pnlDivider.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.pnlDivider.Location = New System.Drawing.Point(26, 55)
+        Me.pnlDivider.Location = New System.Drawing.Point(26, 86)
         Me.pnlDivider.Name = "pnlDivider"
         Me.pnlDivider.Size = New System.Drawing.Size(482, 2)
         Me.pnlDivider.TabIndex = 9
@@ -366,7 +400,7 @@ Partial Class FAHSetupDialog
         '
         Me.cbxSeparator.FormattingEnabled = True
         Me.cbxSeparator.Items.AddRange(New Object() {"_", "_ALL_", "_FLDC_"})
-        Me.cbxSeparator.Location = New System.Drawing.Point(151, 83)
+        Me.cbxSeparator.Location = New System.Drawing.Point(151, 114)
         Me.cbxSeparator.Margin = New System.Windows.Forms.Padding(4)
         Me.cbxSeparator.Name = "cbxSeparator"
         Me.cbxSeparator.Size = New System.Drawing.Size(70, 24)
@@ -378,7 +412,7 @@ Partial Class FAHSetupDialog
         Me.lblErrorNote.AutoSize = True
         Me.lblErrorNote.BackColor = System.Drawing.Color.Tomato
         Me.lblErrorNote.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lblErrorNote.Location = New System.Drawing.Point(76, 17)
+        Me.lblErrorNote.Location = New System.Drawing.Point(55, 48)
         Me.lblErrorNote.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblErrorNote.Name = "lblErrorNote"
         Me.lblErrorNote.Size = New System.Drawing.Size(42, 18)
@@ -395,7 +429,7 @@ Partial Class FAHSetupDialog
         Me.gbxPasskey.Controls.Add(Me.lblPasskeyNotes)
         Me.gbxPasskey.Controls.Add(Me.lblPasskeyFromEmail)
         Me.gbxPasskey.Controls.Add(Me.lblEmail)
-        Me.gbxPasskey.Location = New System.Drawing.Point(44, 291)
+        Me.gbxPasskey.Location = New System.Drawing.Point(44, 320)
         Me.gbxPasskey.Margin = New System.Windows.Forms.Padding(4)
         Me.gbxPasskey.Name = "gbxPasskey"
         Me.gbxPasskey.Padding = New System.Windows.Forms.Padding(4)
@@ -441,7 +475,7 @@ Partial Class FAHSetupDialog
         Me.lbl1.AutoSize = True
         Me.lbl1.BackColor = System.Drawing.SystemColors.ControlDarkDark
         Me.lbl1.ForeColor = System.Drawing.SystemColors.ControlLightLight
-        Me.lbl1.Location = New System.Drawing.Point(-4, 35)
+        Me.lbl1.Location = New System.Drawing.Point(-4, 64)
         Me.lbl1.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lbl1.Name = "lbl1"
         Me.lbl1.Size = New System.Drawing.Size(18, 16)
@@ -453,7 +487,7 @@ Partial Class FAHSetupDialog
         Me.lbl2.AutoSize = True
         Me.lbl2.BackColor = System.Drawing.SystemColors.ControlDarkDark
         Me.lbl2.ForeColor = System.Drawing.SystemColors.ControlLightLight
-        Me.lbl2.Location = New System.Drawing.Point(-4, 169)
+        Me.lbl2.Location = New System.Drawing.Point(-4, 198)
         Me.lbl2.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lbl2.Name = "lbl2"
         Me.lbl2.Size = New System.Drawing.Size(18, 16)
@@ -465,7 +499,7 @@ Partial Class FAHSetupDialog
         Me.lbl3.AutoSize = True
         Me.lbl3.BackColor = System.Drawing.SystemColors.ControlDarkDark
         Me.lbl3.ForeColor = System.Drawing.SystemColors.ControlLightLight
-        Me.lbl3.Location = New System.Drawing.Point(-4, 324)
+        Me.lbl3.Location = New System.Drawing.Point(-4, 353)
         Me.lbl3.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lbl3.Name = "lbl3"
         Me.lbl3.Size = New System.Drawing.Size(18, 16)
@@ -485,7 +519,7 @@ Partial Class FAHSetupDialog
         Me.gbxConfigPreview.Margin = New System.Windows.Forms.Padding(4)
         Me.gbxConfigPreview.Name = "gbxConfigPreview"
         Me.gbxConfigPreview.Padding = New System.Windows.Forms.Padding(4)
-        Me.gbxConfigPreview.Size = New System.Drawing.Size(526, 572)
+        Me.gbxConfigPreview.Size = New System.Drawing.Size(526, 598)
         Me.gbxConfigPreview.TabIndex = 15
         Me.gbxConfigPreview.TabStop = False
         Me.gbxConfigPreview.Text = "Folding@Home Config File Preview:"
@@ -539,7 +573,7 @@ Partial Class FAHSetupDialog
         '
         Me.SplitContainer1.Panel2.BackColor = System.Drawing.SystemColors.Control
         Me.SplitContainer1.Panel2.Controls.Add(Me.txtXmlAfter)
-        Me.SplitContainer1.Size = New System.Drawing.Size(510, 524)
+        Me.SplitContainer1.Size = New System.Drawing.Size(510, 550)
         Me.SplitContainer1.SplitterDistance = 228
         Me.SplitContainer1.SplitterWidth = 3
         Me.SplitContainer1.TabIndex = 0
@@ -554,7 +588,7 @@ Partial Class FAHSetupDialog
         Me.txtXmlBefore.Name = "txtXmlBefore"
         Me.txtXmlBefore.ReadOnly = True
         Me.txtXmlBefore.ScrollBars = System.Windows.Forms.ScrollBars.Both
-        Me.txtXmlBefore.Size = New System.Drawing.Size(226, 522)
+        Me.txtXmlBefore.Size = New System.Drawing.Size(226, 548)
         Me.txtXmlBefore.TabIndex = 0
         Me.txtXmlBefore.WordWrap = False
         '
@@ -567,7 +601,7 @@ Partial Class FAHSetupDialog
         Me.txtXmlAfter.Multiline = True
         Me.txtXmlAfter.Name = "txtXmlAfter"
         Me.txtXmlAfter.ScrollBars = System.Windows.Forms.ScrollBars.Both
-        Me.txtXmlAfter.Size = New System.Drawing.Size(277, 522)
+        Me.txtXmlAfter.Size = New System.Drawing.Size(277, 548)
         Me.txtXmlAfter.TabIndex = 0
         Me.txtXmlAfter.WordWrap = False
         '
@@ -616,7 +650,7 @@ Partial Class FAHSetupDialog
         Me.gbxFAHVerifyConfig.Controls.Add(Me.txtTelnetFAHCfg)
         Me.gbxFAHVerifyConfig.Controls.Add(Me.chkShowFAHCfg)
         Me.gbxFAHVerifyConfig.Controls.Add(Me.lblTelnet)
-        Me.gbxFAHVerifyConfig.Location = New System.Drawing.Point(44, 422)
+        Me.gbxFAHVerifyConfig.Location = New System.Drawing.Point(44, 451)
         Me.gbxFAHVerifyConfig.Margin = New System.Windows.Forms.Padding(4)
         Me.gbxFAHVerifyConfig.Name = "gbxFAHVerifyConfig"
         Me.gbxFAHVerifyConfig.Padding = New System.Windows.Forms.Padding(4)
@@ -702,7 +736,7 @@ Partial Class FAHSetupDialog
         Me.lbl4.AutoSize = True
         Me.lbl4.BackColor = System.Drawing.SystemColors.ControlDarkDark
         Me.lbl4.ForeColor = System.Drawing.SystemColors.ControlLightLight
-        Me.lbl4.Location = New System.Drawing.Point(-4, 442)
+        Me.lbl4.Location = New System.Drawing.Point(-4, 471)
         Me.lbl4.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lbl4.Name = "lbl4"
         Me.lbl4.Size = New System.Drawing.Size(18, 16)
@@ -738,7 +772,7 @@ Partial Class FAHSetupDialog
         Me.SplitContainer2.Panel2.BackColor = System.Drawing.SystemColors.Control
         Me.SplitContainer2.Panel2.Controls.Add(Me.gbxConfigPreview)
         Me.SplitContainer2.Panel2MinSize = 2
-        Me.SplitContainer2.Size = New System.Drawing.Size(1118, 574)
+        Me.SplitContainer2.Size = New System.Drawing.Size(1118, 600)
         Me.SplitContainer2.SplitterDistance = 587
         Me.SplitContainer2.SplitterWidth = 3
         Me.SplitContainer2.TabIndex = 19
@@ -748,7 +782,7 @@ Partial Class FAHSetupDialog
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Window
-        Me.ClientSize = New System.Drawing.Size(1118, 574)
+        Me.ClientSize = New System.Drawing.Size(1118, 600)
         Me.Controls.Add(Me.SplitContainer2)
         Me.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Margin = New System.Windows.Forms.Padding(4)
@@ -760,6 +794,8 @@ Partial Class FAHSetupDialog
         Me.gbxTeamSelection.PerformLayout()
         Me.gbxUsername.ResumeLayout(False)
         Me.gbxUsername.PerformLayout()
+        Me.pnlUsernameSelect.ResumeLayout(False)
+        Me.pnlUsernameSelect.PerformLayout()
         Me.gbxPasskey.ResumeLayout(False)
         Me.gbxPasskey.PerformLayout()
         Me.gbxConfigPreview.ResumeLayout(False)
@@ -831,4 +867,7 @@ Partial Class FAHSetupDialog
     Friend WithEvents lblTelnet As Label
     Friend WithEvents txtPwd As TextBox
     Friend WithEvents pnlDivider As Panel
+    Friend WithEvents pnlUsernameSelect As Panel
+    Friend WithEvents lblUsernameEarnSelect As Label
+    Friend WithEvents cbxUsernameEarnSelect As ComboBox
 End Class

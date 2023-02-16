@@ -4,19 +4,15 @@ Compiling the FoldingBrowser Installer Info
 
 One-time Setup Info:
 ---------------------------------------------------------------------
-I'm currently using NSIS v3.02.1, but the latest version will work fine from: http://nsis.sourceforge.net/Main_Page
+I'm currently using NSIS v3.08, but the latest version will work fine from: http://nsis.sourceforge.net/Main_Page
 ** Make sure to get the normal 32-bit NSIS download (right-hand side of the web page), and not the 3rd party NSIS projects from the bottom of the web page. **
 
-There are a couple plugin files you will need to manually add:
+Extra plugin files used:
 http://nsis.sourceforge.net/NsProcess_plugin   (Get the version with Unicode)
+Included at:  ..\Install\Include
+Included at:  ..\Install\Plugins
 
-Copy include file (nsProcess.nsh) to:   C:\Program Files (x86)\NSIS\Include
-
-Copy plugin file (nsProcess.dll) to:  C:\Program Files (x86)\NSIS\Plugins\x86-ansi
-Copy plugin file (nsProcessW.dll) to:  C:\Program Files (x86)\NSIS\Plugins\x86-unicode
-Rename that file to: nsProcess.dll   (Remove the  'W')
-
-I use the front-end 'HM NIS Edit', from:   http://hmne.sourceforge.net/
+Front-end used is 'HM NIS Edit', from:   http://hmne.sourceforge.net/
 
 I typically associate *.nsi files with the 'HM NIS Edit' executable so they can be opened and accessed easily.
     -If you go to the ..\Install folder, and right-click one of the .nsi files
@@ -33,16 +29,18 @@ For compiling the FoldingBrowser Installer:
 -------------------------------------------
 The NSIS installer scripts are located at:   ..\Install
 
-1. You will need the Microsoft Visual C++ Redistributable 2015 - 32-bit (x86) installer (vc_redist.x86.exe) from: https://download.microsoft.com/download/9/3/F/93FCF1E7-E6A4-478B-96E7-D4B285925B00/vc_redist.x86.exe      Link from: https://www.itechtics.com/microsoft-visual-c-redistributable-versions-direct-download-links/
+1. You will need the Microsoft Visual C++ Redistributable 2019 - 32-bit (x86) installer (vc_redist.x86.exe) from: https://aka.ms/vs/17/release/vc_redist.x86.exe
 and copy it to:  ..\Install\VCx86Redist
 
 2. You will need the latest CureCoin wallet (curecoin-qt.exe) from GitHub: https://github.com/cygnusxi/CurecoinSource/releases
 and copy it to:  ..\Install\CureCoin
 
-3. Compile the CureCoin installer script first. The output goes to: ..\Install\CureInst
+3. For the 'Blockchain Included' installers, the blockchain files should be copied to: ..\Install\CureCoin
+
+4. Compile the CureCoin installer script first. The output goes to: ..\Install\CureInst
 (this was done mostly for an easy separate uninstaller for the CureCoin Wallet)
 
-4. Compile the FoldingBrowser script last. This uses the 'Release' version of the FoldingBrowser executable compiled with Visual Studio.
+5. Compile the FoldingBrowser script last. This uses the 'Release' version of the FoldingBrowser executable compiled with Visual Studio.
 
 
 ------------------------------

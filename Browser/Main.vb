@@ -560,7 +560,7 @@
                             DividerLine & vbNewLine & vbNewLine &
                             "-Please use: Tools | Saved Data | 'Make Backup' button to backup your settings" & vbNewLine & vbNewLine &
                             "-Note Distribution Intervals: " & vbNewLine &
-                            "     FoldingCoin: On the 1st Saturday of each month" & vbNewLine &
+                            "     FoldingCoin: Not Currently Distributed." & vbNewLine &
                             "         CureCoin: Daily.     Also, Proof of Stake (POS) when coins are" & vbNewLine &
                             "            over 4 days old, with wallet unlocked and left running." & vbNewLine & vbNewLine &
                             "-Please contact us on Discord for questions (Use FoldingBrowser Discord buttons)"
@@ -695,7 +695,7 @@
                 Me.btnFAHTwitter.BackgroundImage = GetResizedImage(My.Resources.Twitter_192, CInt(i48 * g_sScaleFactor))
                 Me.btnFAHNews.BackgroundImage = GetResizedImage(My.Resources.News_192, CInt(i48 * g_sScaleFactor))
                 Me.btnEOC_UserStats.BackgroundImage = GetResizedImage(My.Resources.EOC_192, CInt(i48 * g_sScaleFactor))
-                Me.btnFoldingCoinUserStats.BackgroundImage = GetResizedImage(My.Resources.FLDC_192, CInt(i48 * g_sScaleFactor))
+                'Me.btnFoldingCoinUserStats.BackgroundImage = GetResizedImage(My.Resources.FLDC_192, CInt(i48 * g_sScaleFactor))
                 'FoldingCoin Related:
                 Me.btnFoldingCoinWebsite.BackgroundImage = GetResizedImage(My.Resources.FoldingCoin_192, CInt(i48 * g_sScaleFactor), Drawing2D.InterpolationMode.HighQualityBicubic)
                 Me.btnMyWallet.BackgroundImage = GetResizedImage(My.Resources.Coins_192, CInt(i48 * g_sScaleFactor))
@@ -703,8 +703,8 @@
                 Me.btnFoldingCoinDiscord.BackgroundImage = GetResizedImage(My.Resources.Discord_192, CInt(i48 * g_sScaleFactor))
                 Me.btnFoldingCoinBlockchain.BackgroundImage = GetResizedImage(My.Resources.BlockchainFLDC_192, CInt(i48 * g_sScaleFactor), Drawing2D.InterpolationMode.HighQualityBicubic)
                 Me.btnBTCBlockchain.BackgroundImage = GetResizedImage(My.Resources.BlockchainBTC_192, CInt(i48 * g_sScaleFactor), Drawing2D.InterpolationMode.HighQualityBicubic)
-                Me.btnFoldingCoinDistribution.BackgroundImage = GetResizedImage(My.Resources.DistributionFLDC_192, CInt(i48 * g_sScaleFactor), Drawing2D.InterpolationMode.HighQualityBicubic)
-                Me.btnFoldingCoinTeamStats.BackgroundImage = GetResizedImage(My.Resources.FLDC_192, CInt(i48 * g_sScaleFactor))
+                'Me.btnFoldingCoinDistribution.BackgroundImage = GetResizedImage(My.Resources.DistributionFLDC_192, CInt(i48 * g_sScaleFactor), Drawing2D.InterpolationMode.HighQualityBicubic)
+                'Me.btnFoldingCoinTeamStats.BackgroundImage = GetResizedImage(My.Resources.FLDC_192, CInt(i48 * g_sScaleFactor))
                 'CureCoin Related:
                 Me.btnCureCoinWebsite.BackgroundImage = GetResizedImage(My.Resources.CureCoin_192, CInt(i48 * g_sScaleFactor), Drawing2D.InterpolationMode.HighQualityBicubic)
                 Me.btnCureCoinTwitter.BackgroundImage = GetResizedImage(My.Resources.Twitter_192, CInt(i48 * g_sScaleFactor))
@@ -712,14 +712,6 @@
                 Me.btnCureCoinBlockchain.BackgroundImage = GetResizedImage(My.Resources.BlockchainCURE_192, CInt(i48 * g_sScaleFactor), Drawing2D.InterpolationMode.HighQualityBicubic)
                 Me.btnCurePool.BackgroundImage = GetResizedImage(My.Resources.DistributionCURE_192, CInt(i48 * g_sScaleFactor), Drawing2D.InterpolationMode.HighQualityBicubic)
                 Me.btnCureCoinTeamStats.BackgroundImage = GetResizedImage(My.Resources.EOC_192, CInt(i48 * g_sScaleFactor))
-
-                'Protein image for decoration / branding in the browser
-                Me.pbProgIcon.Width = CInt(i48 * g_sScaleFactor) + 2
-                Me.pbProgIcon.Height = Me.pbProgIcon.Width
-                Me.pbProgIcon.Left = Me.pnlBtnLinksDividerTop.Width - Me.pbProgIcon.Width
-                Using iconProg As New Icon(My.Resources.L_cysteine_16_24_32_48_256, i256, i256)
-                    Me.pbProgIcon.Image = GetResizedImage(iconProg.ToBitmap, (Me.pbProgIcon.Width - 2), Drawing2D.InterpolationMode.HighQualityBicubic)
-                End Using
 
                 'Molecule image for decoration (not resized)
                 Me.pbMolecule.Image = My.Resources.p1159_L939_K12M_298k
@@ -1051,35 +1043,35 @@
         End Try
     End Sub
 
-    Private Sub btnFoldingCoinUserStats_Click(sender As Object, e As EventArgs) Handles btnFoldingCoinUserStats.Click
-#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
-        Dim strUsername As String = ""
-        Dim DAT As New IniFile
-        'Load DAT file, decrypt it
-        DAT.LoadText(Decrypt(LoadDat))
-        If DAT.ToString.Length = 0 Then
-            'Decryption failed
-            Msg(DAT_ErrorMsg)
-            MessageBox.Show(DAT_ErrorMsg)
-        End If
+    '    Private Sub btnFoldingCoinUserStats_Click(sender As Object, e As EventArgs) Handles btnFoldingCoinUserStats.Click
+    '#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
+    '        Dim strUsername As String = ""
+    '        Dim DAT As New IniFile
+    '        'Load DAT file, decrypt it
+    '        DAT.LoadText(Decrypt(LoadDat))
+    '        If DAT.ToString.Length = 0 Then
+    '            'Decryption failed
+    '            Msg(DAT_ErrorMsg)
+    '            MessageBox.Show(DAT_ErrorMsg)
+    '        End If
 
-        'Look for FAH username for FAH installation to un-check the dialog for existing users
-        If DAT.GetSection(Id & Me.cbxToolsWalletId.Text) IsNot Nothing AndAlso DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_FAH_Username) IsNot Nothing Then
-            strUsername = DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_FAH_Username).GetValue()
-        End If
-        'Done with the DAT file
-        DAT = Nothing
+    '        'Look for FAH username for FAH installation to un-check the dialog for existing users
+    '        If DAT.GetSection(Id & Me.cbxToolsWalletId.Text) IsNot Nothing AndAlso DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_FAH_Username) IsNot Nothing Then
+    '            strUsername = DAT.GetSection(Id & Me.cbxToolsWalletId.Text).GetKey(DAT_FAH_Username).GetValue()
+    '        End If
+    '        'Done with the DAT file
+    '        DAT = Nothing
 
-        'Make sure the Username is FoldingCoin compatible, otherwise just display the main Stats page
-        If strUsername.Length > 0 AndAlso strUsername.Contains("_") = True Then
-            'Normal: Load User's Stats
-            OpenURL(URL_FoldingCoinStats & URL_FoldingCoinStatsUser & strUsername, False)
-        Else
-            'Not a valid FLDC username. Just go to the main FLDC Stats page
-            OpenURL(URL_FoldingCoinStats, False)
-        End If
-#Enable Warning BC42358
-    End Sub
+    '        'Make sure the Username is FoldingCoin compatible, otherwise just display the main Stats page
+    '        If strUsername.Length > 0 AndAlso strUsername.Contains("_") = True Then
+    '            'Normal: Load User's Stats
+    '            OpenURL(URL_FoldingCoinStats & URL_FoldingCoinStatsUser & strUsername, False)
+    '        Else
+    '            'Not a valid FLDC username. Just go to the main FLDC Stats page
+    '            OpenURL(URL_FoldingCoinStats, False)
+    '        End If
+    '#Enable Warning BC42358
+    '    End Sub
 
     Private Sub btnFAHTwitter_Click(sender As System.Object, e As System.EventArgs) Handles btnFAHTwitter.Click
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
@@ -1174,17 +1166,17 @@
 #Enable Warning BC42358
     End Sub
 
-    Private Sub btnFoldingCoinDistribution_Click(sender As System.Object, e As System.EventArgs) Handles btnFoldingCoinDistribution.Click
-#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
-        OpenURL(URL_FLDC_Distro, False)
-#Enable Warning BC42358
-    End Sub
+    '    Private Sub btnFoldingCoinDistribution_Click(sender As System.Object, e As System.EventArgs) Handles btnFoldingCoinDistribution.Click
+    '#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
+    '        OpenURL(URL_FLDC_Distro, False)
+    '#Enable Warning BC42358
+    '    End Sub
 
-    Private Sub btnFoldingCoinTeamStats_Click(sender As Object, e As EventArgs) Handles btnFoldingCoinTeamStats.Click
-#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
-        OpenURL(URL_FoldingCoinStats, False)
-#Enable Warning BC42358
-    End Sub
+    '    Private Sub btnFoldingCoinTeamStats_Click(sender As Object, e As EventArgs) Handles btnFoldingCoinTeamStats.Click
+    '#Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
+    '        OpenURL(URL_FoldingCoinStats, False)
+    '#Enable Warning BC42358
+    '    End Sub
 
     Private Sub btnFoldingCoinWebsite_Click(sender As System.Object, e As System.EventArgs) Handles btnFoldingCoinWebsite.Click
 #Disable Warning BC42358 ' Because this call is not awaited, execution of the current method continues before the call is completed
@@ -2446,7 +2438,7 @@
             Await Wait(100)
             DAT = Nothing
 
-            Await PageTitleWait(NameCryptoBullions)
+            Await PageTitleWait(NameResearchCore)
             System.Windows.Forms.Application.DoEvents()
             'Wait for the registration page to load, if not already (needs to wait for CloudFlare to reload the page)
             For i = 0 To 40
@@ -2458,14 +2450,14 @@
             For m As Integer = 0 To 2
                 'Go to the CureCoin folding pool (CryptoBullionPools) website
                 Await OpenURL(URL_CureCoinFoldingPoolPage & "register", False)
-                Await PageTitleWait(NameCryptoBullions)
+                Await PageTitleWait(NameResearchCore)
                 System.Windows.Forms.Application.DoEvents()
                 Await Wait(100)
 
                 'Ensure the Pool page loaded before proceeding (and it's not still loading CloudFlare...)
                 Dim jsResp As CefSharp.JavascriptResponse
                 For i = 0 To 20
-                    'There should be a count of 2 of these elements on the registration page
+                    'There should be a count of 1 of these elements on the registration page
                     jsResp = Await Me.browser.GetBrowser.MainFrame.EvaluateScriptAsync("document.getElementsByClassName('submit small').length;")
                     If jsResp.Success = True AndAlso IsNumeric(jsResp.Result) = True AndAlso CInt(jsResp.Result) > 0 Then Exit For
                     Await Wait(500)
@@ -2495,62 +2487,38 @@
                 EnterTextByName("password", 0, strPoolPW)
                 Await Wait(100)
 
-                'Ask for the Captcha in a modal dialog, to enter in the form (to keep the user from mofifying the passwords)
-                Dim TxtEntry As New TextEntryDialog
-                TxtEntry.Text = "Enter Captcha Text"
-                TxtEntry.MsgTextUpper.Text = "From the bottom of the registration page,"
-                TxtEntry.MsgTextLower.Text = "Please enter the captcha text:"
-                TxtEntry.Width = (TxtEntry.MsgTextUpper.Left * 2) + TxtEntry.MsgTextUpper.Width + 10
-                TxtEntry.TextEnteredLower.Visible = False
-                'Show: Attempt 1 of 3
-                TxtEntry.MsgTextExtraBottomNote.Visible = True
-                'Hide the Cancel button in favor of showing: Attempt 1 of 3
-                TxtEntry.btnCancel.Visible = False
-                'Move the OK button in the place of the hidden Cancel button
-                TxtEntry.btnOK.Left = TxtEntry.btnCancel.Left
-                TxtEntry.MsgTextExtraBottomNote.Text = "(Attempt: " & (m + 1).ToString & " of 3)"
-                'Show modal dialog box
-                If TxtEntry.ShowDialog(Me) = DialogResult.OK Then
-                    EnterTextByName("captcha_code", 0, TxtEntry.TextEnteredUpper.Text)
-                    TxtEntry.Dispose()
+                'Click "Register" (There is 1 button with this class. Click the 1st button [0])
+                Await ClickByClass("submit small", 0, False)
+                Await Wait(1000)
 
-                    'Click "Register" (There are 2 buttons with this class. Click the 2nd button [1])
-                    Await ClickByClass("submit small", 1, False)
-                    Await Wait(1000)
+                'Wait for the page to load
+                Await PageTitleWait(NameResearchCore)
+                Await Wait(300)
+                'Find: account created text, or Errors for: account exists already, or Wrong Captcha text
+                Dim strTemp As String = ""
+                For l As Integer = 1 To 5
+                    If g_bCancelNav = True Then Exit Try
 
-                    'Wait for the page to load
-                    Await PageTitleWait(NameCryptoBullions)
-                    Await Wait(300)
-                    'Find: account created text, or Errors for: account exists already, or Wrong Captcha text
-                    Dim strTemp As String = ""
-                    For l As Integer = 1 To 5
-                        If g_bCancelNav = True Then Exit Try
-
-                        If FindTextInDoc("ccount *. Please", "Wrong Captcha", strTemp, "", False, "") = True Then
-                            If strTemp.Length > 0 Then
-                                Exit For
-                            End If
+                    If FindTextInDoc("ccount *. Please", "Wrong Captcha", strTemp, "", False, "") = True Then
+                        If strTemp.Length > 0 Then
+                            Exit For
                         End If
-                        Await Wait(3000)
-                    Next
-
-                    Msg("CryptoBullions Registration response: '" & strTemp & "'.")
-                    'Look for a 'successfully created' or 'exists' message
-                    If strTemp.Contains("successfully created") Then
-                        'Return true, if you get here
-                        Return True
-
-                    ElseIf strTemp.Contains("exists") Then
-                        'Indicate account exists already
-                        MessageBox.Show("Account exists. Please try to login instead of creating a new account." & vbNewLine & vbNewLine & "If you don't have the password or pin to this account," & vbNewLine & "then you will probably need to change your username.")
-
-                        'Return true, if you get here
-                        Return True
                     End If
-                Else
-                    'Canceled dialog
-                    TxtEntry.Dispose()
-                    Return False
+                    Await Wait(3000)
+                Next
+
+                Msg("CureCoin Registration response: '" & strTemp & "'.")
+                'Look for a 'successfully created' or 'exists' message
+                If strTemp.Contains("successfully created") Then
+                    'Return true, if you get here
+                    Return True
+
+                ElseIf strTemp.Contains("exists") Then
+                    'Indicate account exists already
+                    MessageBox.Show("Account exists. Please try to login instead of creating a new account." & vbNewLine & vbNewLine & "If you don't have the password or pin to this account," & vbNewLine & "then you will probably need to change your username.")
+
+                    'Return true, if you get here
+                    Return True
                 End If
             Next
 
@@ -2611,21 +2579,21 @@
             Await OpenURL(URL_CureCoinFoldingPoolPage, False)
 
             'Wait for the registration page to load, if not already (needs to wait for CloudFlare to reload the page)
-            Await PageTitleWait(NameCryptoBullions)
+            Await PageTitleWait(NameResearchCore)
             System.Windows.Forms.Application.DoEvents()
-
+            'Wait for the registration page to load, if not already (needs to wait for CloudFlare to reload the page)
             For i As Integer = 0 To 40
                 If Me.Text.Contains("Just") = False Then Exit For
                 Await Wait(300)
             Next
-            Await PageTitleWait(NameCryptoBullions)
+            Await PageTitleWait(NameResearchCore)
             System.Windows.Forms.Application.DoEvents()
 
             'Ensure the Pool page loaded before proceeding (and it's not still loading CloudFlare...)
             Dim jsResp As CefSharp.JavascriptResponse
             For i = 0 To 20
                 'There should be a count of 1 of these elements on the main page
-                jsResp = Await Me.browser.GetBrowser.MainFrame.EvaluateScriptAsync("document.getElementsByClassName('submit small').length;")
+                jsResp = Await Me.browser.GetBrowser.MainFrame.EvaluateScriptAsync("document.getElementsByClassName('g-recaptcha').length;")
                 If jsResp.Success = True AndAlso IsNumeric(jsResp.Result) = True AndAlso CInt(jsResp.Result) > 0 Then Exit For
                 Await Wait(300)
             Next
@@ -2974,7 +2942,7 @@
     Private Sub Main_MouseDown(sender As Object, e As MouseEventArgs) Handles Me.MouseDown,
             pnlURL.MouseDown, lblURL.MouseDown, txtURL.MouseDown, btnBack.MouseDown, btnForward.MouseDown, btnGo.MouseDown, btnHome.MouseDown, btnReload.MouseDown, btnStopNav.MouseDown,
             pnlFind.MouseDown, txtFind.MouseDown, btnFindPrevious.MouseDown, btnFindNext.MouseDown, btnFindClose.MouseDown, pnlFindDivider.MouseDown, pnlBtnLinks.MouseDown, pnlBtnLinksDividerTop.MouseDown,
-            btnFAHWebControl.MouseDown, btnFAHTwitter.MouseDown, btnFAHNews.MouseDown, btnFoldingCoinUserStats.MouseDown, btnEOC_UserStats.MouseDown, pbMolecule.MouseDown, pbProgIcon.MouseDown,
+            btnFAHWebControl.MouseDown, btnFAHTwitter.MouseDown, btnFAHNews.MouseDown, btnFoldingCoinUserStats.MouseDown, btnEOC_UserStats.MouseDown, pbMolecule.MouseDown,
             btnFoldingCoinWebsite.MouseDown, btnFoldingCoinTwitter.MouseDown, btnFoldingCoinDiscord.MouseDown, btnMyWallet.MouseDown, btnFoldingCoinBlockchain.MouseDown, btnBTCBlockchain.MouseDown, btnFoldingCoinDistribution.MouseDown, btnFoldingCoinTeamStats.MouseDown,
             btnCureCoinWebsite.MouseDown, btnCureCoinBlockchain.MouseDown, btnCureCoinDiscord.MouseDown, btnCureCoinTwitter.MouseDown, btnCurePool.MouseDown, btnCureCoinTeamStats.MouseDown,
             pnlBtnLinksDividerBottom.MouseDown, chkToolsShow.MouseDown, txtMsg.MouseDown, btnToolsBrowserTools.MouseDown, btnToolsGetFAH.MouseDown, btnToolsGetWallet.MouseDown, btnToolsFAHConfig.MouseDown, btnToolsCureCoinSetup.MouseDown,
@@ -2999,7 +2967,7 @@
     Private Sub Main_MouseUp(sender As Object, e As MouseEventArgs) Handles Me.MouseUp,
             pnlURL.MouseUp, lblURL.MouseUp, txtURL.MouseUp, btnBack.MouseUp, btnForward.MouseUp, btnGo.MouseUp, btnHome.MouseUp, btnReload.MouseUp, btnStopNav.MouseUp,
             pnlFind.MouseUp, txtFind.MouseUp, btnFindPrevious.MouseUp, btnFindNext.MouseUp, btnFindClose.MouseUp, pnlFindDivider.MouseUp,
-            btnFAHWebControl.MouseUp, btnFAHTwitter.MouseUp, btnFAHNews.MouseUp, btnFoldingCoinUserStats.MouseUp, btnEOC_UserStats.MouseUp, pbMolecule.MouseUp, pbProgIcon.MouseUp,
+            btnFAHWebControl.MouseUp, btnFAHTwitter.MouseUp, btnFAHNews.MouseUp, btnFoldingCoinUserStats.MouseUp, btnEOC_UserStats.MouseUp, pbMolecule.MouseUp,
             btnFoldingCoinWebsite.MouseUp, btnFoldingCoinTwitter.MouseUp, btnFoldingCoinDiscord.MouseUp, btnMyWallet.MouseUp, btnFoldingCoinBlockchain.MouseUp, btnBTCBlockchain.MouseUp, btnFoldingCoinDistribution.MouseUp, btnFoldingCoinTeamStats.MouseUp,
             btnCureCoinWebsite.MouseUp, btnCureCoinBlockchain.MouseUp, btnCureCoinDiscord.MouseUp, btnCureCoinTwitter.MouseUp, btnCurePool.MouseUp, btnCureCoinTeamStats.MouseUp,
             pnlBtnLinksDividerBottom.MouseUp,
@@ -3093,7 +3061,8 @@
             'Load homepage / portal based on the user's options
             Select Case INI.GetSection(INI_Settings).GetKey(INI_Homepage).GetValue()
                 Case HpgDefault
-                    btnFAHWebControl_Click(Nothing, Nothing)
+                    'btnFAHWebControl_Click(Nothing, Nothing)
+                    btnCureCoinWebsite_Click(Nothing, Nothing)
 
                 Case HpgTopBottom
                     If m_bHomepage_TopAnBottomLoaded = False Then
@@ -3114,11 +3083,11 @@
                 Case HpgFoldingCoin
                     btnFoldingCoinWebsite_Click(Nothing, Nothing)
 
-                Case HpgFoldingCoinMyStats
-                    btnFoldingCoinUserStats_Click(Nothing, Nothing)
+                'Case HpgFoldingCoinMyStats
+                '    btnFoldingCoinUserStats_Click(Nothing, Nothing)
 
-                Case HpgFoldingCoinTeamStats
-                    btnFoldingCoinTeamStats_Click(Nothing, Nothing)
+                'Case HpgFoldingCoinTeamStats
+                '    btnFoldingCoinTeamStats_Click(Nothing, Nothing)
 
                 Case HpgCureCoin
                     btnCureCoinWebsite_Click(Nothing, Nothing)

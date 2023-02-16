@@ -14,7 +14,7 @@
             End If
 
             'Load the pull-down menu from the constants
-            Me.cbxHomepage.Items.AddRange({HpgDefault, HpgTopBottom, HpgSideBySide, HpgFoldingCoin, HpgFoldingCoinTeamStats, HpgFoldingCoinMyStats, HpgCureCoin, HpgCureCoinTeamStatsEOC, HpgMyStatsEOC, HpgFAH, HpgBlank})
+            Me.cbxHomepage.Items.AddRange({HpgDefault, HpgTopBottom, HpgSideBySide, HpgFoldingCoin, HpgCureCoin, HpgCureCoinTeamStatsEOC, HpgMyStatsEOC, HpgFAH, HpgBlank})
 
             'Start with the text boxes instead of the raw data that is hard to look at
             chkShowRawData_CheckedChanged(Nothing, Nothing)
