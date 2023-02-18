@@ -21,7 +21,7 @@
 !define REQUIRED_MS_DOT_NET_VERSION "4.0*"
 
 SetCompressor /SOLID lzma
-SetCompressorDictSize 16
+SetCompressorDictSize 64
 Var RunFoldingBrowser
 Unicode true   ;For all languages to display properly (Installer won't run on Win95/98/ME)
 !addincludedir "Include"
