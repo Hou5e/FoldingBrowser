@@ -200,6 +200,7 @@ Section "!${PRODUCT_NAME} v${PRODUCT_VERSION}" SEC01
   File "..\Browser\bin\Release\CefSharp.BrowserSubprocess.Core.dll"
   File "..\Browser\bin\Release\CefSharp.BrowserSubprocess.exe"
   File "..\Browser\bin\Release\CefSharp.Core.dll"
+  File "..\Browser\bin\Release\CefSharp.Core.Runtime.dll"
   File "..\Browser\bin\Release\CefSharp.dll"
   File "..\Browser\bin\Release\CefSharp.WinForms.dll"
   File "..\Browser\bin\Release\chrome_elf.dll"
@@ -211,7 +212,11 @@ Section "!${PRODUCT_NAME} v${PRODUCT_VERSION}" SEC01
   File "..\Browser\bin\Release\libEGL.dll"
   File "..\Browser\bin\Release\libGLESv2.dll"
   File "..\Browser\bin\Release\LICENSE.txt"
+  File "..\Browser\bin\Release\README.txt"
   File "..\Browser\bin\Release\*.bin"
+  File "..\Browser\bin\Release\vk_swiftshader.dll"
+  File "..\Browser\bin\Release\vk_swiftshader_icd.json"
+  File "..\Browser\bin\Release\vulkan-1.dll"
 
   SetOutPath "$INSTDIR\Licenses"  ;Destination
   File "..\Browser\bin\Release\Licenses\*"
@@ -470,12 +475,9 @@ Section Uninstall
   ;Delete the main installation folder if possible
   Delete "$INSTDIR\*"
   RMDir "$INSTDIR"
-
-  SetOutPath $APPDATA     ;Try changing to a different path to avoid being in the working folder
-  ;Delete the main folder if possible
-  RMDir /r "$INSTDIR"
-
-  ;Delete the main folder, if possible
+  ;Try changing to a different path to avoid being in the working folder
+  SetOutPath $APPDATA
+  ;Delete the main installation folder if possible
   Delete "$INSTDIR\*"
   RMDir "$INSTDIR"
 

@@ -1029,7 +1029,7 @@ Partial Class Main
         '
         Me.pbMolecule.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.pbMolecule.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
-        Me.pbMolecule.Location = New System.Drawing.Point(393, -68)
+        Me.pbMolecule.Location = New System.Drawing.Point(419, -68)
         Me.pbMolecule.Margin = New System.Windows.Forms.Padding(4)
         Me.pbMolecule.Name = "pbMolecule"
         Me.pbMolecule.Size = New System.Drawing.Size(630, 504)

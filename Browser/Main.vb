@@ -174,6 +174,12 @@
         If System.IO.File.Exists(IniFilePath) = True Then
             INI.Load(IniFilePath)
 
+            'Make sure the default encryption PW exists
+            If INI.GetSection(INI_Settings).GetKey(INI_PW) Is Nothing Then
+                'Restore value, if missing
+                INI.AddSection(INI_Settings).AddKey(INI_PW).Value = Default_DAT_PW
+            End If
+
             'Make sure the INI key/value exists
             If INI.GetSection(INI_Settings).GetKey(INI_LastWalletId) IsNot Nothing Then
                 'Restore last Wallet Id used
