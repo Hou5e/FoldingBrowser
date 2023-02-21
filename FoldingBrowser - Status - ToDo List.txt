@@ -82,7 +82,7 @@ Other Ideas, Improvements, Tasks, Longer-Term Goals:
 Change Log - Release Notes - Tasks completed:
 ======================================================================================================
 
-v23 Release (2023-02-20)
+v23 Release (2023-02-21)
 [DONE] -Updates for new CureCoin logo changes
 [DONE] -Make 'CureCoin only' dialog easier (see above)
 [DONE] -Update blockchain installer to be up to date: 2023-02-14, Block 793824
