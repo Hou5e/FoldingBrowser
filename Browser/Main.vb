@@ -54,7 +54,6 @@
             Dim settings As New CefSharp.WinForms.CefSettings()
             'Set the Cache path to the user's appdata roaming folder
             settings.CachePath = System.IO.Path.Combine(UserProfileDir, "Cache")
-            settings.UserDataPath = settings.CachePath
             settings.LogFile = System.IO.Path.Combine(settings.CachePath, "debug.log")
             settings.LocalesDirPath = System.IO.Path.Combine(My.Application.Info.DirectoryPath, "locales")
             settings.Locale = "en-US"
@@ -79,7 +78,7 @@
             'Load the INI data before loading the Homepage (which is based on the user's options in the INI file). Fix the INI file, if needed
             LoadINISettings()
 
-            CefSharp.Cef.EnableHighDPISupport()
+            CefSharp.Cef.EnableWaitForBrowsersToClose()
             If CefSharp.Cef.Initialize(settings) = True Then
                 Me.browser = New CefSharp.WinForms.ChromiumWebBrowser(String.Empty)
                 'Add browser event handlers to pass events back to the main UI
@@ -439,13 +438,6 @@
         sbMsg.Append(vbNewLine & DividerLine & vbNewLine & "Chromium Version: " & CefSharp.Cef.ChromiumVersion.ToString & vbNewLine &
             "Cef Version: " & CefSharp.Cef.CefVersion.ToString & vbNewLine &
             "CefSharp Version: " & CefSharp.Cef.CefSharpVersion.ToString)
-        Dim plugins As List(Of CefSharp.WebPluginInfo) = Await CefSharp.Cef.GetPlugins
-        For Each plugin As CefSharp.WebPluginInfo In plugins
-            sbMsg.Append(vbNewLine & DividerLine & vbNewLine &
-                "Plugin: " & plugin.Name & If(plugin.Version.Length > 0, " v" & plugin.Version, "") &
-                If(plugin.Description.Length > 0, vbNewLine & "Plugin Description: " & plugin.Description, "") &
-                If(plugin.Path.Length > 0, vbNewLine & "Plugin Path: " & plugin.Path, ""))
-        Next
         Msg(sbMsg.ToString & vbNewLine & DividerLine)
 
         '''''''''''''''''''''
@@ -628,7 +620,7 @@
                 ClearWebpage()
                 'Added in v63.0.3. Exiting the FAH Web control was hanging the Cef.Shutdown(). On shutdown, the FAH Web control error was happening, and reloading w/o cache when closing. 'Verbose' debug logging was getting cutoff too, and changing logging to 'info' helped fix it
                 g_bCancelNav = True
-                Delay(200)
+                Delay(20)
 
                 RemoveHandler Me.browser.FrameLoadEnd, AddressOf OnBrowserFrameLoadEnd
                 RemoveHandler Me.browser.ConsoleMessage, AddressOf OnBrowserConsoleMessage
@@ -643,10 +635,11 @@
 
                 'Shutdown the web browser control
                 If Me.browser.IsDisposed = False Then
-                    'This is prone to hanging the app when exiting:
+                    CefSharp.Cef.WaitForBrowsersToClose()
+                    'This is prone to hanging the app when exiting (without the line above):
                     CefSharp.Cef.Shutdown()
-                    'Wait for CefSharp.Cef.Shutdown(): This 150ms delay seems to help prevent the messed up state for older (and current) CefSharp versions. Otherwise, the cache needs to be deleted for the FAH Control web page to work (at least with CEF1, v25)
-                    Delay(150)
+                    'Wait for CefSharp.Cef.Shutdown(): using a 150ms delay seems to help prevent the messed up state for older CefSharp versions. Otherwise, the cache needs to be deleted for the FAH Control web page to work (at least with CEF v25)
+                    Delay(20)
                 End If
             End If
 
@@ -3205,7 +3198,7 @@
                 m_bFirstFind = True
             End If
             'Find
-            CefSharp.WebBrowserExtensions.Find(Me.browser, 0, m_strFindText, bNext, False, Not m_bFirstFind)
+            CefSharp.WebBrowserExtensions.Find(Me.browser, m_strFindText, bNext, False, Not m_bFirstFind)
 
         Else
             CefSharp.WebBrowserExtensions.StopFinding(Me.browser, True)

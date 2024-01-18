@@ -37,7 +37,7 @@ Public Module GlobalRefs
     Public Const URL_EOC As String = "http://folding.extremeoverclocking.com/user_summary.php?s=&u="
 
     Public Const URL_FAH As String = "https://foldingathome.org/"
-    Public Const URL_FAH_DL As String = "start-folding/"
+    Public Const URL_FAH_DL As String = "start-folding/?lng=en"
     Public Const URL_FAH_News As String = "news/"
     Public Const URL_FAHTwitter As String = "https://twitter.com/foldingathome/"
     Public Const URL_FAH_Passkey As String = "https://apps.foldingathome.org/getpasskey?name="
@@ -219,44 +219,44 @@ End Module
         'Manual browsing (not automated). Preload the message box defaults with the username and password before calling this
         If m_bPropmtForCredentials = True Then
             'Message box prompt to get credentials
-            Dim TxtEntry As New TextEntryDialog
-            TxtEntry.Text = "Enter User/PW"
-            TxtEntry.MsgTextUpper.Text = "Enter Username (Top text box):"
-            TxtEntry.MsgTextLower.Text = "And Password (Bottom text box):"
+            Using TxtEntry As New TextEntryDialog
+                TxtEntry.Text = "Enter User/PW"
+                TxtEntry.MsgTextUpper.Text = "Enter Username (Top text box):"
+                TxtEntry.MsgTextLower.Text = "And Password (Bottom text box):"
 
-            TxtEntry.TextEnteredUpper.TextAlign = HorizontalAlignment.Center
-            TxtEntry.TextEnteredLower.TextAlign = HorizontalAlignment.Center
-            'Setup password text box
-            TxtEntry.TextEnteredLower.Visible = True
-            TxtEntry.TextEnteredLower.PasswordChar = "*"c
-            'Set default values
-            TxtEntry.TextEnteredUpper.Text = m_strUser
-            TxtEntry.TextEnteredLower.Text = m_strPwd
-            'Adjust the width of the dialog box
-            TxtEntry.Width = (TxtEntry.MsgTextLower.Left * 2) + TxtEntry.MsgTextLower.Width + 50
-            TxtEntry.TextEnteredLower.Visible = True
-            TxtEntry.MsgTextExtraBottomNote.Visible = False
-            TxtEntry.ActiveControl = TxtEntry.TextEnteredUpper
-            TxtEntry.StartPosition = FormStartPosition.CenterScreen
+                TxtEntry.TextEnteredUpper.TextAlign = HorizontalAlignment.Center
+                TxtEntry.TextEnteredLower.TextAlign = HorizontalAlignment.Center
+                'Setup password text box
+                TxtEntry.TextEnteredLower.Visible = True
+                TxtEntry.TextEnteredLower.PasswordChar = "*"c
+                'Set default values
+                TxtEntry.TextEnteredUpper.Text = m_strUser
+                TxtEntry.TextEnteredLower.Text = m_strPwd
+                'Adjust the width of the dialog box
+                TxtEntry.Width = (TxtEntry.MsgTextLower.Left * 2) + TxtEntry.MsgTextLower.Width + 50
+                TxtEntry.TextEnteredLower.Visible = True
+                TxtEntry.MsgTextExtraBottomNote.Visible = False
+                TxtEntry.ActiveControl = TxtEntry.TextEnteredUpper
+                TxtEntry.StartPosition = FormStartPosition.CenterScreen
 
-            'Show modal dialog box
-            If TxtEntry.ShowDialog() = DialogResult.OK Then
-                m_strUser = TxtEntry.TextEnteredUpper.Text
-                m_strPwd = TxtEntry.TextEnteredLower.Text
+                'Show modal dialog box
+                If TxtEntry.ShowDialog() = DialogResult.OK Then
+                    m_strUser = TxtEntry.TextEnteredUpper.Text
+                    m_strPwd = TxtEntry.TextEnteredLower.Text
 
-                'Send credentials to load the web page
-                callback.Continue(m_strUser, m_strPwd)
-                'Reset value
-                m_strPwd = String.Empty
-                'Good
-                bReturn = True
-            Else
-                'Invalid credentials
-                g_Main.Msg("Error: Invalid credentials: Dialog canceled")
-                bReturn = False
-            End If
-            TxtEntry.Dispose()
-
+                    'Send credentials to load the web page
+                    callback.Continue(m_strUser, m_strPwd)
+                    'Reset value
+                    m_strPwd = String.Empty
+                    'Good
+                    bReturn = True
+                Else
+                    'Invalid credentials
+                    g_Main.Msg("Error: Invalid credentials: Dialog canceled")
+                    bReturn = False
+                End If
+                TxtEntry.Dispose()
+            End Using
         Else
             'Automated: Set m_bPropmtForCredentials = false, and the username and password before loading the URL
             If m_strUser.Length > 0 AndAlso m_strPwd.Length > 0 Then
@@ -281,7 +281,7 @@ End Module
 End Class
 
 
-'File download, see: https://github.com/cefsharp/CefSharp/blob/master/CefSharp.Example/DownloadHandler.cs
+'File download, see: https://github.com/cefsharp/CefSharp/blob/cefsharp/100/CefSharp.Example/Handlers/DownloadHandler.cs
 Public Class DownloadHandler
     Implements CefSharp.IDownloadHandler
     <CLSCompliant(False)> Public Sub OnBeforeDownload(webBrowser As CefSharp.IWebBrowser, browser As CefSharp.IBrowser, downloadItem As CefSharp.DownloadItem, callback As CefSharp.IBeforeDownloadCallback) Implements CefSharp.IDownloadHandler.OnBeforeDownload
@@ -311,6 +311,10 @@ Public Class DownloadHandler
             g_strDownloadedFilePath = downloadItem.FullPath
         End If
     End Sub
+
+    <CLSCompliant(False)> Public Function CanDownload(chromiumWebBrowser As CefSharp.IWebBrowser, browser As CefSharp.IBrowser, url As String, requestMethod As String) As Boolean Implements CefSharp.IDownloadHandler.CanDownload
+        Return True
+    End Function
 End Class
 
 
